@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find hospitals, labs, medical stores, sarais and dispensaries in Nangal, Punjab on Curaah." />
+  <title>Find Hospitals — Curaah</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--navy);
+      padding: 100px 6% 52px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .page-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .page-header p {
+      font-size: 16px;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* ── SEARCH BAR ── */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      max-width: 680px;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: 12px 14px 12px 42px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--white);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+
+    .search-input:focus {
+      border-color: var(--electric);
+      background: rgba(255,255,255,0.09);
+    }
+
+    /* ── FILTERS ── */
+    .filters-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border-card);
+      padding: 0 6%;
+      position: sticky;
+      top: var(--nav-height);
+      z-index: 100;
+    }
+
+    .filters-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filters-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 16px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .filter-tab:hover {
+      color: var(--text-primary);
+      border-bottom-color: var(--border-card);
+    }
+
+    .filter-tab.active {
+      color: var(--electric);
+      border-bottom-color: var(--electric);
+      font-weight: 600;
+    }
+
+    .filter-tab-icon {
+      font-size: 15px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .hospitals-main {
+      background: var(--off-white);
+      min-height: 60vh;
+      padding: 40px 6%;
+    }
+
+    .hospitals-main-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .results-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .results-count {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .results-count strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .sort-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 8px 32px 8px 12px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a9bb0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      background: var(--white);
+      border: 1.5px dashed var(--border-card);
+      border-radius: var(--radius-xl);
+    }
+
+    .empty-state-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.07);
+      border: 1.5px solid rgba(61,158,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 24px;
+    }
+
+    .empty-state-title {
+      font-family: 'Georgia', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .empty-state-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 28px;
+    }
+
+    .empty-state-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── HOW ONBOARDING WORKS ── */
+    .onboard-info {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      margin-top: 24px;
+    }
+
+    .onboard-info-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .onboard-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .onboard-step {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .onboard-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.1);
+      border: 1.5px solid rgba(61,158,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--electric);
+      flex-shrink: 0;
+    }
+
+    .onboard-step-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .onboard-step-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── CATEGORY INFO CARDS ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .category-card {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .category-card:hover {
+      border-color: rgba(61,158,255,0.3);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .category-card.active-cat {
+      border-color: var(--electric);
+      background: rgba(61,158,255,0.04);
+    }
+
+    .category-card-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .category-card-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .category-card-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ── NOTIFY FORM ── */
+    .notify-banner {
+      background: var(--navy);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .notify-banner-text h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .notify-banner-text p {
+      font-size: 14px;
+      color: var(--text-on-dark-muted);
+    }
+
+    .notify-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .notify-input {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--white);
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: 11px 16px;
+      outline: none;
+      transition: var(--transition);
+      min-width: 220px;
+    }
+
+    .notify-input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+
+    .notify-input:focus {
+      border-color: var(--electric);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .search-bar { flex-direction: column; }
+      .onboard-steps { grid-template-columns: 1fr; }
+      .notify-banner { flex-direction: column; align-items: flex-start; }
+      .notify-form { width: 100%; }
+      .notify-input { width: 100%; min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVBAR
+  ============================================ -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hospitals.html">Hospitals</a></li>
+      <li><a href="onboard.html">For Facilities</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Register Free</a>
+    </div>
+
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="hospitals.html">Hospitals</a>
+    <a href="onboard.html">For Hospitals & Labs</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register Free →</a>
+  </div>
+
+  <!-- ============================================
+       PAGE HEADER + SEARCH
+  ============================================ -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="section-label" style="margin-bottom:10px;">Nangal, Punjab</div>
+      <h1>Find hospitals, labs & more</h1>
+      <p>Search and discover healthcare facilities near you — book appointments, check availability, and verify insurance coverage.</p>
+
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search by name, speciality, or area..."
+          />
+        </div>
+        <button class="btn btn-primary" onclick="handleSearch()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       FILTER TABS
+  ============================================ -->
+  <div class="filters-bar">
+    <div class="filters-inner">
+      <button class="filter-tab active" data-filter="all" onclick="setFilter(this, 'all')">
+        <span class="filter-tab-icon">🏠</span> All
+      </button>
+      <button class="filter-tab" data-filter="hospital" onclick="setFilter(this, 'hospital')">
+        <span class="filter-tab-icon">🏥</span> Hospitals
+      </button>
+      <button class="filter-tab" data-filter="laboratory" onclick="setFilter(this, 'laboratory')">
+        <span class="filter-tab-icon">🔬</span> Laboratories
+      </button>
+      <button class="filter-tab" data-filter="medical-store" onclick="setFilter(this, 'medical-store')">
+        <span class="filter-tab-icon">💊</span> Medical Stores
+      </button>
+      <button class="filter-tab" data-filter="sarai" onclick="setFilter(this, 'sarai')">
+        <span class="filter-tab-icon">🏨</span> Sarais
+      </button>
+      <button class="filter-tab" data-filter="dispensary" onclick="setFilter(this, 'dispensary')">
+        <span class="filter-tab-icon">🩺</span> Dispensary / PHC
+      </button>
+      <button class="filter-tab" data-filter="diagnostic" onclick="setFilter(this, 'diagnostic')">
+        <span class="filter-tab-icon">📡</span> Diagnostic Centres
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       MAIN CONTENT
+  ============================================ -->
+  <div class="hospitals-main">
+    <div class="hospitals-main-inner">
+
+      <!-- Results info bar -->
+      <div class="results-info">
+        <p class="results-count" id="resultsCount">
+          Showing <strong>0 facilities</strong> in Nangal, Punjab
+        </p>
+        <select class="sort-select">
+          <option>Sort: Nearest first</option>
+          <option>Sort: A to Z</option>
+          <option>Sort: Recently added</option>
+        </select>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-state-icon" id="emptyIcon">🏥</div>
+        <div class="empty-state-title" id="emptyTitle">
+          No hospitals onboarded yet
+        </div>
+        <p class="empty-state-desc" id="emptyDesc">
+          We are actively reaching out to hospitals, labs, and clinics in Nangal. Once they join Curaah, their full profile — doctors, timings, bed availability, and insurance support — will appear right here.
+        </p>
+        <div class="empty-state-actions">
+          <a href="onboard.html" class="btn btn-primary">Register Your Facility</a>
+          <a href="index.html" class="btn btn-secondary">Back to Home</a>
+        </div>
+      </div>
+
+      <!-- Category Overview Cards -->
+      <div style="margin-top: 40px;">
+        <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;letter-spacing:0.5px;">BROWSE BY CATEGORY</p>
+        <div class="categories-grid">
+          <div class="category-card" onclick="setFilterFromCard('hospital')">
+            <div class="category-card-icon">🏥</div>
+            <div class="category-card-name">Hospitals</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+          <div class="category-card" onclick="setFilterFromCard('laboratory')">
+            <div class="category-card-icon">🔬</div>
+            <div class="category-card-name">Laboratories</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+          <div class="category-card" onclick="setFilterFromCard('medical-store')">
+            <div class="category-card-icon">💊</div>
+            <div class="category-card-name">Medical Stores</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+          <div class="category-card" onclick="setFilterFromCard('sarai')">
+            <div class="category-card-icon">🏨</div>
+            <div class="category-card-name">Sarais</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+          <div class="category-card" onclick="setFilterFromCard('dispensary')">
+            <div class="category-card-icon">🩺</div>
+            <div class="category-card-name">Dispensary / PHC</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+          <div class="category-card" onclick="setFilterFromCard('diagnostic')">
+            <div class="category-card-icon">📡</div>
+            <div class="category-card-name">Diagnostic Centres</div>
+            <div class="category-card-count">0 onboarded</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How onboarding works -->
+      <div class="onboard-info">
+        <div class="onboard-info-title">
+          <span>ℹ️</span> How does a facility get listed here?
+        </div>
+        <div class="onboard-steps">
+  <div class="onboard-step">
+    <div class="onboard-step-num">1</div>
+    <div class="onboard-step-title">Fill the onboarding form</div>
+    <div class="onboard-step-desc">Hospital or facility fills a simple form on Curaah with their basic details. Takes under 5 minutes.</div>
+  </div>
+  <div class="onboard-step">
+    <div class="onboard-step-num">2</div>
+    <div class="onboard-step-title">We verify and connect</div>
+    <div class="onboard-step-desc">Curaah team visits within 24 hours, verifies the facility, and sets up their profile and attendant portal for free.</div>
+  </div>
+  <div class="onboard-step">
+    <div class="onboard-step-num">3</div>
+    <div class="onboard-step-title">QR codes generated & profile live</div>
+    <div class="onboard-step-desc">Unique QR check-in codes generated for each OPD department. Print and stick them at entrance — done. Profile goes live instantly.</div>
+  </div>
+  <div class="onboard-step">
+    <div class="onboard-step-num">4</div>
+    <div class="onboard-step-title">Patients book & check in</div>
+    <div class="onboard-step-desc">Patients book OPD appointments online, scan QR at arrival, get token number, sit comfortably — no queues.</div>
+  </div>
+</div>
+      </div>
+
+      <!-- Notify me banner -->
+      <div class="notify-banner">
+        <div class="notify-banner-text">
+          <h3>Get notified when hospitals join</h3>
+          <p>Enter your phone number and we will WhatsApp you when the first hospital in Nangal goes live on Curaah.</p>
+        </div>
+        <div class="notify-form">
+          <input
+            type="tel"
+            class="notify-input"
+            id="notifyPhone"
+            placeholder="Your WhatsApp number"
+            maxlength="10"
+          />
+          <button class="btn btn-primary" onclick="handleNotify()">Notify Me</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+            <circle cx="18" cy="22" r="3.5" fill="white"/>
+          </svg>
+          curaah
+        </div>
+        <p class="footer-brand-desc">Your health, your control. A unified platform connecting patients, hospitals, labs, and health schemes across Punjab.</p>
+        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-col-links">
+          <li><a href="hospitals.html">Find Hospitals</a></li>
+          <li><a href="register.html">Register as Patient</a></li>
+          <li><a href="login.html">Patient Login</a></li>
+          <li><a href="onboard.html">Hospital Onboarding</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Appointment Booking</a></li>
+          <li><a href="#">Insurance Tracking</a></li>
+          <li><a href="#">Health Records</a></li>
+          <li><a href="#">AI Diagnostics</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-col-links">
+          <li><a href="mailto:hello@curaah.in">hello@curaah.in</a></li>
+          <li><a href="#">Nangal, Punjab 140124</a></li>
+          <li><a href="#">WhatsApp Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-bottom-text">© 2025 Curaah. All rights reserved. Built for the people of Punjab.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+    /* ── Filter tabs ── */
+    const emptyIcons = {
+      all:           { icon: '🏥', title: 'No facilities onboarded yet',      desc: 'We are actively reaching out to hospitals, labs, and clinics in Nangal. Once they join Curaah, their profiles will appear here.' },
+      hospital:      { icon: '🏥', title: 'No hospitals onboarded yet',        desc: 'Hospitals in Nangal will appear here once they register on Curaah. Be the first — it is free.' },
+      laboratory:    { icon: '🔬', title: 'No laboratories onboarded yet',     desc: 'Labs in Nangal will appear here after onboarding. Patients will be able to book tests directly.' },
+      'medical-store':{ icon: '💊', title: 'No medical stores onboarded yet',  desc: 'Medical stores can register on Curaah to reach more patients in Nangal.' },
+      sarai:         { icon: '🏨', title: 'No sarais onboarded yet',           desc: 'Patient attendant lodges and sarais near hospitals can register to help families find affordable stays.' },
+      dispensary:    { icon: '🩺', title: 'No dispensaries onboarded yet',     desc: 'Government dispensaries and PHCs can join Curaah to connect with more patients in the area.' },
+      diagnostic:    { icon: '📡', title: 'No diagnostic centres onboarded yet', desc: 'Diagnostic centres offering scans, X-rays, and tests can register to receive patient bookings.' },
+    };
+
+    function setFilter(btn, filter) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      updateEmptyState(filter);
+    }
+
+    function setFilterFromCard(filter) {
+      document.querySelectorAll('.filter-tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.filter === filter) t.classList.add('active');
+      });
+      updateEmptyState(filter);
+      document.querySelector('.filters-bar').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateEmptyState(filter) {
+      const data = emptyIcons[filter] || emptyIcons.all;
+      document.getElementById('emptyIcon').textContent  = data.icon;
+      document.getElementById('emptyTitle').textContent = data.title;
+      document.getElementById('emptyDesc').textContent  = data.desc;
+    }
+
+    /* ── Search ── */
+    function handleSearch() {
+      const val = document.getElementById('searchInput').value.trim();
+      if (val) {
+        showToast(`No results found for "${val}" yet. Facilities are being onboarded.`, 'info');
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleSearch();
+    });
+
+    /* ── Notify me ── */
+    function handleNotify() {
+      const phone = document.getElementById('notifyPhone').value.trim();
+      if (!phone || phone.length < 10) {
+        showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
+        return;
+      }
+      /* 
+        TODO: Connect to Google Apps Script to save phone number
+        sendToSheet(APPS_SCRIPT_URL, { phone, timestamp: new Date().toISOString(), type: 'notify' });
+      */
+      showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
+      document.getElementById('notifyPhone').value = '';
+    }
+  </script>
+
+</body>
+</html>
