@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Your Curaah Health Dashboard — appointments, records, insurance claims." />
+  <title>My Dashboard — Curaah</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: var(--off-white);
+      min-height: 100vh;
+    }
+
+    /* ── DASHBOARD LAYOUT ── */
+    .dashboard-layout {
+      display: flex;
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--navy);
+      border-right: 1px solid var(--border-dark);
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 90;
+    }
+
+    /* Patient profile block */
+    .sidebar-profile {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.15);
+      border: 2px solid var(--electric);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--electric);
+      flex-shrink: 0;
+    }
+
+    .sidebar-profile-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .sidebar-profile-tag {
+      font-size: 11px;
+      color: var(--text-on-dark-muted);
+    }
+
+    /* Nav items */
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      padding: 10px 8px 6px;
+      margin-top: 8px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-on-dark-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+    }
+
+    .sidebar-item.active {
+      background: rgba(61,158,255,0.12);
+      color: var(--electric);
+      font-weight: 600;
+    }
+
+    .sidebar-item-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-item-badge {
+      margin-left: auto;
+      background: var(--electric);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* Sidebar bottom */
+    .sidebar-bottom {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border-dark);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .dashboard-main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px 36px;
+      min-height: calc(100vh - var(--nav-height));
+    }
+
+    /* Page header */
+    .dash-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dash-greeting {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .dash-title {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .stat-card-icon {
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+
+    .stat-card-num {
+      font-family: 'Georgia', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .stat-card-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .stat-card-sub {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 10px;
+      width: fit-content;
+    }
+
+    /* ── CONTENT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .content-grid-wide {
+      grid-column: 1 / -1;
+    }
+
+    /* ── PANEL (reusable card) ── */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title-icon { font-size: 16px; }
+
+    .panel-link {
+      font-size: 13px;
+      color: var(--electric);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .panel-link:hover { text-decoration: underline; }
+
+    .panel-body { padding: 16px 20px; }
+
+    .panel-empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel-empty-icon { font-size: 36px; opacity: 0.4; }
+
+    .panel-empty-text { line-height: 1.6; max-width: 240px; }
+
+    /* ── APPOINTMENT ITEM ── */
+    .appt-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .appt-item:last-child { border-bottom: none; }
+
+    .appt-date-box {
+      width: 48px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background: rgba(61,158,255,0.07);
+      border: 1px solid rgba(61,158,255,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .appt-date-day {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--electric);
+      line-height: 1;
+    }
+
+    .appt-date-mon {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .appt-info { flex: 1; }
+
+    .appt-doctor {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .appt-hospital {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .appt-time {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── CLAIM ITEM ── */
+    .claim-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .claim-item:last-child { border-bottom: none; }
+
+    .claim-scheme {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .claim-hospital {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .claim-amount {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: right;
+      margin-bottom: 4px;
+    }
+
+    /* ── RECORD ITEM ── */
+    .record-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-card);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .record-item:last-child { border-bottom: none; }
+
+    .record-item:hover { opacity: 0.8; }
+
+    .record-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .record-icon-rx   { background: rgba(61,158,255,0.08); }
+    .record-icon-rep  { background: rgba(0,196,140,0.08); }
+    .record-icon-scan { background: rgba(255,159,0,0.08); }
+
+    .record-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .record-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .record-download {
+      margin-left: auto;
+      font-size: 18px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .quick-action-btn {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .quick-action-btn:hover {
+      border-color: rgba(61,158,255,0.3);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .quick-action-btn.highlight {
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .quick-action-icon { font-size: 26px; }
+
+    .quick-action-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .quick-action-btn.highlight .quick-action-label {
+      color: var(--text-on-dark-muted);
+    }
+
+    /* ── AI TEASER PANEL ── */
+    .ai-panel {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .ai-panel-left { flex: 1; }
+
+    .ai-panel-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--electric);
+      margin-bottom: 8px;
+    }
+
+    .ai-panel-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .ai-panel-desc {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+      line-height: 1.6;
+    }
+
+    /* ── SCHEME CARDS ── */
+    .scheme-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .scheme-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-card);
+    }
+
+    .scheme-item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .scheme-item-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .scheme-item-amount {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--electric);
+      white-space: nowrap;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .quick-actions { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 860px) {
+      .sidebar {
+        transform: translateX(-260px);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .dashboard-main {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .content-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .quick-actions { grid-template-columns: repeat(2, 1fr); }
+      .dash-page-header { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVBAR
+  ============================================ -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="hospitals.html">Find Hospitals</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <span style="font-size:13px;color:var(--text-on-dark-muted);">Hello, <strong style="color:var(--white);" id="navName">Patient</strong></span>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Logout</button>
+    </div>
+
+    <div class="nav-hamburger" id="hamburger" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       DASHBOARD LAYOUT
+  ============================================ -->
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Profile -->
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar">P</div>
+        <div>
+          <div class="sidebar-profile-name" id="sidebarName">Patient</div>
+          <div class="sidebar-profile-tag">Nangal, Punjab</div>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <nav class="sidebar-nav">
+
+        <div class="sidebar-section-label">Main</div>
+
+        <button class="sidebar-item active" onclick="showSection('overview', this)">
+          <span class="sidebar-item-icon">🏠</span> Overview
+        </button>
+
+        <button class="sidebar-item" onclick="showSection('appointments', this)">
+          <span class="sidebar-item-icon">📅</span> Appointments
+          <span class="sidebar-item-badge" id="apptBadge">0</span>
+        </button>
+
+        <button class="sidebar-item" onclick="showSection('claims', this)">
+          <span class="sidebar-item-icon">🛡️</span> Insurance Claims
+        </button>
+
+        <button class="sidebar-item" onclick="showSection('records', this)">
+  <span class="sidebar-item-icon">📋</span> Health Records
+</button>
+
+<button class="sidebar-item" onclick="showSection('referrals', this)">
+  <span class="sidebar-item-icon">🔗</span> My Referrals
+</button>
+
+<button class="sidebar-item" onclick="showSection('token', this)">
+  <span class="sidebar-item-icon">📟</span> My Token
+</button>
+
+        <button class="sidebar-item" onclick="showSection('ai', this)">
+          <span class="sidebar-item-icon">🤖</span> AI Assistant
+          <span class="sidebar-item-badge" style="background:var(--warning);">Soon</span>
+        </button>
+
+        <div class="sidebar-section-label">More</div>
+
+        <a class="sidebar-item" href="hospitals.html">
+          <span class="sidebar-item-icon">🏥</span> Find Hospitals
+        </a>
+
+        <button class="sidebar-item" onclick="showSection('profile', this)">
+          <span class="sidebar-item-icon">👤</span> My Profile
+        </button>
+
+      </nav>
+
+      <!-- Bottom -->
+      <div class="sidebar-bottom">
+        <button class="sidebar-item" onclick="handleLogout()" style="color:var(--danger);">
+          <span class="sidebar-item-icon">🚪</span> Logout
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+      <!-- ── OVERVIEW SECTION ── -->
+      <div id="section-overview">
+
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting" id="greeting">Good morning 👋</div>
+            <div class="dash-title" id="dashTitle">Welcome back, Patient</div>
+          </div>
+          <a href="hospitals.html" class="btn btn-primary">+ Book Appointment</a>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-icon">📅</div>
+            <div class="stat-card-num">0</div>
+            <div class="stat-card-label">Upcoming Appointments</div>
+            <div class="stat-card-sub" style="background:rgba(61,158,255,0.08);color:var(--electric);">Book your first</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">🛡️</div>
+            <div class="stat-card-num">0</div>
+            <div class="stat-card-label">Active Claims</div>
+            <div class="stat-card-sub" style="background:rgba(0,196,140,0.08);color:var(--success);">All clear</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">📋</div>
+            <div class="stat-card-num">0</div>
+            <div class="stat-card-label">Health Records</div>
+            <div class="stat-card-sub" style="background:rgba(255,159,0,0.08);color:var(--warning);">Upload first record</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon">🏥</div>
+            <div class="stat-card-num">0</div>
+            <div class="stat-card-label">Hospitals visited</div>
+            <div class="stat-card-sub" style="background:rgba(61,158,255,0.08);color:var(--electric);">Via Curaah</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <p style="font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Quick Actions</p>
+        <div class="quick-actions">
+          <a href="hospitals.html" class="quick-action-btn">
+            <span class="quick-action-icon">📅</span>
+            <span class="quick-action-label">Book Appointment</span>
+          </a>
+          <button class="quick-action-btn" onclick="showSection('records', document.querySelector('[onclick*=records]'))">
+            <span class="quick-action-icon">📤</span>
+            <span class="quick-action-label">Upload Report</span>
+          </button>
+          <button class="quick-action-btn" onclick="showSection('claims', document.querySelector('[onclick*=claims]'))">
+            <span class="quick-action-icon">🛡️</span>
+            <span class="quick-action-label">Track Claim</span>
+          </button>
+          <button class="quick-action-btn highlight" onclick="showSection('ai', document.querySelector('[onclick*=ai]'))">
+            <span class="quick-action-icon">🤖</span>
+            <span class="quick-action-label" style="color:var(--electric);">AI Assistant</span>
+          </button>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+
+          <!-- Upcoming Appointments -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-icon">📅</span> Upcoming Appointments
+              </div>
+              <span class="panel-link" onclick="showSection('appointments', null)">View all</span>
+            </div>
+            <div class="panel-empty">
+              <div class="panel-empty-icon">📅</div>
+              <div class="panel-empty-text">No appointments booked yet. Find a hospital and book your first appointment.</div>
+              <a href="hospitals.html" class="btn btn-primary btn-sm">Find Hospitals</a>
+            </div>
+          </div>
+
+          <!-- Insurance Schemes -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-icon">🛡️</span> Your Health Schemes
+              </div>
+              <span class="panel-link" onclick="showSection('claims', null)">Manage</span>
+            </div>
+            <div class="panel-body">
+              <div class="scheme-list">
+                <div class="scheme-item">
+                  <div>
+                    <div class="scheme-item-name">Ayushman Bharat PM-JAY</div>
+                    <div class="scheme-item-sub">Link via ABHA ID — coming soon</div>
+                  </div>
+                  <span class="badge badge-orange">Not linked</span>
+                </div>
+                <div class="scheme-item">
+                  <div>
+                    <div class="scheme-item-name">Mukhyamantri Sehat Bima</div>
+                    <div class="scheme-item-sub">Punjab state scheme</div>
+                  </div>
+                  <span class="badge badge-orange">Not linked</span>
+                </div>
+                <div class="scheme-item">
+                  <div>
+                    <div class="scheme-item-name">CGHS / ESI</div>
+                    <div class="scheme-item-sub">For govt. / organized sector</div>
+                  </div>
+                  <span class="badge badge-navy">Check eligibility</span>
+                </div>
+              </div>
+              <p style="font-size:11px;color:var(--text-muted);margin-top:14px;line-height:1.6;">
+                Scheme linking will be automatic once ABHA integration is live. We will notify you.
+              </p>
+            </div>
+          </div>
+
+          <!-- Recent Records -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-icon">📋</span> Recent Health Records
+              </div>
+              <span class="panel-link" onclick="showSection('records', null)">View all</span>
+            </div>
+            <div class="panel-empty">
+              <div class="panel-empty-icon">📋</div>
+              <div class="panel-empty-text">No records uploaded yet. Upload prescriptions, reports, or discharge summaries.</div>
+              <button class="btn btn-secondary btn-sm" onclick="showSection('records', null)">Upload Record</button>
+            </div>
+          </div>
+
+          <!-- AI Panel -->
+          <div class="panel" style="border:none;background:transparent;">
+            <div class="ai-panel">
+              <div class="ai-panel-left">
+                <div class="ai-panel-tag">AI Health Assistant</div>
+                <div class="ai-panel-title">Not sure what's wrong?</div>
+                <div class="ai-panel-desc">Describe your symptoms by text or voice. Our AI will analyze and suggest the right hospital or doctor near you.</div>
+              </div>
+              <button class="btn btn-primary" onclick="showSection('ai', null)" style="white-space:nowrap;">
+                Try AI Assistant
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── APPOINTMENTS SECTION ── -->
+      <div id="section-appointments" style="display:none;">
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting">Manage your visits</div>
+            <div class="dash-title">Appointments</div>
+          </div>
+          <a href="hospitals.html" class="btn btn-primary">+ Book New</a>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📅</span> All Appointments</div>
+          </div>
+          <div class="panel-empty">
+            <div class="panel-empty-icon">📅</div>
+            <div class="panel-empty-text">You have no appointments yet. Browse onboarded hospitals in Nangal and book your first OPD slot.</div>
+            <a href="hospitals.html" class="btn btn-primary">Browse Hospitals</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CLAIMS SECTION ── -->
+      <div id="section-claims" style="display:none;">
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting">Track transparently</div>
+            <div class="dash-title">Insurance Claims</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">🛡️</span> Claim History</div>
+          </div>
+          <div class="panel-empty">
+            <div class="panel-empty-icon">🛡️</div>
+            <div class="panel-empty-text">No claims submitted yet. Once you visit a hospital through Curaah and use your scheme, your claim will appear here with live status updates.</div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:16px;">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📜</span> Linked Schemes</div>
+          </div>
+          <div class="panel-body">
+            <div class="scheme-list">
+              <div class="scheme-item">
+                <div>
+                  <div class="scheme-item-name">Ayushman Bharat PM-JAY</div>
+                  <div class="scheme-item-sub">₹5 lakh / year · Central govt.</div>
+                </div>
+                <span class="badge badge-orange">Not linked</span>
+              </div>
+              <div class="scheme-item">
+                <div>
+                  <div class="scheme-item-name">Mukhyamantri Sehat Bima Yojana</div>
+                  <div class="scheme-item-sub">₹10 lakh / year · Punjab govt.</div>
+                </div>
+                <span class="badge badge-orange">Not linked</span>
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:16px;padding:12px;background:var(--off-white);border-radius:var(--radius-md);line-height:1.7;">
+              ℹ️ Scheme linking via Aadhaar and ABHA ID is coming soon. Once connected, your eligible schemes will be automatically detected and claims will be tracked in real time — with full transparency and no middlemen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RECORDS SECTION ── -->
+      <div id="section-records" style="display:none;">
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting">Your medical history</div>
+            <div class="dash-title">Health Records</div>
+          </div>
+          <button class="btn btn-primary" onclick="showToast('File upload will be available once Supabase storage is connected.', 'info')">+ Upload Record</button>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">📋</span> All Records</div>
+          </div>
+          <div class="panel-empty">
+            <div class="panel-empty-icon">📋</div>
+            <div class="panel-empty-text">No records yet. Upload your prescriptions, lab reports, discharge summaries, or scan images. They will be stored securely and accessible anywhere.</div>
+            <button class="btn btn-secondary btn-sm" onclick="showToast('File upload coming soon with Supabase storage.', 'info')">Upload First Record</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AI SECTION ── -->
+      <div id="section-ai" style="display:none;">
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting">Powered by Gemini AI</div>
+            <div class="dash-title">AI Health Assistant</div>
+          </div>
+          <span class="badge badge-blue badge-dot" style="padding:8px 14px;">Coming Soon</span>
+        </div>
+        <div class="panel">
+          <div class="panel-body" style="padding:48px 32px;text-align:center;">
+            <div style="font-size:56px;margin-bottom:20px;">🤖</div>
+            <div style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">AI Assistant is almost here</div>
+            <p style="font-size:15px;color:var(--text-secondary);line-height:1.75;max-width:480px;margin:0 auto 28px;">
+              Describe your symptoms by text or voice, upload a report or scan — and our AI will analyze your condition, check your insurance, and suggest the most appropriate hospital or doctor near you with a direct booking link.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto;">
+              <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-secondary);background:var(--off-white);padding:12px 16px;border-radius:var(--radius-md);">
+                <span style="font-size:18px;">💬</span> Text symptom input
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-secondary);background:var(--off-white);padding:12px 16px;border-radius:var(--radius-md);">
+                <span style="font-size:18px;">🎙️</span> Voice input support
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-secondary);background:var(--off-white);padding:12px 16px;border-radius:var(--radius-md);">
+                <span style="font-size:18px;">📄</span> Report & scan analysis
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-secondary);background:var(--off-white);padding:12px 16px;border-radius:var(--radius-md);">
+                <span style="font-size:18px;">🏥</span> Smart hospital recommendation
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROFILE SECTION ── -->
+      <div id="section-profile" style="display:none;">
+        <div class="dash-page-header">
+          <div>
+            <div class="dash-greeting">Your information</div>
+            <div class="dash-title">My Profile</div>
+          </div>
+          <button class="btn btn-secondary" onclick="showToast('Profile editing will be available once Supabase is connected.', 'info')">Edit Profile</button>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-icon">👤</span> Personal Details</div>
+          </div>
+          <div class="panel-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input class="form-input" type="text" value="Patient" disabled style="background:var(--off-white);cursor:not-allowed;" id="profileName"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <input class="form-input" type="text" value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input class="form-input" type="text" value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City / Area</label>
+                <input class="form-input" type="text" value="Nangal, Punjab" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+              </div>
+            </div>
+            <div style="margin-top:20px;padding:16px;background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
+              <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+                🔐 <strong>ABHA ID & Aadhaar linking</strong> will be available soon. This will automatically connect your government health schemes to your Curaah profile.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── REFERRALS SECTION ── -->
+<div id="section-referrals" style="display:none;">
+  <div class="dash-page-header">
+    <div>
+      <div class="dash-greeting">Track your referrals</div>
+      <div class="dash-title">My Referrals</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">🔗</span> Referral History
+      </div>
+    </div>
+    <div class="panel-empty">
+      <div class="panel-empty-icon">🔗</div>
+      <div class="panel-empty-text">
+        No referrals yet. When a doctor at any Curaah-connected hospital refers you to another facility — like PGI Chandigarh — your digital referral letter and booked appointment will appear here automatically. No paper files needed.
+      </div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:16px;">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">ℹ️</span> How referrals work on Curaah
+      </div>
+    </div>
+    <div class="panel-body">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">1️⃣</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Doctor fills digital referral</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">Your doctor enters diagnosis, urgency level, and required department on Curaah and books the referred hospital appointment simultaneously.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">2️⃣</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">You get referral + appointment together</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">You receive your digital referral letter and appointment confirmation in one SMS. No separate visits, no paper letters to carry.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">3️⃣</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Your records travel with you</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">The referred hospital receives your complete health history digitally before you even arrive. No files to carry. No information lost.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOKEN SECTION ── -->
+<div id="section-token" style="display:none;">
+  <div class="dash-page-header">
+    <div>
+      <div class="dash-greeting">Your OPD queue token</div>
+      <div class="dash-title">My Token</div>
+    </div>
+  </div>
+
+  <!-- Active token card -->
+  <div style="background:var(--navy);border-radius:var(--radius-xl);padding:36px;text-align:center;margin-bottom:20px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--electric);margin-bottom:16px;">No active token</p>
+    <div style="font-family:'Georgia',serif;font-size:80px;font-weight:700;color:var(--white);line-height:1;margin-bottom:8px;">—</div>
+    <p style="font-size:14px;color:var(--text-on-dark-muted);margin-bottom:24px;">Check in at the hospital OPD to get your token number. You will see it here in real time.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <div style="background:rgba(255,255,255,0.06);border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:16px 24px;min-width:120px;">
+        <div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;">—</div>
+        <div style="font-size:11px;color:var(--text-on-dark-muted);">Currently serving</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:16px 24px;min-width:120px;">
+        <div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;">—</div>
+        <div style="font-size:11px;color:var(--text-on-dark-muted);">Est. wait time</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:16px 24px;min-width:120px;">
+        <div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;">—</div>
+        <div style="font-size:11px;color:var(--text-on-dark-muted);">Your position</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">📟</span> How the token system works
+      </div>
+    </div>
+    <div class="panel-body">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">📱</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Scan QR at hospital entrance</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">Show the QR code from your appointment SMS at the kiosk. Token assigned in seconds. No standing in registration queue.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">🪑</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Sit and relax</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">No standing in OPD queue. Watch the live token display screen or track your position here. You will get an SMS when you are next.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">🔔</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Get notified when your turn is near</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">SMS alert when you are 2 tokens away. Walk to the OPD calmly. No rushing, no missing your turn.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+          <span style="font-size:18px;flex-shrink:0;">👤</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">No phone? No problem</p>
+            <p style="font-size:12px;color:var(--text-secondary);margin:0;">Face recognition kiosk at hospital entrance checks you in using Aadhaar face match. Or hospital staff can check you in by entering your phone number.</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
+        <p style="font-size:12px;color:var(--text-secondary);margin:0;line-height:1.7;">
+          📟 <strong>Token system is coming soon</strong> — available once hospitals install Curaah's IoT check-in kiosks. We are working to set these up at onboarded hospitals in Nangal.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+
+    /* ── Section switcher ── */
+    const sections = ['overview','appointments','claims','records','referrals','token','ai','profile'];
+
+    function showSection(name, clickedBtn) {
+      sections.forEach(s => {
+        const el = document.getElementById('section-' + s);
+        if (el) el.style.display = s === name ? 'block' : 'none';
+      });
+
+      /* Update sidebar active state */
+      if (clickedBtn) {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        clickedBtn.classList.add('active');
+      }
+
+      /* Close mobile sidebar */
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    /* ── Mobile sidebar toggle ── */
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    /* ── Greeting based on time ── */
+    function setGreeting() {
+      const hour = new Date().getHours();
+      let greet = 'Good morning 👋';
+      if (hour >= 12 && hour < 17) greet = 'Good afternoon 👋';
+      else if (hour >= 17)         greet = 'Good evening 👋';
+      const el = document.getElementById('greeting');
+      if (el) el.textContent = greet;
+    }
+
+    /* ── Load patient name ── */
+    function loadPatientName() {
+      /*
+        TODO: Load from Supabase session
+        const { data: { user } } = await supabase.auth.getUser()
+        Then fetch from 'patients' table using user.id
+      */
+      const name = 'Patient'; /* Replace with real name from Supabase */
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+      const els = {
+        navName:       document.getElementById('navName'),
+        sidebarName:   document.getElementById('sidebarName'),
+        sidebarAvatar: document.getElementById('sidebarAvatar'),
+        dashTitle:     document.getElementById('dashTitle'),
+        profileName:   document.getElementById('profileName'),
+      };
+
+      if (els.navName)       els.navName.textContent     = name;
+      if (els.sidebarName)   els.sidebarName.textContent = name;
+      if (els.sidebarAvatar) els.sidebarAvatar.textContent = initials;
+      if (els.dashTitle)     els.dashTitle.textContent   = 'Welcome back, ' + name;
+      if (els.profileName)   els.profileName.value       = name;
+    }
+
+    /* ── Logout ── */
+    function handleLogout() {
+      /*
+        TODO: supabase.auth.signOut()
+      */
+      showToast('Logged out successfully.', 'success');
+      setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+    }
+
+    /* ── Init ── */
+    setGreeting();
+    loadPatientName();
+
+  </script>
+
+</body>
+</html>
