@@ -724,10 +724,14 @@
         return;
       }
       /* 
-        TODO: Connect to Google Apps Script to save phone number
-        sendToSheet(APPS_SCRIPT_URL, { phone, timestamp: new Date().toISOString(), type: 'notify' });
-      */
-      showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
+        TODO: Connect to Google Apps Script to save phone number */
+      const APPS_SCRIPT_URL = 'YOUR_WEB_APP_URL_HERE';
+await sendToSheet(APPS_SCRIPT_URL, {
+  type: 'notify',
+  phone: phone,
+  source: 'hospitals-page'
+});
+showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
       document.getElementById('notifyPhone').value = '';
     }
   </script>
