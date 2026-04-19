@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Login to Curaah — Your Health, Your Control." />
+  <title>Login — Curaah</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── AUTH LAYOUT ── */
+    .auth-page {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* Left panel — branding */
+    .auth-left {
+      background: var(--navy-mid);
+      border-right: 1px solid var(--border-dark);
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-left::before {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      left: -100px;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,158,255,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .auth-left-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .auth-left-logo-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.3px;
+    }
+
+    .auth-left-mid {
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-left-heading {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .auth-left-heading span {
+      color: var(--electric);
+    }
+
+    .auth-left-desc {
+      font-size: 15px;
+      color: var(--text-on-dark-muted);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      max-width: 380px;
+    }
+
+    .auth-features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-on-dark-muted);
+    }
+
+    .auth-feature-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--electric);
+      flex-shrink: 0;
+    }
+
+    .auth-left-bottom {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* Right panel — form */
+    .auth-right {
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 48px;
+    }
+
+    .auth-form-wrap {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .auth-form-title {
+      font-family: 'Georgia', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .auth-form-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .auth-form-sub a {
+      color: var(--electric);
+      font-weight: 600;
+    }
+
+    .auth-form-sub a:hover {
+      text-decoration: underline;
+    }
+
+    /* Form */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* Password field with toggle */
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-muted);
+      padding: 0;
+      line-height: 1;
+    }
+
+    .password-toggle:hover {
+      color: var(--text-primary);
+    }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0;
+    }
+
+    .auth-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-card);
+    }
+
+    .auth-divider-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Forgot password */
+    .forgot-link {
+      font-size: 13px;
+      color: var(--electric);
+      font-weight: 500;
+      text-align: right;
+      display: block;
+      margin-top: -10px;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Bottom link */
+    .auth-switch {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .auth-switch a {
+      color: var(--electric);
+      font-weight: 600;
+    }
+
+    .auth-switch a:hover {
+      text-decoration: underline;
+    }
+
+    /* Terms note */
+    .auth-terms {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+
+    .auth-terms a {
+      color: var(--electric);
+    }
+
+    /* Error box */
+    .auth-error-box {
+      background: rgba(255,71,87,0.06);
+      border: 1px solid rgba(255,71,87,0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--danger);
+      display: none;
+    }
+
+    .auth-error-box.show {
+      display: block;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .auth-page {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-left {
+        display: none;
+      }
+
+      .auth-right {
+        padding: 100px 24px 48px;
+        align-items: flex-start;
+      }
+
+      .auth-form-wrap {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVBAR (minimal on auth pages)
+  ============================================ -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="register.html" class="btn btn-primary btn-sm">Create Account</a>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       AUTH PAGE
+  ============================================ -->
+  <div class="auth-page">
+
+    <!-- Left — Branding -->
+    <div class="auth-left">
+      <a href="index.html" class="auth-left-logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+          <circle cx="18" cy="22" r="3.5" fill="white"/>
+        </svg>
+        <span class="auth-left-logo-name">curaah</span>
+      </a>
+
+      <div class="auth-left-mid">
+        <h2 class="auth-left-heading">
+          Welcome back.<br/>
+          Your health is<br/>
+          <span>waiting for you.</span>
+        </h2>
+        <p class="auth-left-desc">
+          Log in to access your appointments, health records, insurance claims, and AI health assistant — all in one place.
+        </p>
+        <div class="auth-features">
+          <div class="auth-feature-item">
+            <span class="auth-feature-dot"></span>
+            View and manage your OPD appointments
+          </div>
+          <div class="auth-feature-item">
+            <span class="auth-feature-dot"></span>
+            Track Ayushman Bharat & MMSBY claim status
+          </div>
+          <div class="auth-feature-item">
+            <span class="auth-feature-dot"></span>
+            Access your complete medical history
+          </div>
+          <div class="auth-feature-item">
+            <span class="auth-feature-dot"></span>
+            Get AI-powered health guidance
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-left-bottom">
+        © 2025 Curaah · Built in Nangal, Punjab
+      </div>
+    </div>
+
+    <!-- Right — Login Form -->
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+
+        <h1 class="auth-form-title">Login to Curaah</h1>
+        <p class="auth-form-sub">
+          Don't have an account? <a href="register.html">Register free →</a>
+        </p>
+
+        <!-- Error box -->
+        <div class="auth-error-box" id="errorBox">
+          Incorrect phone number or password. Please try again.
+        </div>
+
+        <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input
+              class="form-input"
+              type="tel"
+              id="phone"
+              placeholder="Enter your 10-digit number"
+              maxlength="10"
+              autocomplete="tel"
+              required
+            />
+            <span class="form-error" id="phoneError"></span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-wrap">
+              <input
+                class="form-input"
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="password-toggle" onclick="togglePassword('password', this)">👁️</button>
+            </div>
+            <span class="form-error" id="passwordError"></span>
+          </div>
+
+          <!-- Forgot password -->
+          <a href="#" class="forgot-link" onclick="handleForgot(event)">Forgot password?</a>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginBtn">
+            Login to My Account
+          </button>
+
+          <div class="auth-divider">
+            <div class="auth-divider-line"></div>
+            <span class="auth-divider-text">or</span>
+            <div class="auth-divider-line"></div>
+          </div>
+
+          <!-- Register link -->
+          <a href="register.html" class="btn btn-secondary btn-full">
+            Create a New Account
+          </a>
+
+        </form>
+
+        <p class="auth-switch" style="margin-top: 20px;">
+          Are you a hospital or facility? <a href="onboard.html">Onboard here →</a>
+        </p>
+
+        <p class="auth-terms" style="margin-top: 16px;">
+          By logging in you agree to our
+          <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+    /* ── Password visibility toggle ── */
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁️';
+      }
+    }
+
+    /* ── Login handler ── */
+    function handleLogin(e) {
+      e.preventDefault();
+
+      const phone    = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorBox = document.getElementById('errorBox');
+      const btn      = document.getElementById('loginBtn');
+
+      /* Basic validation */
+      let valid = true;
+
+      if (!isValidPhone(phone)) {
+        document.getElementById('phoneError').textContent = 'Enter a valid 10-digit Indian mobile number.';
+        document.getElementById('phone').style.borderColor = 'var(--danger)';
+        valid = false;
+      } else {
+        document.getElementById('phoneError').textContent = '';
+        document.getElementById('phone').style.borderColor = '';
+      }
+
+      if (password.length < 6) {
+        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
+        document.getElementById('password').style.borderColor = 'var(--danger)';
+        valid = false;
+      } else {
+        document.getElementById('passwordError').textContent = '';
+        document.getElementById('password').style.borderColor = '';
+      }
+
+      if (!valid) return;
+
+      /* Loading state */
+      btn.textContent = 'Logging in...';
+      btn.disabled = true;
+      errorBox.classList.remove('show');
+
+      /*
+        TODO: Replace this with Supabase auth
+        ─────────────────────────────────────
+        import { createClient } from '@supabase/supabase-js'
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        const { data, error } = await supabase.auth.signInWithPassword({
+          phone: '+91' + phone,
+          password: password
+        })
+        if (error) { show error } else { redirect to dashboard }
+        ─────────────────────────────────────
+      */
+
+      /* Simulated response for now */
+      setTimeout(() => {
+        btn.textContent = 'Login to My Account';
+        btn.disabled = false;
+        errorBox.classList.add('show');
+        showToast('Login backend not connected yet. Coming soon!', 'info');
+      }, 1200);
+    }
+
+    /* ── Forgot password ── */
+    function handleForgot(e) {
+      e.preventDefault();
+      showToast('Password reset will be available once Supabase is connected.', 'info');
+    }
+  </script>
+
+</body>
+</html>
