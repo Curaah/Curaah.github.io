@@ -717,7 +717,7 @@
     });
 
     /* ── Notify me ── */
-    function handleNotify() {
+    async function handleNotify() {
       const phone = document.getElementById('notifyPhone').value.trim();
       if (!phone || phone.length < 10) {
         showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
