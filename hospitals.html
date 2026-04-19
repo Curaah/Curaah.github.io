@@ -389,6 +389,34 @@
       border-color: var(--electric);
     }
 
+
+    /* ── CITY FILTER BUTTONS ── */
+.city-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+
+.city-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--white);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.city-btn.active {
+  background: var(--electric);
+  color: var(--white);
+  border-color: var(--electric);
+}
+    
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .search-bar { flex-direction: column; }
@@ -447,9 +475,9 @@
   ============================================ -->
   <div class="page-header">
     <div class="page-header-inner">
-      <div class="section-label" style="margin-bottom:10px;">Nangal, Punjab</div>
+      <div class="section-label" style="margin-bottom:10px;">Punjab & Himachal Pradesh</div>
       <h1>Find hospitals, labs & more</h1>
-      <p>Search and discover healthcare facilities near you — book appointments, check availability, and verify insurance coverage.</p>
+      <p>Search and discover healthcare facilities near you — filter by your city, category, and insurance scheme.</p>
 
       <div class="search-bar">
         <div class="search-input-wrap">
@@ -462,6 +490,18 @@
           />
         </div>
         <button class="btn btn-primary" onclick="handleSearch()">Search</button>
+      </div>
+
+      <!-- City filter -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+        <button class="city-btn active" onclick="setCity(this, 'all')">All Cities</button>
+        <button class="city-btn" onclick="setCity(this, 'nangal')">Nangal</button>
+        <button class="city-btn" onclick="setCity(this, 'anandpur')">Anandpur Sahib</button>
+        <button class="city-btn" onclick="setCity(this, 'ropar')">Ropar</button>
+        <button class="city-btn" onclick="setCity(this, 'morinda')">Morinda</button>
+        <button class="city-btn" onclick="setCity(this, 'una')">Una (HP)</button>
+        <button class="city-btn" onclick="setCity(this, 'bilaspur')">Bilaspur (HP)</button>
+        <button class="city-btn" onclick="setCity(this, 'chandigarh')">Chandigarh</button>
       </div>
     </div>
   </div>
@@ -504,8 +544,8 @@
       <!-- Results info bar -->
       <div class="results-info">
         <p class="results-count" id="resultsCount">
-          Showing <strong>0 facilities</strong> in Nangal, Punjab
-        </p>
+  Showing <strong>0 facilities</strong> in all areas
+</p>
         <select class="sort-select">
           <option>Sort: Nearest first</option>
           <option>Sort: A to Z</option>
@@ -682,11 +722,29 @@
       diagnostic:    { icon: '📡', title: 'No diagnostic centres onboarded yet', desc: 'Diagnostic centres offering scans, X-rays, and tests can register to receive patient bookings.' },
     };
 
-    function setFilter(btn, filter) {
-      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      updateEmptyState(filter);
-    }
+    let currentCity = 'all';
+let currentFilter = 'all';
+
+function setFilter(btn, filter) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = filter;
+  updateEmptyState(filter, currentCity);
+}
+
+function setCity(btn, city) {
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCity = city;
+  updateEmptyState(currentFilter, currentCity);
+  updateResultsCount(city);
+}
+
+function updateResultsCount(city) {
+  const label = city === 'all' ? 'all areas' : city.charAt(0).toUpperCase() + city.slice(1);
+  document.getElementById('resultsCount').innerHTML =
+    `Showing <strong>0 facilities</strong> in ${label}`;
+}
 
     function setFilterFromCard(filter) {
       document.querySelectorAll('.filter-tab').forEach(t => {
@@ -697,12 +755,14 @@
       document.querySelector('.filters-bar').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function updateEmptyState(filter) {
-      const data = emptyIcons[filter] || emptyIcons.all;
-      document.getElementById('emptyIcon').textContent  = data.icon;
-      document.getElementById('emptyTitle').textContent = data.title;
-      document.getElementById('emptyDesc').textContent  = data.desc;
-    }
+    function updateEmptyState(filter, city) {
+  const data = emptyIcons[filter] || emptyIcons.all;
+  const cityLabel = (!city || city === 'all') ? 'your area' : city.charAt(0).toUpperCase() + city.slice(1);
+  document.getElementById('emptyIcon').textContent  = data.icon;
+  document.getElementById('emptyTitle').textContent = data.title;
+  document.getElementById('emptyDesc').textContent  =
+    `No ${filter === 'all' ? 'facilities' : filter + 's'} onboarded in ${cityLabel} yet. Once they join Curaah their profile will appear here.`;
+}
 
     /* ── Search ── */
     function handleSearch() {
