@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Register your hospital, lab, or clinic on Curaah — free onboarding for facilities in Nangal, Punjab." />
+  <title>Register Your Facility — Curaah</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── PAGE HEADER ── */
+    .onboard-hero {
+      background: var(--navy);
+      padding: 110px 6% 64px;
+      border-bottom: 1px solid var(--border-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .onboard-hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,158,255,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .onboard-hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .onboard-hero h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .onboard-hero h1 span { color: var(--electric); }
+
+    .onboard-hero-desc {
+      font-size: 16px;
+      color: var(--text-on-dark-muted);
+      line-height: 1.75;
+      margin-bottom: 32px;
+      max-width: 440px;
+    }
+
+    .onboard-benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .onboard-benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-on-dark-muted);
+      line-height: 1.5;
+    }
+
+    .onboard-benefit-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.12);
+      border: 1px solid rgba(61,158,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* Stats on hero right */
+    .onboard-hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .onboard-stat {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .onboard-stat-num {
+      font-family: 'Georgia', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--electric);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .onboard-stat-label {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+      line-height: 1.5;
+    }
+
+    /* ── FORM SECTION ── */
+    .onboard-form-section {
+      padding: 64px 6%;
+      background: var(--off-white);
+    }
+
+    .onboard-form-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    /* Left sticky info */
+    .onboard-form-info {
+      position: sticky;
+      top: calc(var(--nav-height) + 24px);
+    }
+
+    .onboard-form-info-title {
+      font-family: 'Georgia', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .onboard-form-info-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    /* Steps indicator */
+    .form-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .form-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+    }
+
+    .form-step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 32px;
+      bottom: -8px;
+      width: 1.5px;
+      background: var(--border-card);
+    }
+
+    .form-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1.5px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      transition: var(--transition);
+    }
+
+    .form-step-num.done {
+      background: var(--electric);
+      border-color: var(--electric);
+      color: white;
+    }
+
+    .form-step-num.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    .form-step-content {
+      padding: 4px 0 20px;
+    }
+
+    .form-step-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .form-step-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── FORM CARD ── */
+    .onboard-form-card {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .form-card-header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .form-card-header-icon {
+      font-size: 22px;
+    }
+
+    .form-card-header-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-card-header-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .form-card-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-section-divider {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Checkbox group */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border-card);
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+
+    .checkbox-item:hover {
+      border-color: rgba(61,158,255,0.3);
+      background: rgba(61,158,255,0.02);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--electric);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + .checkbox-label-wrap {
+      color: var(--electric);
+    }
+
+    .checkbox-item:has(input:checked) {
+      border-color: var(--electric);
+      background: rgba(61,158,255,0.04);
+    }
+
+    .checkbox-label-wrap { flex: 1; }
+
+    .checkbox-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .checkbox-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Scheme checkboxes (horizontal) */
+    .scheme-checkboxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Form card footer */
+    .form-card-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--border-card);
+      background: var(--off-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .form-card-footer-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 360px;
+    }
+
+    /* Error box */
+    .form-error-box {
+      background: rgba(255,71,87,0.06);
+      border: 1px solid rgba(255,71,87,0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--danger);
+      display: none;
+    }
+
+    .form-error-box.show { display: block; }
+
+    /* Success screen */
+    .onboard-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 64px 32px;
+    }
+
+    .onboard-success.show { display: flex; }
+
+    .success-shield {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0,196,140,0.1);
+      border: 2px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 24px;
+    }
+
+    .success-title {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .success-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 440px;
+      margin-bottom: 32px;
+    }
+
+    .success-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .success-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .success-step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--electric);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 64px 6%;
+      background: var(--white);
+    }
+
+    .faq-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+    }
+
+    .faq-question:hover { background: var(--off-white); }
+
+    .faq-arrow {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    .faq-answer {
+      display: none;
+      padding: 0 20px 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      border-top: 1px solid var(--border-card);
+      padding-top: 14px;
+    }
+
+    .faq-item.open .faq-answer { display: block; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .onboard-hero-inner  { grid-template-columns: 1fr; gap: 40px; }
+      .onboard-hero-stats  { display: none; }
+      .onboard-form-inner  { grid-template-columns: 1fr; }
+      .onboard-form-info   { position: static; }
+      .form-steps          { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
+      .scheme-checkboxes        { grid-template-columns: 1fr; }
+      .form-card-footer         { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVBAR
+  ============================================ -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hospitals.html">Hospitals</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Patient Register</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="hospitals.html">Hospitals</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register as Patient</a>
+  </div>
+
+  <!-- ============================================
+       HERO
+  ============================================ -->
+  <section class="onboard-hero">
+    <div class="onboard-hero-inner">
+      <div>
+        <div class="section-label" style="margin-bottom:12px;">For Hospitals & Facilities</div>
+        <h1>
+          Join Curaah.<br/>
+          Reach every patient in<br/>
+          <span>Nangal for free.</span>
+        </h1>
+        <p class="onboard-hero-desc">
+          Register your hospital, lab, medical store, sarai, or dispensary on Curaah at zero cost. We set up your profile, train your staff, and connect you with thousands of patients in your area.
+        </p>
+        <div class="onboard-benefits">
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    Dedicated profile page with live doctor & bed availability
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    Receive patient appointment bookings directly
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    Smart token system — patients sit, not stand in queues
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    QR check-in codes for your OPD — just print and stick
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    Insurance pre-verification before patient arrives
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    Doctor attendant portal — patient data auto-loaded
+  </div>
+  <div class="onboard-benefit">
+    <div class="onboard-benefit-icon">✓</div>
+    100% free — no subscription, no commission, no hardware cost
+  </div>
+</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="onboard-hero-stats">
+        <div class="onboard-stat">
+          <div class="onboard-stat-num">₹0</div>
+          <div class="onboard-stat-label">Cost to join Curaah — free forever for early partners</div>
+        </div>
+        <div class="onboard-stat">
+          <div class="onboard-stat-num">24h</div>
+          <div class="onboard-stat-label">Our team contacts you within 24 hours of registration</div>
+        </div>
+        <div class="onboard-stat">
+          <div class="onboard-stat-num">4+</div>
+          <div class="onboard-stat-label">Govt. insurance schemes supported on the platform</div>
+        </div>
+        <div class="onboard-stat">
+          <div class="onboard-stat-num">AI</div>
+          <div class="onboard-stat-label">Smart patient routing — right patient, right facility</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ONBOARDING FORM
+  ============================================ -->
+  <section class="onboard-form-section">
+    <div class="onboard-form-inner">
+
+      <!-- Left info -->
+      <div class="onboard-form-info">
+        <div class="section-label" style="margin-bottom:10px;">Registration Form</div>
+        <div class="onboard-form-info-title">Fill once, go live fast</div>
+        <p class="onboard-form-info-desc">
+          This takes about 5 minutes. After submission, our team will contact you within 24 hours to verify details and set up your profile.
+        </p>
+
+        <div class="form-steps">
+          <div class="form-step-item">
+            <div class="form-step-num active" id="step1">1</div>
+            <div class="form-step-content">
+              <div class="form-step-title">Facility details</div>
+              <div class="form-step-desc">Basic info about your facility</div>
+            </div>
+          </div>
+          <div class="form-step-item">
+            <div class="form-step-num" id="step2">2</div>
+            <div class="form-step-content">
+              <div class="form-step-title">Services & capacity</div>
+              <div class="form-step-desc">Doctors, beds, timings</div>
+            </div>
+          </div>
+          <div class="form-step-item">
+            <div class="form-step-num" id="step3">3</div>
+            <div class="form-step-content">
+              <div class="form-step-title">Insurance schemes</div>
+              <div class="form-step-desc">Which schemes you accept</div>
+            </div>
+          </div>
+          <div class="form-step-item">
+            <div class="form-step-num" id="step4">4</div>
+            <div class="form-step-content">
+              <div class="form-step-title">Contact person</div>
+              <div class="form-step-desc">Who we should reach out to</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form card -->
+      <div class="onboard-form-card">
+
+        <!-- Form view -->
+        <div id="onboardFormView">
+          <div class="form-card-header">
+            <span class="form-card-header-icon">🏥</span>
+            <div>
+              <div class="form-card-header-title">Register Your Facility on Curaah</div>
+              <div class="form-card-header-sub">All fields marked * are required. This information helps us set up your profile accurately.</div>
+            </div>
+          </div>
+
+          <form class="form-card-body" id="onboardForm" onsubmit="handleOnboard(event)">
+
+            <!-- Error box -->
+            <div class="form-error-box" id="onboardError">
+              Please fill all required fields correctly before submitting.
+            </div>
+
+            <!-- SECTION 1: Facility Details -->
+            <div class="form-section-divider">1 — Facility Details</div>
+
+            <div class="form-group">
+              <label class="form-label" for="facilityName">Facility Name *</label>
+              <input class="form-input" type="text" id="facilityName"
+                placeholder="e.g. NFL Hospital, Nangal City Clinic"
+                required />
+              <span class="form-error" id="facilityNameError"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Facility Type *</label>
+              <div class="checkbox-group" id="facilityTypeGroup">
+                <label class="checkbox-item">
+                  <input type="radio" name="facilityType" value="hospital" required />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">🏥 Hospital / Clinical Establishment</span>
+                    <span class="checkbox-sub">Multi-specialty or single specialty hospital, nursing home</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="radio" name="facilityType" value="laboratory" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">🔬 Laboratory / Diagnostic Centre</span>
+                    <span class="checkbox-sub">Blood tests, pathology, X-ray, MRI, CT scan, ultrasound</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="radio" name="facilityType" value="medical-store" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">💊 Medical Store / Pharmacy</span>
+                    <span class="checkbox-sub">Retail pharmacy, Jan Aushadhi store</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="radio" name="facilityType" value="sarai" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">🏨 Sarai / Patient Lodge</span>
+                    <span class="checkbox-sub">Accommodation for patient attendants near hospitals</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="radio" name="facilityType" value="dispensary" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">🩺 Dispensary / PHC / Government Clinic</span>
+                    <span class="checkbox-sub">Government dispensary, Primary Health Centre, Sub-centre</span>
+                  </div>
+                </label>
+              </div>
+              <span class="form-error" id="facilityTypeError"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="address">Full Address *</label>
+              <textarea class="form-input form-textarea" id="address"
+                placeholder="Street, locality, city, PIN code"
+                rows="3" required></textarea>
+              <span class="form-error" id="addressError"></span>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="city">City / Area *</label>
+                <input class="form-input" type="text" id="city"
+                  placeholder="e.g. Nangal" required />
+                <span class="form-error" id="cityError"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pincode">PIN Code *</label>
+                <input class="form-input" type="text" id="pincode"
+                  placeholder="e.g. 140124" maxlength="6" required />
+                <span class="form-error" id="pincodeError"></span>
+              </div>
+            </div>
+
+            <!-- SECTION 2: Services & Capacity -->
+            <div class="form-section-divider">2 — Services & Capacity</div>
+
+            <div class="form-row-3" id="hospitalFields">
+              <div class="form-group">
+                <label class="form-label" for="doctorCount">No. of Doctors</label>
+                <input class="form-input" type="number" id="doctorCount"
+                  placeholder="e.g. 12" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bedCount">Total Beds</label>
+                <input class="form-input" type="number" id="bedCount"
+                  placeholder="e.g. 50" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="opdDays">OPD Days</label>
+                <select class="form-input form-select" id="opdDays">
+                  <option value="" disabled selected>Select</option>
+                  <option>Mon – Sat</option>
+                  <option>Mon – Fri</option>
+                  <option>All 7 days</option>
+                  <option>Mon, Wed, Fri</option>
+                  <option>As per schedule</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="opdStart">OPD Start Time</label>
+                <input class="form-input" type="time" id="opdStart" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="opdEnd">OPD End Time</label>
+                <input class="form-input" type="time" id="opdEnd" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="specialities">Specialities / Services Offered</label>
+              <input class="form-input" type="text" id="specialities"
+                placeholder="e.g. General Medicine, Orthopaedics, Gynaecology, Blood Tests, X-Ray" />
+              <span class="form-hint">Separate with commas</span>
+            </div>
+
+            <!-- SECTION 3: Insurance Schemes -->
+            <div class="form-section-divider">3 — Insurance Schemes Accepted</div>
+
+            <div class="form-group">
+              <label class="form-label">Which government health schemes do you accept?</label>
+              <div class="scheme-checkboxes">
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="ayushman" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">Ayushman Bharat PM-JAY</span>
+                    <span class="checkbox-sub">₹5 lakh / year · Central govt.</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="mmsby" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">Mukhyamantri Sehat Bima</span>
+                    <span class="checkbox-sub">₹10 lakh / year · Punjab</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="cghs" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">CGHS / CSMA</span>
+                    <span class="checkbox-sub">Central govt. employees</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="esi" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">ESI Scheme</span>
+                    <span class="checkbox-sub">Organised sector workers</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="private-insurance" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">Private Insurance</span>
+                    <span class="checkbox-sub">Star, HDFC ERGO, etc.</span>
+                  </div>
+                </label>
+                <label class="checkbox-item">
+                  <input type="checkbox" name="scheme" value="none" />
+                  <div class="checkbox-label-wrap">
+                    <span class="checkbox-label">None / Not sure yet</span>
+                    <span class="checkbox-sub">We can help you get empanelled</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- SECTION 4: Contact Person -->
+            <div class="form-section-divider">4 — Contact Person</div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="contactName">Contact Person Name *</label>
+                <input class="form-input" type="text" id="contactName"
+                  placeholder="Full name" required />
+                <span class="form-error" id="contactNameError"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contactRole">Designation / Role *</label>
+                <input class="form-input" type="text" id="contactRole"
+                  placeholder="e.g. Medical Superintendent, Owner" required />
+                <span class="form-error" id="contactRoleError"></span>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="contactPhone">Phone / WhatsApp *</label>
+                <input class="form-input" type="tel" id="contactPhone"
+                  placeholder="10-digit number" maxlength="10" required />
+                <span class="form-error" id="contactPhoneError"></span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contactEmail">
+                  Email Address
+                  <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:4px;">(optional)</span>
+                </label>
+                <input class="form-input" type="email" id="contactEmail"
+                  placeholder="For onboarding communication" />
+                <span class="form-error" id="contactEmailError"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="additionalNotes">
+                Anything else you'd like us to know?
+                <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:4px;">(optional)</span>
+              </label>
+              <textarea class="form-input form-textarea" id="additionalNotes"
+                placeholder="Special services, existing software, questions about Curaah..."
+                rows="3"></textarea>
+            </div>
+
+          </form>
+
+          <div class="form-card-footer">
+            <p class="form-card-footer-note">
+              🔒 Your information is confidential and used only for onboarding purposes. We will contact you within 24 hours.
+            </p>
+            <button class="btn btn-primary btn-lg" onclick="handleOnboard(event)" id="onboardBtn">
+              Submit Registration →
+            </button>
+          </div>
+        </div>
+
+        <!-- Success screen -->
+        <div class="onboard-success" id="onboardSuccess">
+          <div class="success-shield">🎉</div>
+          <div class="success-title">Registration Received!</div>
+          <p class="success-desc">
+            Thank you for registering on Curaah. Our team will contact you on your WhatsApp number within 24 hours to verify details and set up your facility profile.
+          </p>
+          <div class="success-steps">
+            <div class="success-step">
+              <div class="success-step-num">1</div>
+              Our team reviews your registration today
+            </div>
+            <div class="success-step">
+              <div class="success-step-num">2</div>
+              We call / WhatsApp you to verify details
+            </div>
+            <div class="success-step">
+              <div class="success-step-num">3</div>
+              Your facility profile goes live on Curaah
+            </div>
+            <div class="success-step">
+              <div class="success-step-num">4</div>
+              Patients in Nangal can find and book you
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
+            <a href="index.html" class="btn btn-primary">Back to Home</a>
+            <a href="hospitals.html" class="btn btn-secondary">View Hospitals Page</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FAQ
+  ============================================ -->
+  <section class="faq-section">
+    <div class="faq-inner">
+      <div class="text-center">
+        <div class="section-label" style="margin-bottom:10px;">Common Questions</div>
+        <h2 class="section-title">Frequently asked questions</h2>
+        <p class="section-sub" style="margin:0 auto;">Everything a hospital administrator needs to know before joining Curaah.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Is Curaah really free for hospitals? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            Yes — completely free for all early partner facilities in Nangal. There is no subscription fee, no commission on appointments, and no hidden charges. Our goal right now is to build the network and prove value. Revenue model will be discussed transparently with all partners before anything changes.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Do we need any technical setup or software? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            No. Curaah handles all technical setup. Your staff just needs a smartphone or computer with internet. We will visit your facility, train your staff (usually takes 1–2 hours), and handle everything. You do not need to install any software.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What information will be shown on our profile? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            Your profile will show your facility name, type, address, contact number, OPD days and timings, list of doctors with their specialities, real-time bed availability (for hospitals), insurance schemes accepted, and an appointment booking button. You control all this information and can update it anytime.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            How does appointment booking work for our OPD? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            Patients book a slot through Curaah. You receive the booking on your dashboard with patient name, phone, and preferred doctor. Your staff confirms it. The patient gets an SMS with their appointment details. Walk-in queues reduce automatically.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            We are a PSU hospital (NFL/BBMB). Can we join? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            Yes. PSU hospitals like NFL and BBMB are welcome. We understand there may be internal approval processes and we are happy to work with your administration at every step — provide documentation, meet with your medical superintendent, or present to your management team.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            What happens after we submit this form? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            Our team will contact you on WhatsApp within 24 hours. We will schedule a short visit to your facility (30–45 minutes), verify details, and set up your profile. Your facility goes live on Curaah once everything is confirmed by both sides.
+          </div>
+        </div>
+
+        <div class="faq-item">
+  <button class="faq-question" onclick="toggleFaq(this)">
+    How does the token and queue system work? <span class="faq-arrow">▼</span>
+  </button>
+  <div class="faq-answer">
+    Once your hospital is onboarded, Curaah generates unique QR codes for each of your OPD departments. You simply print them and stick them at the OPD entrance — no hardware, no installation, no electricity needed. When a patient arrives with a Curaah appointment, they scan the QR code on their phone and get a token number instantly. They sit down comfortably and receive an SMS notification when their turn is approaching. For patients without smartphones, your staff can check them in on any device. The entire setup costs nothing and eliminates OPD queues from day one.
+  </div>
+</div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+            <circle cx="18" cy="22" r="3.5" fill="white"/>
+          </svg>
+          curaah
+        </div>
+        <p class="footer-brand-desc">Your health, your control. A unified platform connecting patients, hospitals, labs, and health schemes across Punjab.</p>
+        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-col-links">
+          <li><a href="hospitals.html">Find Hospitals</a></li>
+          <li><a href="register.html">Register as Patient</a></li>
+          <li><a href="login.html">Patient Login</a></li>
+          <li><a href="onboard.html">Hospital Onboarding</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-col-links">
+          <li><a href="#">Appointment Booking</a></li>
+          <li><a href="#">Insurance Tracking</a></li>
+          <li><a href="#">Health Records</a></li>
+          <li><a href="#">AI Diagnostics</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-col-links">
+          <li><a href="mailto:hello@curaah.in">hello@curaah.in</a></li>
+          <li><a href="#">Nangal, Punjab 140124</a></li>
+          <li><a href="#">WhatsApp Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-bottom-text">© 2025 Curaah. All rights reserved. Built for the people of Punjab.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+
+    /* ── FAQ toggle ── */
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      item.classList.toggle('open');
+    }
+
+    /* ── Form submission ── */
+    function handleOnboard(e) {
+      e.preventDefault();
+
+      const facilityName  = document.getElementById('facilityName').value.trim();
+      const facilityType  = document.querySelector('input[name="facilityType"]:checked');
+      const address       = document.getElementById('address').value.trim();
+      const city          = document.getElementById('city').value.trim();
+      const pincode       = document.getElementById('pincode').value.trim();
+      const contactName   = document.getElementById('contactName').value.trim();
+      const contactRole   = document.getElementById('contactRole').value.trim();
+      const contactPhone  = document.getElementById('contactPhone').value.trim();
+      const contactEmail  = document.getElementById('contactEmail').value.trim();
+      const errorBox      = document.getElementById('onboardError');
+      const btn           = document.getElementById('onboardBtn');
+
+      let valid = true;
+
+      function setError(id, msg) {
+        const el = document.getElementById(id + 'Error');
+        const inp = document.getElementById(id);
+        if (el) el.textContent = msg;
+        if (inp) inp.style.borderColor = msg ? 'var(--danger)' : '';
+        if (msg) valid = false;
+      }
+
+      /* Validate */
+      setError('facilityName', facilityName.length < 2 ? 'Please enter the facility name.' : '');
+      setError('address',      address.length < 5      ? 'Please enter the full address.'  : '');
+      setError('city',         city.length < 2         ? 'Please enter the city.'          : '');
+      setError('pincode',      !/^\d{6}$/.test(pincode) ? 'Enter a valid 6-digit PIN code.' : '');
+      setError('contactName',  contactName.length < 2  ? 'Please enter the contact person name.' : '');
+      setError('contactRole',  contactRole.length < 2  ? 'Please enter their designation.'       : '');
+      setError('contactPhone', !isValidPhone(contactPhone) ? 'Enter a valid 10-digit number.'    : '');
+
+      if (!facilityType) {
+        document.getElementById('facilityTypeError').textContent = 'Please select a facility type.';
+        valid = false;
+      } else {
+        document.getElementById('facilityTypeError').textContent = '';
+      }
+
+      if (contactEmail && !isValidEmail(contactEmail)) {
+        setError('contactEmail', 'Please enter a valid email address.');
+      } else {
+        setError('contactEmail', '');
+      }
+
+      if (!valid) {
+        errorBox.classList.add('show');
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      errorBox.classList.remove('show');
+
+      /* Collect all data */
+      const schemes = Array.from(document.querySelectorAll('input[name="scheme"]:checked'))
+                           .map(cb => cb.value);
+
+      const formData = {
+        facilityName,
+        facilityType:  facilityType.value,
+        address,
+        city,
+        pincode,
+        doctorCount:   document.getElementById('doctorCount').value,
+        bedCount:      document.getElementById('bedCount').value,
+        opdDays:       document.getElementById('opdDays').value,
+        opdStart:      document.getElementById('opdStart').value,
+        opdEnd:        document.getElementById('opdEnd').value,
+        specialities:  document.getElementById('specialities').value,
+        schemesAccepted: schemes.join(', '),
+        contactName,
+        contactRole,
+        contactPhone,
+        contactEmail,
+        notes:         document.getElementById('additionalNotes').value,
+        submittedAt:   new Date().toLocaleString('en-IN'),
+      };
+
+      /* Loading state */
+      btn.textContent = 'Submitting...';
+      btn.disabled    = true;
+
+      /*
+        TODO: Connect to Google Apps Script
+        ─────────────────────────────────────
+        Replace APPS_SCRIPT_URL with your deployed Apps Script web app URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
+        await sendToSheet(APPS_SCRIPT_URL, formData);
+        ─────────────────────────────────────
+      */
+
+      /* Simulated submit for now */
+      setTimeout(() => {
+        btn.textContent = 'Submit Registration →';
+        btn.disabled    = false;
+
+        /* Update step indicators */
+        ['step1','step2','step3','step4'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.classList.remove('active'); el.classList.add('done'); el.textContent = '✓'; }
+        });
+
+        /* Show success */
+        document.getElementById('onboardFormView').style.display = 'none';
+        document.getElementById('onboardSuccess').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        showToast('Registration submitted successfully!', 'success');
+      }, 1600);
+    }
+
+  </script>
+
+</body>
+</html>
