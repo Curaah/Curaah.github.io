@@ -1116,7 +1116,7 @@
     }
 
     /* ── Form submission ── */
-    function handleOnboard(e) {
+    async function handleOnboard(e) {
       e.preventDefault();
 
       const facilityName  = document.getElementById('facilityName').value.trim();
@@ -1198,34 +1198,30 @@
 
       /* Loading state */
       btn.textContent = 'Submitting...';
-      btn.disabled    = true;
+      btn.disabled = true;
 
-      /*
-        TODO: Connect to Google Apps Script */
       /* Apps Script URL */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1cg/exec';
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1cg/exec';
 
-/* Send to Google Sheet */
-formData.type = 'onboarding';
-const result = await sendToSheet(APPS_SCRIPT_URL, formData);
+      /* Send to Google Sheet */
+      formData.type = 'onboarding';
+      await sendToSheet(APPS_SCRIPT_URL, formData);
 
-setTimeout(() => {
-        btn.textContent = 'Submit Registration →';
-        btn.disabled    = false;
+      /* Reset button */
+      btn.textContent = 'Submit Registration →';
+      btn.disabled = false;
 
-        /* Update step indicators */
-        ['step1','step2','step3','step4'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) { el.classList.remove('active'); el.classList.add('done'); el.textContent = '✓'; }
-        });
+      /* Update step indicators */
+      ['step1','step2','step3','step4'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('active'); el.classList.add('done'); el.textContent = '✓'; }
+      });
 
-        /* Show success */
-        document.getElementById('onboardFormView').style.display = 'none';
-        document.getElementById('onboardSuccess').classList.add('show');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        showToast('Registration submitted successfully!', 'success');
-      }, 1600);
+      /* Show success */
+      document.getElementById('onboardFormView').style.display = 'none';
+      document.getElementById('onboardSuccess').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('Registration submitted successfully!', 'success');
     }
 
   </script>
