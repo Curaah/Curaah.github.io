@@ -1201,14 +1201,15 @@
       btn.disabled    = true;
 
       /*
-        TODO: Connect to Google Apps Script
-        ─────────────────────────────────────
-        Replace APPS_SCRIPT_URL with your deployed Apps Script web app URL
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
-        await sendToSheet(APPS_SCRIPT_URL, formData);
-        ─────────────────────────────────────
-      */
+        TODO: Connect to Google Apps Script */
+      /* Apps Script URL */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1cg/exec';
 
+/* Send to Google Sheet */
+formData.type = 'onboarding';
+const result = await sendToSheet(APPS_SCRIPT_URL, formData);
+
+setTimeout(() => {
       /* Simulated submit for now */
       setTimeout(() => {
         btn.textContent = 'Submit Registration →';
