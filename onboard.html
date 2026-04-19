@@ -1210,8 +1210,6 @@ formData.type = 'onboarding';
 const result = await sendToSheet(APPS_SCRIPT_URL, formData);
 
 setTimeout(() => {
-      /* Simulated submit for now */
-      setTimeout(() => {
         btn.textContent = 'Submit Registration →';
         btn.disabled    = false;
 
