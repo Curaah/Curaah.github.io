@@ -24,7 +24,6 @@
       min-height: 100vh;
     }
 
-    /* Left panel */
     .auth-left {
       background: var(--navy-mid);
       border-right: 1px solid var(--border-dark);
@@ -39,10 +38,8 @@
     .auth-left::before {
       content: '';
       position: absolute;
-      top: -100px;
-      right: -100px;
-      width: 400px;
-      height: 400px;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(61,158,255,0.07) 0%, transparent 65%);
       pointer-events: none;
@@ -98,8 +95,7 @@
     }
 
     .auth-feature-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--electric);
       flex-shrink: 0;
@@ -110,7 +106,6 @@
       color: rgba(255,255,255,0.25);
     }
 
-    /* Right panel */
     .auth-right {
       background: var(--white);
       display: flex;
@@ -147,7 +142,6 @@
 
     .auth-form-sub a:hover { text-decoration: underline; }
 
-    /* Form */
     .auth-form {
       display: flex;
       flex-direction: column;
@@ -160,7 +154,6 @@
       gap: 14px;
     }
 
-    /* Password wrap */
     .password-wrap { position: relative; }
 
     .password-toggle {
@@ -179,7 +172,6 @@
 
     .password-toggle:hover { color: var(--text-primary); }
 
-    /* Optional badge */
     .label-optional {
       font-size: 11px;
       font-weight: 400;
@@ -187,7 +179,6 @@
       margin-left: 6px;
     }
 
-    /* ABHA info box */
     .abha-info {
       background: rgba(61,158,255,0.05);
       border: 1px solid rgba(61,158,255,0.15);
@@ -211,7 +202,6 @@
       font-weight: 600;
     }
 
-    /* Section divider inside form */
     .form-section-label {
       font-size: 11px;
       font-weight: 700;
@@ -223,7 +213,6 @@
       margin-bottom: 2px;
     }
 
-    /* Password strength */
     .password-strength {
       display: flex;
       gap: 4px;
@@ -248,7 +237,6 @@
       margin-top: 4px;
     }
 
-    /* Success state */
     .auth-success {
       display: none;
       flex-direction: column;
@@ -261,8 +249,7 @@
     .auth-success.show { display: flex; }
 
     .success-icon {
-      width: 72px;
-      height: 72px;
+      width: 72px; height: 72px;
       border-radius: 50%;
       background: rgba(0,196,140,0.1);
       border: 2px solid var(--success);
@@ -286,7 +273,6 @@
       max-width: 320px;
     }
 
-    /* Bottom links */
     .auth-switch {
       text-align: center;
       font-size: 14px;
@@ -309,7 +295,6 @@
 
     .auth-terms a { color: var(--electric); }
 
-    /* Error box */
     .auth-error-box {
       background: rgba(255,71,87,0.06);
       border: 1px solid rgba(255,71,87,0.2);
@@ -322,7 +307,6 @@
 
     .auth-error-box.show { display: block; }
 
-    /* Responsive */
     @media (max-width: 860px) {
       .auth-page { grid-template-columns: 1fr; }
       .auth-left  { display: none; }
@@ -420,27 +404,20 @@
             Please fix the errors above and try again.
           </div>
 
-          <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+          <form class="auth-form" id="registerForm">
 
-            <!-- Personal details -->
+            <!-- Personal Details -->
             <div class="form-section-label">Personal Details</div>
 
             <div class="form-row-2">
               <div class="form-group">
-                <label class="form-label" for="fullName">Full Name</label>
-                <input
-                  class="form-input"
-                  type="text"
-                  id="fullName"
-                  placeholder="As per Aadhaar"
-                  autocomplete="name"
-                  required
-                />
-                <span class="form-error" id="nameError"></span>
+                <label class="form-label" for="fullName">Full Name *</label>
+                <input class="form-input" type="text" id="fullName"
+                  placeholder="As per Aadhaar" autocomplete="name" required />
+                <span class="form-error" id="fullNameError"></span>
               </div>
-
               <div class="form-group">
-                <label class="form-label" for="gender">Gender</label>
+                <label class="form-label" for="gender">Gender *</label>
                 <select class="form-input form-select" id="gender" required>
                   <option value="" disabled selected>Select</option>
                   <option value="male">Male</option>
@@ -453,31 +430,20 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="city">City / Area</label>
-              <input
-                class="form-input"
-                type="text"
-                id="city"
-                placeholder="e.g. Nangal, Ropar, Anandpur Sahib"
-                required
-              />
+              <label class="form-label" for="city">City / Area *</label>
+              <input class="form-input" type="text" id="city"
+                placeholder="e.g. Nangal, Ropar, Anandpur Sahib" required />
               <span class="form-error" id="cityError"></span>
             </div>
 
             <!-- Contact -->
-            <div class="form-section-label" style="margin-top: 4px;">Contact</div>
+            <div class="form-section-label" style="margin-top:4px;">Contact</div>
 
             <div class="form-group">
-              <label class="form-label" for="phone">Phone Number</label>
-              <input
-                class="form-input"
-                type="tel"
-                id="phone"
+              <label class="form-label" for="phone">Phone Number *</label>
+              <input class="form-input" type="tel" id="phone"
                 placeholder="10-digit mobile number"
-                maxlength="10"
-                autocomplete="tel"
-                required
-              />
+                maxlength="10" autocomplete="tel" required />
               <span class="form-hint">This will be your login ID</span>
               <span class="form-error" id="phoneError"></span>
             </div>
@@ -487,32 +453,24 @@
                 Email Address
                 <span class="label-optional">(optional)</span>
               </label>
-              <input
-                class="form-input"
-                type="email"
-                id="email"
+              <input class="form-input" type="email" id="email"
                 placeholder="For appointment confirmations"
-                autocomplete="email"
-              />
+                autocomplete="email" />
               <span class="form-error" id="emailError"></span>
             </div>
 
             <!-- Security -->
-            <div class="form-section-label" style="margin-top: 4px;">Security</div>
+            <div class="form-section-label" style="margin-top:4px;">Security</div>
 
             <div class="form-group">
-              <label class="form-label" for="password">Create Password</label>
+              <label class="form-label" for="password">Create Password *</label>
               <div class="password-wrap">
-                <input
-                  class="form-input"
-                  type="password"
-                  id="password"
+                <input class="form-input" type="password" id="password"
                   placeholder="Minimum 6 characters"
                   autocomplete="new-password"
-                  oninput="checkPasswordStrength(this.value)"
-                  required
-                />
-                <button type="button" class="password-toggle" onclick="togglePassword('password', this)">👁️</button>
+                  oninput="checkPasswordStrength(this.value)" required />
+                <button type="button" class="password-toggle"
+                  onclick="togglePassword('password', this)">👁️</button>
               </div>
               <div class="password-strength">
                 <div class="strength-bar" id="bar1"></div>
@@ -523,44 +481,61 @@
               <span class="form-error" id="passwordError"></span>
             </div>
 
-            <!-- Identity (future) -->
-            <div class="form-section-label" style="margin-top: 4px;">Health Identity</div>
+            <!-- Health Identity -->
+            <div class="form-section-label" style="margin-top:4px;">Health Identity</div>
 
             <div class="abha-info">
               <span class="abha-info-icon">ℹ️</span>
               <div class="abha-info-text">
-                <strong>ABHA ID & Aadhaar linking coming soon.</strong> Once connected, your government health schemes (Ayushman Bharat, MMSBY) will be automatically detected and linked to your Curaah profile.
+                <strong>ABHA ID & Aadhaar linking coming soon.</strong>
+                Once connected, your government health schemes (Ayushman Bharat, MMSBY)
+                will be automatically detected and linked to your Curaah profile.
               </div>
             </div>
 
+            <!-- DPDP Consent -->
+            <div class="form-group" style="margin-top:4px;">
+              <label style="background:var(--off-white);border:1.5px solid var(--border-card);
+                border-radius:var(--radius-md);padding:12px 14px;display:flex;
+                align-items:flex-start;gap:10px;cursor:pointer;transition:var(--transition);">
+                <input type="checkbox" id="consentCheck"
+                  style="width:16px;height:16px;accent-color:#3d9eff;
+                  flex-shrink:0;margin-top:2px;" />
+                <span style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
+                  I agree to Curaah's <a href="#" style="color:#3d9eff;">Terms of Use</a> and
+                  <a href="#" style="color:#3d9eff;">Privacy Policy</a>. I give consent for
+                  Curaah to store and process my health-related data in compliance with the
+                  <strong>Digital Personal Data Protection Act 2023</strong>.
+                  My data will never be sold and I can request deletion at any time.
+                </span>
+              </label>
+              <span class="form-error" id="consentError"></span>
+            </div>
+
             <!-- Submit -->
-            <button type="submit" class="btn btn-primary btn-full btn-lg" id="registerBtn" style="margin-top: 4px;">
+            <button type="button" class="btn btn-primary btn-full btn-lg"
+              id="registerBtn" onclick="handleRegister()">
               Create My Free Account
             </button>
 
-            <div class="form-group" style="margin-top:4px;">
-  <label class="checkbox-item" style="border:1.5px solid var(--border-card);border-radius:var(--radius-md);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-    <input type="checkbox" id="consentCheck" style="width:16px;height:16px;accent-color:#3d9eff;flex-shrink:0;margin-top:2px;" required />
-    <span style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
-      I agree to Curaah's <a href="#" style="color:#3d9eff;">Terms of Use</a> and <a href="#" style="color:#3d9eff;">Privacy Policy</a>. I give consent for Curaah to store and process my health-related data as described, in compliance with the <strong>Digital Personal Data Protection Act 2023</strong>. I understand my data will never be sold and I can request deletion at any time.
-    </span>
-  </label>
-  <span class="form-error" id="consentError"></span>
-</div>
+            <p class="auth-terms">
+              Your data is encrypted and stored securely. Never shared without your consent.
+            </p>
 
           </form>
 
-          <p class="auth-switch" style="margin-top: 16px;">
+          <p class="auth-switch" style="margin-top:16px;">
             Are you a hospital or facility? <a href="onboard.html">Onboard here →</a>
           </p>
         </div>
 
-        <!-- Success view (shown after registration) -->
+        <!-- Success view -->
         <div class="auth-success" id="successView">
           <div class="success-icon">✅</div>
           <div class="success-title">Welcome to Curaah!</div>
           <p class="success-desc">
-            Your account has been created successfully. You can now book appointments, track your insurance claims, and manage your health records.
+            Your account has been created. You can now book appointments,
+            track insurance claims, and manage your health records.
           </p>
           <a href="dashboard.html" class="btn btn-primary btn-lg">Go to My Dashboard →</a>
           <a href="hospitals.html" class="btn btn-secondary">Browse Hospitals</a>
@@ -573,10 +548,12 @@
 
   <!-- Scripts -->
   <script src="js/main.js"></script>
-  <script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
 
-    /* ── Password toggle ── */
-    function togglePassword(inputId, btn) {
+    /* ── Expose functions to global scope ── */
+
+    window.togglePassword = function(inputId, btn) {
       const input = document.getElementById(inputId);
       if (input.type === 'password') {
         input.type = 'text';
@@ -585,155 +562,132 @@
         input.type = 'password';
         btn.textContent = '👁️';
       }
-    }
+    };
 
-    /* ── Password strength checker ── */
-    function checkPasswordStrength(val) {
-      const bars  = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+    window.checkPasswordStrength = function(val) {
+      const bars  = [
+        document.getElementById('bar1'),
+        document.getElementById('bar2'),
+        document.getElementById('bar3'),
+      ];
       const label = document.getElementById('strengthLabel');
-
       bars.forEach(b => { b.className = 'strength-bar'; });
-
-      if (val.length === 0) { label.textContent = ''; return; }
-
+      if (!val.length) { label.textContent = ''; return; }
       let score = 0;
       if (val.length >= 6)  score++;
       if (val.length >= 10) score++;
       if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
-
       if (score === 1) {
         bars[0].classList.add('weak');
-        label.textContent = 'Weak — add numbers or uppercase letters';
+        label.textContent = 'Weak — add numbers or uppercase';
         label.style.color = 'var(--danger)';
       } else if (score === 2) {
         bars[0].classList.add('medium');
         bars[1].classList.add('medium');
-        label.textContent = 'Medium — good, but could be stronger';
+        label.textContent = 'Medium — could be stronger';
         label.style.color = 'var(--warning)';
-      } else if (score === 3) {
+      } else {
         bars.forEach(b => b.classList.add('strong'));
         label.textContent = 'Strong password ✓';
         label.style.color = 'var(--success)';
       }
-    }
+    };
 
-    /* ── Register handler ── */
-    function handleRegister(e) {
-      e.preventDefault();
-
+    window.handleRegister = async function() {
       const fullName = document.getElementById('fullName').value.trim();
       const gender   = document.getElementById('gender').value;
       const city     = document.getElementById('city').value.trim();
       const phone    = document.getElementById('phone').value.trim();
       const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const password = document.getElementById('password').value;
+      const consent  = document.getElementById('consentCheck');
       const errorBox = document.getElementById('errorBox');
       const btn      = document.getElementById('registerBtn');
 
       let valid = true;
 
-      /* Validate name */
-      if (fullName.length < 2) {
-        document.getElementById('nameError').textContent = 'Please enter your full name.';
-        document.getElementById('fullName').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('nameError').textContent = '';
-        document.getElementById('fullName').style.borderColor = '';
+      function setErr(fieldId, msg) {
+        const errEl  = document.getElementById(fieldId + 'Error');
+        const inpEl  = document.getElementById(fieldId);
+        if (errEl) errEl.textContent = msg;
+        if (inpEl) inpEl.style.borderColor = msg ? 'var(--danger)' : '';
+        if (msg)   valid = false;
       }
 
-      /* Validate gender */
-      if (!gender) {
-        document.getElementById('genderError').textContent = 'Please select your gender.';
-        document.getElementById('gender').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('genderError').textContent = '';
-        document.getElementById('gender').style.borderColor = '';
-      }
+      /* Validate all fields */
+      setErr('fullName', fullName.length < 2 ? 'Please enter your full name.' : '');
+      setErr('gender',   !gender             ? 'Please select your gender.'   : '');
+      setErr('city',     city.length < 2     ? 'Please enter your city.'      : '');
+      setErr('phone',    !isValidPhone(phone) ? 'Enter a valid 10-digit number.' : '');
+      setErr('password', password.length < 6  ? 'Password must be at least 6 characters.' : '');
 
-      /* Validate city */
-      if (city.length < 2) {
-        document.getElementById('cityError').textContent = 'Please enter your city or area.';
-        document.getElementById('city').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('cityError').textContent = '';
-        document.getElementById('city').style.borderColor = '';
-      }
-
-      /* Validate phone */
-      if (!isValidPhone(phone)) {
-        document.getElementById('phoneError').textContent = 'Enter a valid 10-digit Indian mobile number.';
-        document.getElementById('phone').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('phoneError').textContent = '';
-        document.getElementById('phone').style.borderColor = '';
-      }
-
-      /* Validate email (optional but if filled must be valid) */
       if (email && !isValidEmail(email)) {
-        document.getElementById('emailError').textContent = 'Please enter a valid email address.';
-        document.getElementById('email').style.borderColor = 'var(--danger)';
-        valid = false;
+        setErr('email', 'Please enter a valid email address.');
       } else {
-        document.getElementById('emailError').textContent = '';
-        document.getElementById('email').style.borderColor = '';
+        setErr('email', '');
       }
 
-      /* Validate password */
-      if (password.length < 6) {
-        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
-        document.getElementById('password').style.borderColor = 'var(--danger)';
+      if (!consent.checked) {
+        document.getElementById('consentError').textContent = 'You must agree to the terms to continue.';
         valid = false;
       } else {
-        document.getElementById('passwordError').textContent = '';
-        document.getElementById('password').style.borderColor = '';
+        document.getElementById('consentError').textContent = '';
       }
-
-      /* Validate consent */
-const consent = document.getElementById('consentCheck');
-if (!consent.checked) {
-  document.getElementById('consentError').textContent = 'You must agree to the terms to create an account.';
-  valid = false;
-} else {
-  document.getElementById('consentError').textContent = '';
-}
 
       if (!valid) {
         errorBox.classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
       errorBox.classList.remove('show');
-
-      /* Loading state */
       btn.textContent = 'Creating your account...';
-      btn.disabled = true;
+      btn.disabled    = true;
 
-      /*
-        TODO: Replace with Supabase auth
-        ─────────────────────────────────────
-        const { data, error } = await supabase.auth.signUp({
-          phone: '+91' + phone,
+      try {
+        /* Supabase needs an email for auth */
+        /* If patient has no email, we create a unique one from their phone */
+        const authEmail = email || `${phone}@curaah.in`;
+
+        /* Step 1 — Create auth account */
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email:    authEmail,
           password: password,
-        })
-        Then insert profile into 'patients' table:
-        await supabase.from('patients').insert({
-          full_name: fullName, gender, city, phone, email
-        })
-        ─────────────────────────────────────
-      */
+        });
 
-      /* Simulated success for now */
-      setTimeout(() => {
+        if (authError) throw new Error(authError.message);
+        if (!authData.user) throw new Error('Account creation failed. Please try again.');
+
+        /* Step 2 — Save patient profile to database */
+        const { error: profileError } = await supabase
+          .from('patients')
+          .insert({
+            id:            authData.user.id,
+            full_name:     fullName,
+            phone:         phone,
+            email:         email || null,
+            gender:        gender,
+            city:          city,
+            consent_given: true,
+          });
+
+        if (profileError) throw new Error(profileError.message);
+
+        /* Step 3 — Success */
         btn.textContent = 'Create My Free Account';
-        btn.disabled = false;
-        document.getElementById('formView').style.display = 'none';
+        btn.disabled    = false;
+        document.getElementById('formView').style.display  = 'none';
         document.getElementById('successView').classList.add('show');
-      }, 1400);
-    }
+        showToast('Welcome to Curaah! Your account is ready.', 'success');
+
+      } catch (err) {
+        btn.textContent = 'Create My Free Account';
+        btn.disabled    = false;
+        errorBox.textContent = err.message || 'Something went wrong. Please try again.';
+        errorBox.classList.add('show');
+        showToast(err.message || 'Registration failed. Please try again.', 'error');
+      }
+    };
 
   </script>
 
