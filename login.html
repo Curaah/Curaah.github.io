@@ -311,12 +311,12 @@
         <form class="auth-form" id="loginForm">
 
           <div class="form-group">
-            <label class="form-label" for="phone">Phone Number</label>
-            <input class="form-input" type="tel" id="phone"
-              placeholder="Enter your 10-digit number"
-              maxlength="10" autocomplete="tel" required />
-            <span class="form-error" id="phoneError"></span>
-          </div>
+  <label class="form-label" for="loginId">Phone Number or Email</label>
+  <input class="form-input" type="text" id="loginId"
+    placeholder="Phone number or email address"
+    autocomplete="username" required />
+  <span class="form-error" id="loginIdError"></span>
+</div>
 
           <div class="form-group">
             <label class="form-label" for="password">Password</label>
@@ -381,67 +381,83 @@
 
     /* ── Login handler ── */
     window.handleLogin = async function() {
-      const phone    = document.getElementById('phone').value.trim();
-      const password = document.getElementById('password').value;
-      const errorBox = document.getElementById('errorBox');
-      const btn      = document.getElementById('loginBtn');
+  const loginId  = document.getElementById('loginId').value.trim();
+  const password = document.getElementById('password').value;
+  const errorBox = document.getElementById('errorBox');
+  const btn      = document.getElementById('loginBtn');
 
-      let valid = true;
+  let valid = true;
 
-      if (!isValidPhone(phone)) {
-        document.getElementById('phoneError').textContent = 'Enter a valid 10-digit number.';
-        document.getElementById('phone').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('phoneError').textContent = '';
-        document.getElementById('phone').style.borderColor = '';
+  if (!loginId) {
+    document.getElementById('loginIdError').textContent = 'Enter your phone number or email.';
+    valid = false;
+  } else {
+    document.getElementById('loginIdError').textContent = '';
+  }
+
+  if (password.length < 6) {
+    document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
+    document.getElementById('password').style.borderColor = 'var(--danger)';
+    valid = false;
+  } else {
+    document.getElementById('passwordError').textContent = '';
+    document.getElementById('password').style.borderColor = '';
+  }
+
+  if (!valid) return;
+
+  btn.textContent = 'Logging in...';
+  btn.disabled    = true;
+  errorBox.classList.remove('show');
+
+  try {
+    /* Determine if loginId is phone or email */
+    let authEmail;
+    if (isValidEmail(loginId)) {
+      /* They entered a real email */
+      authEmail = loginId;
+    } else if (isValidPhone(loginId)) {
+      /* They entered phone — use phone@curaah.in format */
+      authEmail = `${loginId}@curaah.in`;
+    } else {
+      throw new Error('Please enter a valid phone number or email address.');
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email:    authEmail,
+      password: password,
+    });
+
+    if (error) {
+      /* If phone@curaah.in failed, they may have used real email during register */
+      /* Give a clear message */
+      if (error.message.includes('Invalid login')) {
+        throw new Error('Incorrect credentials. If you registered with an email, please enter that email instead of your phone number.');
       }
+      throw new Error(error.message);
+    }
 
-      if (password.length < 6) {
-        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
-        document.getElementById('password').style.borderColor = 'var(--danger)';
-        valid = false;
-      } else {
-        document.getElementById('passwordError').textContent = '';
-        document.getElementById('password').style.borderColor = '';
-      }
+    /* Fetch patient name */
+    const { data: patient } = await supabase
+      .from('patients')
+      .select('full_name')
+      .eq('id', data.user.id)
+      .single();
 
-      if (!valid) return;
+    const name = patient?.full_name || 'there';
+    showToast(`Welcome back, ${name}! 👋`, 'success');
 
-      btn.textContent = 'Logging in...';
-      btn.disabled    = true;
-      errorBox.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 900);
 
-      try {
-        /* Auth email = phone@curaah.in (same as registration) */
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email:    `${phone}@curaah.in`,
-          password: password,
-        });
-
-        if (error) throw new Error('Incorrect phone number or password. Please try again.');
-
-        /* Fetch patient name for greeting */
-        const { data: patient } = await supabase
-          .from('patients')
-          .select('full_name')
-          .eq('id', data.user.id)
-          .single();
-
-        const name = patient?.full_name || 'there';
-        showToast(`Welcome back, ${name}! 👋`, 'success');
-
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 900);
-
-      } catch (err) {
-        btn.textContent = 'Login to My Account';
-        btn.disabled    = false;
-        errorBox.textContent = err.message || 'Login failed. Please try again.';
-        errorBox.classList.add('show');
-      }
-    };
+  } catch (err) {
+    btn.textContent = 'Login to My Account';
+    btn.disabled    = false;
+    errorBox.textContent = err.message || 'Login failed. Please try again.';
+    errorBox.classList.add('show');
+  }
+};
 
     /* ── Forgot password ── */
     window.handleForgot = async function(e) {
