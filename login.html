@@ -17,7 +17,6 @@
       flex-direction: column;
     }
 
-    /* ── AUTH LAYOUT ── */
     .auth-page {
       flex: 1;
       display: grid;
@@ -25,7 +24,6 @@
       min-height: 100vh;
     }
 
-    /* Left panel — branding */
     .auth-left {
       background: var(--navy-mid);
       border-right: 1px solid var(--border-dark);
@@ -40,10 +38,8 @@
     .auth-left::before {
       content: '';
       position: absolute;
-      bottom: -150px;
-      left: -100px;
-      width: 500px;
-      height: 500px;
+      bottom: -150px; left: -100px;
+      width: 500px; height: 500px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(61,158,255,0.07) 0%, transparent 65%);
       pointer-events: none;
@@ -63,10 +59,7 @@
       letter-spacing: -0.3px;
     }
 
-    .auth-left-mid {
-      position: relative;
-      z-index: 1;
-    }
+    .auth-left-mid { position: relative; z-index: 1; }
 
     .auth-left-heading {
       font-family: 'Georgia', serif;
@@ -78,9 +71,7 @@
       margin-bottom: 16px;
     }
 
-    .auth-left-heading span {
-      color: var(--electric);
-    }
+    .auth-left-heading span { color: var(--electric); }
 
     .auth-left-desc {
       font-size: 15px;
@@ -105,8 +96,7 @@
     }
 
     .auth-feature-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--electric);
       flex-shrink: 0;
@@ -117,7 +107,6 @@
       color: rgba(255,255,255,0.25);
     }
 
-    /* Right panel — form */
     .auth-right {
       background: var(--white);
       display: flex;
@@ -146,52 +135,29 @@
       margin-bottom: 32px;
     }
 
-    .auth-form-sub a {
-      color: var(--electric);
-      font-weight: 600;
-    }
+    .auth-form-sub a { color: var(--electric); font-weight: 600; }
+    .auth-form-sub a:hover { text-decoration: underline; }
 
-    .auth-form-sub a:hover {
-      text-decoration: underline;
-    }
-
-    /* Form */
     .auth-form {
       display: flex;
       flex-direction: column;
       gap: 18px;
     }
 
-    .form-row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    /* Password field with toggle */
-    .password-wrap {
-      position: relative;
-    }
+    .password-wrap { position: relative; }
 
     .password-toggle {
       position: absolute;
-      right: 14px;
-      top: 50%;
+      right: 14px; top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
+      background: none; border: none;
+      cursor: pointer; font-size: 16px;
       color: var(--text-muted);
-      padding: 0;
-      line-height: 1;
+      padding: 0; line-height: 1;
     }
 
-    .password-toggle:hover {
-      color: var(--text-primary);
-    }
+    .password-toggle:hover { color: var(--text-primary); }
 
-    /* Divider */
     .auth-divider {
       display: flex;
       align-items: center;
@@ -200,8 +166,7 @@
     }
 
     .auth-divider-line {
-      flex: 1;
-      height: 1px;
+      flex: 1; height: 1px;
       background: var(--border-card);
     }
 
@@ -211,7 +176,6 @@
       font-weight: 500;
     }
 
-    /* Forgot password */
     .forgot-link {
       font-size: 13px;
       color: var(--electric);
@@ -221,11 +185,8 @@
       margin-top: -10px;
     }
 
-    .forgot-link:hover {
-      text-decoration: underline;
-    }
+    .forgot-link:hover { text-decoration: underline; }
 
-    /* Bottom link */
     .auth-switch {
       text-align: center;
       font-size: 14px;
@@ -233,16 +194,9 @@
       margin-top: 8px;
     }
 
-    .auth-switch a {
-      color: var(--electric);
-      font-weight: 600;
-    }
+    .auth-switch a { color: var(--electric); font-weight: 600; }
+    .auth-switch a:hover { text-decoration: underline; }
 
-    .auth-switch a:hover {
-      text-decoration: underline;
-    }
-
-    /* Terms note */
     .auth-terms {
       font-size: 11px;
       color: var(--text-muted);
@@ -251,11 +205,8 @@
       margin-top: 4px;
     }
 
-    .auth-terms a {
-      color: var(--electric);
-    }
+    .auth-terms a { color: var(--electric); }
 
-    /* Error box */
     .auth-error-box {
       background: rgba(255,71,87,0.06);
       border: 1px solid rgba(255,71,87,0.2);
@@ -264,39 +215,23 @@
       font-size: 13px;
       color: var(--danger);
       display: none;
+      line-height: 1.5;
     }
 
-    .auth-error-box.show {
-      display: block;
-    }
+    .auth-error-box.show { display: block; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
-      .auth-page {
-        grid-template-columns: 1fr;
-      }
-
-      .auth-left {
-        display: none;
-      }
-
-      .auth-right {
-        padding: 100px 24px 48px;
-        align-items: flex-start;
-      }
-
-      .auth-form-wrap {
-        max-width: 100%;
-      }
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-left  { display: none; }
+      .auth-right { padding: 100px 24px 48px; align-items: flex-start; }
+      .auth-form-wrap { max-width: 100%; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ============================================
-       NAVBAR (minimal on auth pages)
-  ============================================ -->
+  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html" class="nav-logo">
       <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
@@ -314,9 +249,7 @@
     </div>
   </nav>
 
-  <!-- ============================================
-       AUTH PAGE
-  ============================================ -->
+  <!-- AUTH PAGE -->
   <div class="auth-page">
 
     <!-- Left — Branding -->
@@ -373,50 +306,34 @@
           Don't have an account? <a href="register.html">Register free →</a>
         </p>
 
-        <!-- Error box -->
-        <div class="auth-error-box" id="errorBox">
-          Incorrect phone number or password. Please try again.
-        </div>
+        <div class="auth-error-box" id="errorBox"></div>
 
-        <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+        <form class="auth-form" id="loginForm">
 
-          <!-- Phone -->
           <div class="form-group">
             <label class="form-label" for="phone">Phone Number</label>
-            <input
-              class="form-input"
-              type="tel"
-              id="phone"
+            <input class="form-input" type="tel" id="phone"
               placeholder="Enter your 10-digit number"
-              maxlength="10"
-              autocomplete="tel"
-              required
-            />
+              maxlength="10" autocomplete="tel" required />
             <span class="form-error" id="phoneError"></span>
           </div>
 
-          <!-- Password -->
           <div class="form-group">
             <label class="form-label" for="password">Password</label>
             <div class="password-wrap">
-              <input
-                class="form-input"
-                type="password"
-                id="password"
+              <input class="form-input" type="password" id="password"
                 placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-              />
-              <button type="button" class="password-toggle" onclick="togglePassword('password', this)">👁️</button>
+                autocomplete="current-password" required />
+              <button type="button" class="password-toggle"
+                onclick="togglePassword('password', this)">👁️</button>
             </div>
             <span class="form-error" id="passwordError"></span>
           </div>
 
-          <!-- Forgot password -->
           <a href="#" class="forgot-link" onclick="handleForgot(event)">Forgot password?</a>
 
-          <!-- Submit -->
-          <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginBtn">
+          <button type="button" class="btn btn-primary btn-full btn-lg"
+            id="loginBtn" onclick="handleLogin()">
             Login to My Account
           </button>
 
@@ -426,18 +343,17 @@
             <div class="auth-divider-line"></div>
           </div>
 
-          <!-- Register link -->
           <a href="register.html" class="btn btn-secondary btn-full">
             Create a New Account
           </a>
 
         </form>
 
-        <p class="auth-switch" style="margin-top: 20px;">
+        <p class="auth-switch" style="margin-top:20px;">
           Are you a hospital or facility? <a href="onboard.html">Onboard here →</a>
         </p>
 
-        <p class="auth-terms" style="margin-top: 16px;">
+        <p class="auth-terms" style="margin-top:16px;">
           By logging in you agree to our
           <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
         </p>
@@ -447,11 +363,12 @@
 
   </div>
 
-  <!-- Scripts -->
   <script src="js/main.js"></script>
-  <script>
-    /* ── Password visibility toggle ── */
-    function togglePassword(inputId, btn) {
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    /* ── Password toggle ── */
+    window.togglePassword = function(inputId, btn) {
       const input = document.getElementById(inputId);
       if (input.type === 'password') {
         input.type = 'text';
@@ -460,22 +377,19 @@
         input.type = 'password';
         btn.textContent = '👁️';
       }
-    }
+    };
 
     /* ── Login handler ── */
-    function handleLogin(e) {
-      e.preventDefault();
-
+    window.handleLogin = async function() {
       const phone    = document.getElementById('phone').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const password = document.getElementById('password').value;
       const errorBox = document.getElementById('errorBox');
       const btn      = document.getElementById('loginBtn');
 
-      /* Basic validation */
       let valid = true;
 
       if (!isValidPhone(phone)) {
-        document.getElementById('phoneError').textContent = 'Enter a valid 10-digit Indian mobile number.';
+        document.getElementById('phoneError').textContent = 'Enter a valid 10-digit number.';
         document.getElementById('phone').style.borderColor = 'var(--danger)';
         valid = false;
       } else {
@@ -494,38 +408,64 @@
 
       if (!valid) return;
 
-      /* Loading state */
       btn.textContent = 'Logging in...';
-      btn.disabled = true;
+      btn.disabled    = true;
       errorBox.classList.remove('show');
 
-      /*
-        TODO: Replace this with Supabase auth
-        ─────────────────────────────────────
-        import { createClient } from '@supabase/supabase-js'
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      try {
+        /* Auth email = phone@curaah.in (same as registration) */
         const { data, error } = await supabase.auth.signInWithPassword({
-          phone: '+91' + phone,
-          password: password
-        })
-        if (error) { show error } else { redirect to dashboard }
-        ─────────────────────────────────────
-      */
+          email:    `${phone}@curaah.in`,
+          password: password,
+        });
 
-      /* Simulated response for now */
-      setTimeout(() => {
+        if (error) throw new Error('Incorrect phone number or password. Please try again.');
+
+        /* Fetch patient name for greeting */
+        const { data: patient } = await supabase
+          .from('patients')
+          .select('full_name')
+          .eq('id', data.user.id)
+          .single();
+
+        const name = patient?.full_name || 'there';
+        showToast(`Welcome back, ${name}! 👋`, 'success');
+
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 900);
+
+      } catch (err) {
         btn.textContent = 'Login to My Account';
-        btn.disabled = false;
+        btn.disabled    = false;
+        errorBox.textContent = err.message || 'Login failed. Please try again.';
         errorBox.classList.add('show');
-        showToast('Login backend not connected yet. Coming soon!', 'info');
-      }, 1200);
-    }
+      }
+    };
 
     /* ── Forgot password ── */
-    function handleForgot(e) {
+    window.handleForgot = async function(e) {
       e.preventDefault();
-      showToast('Password reset will be available once Supabase is connected.', 'info');
-    }
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!phone || !isValidPhone(phone)) {
+        showToast('Enter your phone number first, then click Forgot Password.', 'info');
+        return;
+      }
+
+      try {
+        await supabase.auth.resetPasswordForEmail(`${phone}@curaah.in`);
+        showToast('Reset instructions sent if an account exists for this number.', 'success');
+      } catch (err) {
+        showToast('Could not send reset. Contact us at curaahtech@gmail.com', 'error');
+      }
+    };
+
+    /* ── Redirect if already logged in ── */
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.href = 'dashboard.html';
+    });
+
   </script>
 
 </body>
