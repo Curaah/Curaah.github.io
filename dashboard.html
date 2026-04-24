@@ -984,17 +984,25 @@
                 <input class="form-input" type="text" value="Patient" disabled style="background:var(--off-white);cursor:not-allowed;" id="profileName"/>
               </div>
               <div class="form-group">
-                <label class="form-label">Gender</label>
-                <input class="form-input" type="text" value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Phone Number</label>
-                <input class="form-input" type="text" value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">City / Area</label>
-                <input class="form-input" type="text" value="Nangal, Punjab" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-              </div>
+  <label class="form-label">Full Name</label>
+  <input class="form-input" type="text" id="profileName"
+    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+</div>
+<div class="form-group">
+  <label class="form-label">Gender</label>
+  <input class="form-input" type="text" id="profileGender"
+    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+</div>
+<div class="form-group">
+  <label class="form-label">Phone Number</label>
+  <input class="form-input" type="text" id="profilePhone"
+    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+</div>
+<div class="form-group">
+  <label class="form-label">City / Area</label>
+  <input class="form-input" type="text" id="profileCity"
+    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
+</div>
             </div>
             <div style="margin-top:20px;padding:16px;background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
               <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
@@ -1141,7 +1149,8 @@
 
   <!-- Scripts -->
   <script src="js/main.js"></script>
-  <script>
+<script type="module">
+  import { supabase } from './js/supabase.js';
 
     /* ── Section switcher ── */
     const sections = ['overview','appointments','claims','records','referrals','token','ai','profile'];
@@ -1212,8 +1221,81 @@
     }
 
     /* ── Init ── */
-    setGreeting();
-    loadPatientName();
+    /* ── Init ── */
+setGreeting();
+
+/* ── Load real patient data from Supabase ── */
+async function initDashboard() {
+  try {
+    /* Check if logged in */
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      /* Not logged in — redirect to login */
+      window.location.href = 'login.html';
+      return;
+    }
+
+    /* Fetch patient profile */
+    const { data: patient, error } = await supabase
+      .from('patients')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !patient) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    /* Update UI with real data */
+    const name     = patient.full_name || 'Patient';
+    const initials = name.split(' ')
+                         .map(n => n[0])
+                         .join('')
+                         .toUpperCase()
+                         .slice(0, 2);
+
+    const els = {
+      navName:       document.getElementById('navName'),
+      sidebarName:   document.getElementById('sidebarName'),
+      sidebarAvatar: document.getElementById('sidebarAvatar'),
+      dashTitle:     document.getElementById('dashTitle'),
+      profileName:   document.getElementById('profileName'),
+    };
+
+    if (els.navName)       els.navName.textContent       = name.split(' ')[0];
+    if (els.sidebarName)   els.sidebarName.textContent   = name;
+    if (els.sidebarAvatar) els.sidebarAvatar.textContent = initials;
+    if (els.dashTitle)     els.dashTitle.textContent     = 'Welcome back, ' + name.split(' ')[0] + ' 👋';
+    if (els.profileName)   els.profileName.value         = name;
+
+    /* Update profile section with real data */
+    const profileFields = {
+      profileGender: patient.gender || '—',
+      profilePhone:  patient.phone  || '—',
+      profileCity:   patient.city   || '—',
+    };
+
+    Object.entries(profileFields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+
+  } catch (err) {
+    console.error('Dashboard init error:', err);
+    window.location.href = 'login.html';
+  }
+}
+
+/* ── Real logout ── */
+window.handleLogout = async function() {
+  await supabase.auth.signOut();
+  showToast('Logged out successfully.', 'success');
+  setTimeout(() => { window.location.href = 'index.html'; }, 800);
+};
+
+initDashboard();
 
   </script>
 
