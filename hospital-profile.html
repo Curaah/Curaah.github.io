@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Hospital Profile — Curaah" />
+  <title>Hospital Profile — Curaah</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body { background: var(--off-white); }
+
+    /* ── HOSPITAL HERO ── */
+    .hospital-hero {
+      background: var(--navy);
+      padding: 100px 6% 48px;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .hospital-hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hospital-hero-left { flex: 1; min-width: 260px; }
+
+    .hospital-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(61,158,255,0.12);
+      border: 1px solid rgba(61,158,255,0.25);
+      color: var(--electric);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .hospital-hero-name {
+      font-family: 'Georgia', serif;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .hospital-hero-address {
+      font-size: 14px;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hospital-hero-schemes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .scheme-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0,196,140,0.12);
+      border: 1px solid rgba(0,196,140,0.25);
+      color: var(--success);
+    }
+
+    /* Hero right — quick stats */
+    .hospital-hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      min-width: 300px;
+    }
+
+    .hero-stat-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .hero-stat-box-num {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--electric);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-box-label {
+      font-size: 11px;
+      color: var(--text-on-dark-muted);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .profile-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 6%;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    /* ── PANELS ── */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-body { padding: 20px; }
+
+    /* ── DOCTORS LIST ── */
+    .doctors-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doctor-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-card);
+      transition: var(--transition);
+    }
+
+    .doctor-item:hover {
+      border-color: rgba(61,158,255,0.3);
+      background: rgba(61,158,255,0.03);
+    }
+
+    .doctor-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.1);
+      border: 1.5px solid rgba(61,158,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--electric);
+      flex-shrink: 0;
+    }
+
+    .doctor-info { flex: 1; }
+
+    .doctor-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .doctor-spec {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .doctor-timing {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .avail-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .avail-yes { background: rgba(0,196,140,0.1); color: var(--success); }
+    .avail-busy { background: rgba(255,159,0,0.1); color: var(--warning); }
+    .avail-no  { background: rgba(255,71,87,0.1);  color: var(--danger);  }
+
+    /* ── INFO GRID ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .info-item { display: flex; flex-direction: column; gap: 4px; }
+
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* ── BOOKING CARD (sticky right) ── */
+    .booking-card {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+    }
+
+    .booking-card-header {
+      background: var(--navy);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .booking-card-title {
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .booking-card-sub {
+      font-size: 12px;
+      color: var(--text-on-dark-muted);
+    }
+
+    .booking-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .booking-card-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-card);
+      background: var(--off-white);
+    }
+
+    /* Booking success */
+    .booking-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 32px 20px;
+      gap: 14px;
+    }
+
+    .booking-success.show { display: flex; }
+
+    .booking-success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(0,196,140,0.1);
+      border: 2px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .booking-success-title {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .booking-success-token {
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      width: 100%;
+    }
+
+    .token-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--electric);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .token-number {
+      font-family: 'Georgia', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .token-sub {
+      font-size: 12px;
+      color: var(--text-on-dark-muted);
+      margin-top: 6px;
+    }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--light-bg) 25%, var(--border-card) 50%, var(--light-bg) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-md);
+      height: 20px;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .profile-main { grid-template-columns: 1fr; }
+      .booking-card { position: static; }
+      .hospital-hero-stats { grid-template-columns: repeat(3,1fr); min-width: unset; width: 100%; }
+    }
+
+    @media (max-width: 500px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .hospital-hero-stats { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hospitals.html">Hospitals</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLogin">Login</a>
+      <a href="dashboard.html" class="btn btn-primary btn-sm" id="navDash"
+        style="display:none;">My Dashboard</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="hospitals.html">Hospitals</a>
+    <a href="login.html">Login</a>
+  </div>
+
+  <!-- HOSPITAL HERO -->
+  <section class="hospital-hero">
+    <div class="hospital-hero-inner">
+      <div class="hospital-hero-left">
+        <div class="hospital-type-badge" id="heroTypeBadge">🏥 Hospital</div>
+        <h1 class="hospital-hero-name" id="heroName">Loading...</h1>
+        <p class="hospital-hero-address" id="heroAddress">📍 —</p>
+        <div class="hospital-hero-schemes" id="heroSchemes"></div>
+      </div>
+      <div class="hospital-hero-stats">
+        <div class="hero-stat-box">
+          <div class="hero-stat-box-num" id="statDoctors">—</div>
+          <div class="hero-stat-box-label">Doctors</div>
+        </div>
+        <div class="hero-stat-box">
+          <div class="hero-stat-box-num" id="statBeds">—</div>
+          <div class="hero-stat-box-label">Beds free</div>
+        </div>
+        <div class="hero-stat-box">
+          <div class="hero-stat-box-num" id="statWait">~20m</div>
+          <div class="hero-stat-box-label">Est. wait</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="profile-main">
+
+    <!-- LEFT — Hospital info -->
+    <div>
+
+      <!-- Doctors -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">👨‍⚕️ Doctors Available Today</div>
+        </div>
+        <div class="panel-body">
+          <div class="doctors-list" id="doctorsList">
+            <!-- Loaded dynamically -->
+            <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">
+              Loading doctors...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPD Info -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">ℹ️ Hospital Information</div>
+        </div>
+        <div class="panel-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">OPD Days</span>
+              <span class="info-value" id="infoOpdDays">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">OPD Timings</span>
+              <span class="info-value" id="infoOpdTime">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Beds</span>
+              <span class="info-value" id="infoBeds">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone</span>
+              <span class="info-value" id="infoPhone">—</span>
+            </div>
+            <div class="info-item" style="grid-column:1/-1;">
+              <span class="info-label">Address</span>
+              <span class="info-value" id="infoAddress">—</span>
+            </div>
+            <div class="info-item" style="grid-column:1/-1;">
+              <span class="info-label">Specialities</span>
+              <span class="info-value" id="infoSpecialities">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schemes -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🛡️ Insurance Schemes Accepted</div>
+        </div>
+        <div class="panel-body">
+          <div id="schemesPanel" style="display:flex;flex-direction:column;gap:10px;">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT — Booking card -->
+    <div>
+      <div class="booking-card">
+
+        <!-- Booking form -->
+        <div id="bookingForm">
+          <div class="booking-card-header">
+            <div class="booking-card-title">Book Appointment</div>
+            <div class="booking-card-sub">Select doctor, date & time slot</div>
+          </div>
+
+          <div class="booking-card-body">
+
+            <!-- Login prompt if not logged in -->
+            <div id="loginPrompt" style="display:none;text-align:center;padding:12px 0;">
+              <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.6;">
+                Please login to book an appointment at this hospital.
+              </p>
+              <a href="login.html" class="btn btn-primary btn-full">Login to Book</a>
+              <a href="register.html" class="btn btn-secondary btn-full"
+                style="margin-top:8px;">Register Free</a>
+            </div>
+
+            <!-- Booking fields -->
+            <div id="bookingFields">
+              <div class="form-group">
+                <label class="form-label">Select Doctor *</label>
+                <select class="form-input form-select" id="selectDoctor">
+                  <option value="" disabled selected>Choose a doctor</option>
+                </select>
+                <span class="form-error" id="doctorError"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Appointment Date *</label>
+                <input class="form-input" type="date" id="apptDate" />
+                <span class="form-error" id="dateError"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Time Slot *</label>
+                <select class="form-input form-select" id="selectSlot">
+                  <option value="" disabled selected>Choose a slot</option>
+                  <option>9:00 AM</option>
+                  <option>9:30 AM</option>
+                  <option>10:00 AM</option>
+                  <option>10:30 AM</option>
+                  <option>11:00 AM</option>
+                  <option>11:30 AM</option>
+                  <option>12:00 PM</option>
+                  <option>2:00 PM</option>
+                  <option>2:30 PM</option>
+                  <option>3:00 PM</option>
+                  <option>3:30 PM</option>
+                  <option>4:00 PM</option>
+                </select>
+                <span class="form-error" id="slotError"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">
+                  Reason / Symptoms
+                  <span style="font-size:11px;color:var(--text-muted);
+                    font-weight:400;margin-left:4px;">(optional)</span>
+                </label>
+                <textarea class="form-input form-textarea" id="apptNotes"
+                  placeholder="Brief description of your concern..."
+                  rows="3"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Insurance Scheme</label>
+                <select class="form-input form-select" id="selectScheme">
+                  <option value="">None / Self pay</option>
+                  <option value="ayushman">Ayushman Bharat PM-JAY</option>
+                  <option value="mmsby">Mukhyamantri Sehat Bima</option>
+                  <option value="cghs">CGHS / CSMA</option>
+                  <option value="esi">ESI Scheme</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="booking-card-footer" id="bookingFooter">
+            <button class="btn btn-primary btn-full btn-lg"
+              id="bookBtn" onclick="handleBooking()">
+              Confirm Appointment
+            </button>
+            <p style="font-size:11px;color:var(--text-muted);
+              text-align:center;margin-top:10px;line-height:1.6;">
+              Free to book. Cancel anytime. You will get SMS confirmation.
+            </p>
+          </div>
+        </div>
+
+        <!-- Booking success + Token -->
+        <div class="booking-success" id="bookingSuccess">
+          <div class="booking-success-icon">✅</div>
+          <div class="booking-success-title">Appointment Booked!</div>
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">
+            Your appointment is confirmed. Show this token when you arrive.
+          </p>
+          <div class="booking-success-token">
+            <div class="token-label">Your Token Number</div>
+            <div class="token-number" id="tokenDisplay">—</div>
+            <div class="token-sub" id="tokenDoctor">—</div>
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);line-height:1.6;">
+            Scan the QR code at the hospital OPD entrance to check in and activate your token.
+          </p>
+          <a href="dashboard.html" class="btn btn-primary btn-full">
+            View in My Dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z"
+              fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z"
+              fill="#3d9eff" opacity="0.9"/>
+            <circle cx="18" cy="22" r="3.5" fill="white"/>
+          </svg>
+          curaah
+        </div>
+        <p class="footer-brand-desc">Your health, your control.</p>
+        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Platform</div>
+        <ul class="footer-col-links">
+          <li><a href="hospitals.html">Find Hospitals</a></li>
+          <li><a href="register.html">Register as Patient</a></li>
+          <li><a href="login.html">Patient Login</a></li>
+          <li><a href="onboard.html">Hospital Onboarding</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-col-links">
+          <li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li>
+          <li><a href="#">Nangal, Punjab 140124</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-bottom-text">© 2025 Curaah. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    let hospital    = null;
+    let currentUser = null;
+    let doctors     = [];
+
+    /* ── Demo doctors list ── */
+    /* In future this will come from a doctors table in Supabase */
+    const demoDoctors = [
+      { name: 'Dr. Suresh Kumar',   spec: 'General Medicine',  timing: '9am – 1pm',  avail: 'yes'  },
+      { name: 'Dr. Priya Rana',     spec: 'Gynaecology',       timing: '10am – 12pm', avail: 'busy' },
+      { name: 'Dr. Amit Sharma',    spec: 'Orthopaedics',      timing: '2pm – 5pm',  avail: 'yes'  },
+      { name: 'Dr. Neha Verma',     spec: 'Paediatrics',       timing: '9am – 12pm', avail: 'yes'  },
+      { name: 'Dr. Rajiv Malhotra', spec: 'General Surgery',   timing: '3pm – 6pm',  avail: 'no'   },
+    ];
+
+    /* ── Get hospital ID from URL ── */
+    function getHospitalId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    /* ── Fetch hospital from Supabase ── */
+    async function fetchHospital(id) {
+      const { data, error } = await supabase
+        .from('hospitals')
+        .select('*')
+        .eq('id', id)
+        .single();
+      if (error) { console.error(error); return null; }
+      return data;
+    }
+
+    /* ── Check if user is logged in ── */
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        document.getElementById('navLogin').style.display  = 'none';
+        document.getElementById('navDash').style.display   = 'inline-flex';
+        document.getElementById('loginPrompt').style.display  = 'none';
+        document.getElementById('bookingFields').style.display = 'flex';
+        document.getElementById('bookingFooter').style.display = 'block';
+      } else {
+        document.getElementById('loginPrompt').style.display   = 'block';
+        document.getElementById('bookingFields').style.display = 'none';
+        document.getElementById('bookingFooter').style.display = 'none';
+      }
+    }
+
+    /* ── Render hospital data ── */
+    function renderHospital(h) {
+      /* Hero */
+      document.title = `${h.name} — Curaah`;
+      document.getElementById('heroName').textContent = h.name;
+      document.getElementById('heroAddress').textContent = `📍 ${h.address || ''}, ${h.city || ''}`;
+      document.getElementById('statDoctors').textContent = h.doctor_count || 0;
+      document.getElementById('statBeds').textContent    = h.beds_available ?? h.bed_count ?? 0;
+
+      const typeLabel = {
+        hospital:        '🏥 Hospital',
+        laboratory:      '🔬 Laboratory',
+        'medical-store': '💊 Medical Store',
+        sarai:           '🏨 Sarai',
+        dispensary:      '🩺 Dispensary',
+        diagnostic:      '📡 Diagnostic Centre',
+      }[h.type] || '🏥 Facility';
+      document.getElementById('heroTypeBadge').textContent = typeLabel;
+
+      /* Schemes pills */
+      const schemes = h.schemes_accepted || [];
+      const schemeNames = {
+        ayushman: 'Ayushman Bharat',
+        mmsby:    'MMSBY Punjab',
+        cghs:     'CGHS',
+        esi:      'ESI',
+      };
+      document.getElementById('heroSchemes').innerHTML = schemes
+        .map(s => `<span class="scheme-pill">✓ ${schemeNames[s] || s}</span>`)
+        .join('');
+
+      /* Info section */
+      document.getElementById('infoOpdDays').textContent     = h.opd_days    || '—';
+      document.getElementById('infoOpdTime').textContent     =
+        h.opd_start && h.opd_end ? `${h.opd_start} – ${h.opd_end}` : '—';
+      document.getElementById('infoBeds').textContent        = h.bed_count   || '—';
+      document.getElementById('infoPhone').textContent       = h.phone       || '—';
+      document.getElementById('infoAddress').textContent     = h.address     || '—';
+      document.getElementById('infoSpecialities').textContent =
+        Array.isArray(h.specialities) ? h.specialities.join(', ') : '—';
+
+      /* Schemes panel */
+      document.getElementById('schemesPanel').innerHTML = schemes.length
+        ? schemes.map(s => `
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;
+              background:var(--off-white);border-radius:var(--radius-md);
+              border:1px solid var(--border-card);">
+              <span style="font-size:18px;">🛡️</span>
+              <div>
+                <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+                  ${schemeNames[s] || s}
+                </p>
+                <p style="font-size:11px;color:var(--text-muted);margin:0;">
+                  Cashless treatment available
+                </p>
+              </div>
+              <span style="margin-left:auto;" class="badge badge-green">Accepted</span>
+            </div>
+          `).join('')
+        : '<p style="font-size:13px;color:var(--text-muted);">No schemes listed yet.</p>';
+    }
+
+    /* ── Render doctors ── */
+    function renderDoctors(h) {
+      /* Use demo doctors for now */
+      /* In future fetch from doctors table filtered by hospital_id */
+      const list = document.getElementById('doctorsList');
+      const select = document.getElementById('selectDoctor');
+
+      list.innerHTML = demoDoctors.map(d => {
+        const initials = d.name.split(' ').slice(-2)
+          .map(n => n[0]).join('').toUpperCase();
+        const availClass = { yes: 'avail-yes', busy: 'avail-busy', no: 'avail-no' }[d.avail];
+        const availText  = { yes: 'Available', busy: 'Busy', no: 'Not today' }[d.avail];
+        return `
+          <div class="doctor-item">
+            <div class="doctor-avatar">${initials}</div>
+            <div class="doctor-info">
+              <div class="doctor-name">${d.name}</div>
+              <div class="doctor-spec">${d.spec} · OPD ${d.timing}</div>
+            </div>
+            <span class="avail-badge ${availClass}">${availText}</span>
+          </div>
+        `;
+      }).join('');
+
+      /* Populate booking dropdown with available doctors */
+      const available = demoDoctors.filter(d => d.avail !== 'no');
+      select.innerHTML = '<option value="" disabled selected>Choose a doctor</option>' +
+        available.map(d =>
+          `<option value="${d.name}">${d.name} — ${d.spec}</option>`
+        ).join('');
+    }
+
+    /* ── Set min date on date picker (today) ── */
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('apptDate').min   = today;
+      document.getElementById('apptDate').value = today;
+    }
+
+    /* ── Handle booking ── */
+    window.handleBooking = async function() {
+      if (!currentUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const doctor = document.getElementById('selectDoctor').value;
+      const date   = document.getElementById('apptDate').value;
+      const slot   = document.getElementById('selectSlot').value;
+      const notes  = document.getElementById('apptNotes').value;
+      const scheme = document.getElementById('selectScheme').value;
+      const btn    = document.getElementById('bookBtn');
+
+      let valid = true;
+
+      if (!doctor) {
+        document.getElementById('doctorError').textContent = 'Please select a doctor.';
+        valid = false;
+      } else {
+        document.getElementById('doctorError').textContent = '';
+      }
+
+      if (!date) {
+        document.getElementById('dateError').textContent = 'Please select a date.';
+        valid = false;
+      } else {
+        document.getElementById('dateError').textContent = '';
+      }
+
+      if (!slot) {
+        document.getElementById('slotError').textContent = 'Please select a time slot.';
+        valid = false;
+      } else {
+        document.getElementById('slotError').textContent = '';
+      }
+
+      if (!valid) return;
+
+      btn.textContent = 'Booking...';
+      btn.disabled    = true;
+
+      try {
+        /* Save appointment to Supabase */
+        const { data: appt, error: apptError } = await supabase
+          .from('appointments')
+          .insert({
+            patient_id:       currentUser.id,
+            hospital_id:      hospital.id,
+            doctor_name:      doctor,
+            appointment_date: date,
+            time_slot:        slot,
+            status:           'confirmed',
+            scheme_used:      scheme || null,
+            notes:            notes  || null,
+          })
+          .select()
+          .single();
+
+        if (apptError) throw new Error(apptError.message);
+
+        /* Generate token number */
+        /* Count existing tokens for this hospital today */
+        const { count } = await supabase
+          .from('tokens')
+          .select('*', { count: 'exact', head: true })
+          .eq('hospital_id', hospital.id)
+          .eq('appointment_date', date);
+
+        const tokenNumber = (count || 0) + 1;
+
+        /* Save token */
+        await supabase.from('tokens').insert({
+          patient_id:     currentUser.id,
+          hospital_id:    hospital.id,
+          appointment_id: appt.id,
+          token_number:   tokenNumber,
+          opd_department: doctor,
+          status:         'waiting',
+        });
+
+        /* Show success */
+        btn.textContent = 'Confirm Appointment';
+        btn.disabled    = false;
+        document.getElementById('bookingForm').style.display    = 'none';
+        document.getElementById('bookingSuccess').classList.add('show');
+        document.getElementById('tokenDisplay').textContent     = tokenNumber;
+        document.getElementById('tokenDoctor').textContent      =
+          `${doctor} · ${slot} · ${new Date(date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}`;
+
+        showToast('Appointment booked successfully!', 'success');
+
+      } catch (err) {
+        btn.textContent = 'Confirm Appointment';
+        btn.disabled    = false;
+        showToast(err.message || 'Booking failed. Please try again.', 'error');
+      }
+    };
+
+    /* ── Init ── */
+    async function init() {
+      const id = getHospitalId();
+
+      if (!id) {
+        window.location.href = 'hospitals.html';
+        return;
+      }
+
+      await checkAuth();
+
+      hospital = await fetchHospital(id);
+
+      if (!hospital) {
+        showToast('Hospital not found.', 'error');
+        setTimeout(() => { window.location.href = 'hospitals.html'; }, 1500);
+        return;
+      }
+
+      renderHospital(hospital);
+      renderDoctors(hospital);
+      setMinDate();
+    }
+
+    init();
+
+  </script>
+
+</body>
+</html>
