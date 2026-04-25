@@ -710,91 +710,256 @@
 
   <!-- Scripts -->
   <script src="js/main.js"></script>
-  <script>
-    /* ── Filter tabs ── */
-    const emptyIcons = {
-      all:           { icon: '🏥', title: 'No facilities onboarded yet',      desc: 'We are actively reaching out to hospitals, labs, and clinics in Nangal. Once they join Curaah, their profiles will appear here.' },
-      hospital:      { icon: '🏥', title: 'No hospitals onboarded yet',        desc: 'Hospitals in Nangal will appear here once they register on Curaah. Be the first — it is free.' },
-      laboratory:    { icon: '🔬', title: 'No laboratories onboarded yet',     desc: 'Labs in Nangal will appear here after onboarding. Patients will be able to book tests directly.' },
-      'medical-store':{ icon: '💊', title: 'No medical stores onboarded yet',  desc: 'Medical stores can register on Curaah to reach more patients in Nangal.' },
-      sarai:         { icon: '🏨', title: 'No sarais onboarded yet',           desc: 'Patient attendant lodges and sarais near hospitals can register to help families find affordable stays.' },
-      dispensary:    { icon: '🩺', title: 'No dispensaries onboarded yet',     desc: 'Government dispensaries and PHCs can join Curaah to connect with more patients in the area.' },
-      diagnostic:    { icon: '📡', title: 'No diagnostic centres onboarded yet', desc: 'Diagnostic centres offering scans, X-rays, and tests can register to receive patient bookings.' },
-    };
+<script type="module">
+  import { supabase } from './js/supabase.js';
 
-    let currentCity = 'all';
-let currentFilter = 'all';
+  /* ── State ── */
+  let allHospitals  = [];
+  let currentFilter = 'all';
+  let currentCity   = 'all';
 
-function setFilter(btn, filter) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  currentFilter = filter;
-  updateEmptyState(filter, currentCity);
-}
+  /* ── Filter tabs ── */
+  const emptyIcons = {
+    all:           { icon: '🏥', title: 'No facilities onboarded yet',         desc: 'We are actively reaching out to hospitals, labs, and clinics. Once they join Curaah their profiles will appear here.' },
+    hospital:      { icon: '🏥', title: 'No hospitals onboarded yet',           desc: 'Hospitals will appear here once they register on Curaah.' },
+    laboratory:    { icon: '🔬', title: 'No laboratories onboarded yet',        desc: 'Labs will appear here after onboarding.' },
+    'medical-store':{ icon: '💊', title: 'No medical stores onboarded yet',     desc: 'Medical stores can register on Curaah to reach more patients.' },
+    sarai:         { icon: '🏨', title: 'No sarais onboarded yet',              desc: 'Patient lodges can register to help families find affordable stays.' },
+    dispensary:    { icon: '🩺', title: 'No dispensaries onboarded yet',        desc: 'Government dispensaries and PHCs can join Curaah.' },
+    diagnostic:    { icon: '📡', title: 'No diagnostic centres onboarded yet',  desc: 'Diagnostic centres can register to receive patient bookings.' },
+  };
 
-function setCity(btn, city) {
-  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentCity = city;
-  updateEmptyState(currentFilter, currentCity);
-  updateResultsCount(city);
-}
+  window.setFilter = function(btn, filter) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = filter;
+    renderHospitals();
+  };
 
-function updateResultsCount(city) {
-  const label = city === 'all' ? 'all areas' : city.charAt(0).toUpperCase() + city.slice(1);
-  document.getElementById('resultsCount').innerHTML =
-    `Showing <strong>0 facilities</strong> in ${label}`;
-}
-
-    function setFilterFromCard(filter) {
-      document.querySelectorAll('.filter-tab').forEach(t => {
-        t.classList.remove('active');
-        if (t.dataset.filter === filter) t.classList.add('active');
-      });
-      updateEmptyState(filter);
-      document.querySelector('.filters-bar').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function updateEmptyState(filter, city) {
-  const data = emptyIcons[filter] || emptyIcons.all;
-  const cityLabel = (!city || city === 'all') ? 'your area' : city.charAt(0).toUpperCase() + city.slice(1);
-  document.getElementById('emptyIcon').textContent  = data.icon;
-  document.getElementById('emptyTitle').textContent = data.title;
-  document.getElementById('emptyDesc').textContent  =
-    `No ${filter === 'all' ? 'facilities' : filter + 's'} onboarded in ${cityLabel} yet. Once they join Curaah their profile will appear here.`;
-}
-
-    /* ── Search ── */
-    function handleSearch() {
-      const val = document.getElementById('searchInput').value.trim();
-      if (val) {
-        showToast(`No results found for "${val}" yet. Facilities are being onboarded.`, 'info');
-      }
-    }
-
-    document.getElementById('searchInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleSearch();
+  window.setFilterFromCard = function(filter) {
+    document.querySelectorAll('.filter-tab').forEach(t => {
+      t.classList.remove('active');
+      if (t.dataset.filter === filter) t.classList.add('active');
     });
+    currentFilter = filter;
+    renderHospitals();
+    document.querySelector('.filters-bar').scrollIntoView({ behavior: 'smooth' });
+  };
 
-    /* ── Notify me ── */
-    async function handleNotify() {
-      const phone = document.getElementById('notifyPhone').value.trim();
-      if (!phone || phone.length < 10) {
-        showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
-        return;
-      }
-      /* 
-        TODO: Connect to Google Apps Script to save phone number */
-      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1cg/exec';
-await sendToSheet(APPS_SCRIPT_URL, {
-  type: 'notify',
-  phone: phone,
-  source: 'hospitals-page'
-});
-showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
-      document.getElementById('notifyPhone').value = '';
+  window.setCity = function(btn, city) {
+    document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCity = city;
+    renderHospitals();
+  };
+
+  /* ── Fetch hospitals from Supabase ── */
+  async function fetchHospitals() {
+    const { data, error } = await supabase
+      .from('hospitals')
+      .select('*')
+      .eq('is_verified', true)
+      .eq('is_active', true)
+      .order('name');
+
+    if (error) {
+      console.error('Error fetching hospitals:', error);
+      return [];
     }
-  </script>
+    return data || [];
+  }
 
+  /* ── Render hospital cards ── */
+  function renderHospitals() {
+    let filtered = allHospitals;
+
+    /* Filter by type */
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(h => h.type === currentFilter);
+    }
+
+    /* Filter by city */
+    if (currentCity !== 'all') {
+      filtered = filtered.filter(h =>
+        h.city && h.city.toLowerCase().includes(currentCity.toLowerCase())
+      );
+    }
+
+    const container  = document.getElementById('hospitalsGrid');
+    const emptyState = document.getElementById('emptyState');
+    const countEl    = document.getElementById('resultsCount');
+
+    /* Update count */
+    const cityLabel = currentCity === 'all' ? 'all areas' :
+      currentCity.charAt(0).toUpperCase() + currentCity.slice(1);
+    countEl.innerHTML = `Showing <strong>${filtered.length} ${filtered.length === 1 ? 'facility' : 'facilities'}</strong> in ${cityLabel}`;
+
+    if (filtered.length === 0) {
+      /* Show empty state */
+      emptyState.style.display  = 'flex';
+      container.style.display   = 'none';
+      const data = emptyIcons[currentFilter] || emptyIcons.all;
+      document.getElementById('emptyIcon').textContent  = data.icon;
+      document.getElementById('emptyTitle').textContent = data.title;
+      document.getElementById('emptyDesc').textContent  = data.desc;
+      return;
+    }
+
+    /* Show hospital cards */
+    emptyState.style.display = 'none';
+    container.style.display  = 'grid';
+
+    container.innerHTML = filtered.map(h => {
+      const typeLabel = {
+        hospital:        'Hospital',
+        laboratory:      'Laboratory',
+        'medical-store': 'Medical Store',
+        sarai:           'Sarai / Lodge',
+        dispensary:      'Dispensary / PHC',
+        diagnostic:      'Diagnostic Centre',
+      }[h.type] || h.type;
+
+      const typeIcon = {
+        hospital:        '🏥',
+        laboratory:      '🔬',
+        'medical-store': '💊',
+        sarai:           '🏨',
+        dispensary:      '🩺',
+        diagnostic:      '📡',
+      }[h.type] || '🏥';
+
+      const badgeColor = {
+        hospital:        'badge-blue',
+        laboratory:      'badge-green',
+        'medical-store': 'badge-orange',
+        sarai:           'badge-navy',
+        dispensary:      'badge-green',
+        diagnostic:      'badge-blue',
+      }[h.type] || 'badge-blue';
+
+      const schemes = Array.isArray(h.schemes_accepted)
+        ? h.schemes_accepted.join(', ').toUpperCase()
+        : '—';
+
+      const specialities = Array.isArray(h.specialities)
+        ? h.specialities.slice(0, 3).join(' · ')
+        : '—';
+
+      const opdTime = h.opd_start && h.opd_end
+        ? `${h.opd_start} – ${h.opd_end}`
+        : 'Timings not set';
+
+      return `
+        <div class="hospital-card" onclick="window.location.href='hospital-profile.html?id=${h.id}'">
+          <div class="hcard-top">
+            <div class="hcard-icon">${typeIcon}</div>
+            <div class="hcard-meta">
+              <div class="hcard-name">${h.name}</div>
+              <div class="hcard-type">${h.address || ''} · ${h.city || ''}</div>
+            </div>
+            <span class="badge ${badgeColor}">${typeLabel}</span>
+          </div>
+          <div class="hcard-stats">
+            <div class="hcard-stat">
+              <div class="hcard-stat-num">${h.doctor_count || 0}</div>
+              <div class="hcard-stat-label">Doctors</div>
+            </div>
+            <div class="hcard-stat">
+              <div class="hcard-stat-num">${h.beds_available ?? h.bed_count ?? 0}</div>
+              <div class="hcard-stat-label">Beds free</div>
+            </div>
+            <div class="hcard-stat">
+              <div class="hcard-stat-num">${h.opd_days || '—'}</div>
+              <div class="hcard-stat-label">OPD days</div>
+            </div>
+          </div>
+          <div style="padding:10px 20px;font-size:11px;color:var(--text-muted);
+            border-bottom:1px solid var(--border-card);">
+            ${specialities}
+          </div>
+          <div class="hcard-footer">
+            <span class="hcard-time">OPD · ${opdTime}</span>
+            <button class="btn-sm"
+              onclick="event.stopPropagation();
+              window.location.href='hospital-profile.html?id=${h.id}'">
+              View & Book
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ── Search ── */
+  window.handleSearch = function() {
+    const val = document.getElementById('searchInput').value.trim().toLowerCase();
+    if (!val) {
+      renderHospitals();
+      return;
+    }
+    const filtered = allHospitals.filter(h =>
+      h.name.toLowerCase().includes(val) ||
+      (h.city && h.city.toLowerCase().includes(val)) ||
+      (h.specialities && h.specialities.some(s => s.toLowerCase().includes(val)))
+    );
+    const container  = document.getElementById('hospitalsGrid');
+    const emptyState = document.getElementById('emptyState');
+    document.getElementById('resultsCount').innerHTML =
+      `Showing <strong>${filtered.length} results</strong> for "${val}"`;
+    if (filtered.length === 0) {
+      emptyState.style.display = 'flex';
+      container.style.display  = 'none';
+      document.getElementById('emptyIcon').textContent  = '🔍';
+      document.getElementById('emptyTitle').textContent = `No results for "${val}"`;
+      document.getElementById('emptyDesc').textContent  = 'Try a different name, city, or speciality.';
+      return;
+    }
+    emptyState.style.display = 'none';
+    container.style.display  = 'grid';
+    container.innerHTML = filtered.map(h => `
+      <div class="hospital-card" onclick="window.location.href='hospital-profile.html?id=${h.id}'">
+        <div class="hcard-top">
+          <div class="hcard-icon">🏥</div>
+          <div class="hcard-meta">
+            <div class="hcard-name">${h.name}</div>
+            <div class="hcard-type">${h.city || ''}</div>
+          </div>
+        </div>
+        <div class="hcard-footer">
+          <span class="hcard-time">OPD · ${h.opd_start || '—'} – ${h.opd_end || '—'}</span>
+          <button class="btn-sm">View & Book</button>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.handleSearch();
+  });
+
+  /* ── Notify me ── */
+  window.handleNotify = async function() {
+    const phone = document.getElementById('notifyPhone').value.trim();
+    if (!phone || phone.length < 10) {
+      showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
+      return;
+    }
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1ca/exec';
+    await sendToSheet(APPS_SCRIPT_URL, {
+      type: 'notify', phone, source: 'hospitals-page'
+    });
+    showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
+    document.getElementById('notifyPhone').value = '';
+  };
+
+  /* ── Init ── */
+  async function init() {
+    allHospitals = await fetchHospitals();
+    renderHospitals();
+  }
+
+  init();
+
+</script>
 </body>
 </html>
