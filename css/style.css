@@ -723,3 +723,98 @@ ul {
     text-align: center;
   }
 }
+/* ── HOSPITAL CARDS ── */
+.hospital-card {
+  background: var(--white);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.hospital-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: rgba(61,158,255,0.25);
+}
+
+.hcard-top {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-card);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.hcard-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--light-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.hcard-meta { flex: 1; }
+
+.hcard-name {
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.hcard-type {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.hcard-stats {
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.hcard-stat { text-align: center; }
+
+.hcard-stat-num {
+  font-family: 'Georgia', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--electric);
+}
+
+.hcard-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.hcard-footer {
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hcard-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hcard-time::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  display: inline-block;
+}
