@@ -965,53 +965,68 @@
       </div>
 
       <!-- ── PROFILE SECTION ── -->
-      <div id="section-profile" style="display:none;">
-        <div class="dash-page-header">
-          <div>
-            <div class="dash-greeting">Your information</div>
-            <div class="dash-title">My Profile</div>
-          </div>
-          <button class="btn btn-secondary" onclick="showToast('Profile editing will be available once Supabase is connected.', 'info')">Edit Profile</button>
-        </div>
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title"><span class="panel-title-icon">👤</span> Personal Details</div>
-          </div>
-          <div class="panel-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-              <div class="form-group">
-                <label class="form-label">Full Name</label>
-                <input class="form-input" type="text" value="Patient" disabled style="background:var(--off-white);cursor:not-allowed;" id="profileName"/>
-              </div>
-              <div class="form-group">
-  <label class="form-label">Full Name</label>
-  <input class="form-input" type="text" id="profileName"
-    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-</div>
-<div class="form-group">
-  <label class="form-label">Gender</label>
-  <input class="form-input" type="text" id="profileGender"
-    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-</div>
-<div class="form-group">
-  <label class="form-label">Phone Number</label>
-  <input class="form-input" type="text" id="profilePhone"
-    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-</div>
-<div class="form-group">
-  <label class="form-label">City / Area</label>
-  <input class="form-input" type="text" id="profileCity"
-    value="—" disabled style="background:var(--off-white);cursor:not-allowed;"/>
-</div>
-            </div>
-            <div style="margin-top:20px;padding:16px;background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
-              <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
-                🔐 <strong>ABHA ID & Aadhaar linking</strong> will be available soon. This will automatically connect your government health schemes to your Curaah profile.
-              </p>
-            </div>
-          </div>
-        </div>
+<div id="section-profile" style="display:none;">
+  <div class="dash-page-header">
+    <div>
+      <div class="dash-greeting">Your information</div>
+      <div class="dash-title">My Profile</div>
+    </div>
+    <button class="btn btn-secondary"
+      onclick="showToast('Profile editing will be available once Supabase is connected.', 'info')">
+      Edit Profile
+    </button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">👤</span> Personal Details
       </div>
+    </div>
+    <div class="panel-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" id="profileName"
+            value="—" disabled
+            style="background:var(--off-white);cursor:not-allowed;" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <input class="form-input" type="text" id="profileGender"
+            value="—" disabled
+            style="background:var(--off-white);cursor:not-allowed;" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" type="text" id="profilePhone"
+            value="—" disabled
+            style="background:var(--off-white);cursor:not-allowed;" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City / Area</label>
+          <input class="form-input" type="text" id="profileCity"
+            value="—" disabled
+            style="background:var(--off-white);cursor:not-allowed;" />
+        </div>
+
+      </div>
+
+      <div style="margin-top:20px;padding:16px;background:rgba(61,158,255,0.05);
+        border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
+        <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          🔐 <strong>ABHA ID & Aadhaar linking</strong> will be available soon.
+          This will automatically connect your government health schemes
+          to your Curaah profile.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- ── REFERRALS SECTION ── -->
 <div id="section-referrals" style="display:none;">
