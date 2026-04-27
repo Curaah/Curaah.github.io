@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Curaah Staff Portal — Hospital Management Dashboard" />
+  <meta name="description" content="Curaah Staff Portal — Hospital Management" />
   <title>Staff Portal — Curaah</title>
 
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
@@ -27,7 +27,7 @@
       border-radius: var(--radius-xl);
       padding: 48px;
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       box-shadow: var(--shadow-lg);
     }
 
@@ -64,6 +64,7 @@
       font-size: 14px;
       color: var(--text-muted);
       margin-bottom: 28px;
+      line-height: 1.6;
     }
 
     .staff-login-form {
@@ -80,6 +81,7 @@
       font-size: 13px;
       color: var(--danger);
       display: none;
+      line-height: 1.5;
     }
 
     .staff-error-box.show { display: block; }
@@ -171,7 +173,12 @@
       font-weight: 600;
     }
 
-    .sidebar-item-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+    .sidebar-item-icon {
+      font-size: 15px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
     .sidebar-bottom {
       padding: 12px 8px;
@@ -261,7 +268,7 @@
 
     .panel-body { padding: 16px 20px; }
 
-    /* ── TODAY'S APPOINTMENTS TABLE ── */
+    /* ── TABLE ── */
     .appt-table {
       width: 100%;
       border-collapse: collapse;
@@ -288,13 +295,11 @@
     }
 
     .appt-table tr:last-child td { border-bottom: none; }
-
     .appt-table tr:hover td { background: rgba(61,158,255,0.02); }
+    .patient-name { font-weight: 600; }
+    .patient-phone { font-size: 11px; color: var(--text-muted); }
 
-    .appt-table .patient-name { font-weight: 600; }
-    .appt-table .patient-phone { font-size: 11px; color: var(--text-muted); }
-
-    /* Status badges */
+    /* Status */
     .status-pill {
       font-size: 11px;
       font-weight: 600;
@@ -309,7 +314,7 @@
     .status-completed  { background: rgba(100,100,100,0.1);color: var(--text-muted); }
     .status-cancelled  { background: rgba(255,71,87,0.1);  color: var(--danger); }
 
-    /* Action buttons in table */
+    /* Action buttons */
     .action-btn {
       font-size: 11px;
       font-weight: 600;
@@ -320,38 +325,23 @@
       cursor: pointer;
       transition: var(--transition);
       color: var(--text-secondary);
+      margin-right: 4px;
     }
 
-    .action-btn:hover {
-      background: var(--electric);
-      color: white;
-      border-color: var(--electric);
-    }
-
-    .action-btn.danger:hover {
-      background: var(--danger);
-      border-color: var(--danger);
-      color: white;
-    }
+    .action-btn:hover { background: var(--electric); color: white; border-color: var(--electric); }
+    .action-btn.danger:hover { background: var(--danger); border-color: var(--danger); color: white; }
 
     /* ── BED MANAGEMENT ── */
-    .bed-controls {
+    .bed-section {
+      padding: 24px;
       display: flex;
+      gap: 32px;
       align-items: center;
-      gap: 16px;
-      padding: 20px;
       flex-wrap: wrap;
     }
 
-    .bed-display {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex: 1;
-    }
-
     .bed-circle {
-      width: 90px; height: 90px;
+      width: 100px; height: 100px;
       border-radius: 50%;
       border: 4px solid var(--electric);
       display: flex;
@@ -363,7 +353,7 @@
 
     .bed-circle-num {
       font-family: 'Georgia', serif;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
       color: var(--electric);
       line-height: 1;
@@ -371,17 +361,29 @@
 
     .bed-circle-label { font-size: 10px; color: var(--text-muted); }
 
-    .bed-update-form {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+    .bed-info { flex: 1; }
+
+    .bed-bar {
+      height: 10px;
+      background: var(--light-bg);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      max-width: 300px;
     }
 
-    .bed-update-form label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
+    .bed-bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.5s;
+      background: var(--electric);
+    }
+
+    .bed-update-wrap {
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--border-card);
+      margin-top: 0;
+      padding-top: 20px;
     }
 
     .bed-counter {
@@ -391,13 +393,14 @@
       border: 1px solid var(--border-card);
       border-radius: var(--radius-md);
       overflow: hidden;
+      width: fit-content;
     }
 
     .bed-counter-btn {
-      width: 36px; height: 36px;
+      width: 40px; height: 40px;
       background: var(--off-white);
       border: none;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -409,9 +412,9 @@
     .bed-counter-btn:hover { background: var(--electric); color: white; }
 
     .bed-counter-val {
-      width: 52px; height: 36px;
+      width: 60px; height: 40px;
       text-align: center;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text-primary);
       border: none;
@@ -421,22 +424,89 @@
       font-family: 'Inter', sans-serif;
     }
 
-    /* ── CHECKIN SECTION ── */
+    /* ── CHECK-IN ── */
     .checkin-form {
+      padding: 20px;
       display: flex;
-      gap: 12px;
+      gap: 14px;
       align-items: flex-end;
       flex-wrap: wrap;
+    }
+
+    .checkin-form .form-group { flex: 1; min-width: 180px; }
+
+    .checkin-result {
+      display: none;
+      margin: 0 20px 20px;
+      background: var(--off-white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
       padding: 20px;
     }
 
-    .checkin-form .form-group { flex: 1; min-width: 200px; }
+    .checkin-result.show { display: block; }
 
-    /* ── SLOT MANAGEMENT ── */
+    .token-result {
+      display: none;
+      margin: 0 20px 20px;
+      background: var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      text-align: center;
+    }
+
+    .token-result.show { display: block; }
+
+    .token-big {
+      font-family: 'Georgia', serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    /* ── DOCTORS MANAGEMENT ── */
+    .doctor-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .doctor-card {
+      background: var(--off-white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .doctor-card-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.1);
+      border: 1.5px solid rgba(61,158,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--electric);
+      flex-shrink: 0;
+    }
+
+    .doctor-card-info { flex: 1; }
+    .doctor-card-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .doctor-card-spec { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+
+    /* ── SLOTS ── */
     .slots-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 12px;
+      padding: 20px;
     }
 
     .slot-card {
@@ -444,38 +514,26 @@
       border-radius: var(--radius-md);
       padding: 14px;
       text-align: center;
-      transition: var(--transition);
     }
 
-    .slot-card.available {
-      background: rgba(0,196,140,0.04);
-      border-color: rgba(0,196,140,0.2);
-    }
+    .slot-card.available { background: rgba(0,196,140,0.04); border-color: rgba(0,196,140,0.2); }
+    .slot-card.busy      { background: rgba(255,159,0,0.04);  border-color: rgba(255,159,0,0.2); }
+    .slot-card.full      { background: rgba(255,71,87,0.04);  border-color: rgba(255,71,87,0.2); }
 
-    .slot-card.busy {
-      background: rgba(255,159,0,0.04);
-      border-color: rgba(255,159,0,0.2);
-    }
-
-    .slot-card.full {
-      background: rgba(255,71,87,0.04);
-      border-color: rgba(255,71,87,0.2);
-    }
-
-    .slot-time { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
-    .slot-count { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .slot-bar { height: 4px; background: var(--border-card); border-radius: 2px; overflow: hidden; }
+    .slot-time  { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .slot-count { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+    .slot-bar   { height: 4px; background: var(--border-card); border-radius: 2px; overflow: hidden; }
     .slot-bar-fill { height: 100%; border-radius: 2px; }
 
-    /* ── EMPTY TABLE ── */
+    /* ── EMPTY ── */
     .table-empty {
-      padding: 48px 20px;
+      padding: 40px 20px;
       text-align: center;
       color: var(--text-muted);
       font-size: 14px;
     }
 
-    .table-empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
+    .table-empty-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
@@ -487,15 +545,13 @@
 
     @media (max-width: 600px) {
       .portal-stats { grid-template-columns: 1fr 1fr; }
-      .appt-table th:nth-child(3),
-      .appt-table td:nth-child(3) { display: none; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ── STAFF LOGIN PAGE ── -->
+  <!-- ── LOGIN PAGE ── -->
   <div id="staffLoginPage" class="staff-login-page">
     <div class="staff-login-card">
       <div class="staff-login-logo">
@@ -512,10 +568,10 @@
         </div>
       </div>
 
-      <div class="staff-login-title">Hospital Staff Login</div>
+      <div class="staff-login-title">Staff Login</div>
       <p class="staff-login-sub">
-        Login with your staff credentials to manage appointments,
-        beds, and patient check-ins.
+        Login with the email and password set up by your Curaah onboarding team.
+        Your hospital will be detected automatically.
       </p>
 
       <div class="staff-error-box" id="staffErrorBox"></div>
@@ -524,21 +580,13 @@
         <div class="form-group">
           <label class="form-label">Staff Email *</label>
           <input class="form-input" type="email" id="staffEmail"
-            placeholder="your@hospital.com" autocomplete="email" />
+            placeholder="your@email.com" autocomplete="email" />
         </div>
         <div class="form-group">
           <label class="form-label">Password *</label>
           <input class="form-input" type="password" id="staffPassword"
-            placeholder="Enter password" autocomplete="current-password" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Hospital Code *</label>
-          <input class="form-input" type="text" id="hospitalCode"
-            placeholder="e.g. DEMO-HOSPITAL"
-            style="text-transform:uppercase;" />
-          <span class="form-hint">
-            Get this from your Curaah onboarding team
-          </span>
+            placeholder="Enter your password"
+            autocomplete="current-password" />
         </div>
         <button class="btn btn-primary btn-full btn-lg"
           id="staffLoginBtn" onclick="handleStaffLogin()">
@@ -550,15 +598,14 @@
         text-align:center;margin-top:20px;line-height:1.6;">
         Patient? <a href="login.html"
           style="color:var(--electric);font-weight:600;">
-          Go to patient login →</a>
+          Patient login →</a>
       </p>
     </div>
   </div>
 
-  <!-- ── STAFF PORTAL (shown after login) ── -->
+  <!-- ── PORTAL ── -->
   <div id="staffPortal" style="display:none;">
 
-    <!-- Navbar -->
     <nav class="navbar">
       <a href="index.html" class="nav-logo">
         <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
@@ -577,7 +624,9 @@
         <span style="font-size:13px;color:var(--text-on-dark-muted);">
           <strong style="color:var(--white);" id="portalHospitalName">—</strong>
         </span>
-        <button class="btn btn-ghost btn-sm" onclick="handleStaffLogout()">Logout</button>
+        <button class="btn btn-ghost btn-sm" onclick="handleStaffLogout()">
+          Logout
+        </button>
       </div>
       <div class="nav-hamburger" id="hamburger" onclick="toggleSidebar()">
         <span></span><span></span><span></span>
@@ -586,31 +635,40 @@
 
     <div class="portal-layout">
 
-      <!-- Sidebar -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-hospital">
           <div class="sidebar-hospital-name" id="sidebarHospitalName">—</div>
-          <div class="sidebar-hospital-tag">Staff Portal</div>
+          <div class="sidebar-hospital-tag" id="sidebarStaffName">Staff Portal</div>
         </div>
         <nav class="sidebar-nav">
           <div class="sidebar-section-label">Today</div>
-          <button class="sidebar-item active" onclick="showPortalSection('overview', this)">
+          <button class="sidebar-item active"
+            onclick="showSection('overview', this)">
             <span class="sidebar-item-icon">🏠</span> Overview
           </button>
-          <button class="sidebar-item" onclick="showPortalSection('appointments', this)">
-            <span class="sidebar-item-icon">📅</span> Today's Appointments
+          <button class="sidebar-item"
+            onclick="showSection('appointments', this)">
+            <span class="sidebar-item-icon">📅</span> Appointments
           </button>
-          <button class="sidebar-item" onclick="showPortalSection('checkin', this)">
-            <span class="sidebar-item-icon">✅</span> Manual Check-in
+          <button class="sidebar-item"
+            onclick="showSection('checkin', this)">
+            <span class="sidebar-item-icon">✅</span> Check-in Patient
           </button>
-          <button class="sidebar-item" onclick="showPortalSection('tokens', this)">
+          <button class="sidebar-item"
+            onclick="showSection('tokens', this)">
             <span class="sidebar-item-icon">📟</span> Token Queue
           </button>
           <div class="sidebar-section-label">Manage</div>
-          <button class="sidebar-item" onclick="showPortalSection('beds', this)">
+          <button class="sidebar-item"
+            onclick="showSection('beds', this)">
             <span class="sidebar-item-icon">🛏️</span> Bed Management
           </button>
-          <button class="sidebar-item" onclick="showPortalSection('slots', this)">
+          <button class="sidebar-item"
+            onclick="showSection('doctors', this)">
+            <span class="sidebar-item-icon">👨‍⚕️</span> Manage Doctors
+          </button>
+          <button class="sidebar-item"
+            onclick="showSection('slots', this)">
             <span class="sidebar-item-icon">⏰</span> Slot Availability
           </button>
         </nav>
@@ -622,25 +680,24 @@
         </div>
       </aside>
 
-      <!-- Main -->
       <main class="portal-main">
 
-        <!-- ── OVERVIEW ── -->
-        <div id="portal-section-overview">
+        <!-- OVERVIEW -->
+        <div id="section-overview">
           <div class="portal-header">
             <div>
-              <div class="portal-title" id="overviewTitle">Good morning</div>
+              <div class="portal-title" id="overviewGreeting">Good morning</div>
               <div class="portal-date" id="portalDate">—</div>
             </div>
             <button class="btn btn-primary btn-sm"
-              onclick="showPortalSection('checkin', document.querySelector('[onclick*=checkin]'))">
-              + Manual Check-in
+              onclick="showSection('checkin', document.querySelector('[onclick*=checkin]'))">
+              + Check In Patient
             </button>
           </div>
 
           <div class="portal-stats">
             <div class="portal-stat">
-              <div class="portal-stat-num" id="statTodayAppts">—</div>
+              <div class="portal-stat-num" id="statTotal">—</div>
               <div class="portal-stat-label">Today's appointments</div>
             </div>
             <div class="portal-stat">
@@ -648,7 +705,7 @@
               <div class="portal-stat-label">Checked in</div>
             </div>
             <div class="portal-stat">
-              <div class="portal-stat-num" id="statBedsAvail">—</div>
+              <div class="portal-stat-num" id="statBeds">—</div>
               <div class="portal-stat-label">Beds available</div>
             </div>
             <div class="portal-stat">
@@ -657,263 +714,311 @@
             </div>
           </div>
 
-          <!-- Today's quick list -->
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">📅 Today's Appointments</div>
               <span style="font-size:13px;color:var(--electric);cursor:pointer;font-weight:500;"
-                onclick="showPortalSection('appointments', null)">
-                View all
-              </span>
+                onclick="showSection('appointments', null)">View all</span>
             </div>
-            <div id="overviewApptsList">
+            <div id="overviewList">
               <div class="table-empty">
                 <div class="table-empty-icon">📅</div>
-                Loading today's appointments...
+                Loading...
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ── TODAY'S APPOINTMENTS ── -->
-        <div id="portal-section-appointments" style="display:none;">
+        <!-- APPOINTMENTS -->
+        <div id="section-appointments" style="display:none;">
           <div class="portal-header">
             <div>
               <div class="portal-title">Today's Appointments</div>
-              <div class="portal-date" id="apptDate2">—</div>
+              <div class="portal-date" id="apptDateLabel">—</div>
             </div>
             <select class="form-input form-select"
               id="filterDoctor"
               style="width:auto;min-width:200px;"
-              onchange="filterByDoctor()">
+              onchange="filterAppointments()">
               <option value="all">All Doctors</option>
             </select>
           </div>
-
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">📋 Patient List</div>
-              <span style="font-size:12px;color:var(--text-muted);" id="apptCountLabel">
-                — appointments today
-              </span>
+              <span style="font-size:12px;color:var(--text-muted);"
+                id="apptCountLabel">— today</span>
             </div>
             <div style="overflow-x:auto;">
-              <table class="appt-table" id="apptTable">
+              <table class="appt-table">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>Patient</th>
                     <th>Doctor</th>
-                    <th>Time Slot</th>
+                    <th>Slot</th>
                     <th>Scheme</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="apptTableBody">
-                  <tr>
-                    <td colspan="7" class="table-empty">
-                      <div class="table-empty-icon">📅</div>
-                      Loading...
-                    </td>
-                  </tr>
+                  <tr><td colspan="7" class="table-empty">Loading...</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- ── MANUAL CHECK-IN ── -->
-        <div id="portal-section-checkin" style="display:none;">
+        <!-- CHECK-IN -->
+        <div id="section-checkin" style="display:none;">
           <div class="portal-header">
             <div>
-              <div class="portal-title">Manual Check-in</div>
-              <div class="portal-date">
-                Check in patients who don't have smartphones
-              </div>
+              <div class="portal-title">Check-in Patient</div>
+              <div class="portal-date">For patients without smartphones</div>
             </div>
           </div>
-
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">🔍 Find Patient Appointment</div>
+              <div class="panel-title">🔍 Find Patient by Phone</div>
             </div>
             <div class="checkin-form">
               <div class="form-group">
                 <label class="form-label">Patient Phone Number *</label>
                 <input class="form-input" type="tel" id="checkinPhone"
-                  placeholder="10-digit mobile number" maxlength="10" />
+                  placeholder="10-digit number" maxlength="10" />
               </div>
               <div class="form-group">
-                <label class="form-label">Appointment Date</label>
+                <label class="form-label">Date</label>
                 <input class="form-input" type="date" id="checkinDate" />
               </div>
               <button class="btn btn-primary" style="flex-shrink:0;"
-                onclick="findPatientAppt()">
+                onclick="findPatient()">
                 Find Appointment
               </button>
             </div>
 
-            <!-- Result -->
-            <div id="checkinResult" style="display:none;padding:0 20px 20px;">
-              <div style="background:var(--off-white);border:1px solid var(--border-card);
-                border-radius:var(--radius-lg);padding:20px;">
-                <div style="display:flex;justify-content:space-between;
-                  align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
-                  <div>
-                    <p style="font-size:16px;font-weight:600;color:var(--text-primary);
-                      margin:0 0 4px;" id="checkinPatientName">—</p>
-                    <p style="font-size:13px;color:var(--text-muted);margin:0;"
-                      id="checkinApptDetails">—</p>
-                  </div>
-                  <span class="status-pill status-confirmed" id="checkinCurrentStatus">
-                    Confirmed
-                  </span>
+            <div class="checkin-result" id="checkinResult">
+              <div style="display:flex;justify-content:space-between;
+                align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+                <div>
+                  <p style="font-size:16px;font-weight:600;
+                    color:var(--text-primary);margin:0 0 4px;"
+                    id="checkinPatientName">—</p>
+                  <p style="font-size:13px;color:var(--text-muted);margin:0;"
+                    id="checkinApptInfo">—</p>
                 </div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                  <button class="btn btn-primary" id="checkinBtn"
-                    onclick="confirmCheckin()">
-                    ✅ Check In Patient
-                  </button>
-                  <button class="btn btn-secondary"
-                    onclick="document.getElementById('checkinResult').style.display='none'">
-                    Cancel
-                  </button>
-                </div>
+                <span class="status-pill status-confirmed"
+                  id="checkinStatus">Confirmed</span>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-primary" id="checkinConfirmBtn"
+                  onclick="confirmCheckin()">
+                  ✅ Confirm Check-in & Assign Token
+                </button>
+                <button class="btn btn-secondary"
+                  onclick="resetCheckin()">Cancel</button>
               </div>
             </div>
 
-            <!-- Token result -->
-            <div id="tokenResult" style="display:none;padding:0 20px 20px;">
-              <div style="background:var(--navy);border-radius:var(--radius-lg);
-                padding:24px;text-align:center;">
-                <p style="font-size:11px;font-weight:700;letter-spacing:2px;
-                  text-transform:uppercase;color:var(--electric);margin-bottom:12px;">
-                  Token Assigned
-                </p>
-                <div style="font-family:'Georgia',serif;font-size:72px;
-                  font-weight:700;color:var(--white);line-height:1;margin-bottom:8px;"
-                  id="assignedToken">—</div>
-                <p style="font-size:13px;color:var(--text-on-dark-muted);"
-                  id="assignedTokenDetails">—</p>
-                <button class="btn btn-ghost" style="margin-top:16px;"
-                  onclick="resetCheckin()">
-                  Check In Another Patient
-                </button>
-              </div>
+            <div class="token-result" id="tokenResult">
+              <p style="font-size:11px;font-weight:700;letter-spacing:2px;
+                text-transform:uppercase;color:var(--electric);margin-bottom:12px;">
+                Token Assigned
+              </p>
+              <div class="token-big" id="assignedTokenNum">—</div>
+              <p style="font-size:13px;color:var(--text-on-dark-muted);
+                margin-top:8px;" id="assignedTokenInfo">—</p>
+              <button class="btn btn-ghost" style="margin-top:20px;"
+                onclick="resetCheckin()">
+                Check In Another Patient
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- ── TOKEN QUEUE ── -->
-        <div id="portal-section-tokens" style="display:none;">
+        <!-- TOKEN QUEUE -->
+        <div id="section-tokens" style="display:none;">
           <div class="portal-header">
             <div>
               <div class="portal-title">Token Queue</div>
-              <div class="portal-date">Live OPD queue status</div>
+              <div class="portal-date">Live OPD queue</div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="loadTokenQueue()">
+            <button class="btn btn-primary btn-sm" onclick="loadTokens()">
               🔄 Refresh
             </button>
           </div>
-
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">📟 Current Queue</div>
             </div>
-            <div id="tokenQueueList">
+            <div id="tokenList">
               <div class="table-empty">
                 <div class="table-empty-icon">📟</div>
-                No tokens in queue yet. Check in patients first.
+                No tokens yet. Check in patients first.
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ── BED MANAGEMENT ── -->
-        <div id="portal-section-beds" style="display:none;">
+        <!-- BEDS -->
+        <div id="section-beds" style="display:none;">
           <div class="portal-header">
             <div>
               <div class="portal-title">Bed Management</div>
               <div class="portal-date">Update live bed availability</div>
             </div>
           </div>
-
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">🛏️ Current Bed Status</div>
+              <div class="panel-title">🛏️ Current Status</div>
             </div>
-            <div class="bed-controls">
-              <div class="bed-display">
-                <div class="bed-circle">
-                  <div class="bed-circle-num" id="bedAvailDisplay">—</div>
-                  <div class="bed-circle-label">Available</div>
+            <div class="bed-section">
+              <div class="bed-circle">
+                <div class="bed-circle-num" id="bedAvailNum">—</div>
+                <div class="bed-circle-label">Available</div>
+              </div>
+              <div class="bed-info">
+                <p style="font-size:14px;color:var(--text-secondary);margin:0 0 4px;">
+                  <strong id="bedOccNum">—</strong> occupied ·
+                  <strong id="bedTotalNum">—</strong> total
+                </p>
+                <div class="bed-bar">
+                  <div class="bed-bar-fill" id="bedBarFill" style="width:0%;"></div>
                 </div>
-                <div style="flex:1;">
-                  <p style="font-size:13px;color:var(--text-secondary);margin:0 0 4px;">
-                    <strong id="bedOccDisplay">—</strong> beds occupied
-                  </p>
-                  <p style="font-size:13px;color:var(--text-secondary);margin:0 0 12px;">
-                    <strong id="bedTotalDisplay">—</strong> total beds
-                  </p>
-                  <div style="height:10px;background:var(--light-bg);
-                    border-radius:5px;overflow:hidden;max-width:300px;">
-                    <div id="bedBarDisplay" style="height:100%;border-radius:5px;
-                      background:var(--electric);transition:width 0.5s;width:0%;"></div>
-                  </div>
-                </div>
+                <p style="font-size:12px;color:var(--text-muted);margin-top:6px;"
+                  id="bedPctLabel">—</p>
               </div>
             </div>
-            <div style="padding:0 20px 20px;border-top:1px solid var(--border-card);margin-top:0;">
-              <p style="font-size:13px;font-weight:600;color:var(--text-secondary);
-                margin:20px 0 12px;">Update available beds:</p>
-              <div class="bed-update-form">
-                <label>Available beds:</label>
+            <div class="bed-update-wrap">
+              <p style="font-size:13px;font-weight:600;
+                color:var(--text-secondary);margin-bottom:14px;">
+                Update available beds:
+              </p>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                 <div class="bed-counter">
-                  <button class="bed-counter-btn" onclick="changeBeds(-1)">−</button>
+                  <button class="bed-counter-btn" onclick="changeBed(-1)">−</button>
                   <input class="bed-counter-val" type="number"
-                    id="bedUpdateVal" min="0" />
-                  <button class="bed-counter-btn" onclick="changeBeds(1)">+</button>
+                    id="bedNewVal" min="0" />
+                  <button class="bed-counter-btn" onclick="changeBed(1)">+</button>
                 </div>
-                <button class="btn btn-primary" onclick="updateBeds()">
+                <button class="btn btn-primary" onclick="saveBeds()">
                   Save Update
                 </button>
+                <span style="font-size:12px;color:var(--text-muted);">
+                  Updates live for all patients on Curaah immediately.
+                </span>
               </div>
-              <p style="font-size:11px;color:var(--text-muted);margin-top:10px;line-height:1.6;">
-                This updates the live bed count visible to all patients on Curaah.
-                Update whenever a patient is admitted or discharged.
-              </p>
             </div>
           </div>
         </div>
 
-        <!-- ── SLOT AVAILABILITY ── -->
-        <div id="portal-section-slots" style="display:none;">
+        <!-- DOCTORS -->
+        <div id="section-doctors" style="display:none;">
           <div class="portal-header">
             <div>
-              <div class="portal-title">Slot Availability</div>
-              <div class="portal-date">See booking status for each time slot</div>
+              <div class="portal-title">Manage Doctors</div>
+              <div class="portal-date">
+                Add and manage your hospital's doctors
+              </div>
             </div>
-            <div style="display:flex;gap:10px;align-items:center;">
-              <select class="form-input form-select" id="slotFilterDoctor"
-                style="width:auto;min-width:180px;" onchange="loadSlotView()">
-                <option value="">All Doctors</option>
-              </select>
-              <input class="form-input" type="date" id="slotFilterDate"
-                style="width:auto;" onchange="loadSlotView()" />
+            <button class="btn btn-primary btn-sm"
+              onclick="toggleAddDoctorForm()">
+              + Add Doctor
+            </button>
+          </div>
+
+          <!-- Add doctor form -->
+          <div class="panel" id="addDoctorPanel" style="display:none;">
+            <div class="panel-header">
+              <div class="panel-title">➕ Add New Doctor</div>
+              <button class="btn btn-secondary btn-sm"
+                onclick="toggleAddDoctorForm()">Cancel</button>
+            </div>
+            <div class="doctor-form-grid">
+              <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input class="form-input" type="text" id="drName"
+                  placeholder="Dr. Full Name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Speciality *</label>
+                <input class="form-input" type="text" id="drSpec"
+                  placeholder="e.g. General Medicine" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Qualification</label>
+                <input class="form-input" type="text" id="drQual"
+                  placeholder="e.g. MBBS, MD" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">OPD Days</label>
+                <select class="form-input form-select" id="drDays">
+                  <option value="">Select</option>
+                  <option>Mon – Sat</option>
+                  <option>Mon – Fri</option>
+                  <option>All 7 days</option>
+                  <option>Mon, Wed, Fri</option>
+                  <option>Tue, Thu, Sat</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">OPD Start</label>
+                <input class="form-input" type="time" id="drStart" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">OPD End</label>
+                <input class="form-input" type="time" id="drEnd" />
+              </div>
+            </div>
+            <div style="padding:0 20px 20px;">
+              <button class="btn btn-primary" onclick="addDoctor()">
+                Add Doctor to Hospital
+              </button>
             </div>
           </div>
 
+          <!-- Doctors list -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">👨‍⚕️ Your Doctors</div>
+              <span style="font-size:12px;color:var(--text-muted);"
+                id="drCountLabel">— doctors</span>
+            </div>
+            <div id="doctorsList">
+              <div class="table-empty">
+                <div class="table-empty-icon">👨‍⚕️</div>
+                No doctors added yet. Add your first doctor above.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLOTS -->
+        <div id="section-slots" style="display:none;">
+          <div class="portal-header">
+            <div>
+              <div class="portal-title">Slot Availability</div>
+              <div class="portal-date">Booking status per time slot</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <select class="form-input form-select" id="slotDoctor"
+                style="width:auto;min-width:180px;"
+                onchange="loadSlots()">
+                <option value="">Select Doctor</option>
+              </select>
+              <input class="form-input" type="date" id="slotDate"
+                style="width:auto;" onchange="loadSlots()" />
+            </div>
+          </div>
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">⏰ Slot Status</div>
             </div>
-            <div class="panel-body">
-              <div class="slots-grid" id="slotsGrid">
-                <div style="grid-column:1/-1;text-align:center;
-                  padding:24px;color:var(--text-muted);font-size:14px;">
-                  Select a doctor and date to see slot availability.
-                </div>
+            <div class="slots-grid" id="slotsGrid">
+              <div style="grid-column:1/-1;text-align:center;
+                padding:24px;color:var(--text-muted);font-size:14px;">
+                Select a doctor and date to see slots.
               </div>
             </div>
           </div>
@@ -927,10 +1032,13 @@
   <script type="module">
     import { supabase } from './js/supabase.js';
 
+    /* ── State ── */
     let currentHospital = null;
+    let currentStaff    = null;
     let todayAppts      = [];
+    let hospitalDoctors = [];
     let checkinApptId   = null;
-    let checkinPatientId= null;
+    let checkinPatId    = null;
 
     const TODAY = new Date().toISOString().split('T')[0];
 
@@ -940,19 +1048,14 @@
       '2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM',
     ];
 
-    const demoDoctors = [
-      'Dr. Suresh Kumar','Dr. Priya Rana',
-      'Dr. Amit Sharma','Dr. Neha Verma','Dr. Rajiv Malhotra',
-    ];
-
-    /* ── Portal section switcher ── */
     const portalSections = [
-      'overview','appointments','checkin','tokens','beds','slots'
+      'overview','appointments','checkin','tokens','beds','doctors','slots'
     ];
 
-    window.showPortalSection = function(name, btn) {
+    /* ── Section switcher ── */
+    window.showSection = function(name, btn) {
       portalSections.forEach(s => {
-        const el = document.getElementById('portal-section-' + s);
+        const el = document.getElementById('section-' + s);
         if (el) el.style.display = s === name ? 'block' : 'none';
       });
       if (btn) {
@@ -961,12 +1064,11 @@
         btn.classList.add('active');
       }
       document.getElementById('sidebar').classList.remove('open');
-
-      /* Load data for specific sections */
-      if (name === 'appointments') loadTodayAppointments();
-      if (name === 'tokens')       loadTokenQueue();
-      if (name === 'beds')         loadBedSection();
-      if (name === 'slots')        initSlotSection();
+      if (name === 'appointments') loadAppointments();
+      if (name === 'tokens')       loadTokens();
+      if (name === 'beds')         renderBeds();
+      if (name === 'doctors')      loadDoctors();
+      if (name === 'slots')        initSlots();
     };
 
     window.toggleSidebar = function() {
@@ -977,12 +1079,11 @@
     window.handleStaffLogin = async function() {
       const email    = document.getElementById('staffEmail').value.trim();
       const password = document.getElementById('staffPassword').value;
-      const code     = document.getElementById('hospitalCode').value.trim().toUpperCase();
       const errorBox = document.getElementById('staffErrorBox');
       const btn      = document.getElementById('staffLoginBtn');
 
-      if (!email || !password || !code) {
-        errorBox.textContent = 'Please fill all fields.';
+      if (!email || !password) {
+        errorBox.textContent = 'Please enter your email and password.';
         errorBox.classList.add('show');
         return;
       }
@@ -992,33 +1093,38 @@
       errorBox.classList.remove('show');
 
       try {
-        /* Login with Supabase */
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email, password
-        });
+        /* Step 1 — Supabase auth */
+        const { data: authData, error: authError } =
+          await supabase.auth.signInWithPassword({ email, password });
 
-        if (error) throw new Error('Incorrect credentials. Please try again.');
+        if (authError) throw new Error('Incorrect email or password.');
 
-        /* Find hospital by checking hospitals table */
-        /* For demo: find hospital where name contains the code */
-        const { data: hospitals } = await supabase
-          .from('hospitals')
-          .select('*')
+        const userId = authData.user.id;
+
+        /* Step 2 — Check hospital_staff table */
+        const { data: staffRow, error: staffError } = await supabase
+          .from('hospital_staff')
+          .select('*, hospitals(*)')
+          .eq('user_id', userId)
           .eq('is_active', true)
-          .limit(10);
+          .single();
 
-        /* For now use first active hospital as demo */
-        /* In production: match staff to hospital via a staff table */
-        if (!hospitals || hospitals.length === 0) {
-          throw new Error('No active hospital found. Contact Curaah support.');
+        if (staffError || !staffRow) {
+          /* Sign out — not a staff member */
+          await supabase.auth.signOut();
+          throw new Error(
+            'This account is not registered as hospital staff. ' +
+            'If you are a patient, use the patient login.'
+          );
         }
 
-        currentHospital = hospitals[0];
+        /* Step 3 — Set state */
+        currentStaff    = staffRow;
+        currentHospital = staffRow.hospitals;
 
         btn.textContent = 'Login to Staff Portal';
         btn.disabled    = false;
 
-        /* Show portal */
         document.getElementById('staffLoginPage').style.display = 'none';
         document.getElementById('staffPortal').style.display    = 'block';
 
@@ -1032,9 +1138,34 @@
       }
     };
 
-    /* ── STAFF LOGOUT ── */
+    /* ── CHECK SESSION ON LOAD ── */
+    async function checkExistingSession() {
+      const { data:{ session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      /* Check if existing session is a staff member */
+      const { data: staffRow } = await supabase
+        .from('hospital_staff')
+        .select('*, hospitals(*)')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (staffRow && staffRow.hospitals) {
+        currentStaff    = staffRow;
+        currentHospital = staffRow.hospitals;
+        document.getElementById('staffLoginPage').style.display = 'none';
+        document.getElementById('staffPortal').style.display    = 'block';
+        initPortal();
+      }
+      /* If not staff — stay on login page even if session exists */
+    }
+
+    /* ── LOGOUT ── */
     window.handleStaffLogout = async function() {
       await supabase.auth.signOut();
+      currentHospital = null;
+      currentStaff    = null;
       document.getElementById('staffPortal').style.display    = 'none';
       document.getElementById('staffLoginPage').style.display = 'flex';
       showToast('Logged out.', 'success');
@@ -1043,131 +1174,33 @@
     /* ── INIT PORTAL ── */
     async function initPortal() {
       const h = currentHospital;
+      const s = currentStaff;
 
-      /* Set names */
       document.getElementById('portalHospitalName').textContent  = h.name;
       document.getElementById('sidebarHospitalName').textContent = h.name;
+      document.getElementById('sidebarStaffName').textContent    =
+        s.full_name || 'Staff Member';
 
-      /* Date */
+      const hour  = new Date().getHours();
+      const greet = hour < 12 ? 'Good morning' :
+                    hour < 17 ? 'Good afternoon' : 'Good evening';
+      document.getElementById('overviewGreeting').textContent = greet;
+
       const dateStr = new Date().toLocaleDateString('en-IN', {
         weekday:'long', day:'numeric', month:'long', year:'numeric'
       });
-      document.getElementById('portalDate').textContent = dateStr;
-      document.getElementById('apptDate2').textContent  = dateStr;
+      document.getElementById('portalDate').textContent    = dateStr;
+      document.getElementById('apptDateLabel').textContent = dateStr;
 
-      /* Greeting */
-      const hour  = new Date().getHours();
-      const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('overviewTitle').textContent = `${greet}, ${h.name}`;
+      document.getElementById('checkinDate').value = TODAY;
+      document.getElementById('bedNewVal').value   =
+        h.beds_available ?? h.bed_count ?? 0;
 
-      /* Populate doctor filters */
-      const drs = demoDoctors;
-      ['filterDoctor','slotFilterDoctor'].forEach(id => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        sel.innerHTML =
-          `<option value="all">All Doctors</option>` +
-          drs.map(d => `<option value="${d}">${d}</option>`).join('');
-      });
-
-      /* Set today's date on date pickers */
-      const checkinDateEl = document.getElementById('checkinDate');
-      if (checkinDateEl) checkinDateEl.value = TODAY;
-
-      const slotDateEl = document.getElementById('slotFilterDate');
-      if (slotDateEl) slotDateEl.value = TODAY;
-
-      /* Set bed counter */
-      const bedVal = document.getElementById('bedUpdateVal');
-      if (bedVal) bedVal.value = h.beds_available ?? h.bed_count ?? 0;
-
-      /* Load overview data */
       await loadOverview();
     }
 
     /* ── LOAD OVERVIEW ── */
     async function loadOverview() {
-      const h = currentHospital;
-
-      /* Today's appointments */
-      const { data: appts, count } = await supabase
-        .from('appointments')
-        .select('*, patients(full_name, phone)', { count:'exact' })
-        .eq('hospital_id', h.id)
-        .eq('appointment_date', TODAY)
-        .order('time_slot');
-
-      todayAppts = appts || [];
-
-      const checkedIn = todayAppts.filter(a => a.status === 'checkedin').length;
-      const pending   = todayAppts.filter(a =>
-        a.status === 'confirmed' || a.status === 'pending').length;
-
-      document.getElementById('statTodayAppts').textContent =
-        todayAppts.length;
-      document.getElementById('statCheckedIn').textContent =
-        checkedIn;
-      document.getElementById('statBedsAvail').textContent =
-        h.beds_available ?? h.bed_count ?? 0;
-      document.getElementById('statPending').textContent =
-        pending;
-
-      /* Overview list — first 5 */
-      const listEl = document.getElementById('overviewApptsList');
-      if (todayAppts.length === 0) {
-        listEl.innerHTML = `
-          <div class="table-empty">
-            <div class="table-empty-icon">📅</div>
-            No appointments scheduled for today.
-          </div>`;
-        return;
-      }
-
-      const rows = todayAppts.slice(0,5).map((a, i) => {
-        const statusClass = getStatusClass(a.status);
-        const statusText  = formatStatus(a.status);
-        return `
-          <tr>
-            <td>${i+1}</td>
-            <td>
-              <div class="patient-name">
-                ${a.patients?.full_name || 'Patient'}
-              </div>
-              <div class="patient-phone">
-                ${a.patients?.phone || '—'}
-              </div>
-            </td>
-            <td>${a.doctor_name || '—'}</td>
-            <td>${a.time_slot || '—'}</td>
-            <td>${a.scheme_used ? a.scheme_used.toUpperCase() : 'Self pay'}</td>
-            <td><span class="status-pill ${statusClass}">${statusText}</span></td>
-            <td>
-              ${a.status === 'confirmed' || a.status === 'pending'
-                ? `<button class="action-btn"
-                    onclick="quickCheckin('${a.id}','${a.patients?.full_name || ''}','${a.doctor_name}','${a.time_slot}')">
-                    Check In
-                  </button>`
-                : '—'}
-            </td>
-          </tr>`;
-      }).join('');
-
-      listEl.innerHTML = `
-        <div style="overflow-x:auto;">
-          <table class="appt-table">
-            <thead>
-              <tr>
-                <th>#</th><th>Patient</th><th>Doctor</th>
-                <th>Time</th><th>Scheme</th><th>Status</th><th>Action</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>`;
-    }
-
-    /* ── LOAD TODAY'S APPOINTMENTS ── */
-    async function loadTodayAppointments() {
       const h = currentHospital;
 
       const { data: appts } = await supabase
@@ -1179,163 +1212,205 @@
 
       todayAppts = appts || [];
 
-      document.getElementById('apptCountLabel').textContent =
-        `${todayAppts.length} appointments today`;
+      const checkedIn = todayAppts.filter(a => a.status === 'checkedin').length;
+      const pending   = todayAppts.filter(a =>
+        a.status === 'confirmed' || a.status === 'pending').length;
 
-      renderApptTable(todayAppts);
+      document.getElementById('statTotal').textContent     = todayAppts.length;
+      document.getElementById('statCheckedIn').textContent = checkedIn;
+      document.getElementById('statBeds').textContent      =
+        h.beds_available ?? h.bed_count ?? 0;
+      document.getElementById('statPending').textContent   = pending;
+
+      populateDoctorFilter();
+      renderOverviewList();
     }
 
-    function renderApptTable(appts) {
-      const tbody = document.getElementById('apptTableBody');
-      if (!appts || appts.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="table-empty">
-              <div class="table-empty-icon">📅</div>
-              No appointments found.
-            </td>
-          </tr>`;
+    function populateDoctorFilter() {
+      const names = [...new Set(todayAppts.map(a => a.doctor_name).filter(Boolean))];
+      const sel   = document.getElementById('filterDoctor');
+      sel.innerHTML =
+        '<option value="all">All Doctors</option>' +
+        names.map(n => `<option value="${n}">${n}</option>`).join('');
+    }
+
+    function renderOverviewList() {
+      const el = document.getElementById('overviewList');
+      if (todayAppts.length === 0) {
+        el.innerHTML = `
+          <div class="table-empty">
+            <div class="table-empty-icon">📅</div>
+            No appointments scheduled for today.
+          </div>`;
         return;
       }
-
-      tbody.innerHTML = appts.map((a, i) => {
-        const statusClass = getStatusClass(a.status);
-        const statusText  = formatStatus(a.status);
-        return `
-          <tr>
-            <td>${i+1}</td>
-            <td>
-              <div class="patient-name">
-                ${a.patients?.full_name || 'Patient'}
-              </div>
-              <div class="patient-phone">${a.patients?.phone || '—'}</div>
-            </td>
-            <td>${a.doctor_name || '—'}</td>
-            <td>${a.time_slot || '—'}</td>
-            <td>${a.scheme_used ? a.scheme_used.toUpperCase() : 'Self pay'}</td>
-            <td><span class="status-pill ${statusClass}">${statusText}</span></td>
-            <td style="display:flex;gap:6px;flex-wrap:wrap;">
-              ${a.status === 'confirmed' || a.status === 'pending'
-                ? `<button class="action-btn"
-                    onclick="quickCheckin('${a.id}','${a.patients?.full_name || ''}','${a.doctor_name}','${a.time_slot}')">
-                    Check In
-                  </button>`
-                : ''}
-              ${a.status !== 'completed' && a.status !== 'cancelled'
-                ? `<button class="action-btn"
-                    onclick="markCompleted('${a.id}')">
-                    Done
-                  </button>`
-                : ''}
-              ${a.status !== 'cancelled'
-                ? `<button class="action-btn danger"
-                    onclick="cancelAppt('${a.id}')">
-                    Cancel
-                  </button>`
-                : ''}
-            </td>
-          </tr>`;
-      }).join('');
+      el.innerHTML = buildTable(todayAppts.slice(0, 5));
     }
 
-    window.filterByDoctor = function() {
+    /* ── LOAD APPOINTMENTS ── */
+    async function loadAppointments() {
+      const { data: appts } = await supabase
+        .from('appointments')
+        .select('*, patients(full_name, phone)')
+        .eq('hospital_id', currentHospital.id)
+        .eq('appointment_date', TODAY)
+        .order('time_slot');
+
+      todayAppts = appts || [];
+      document.getElementById('apptCountLabel').textContent =
+        `${todayAppts.length} appointments today`;
+      document.getElementById('apptTableBody').innerHTML =
+        buildTableRows(todayAppts);
+    }
+
+    window.filterAppointments = function() {
       const val = document.getElementById('filterDoctor').value;
-      if (val === 'all') {
-        renderApptTable(todayAppts);
-      } else {
-        renderApptTable(todayAppts.filter(a => a.doctor_name === val));
-      }
+      const filtered = val === 'all'
+        ? todayAppts
+        : todayAppts.filter(a => a.doctor_name === val);
+      document.getElementById('apptTableBody').innerHTML =
+        buildTableRows(filtered);
     };
 
-    /* ── QUICK CHECK-IN from table ── */
-    window.quickCheckin = async function(apptId, patientName, doctor, slot) {
-      if (!confirm(`Check in ${patientName} for ${doctor} at ${slot}?`)) return;
+    function buildTable(appts) {
+      if (!appts.length) return `
+        <div class="table-empty">
+          <div class="table-empty-icon">📅</div>No appointments.
+        </div>`;
+      return `
+        <div style="overflow-x:auto;">
+          <table class="appt-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Patient</th><th>Doctor</th>
+                <th>Slot</th><th>Scheme</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>${buildTableRows(appts)}</tbody>
+          </table>
+        </div>`;
+    }
 
+    function buildTableRows(appts) {
+      if (!appts.length) return `
+        <tr><td colspan="7" class="table-empty">No appointments found.</td></tr>`;
+      return appts.map((a, i) => `
+        <tr>
+          <td>${i+1}</td>
+          <td>
+            <div class="patient-name">${a.patients?.full_name || 'Patient'}</div>
+            <div class="patient-phone">${a.patients?.phone || '—'}</div>
+          </td>
+          <td>${a.doctor_name || '—'}</td>
+          <td>${a.time_slot  || '—'}</td>
+          <td>${a.scheme_used ? a.scheme_used.toUpperCase() : 'Self pay'}</td>
+          <td><span class="status-pill ${statusClass(a.status)}">
+            ${statusText(a.status)}</span></td>
+          <td>
+            ${canCheckin(a.status)
+              ? `<button class="action-btn"
+                  onclick="quickCheckin('${a.id}','${a.patients?.full_name || ''}',
+                  '${a.doctor_name}','${a.time_slot}','${a.patient_id}')">
+                  Check In</button>` : ''}
+            ${canComplete(a.status)
+              ? `<button class="action-btn"
+                  onclick="markDone('${a.id}')">Done</button>` : ''}
+            ${canCancel(a.status)
+              ? `<button class="action-btn danger"
+                  onclick="cancelAppt('${a.id}')">Cancel</button>` : ''}
+          </td>
+        </tr>`).join('');
+    }
+
+    function canCheckin(s)  { return s === 'confirmed' || s === 'pending'; }
+    function canComplete(s) { return s !== 'completed' && s !== 'cancelled'; }
+    function canCancel(s)   { return s !== 'cancelled'; }
+
+    function statusClass(s) {
+      return { confirmed:'status-confirmed', pending:'status-pending',
+        checkedin:'status-checkedin', completed:'status-completed',
+        cancelled:'status-cancelled' }[s] || 'status-pending';
+    }
+
+    function statusText(s) {
+      return { confirmed:'Confirmed', pending:'Pending', checkedin:'Checked In',
+        completed:'Completed', cancelled:'Cancelled' }[s] || 'Pending';
+    }
+
+    /* ── QUICK CHECK-IN ── */
+    window.quickCheckin = async function(apptId, name, doctor, slot, patId) {
+      if (!confirm(`Check in ${name} for ${doctor} at ${slot}?`)) return;
       try {
-        /* Update appointment status */
-        await supabase
-          .from('appointments')
-          .update({ status: 'checkedin' })
-          .eq('id', apptId);
+        await supabase.from('appointments')
+          .update({ status: 'checkedin' }).eq('id', apptId);
 
-        /* Count existing tokens for this hospital today */
         const { count } = await supabase
           .from('tokens')
           .select('*', { count:'exact', head:true })
           .eq('hospital_id', currentHospital.id);
 
-        const tokenNumber = (count || 0) + 1;
+        const tokenNum = (count || 0) + 1;
 
-        /* Create token */
         await supabase.from('tokens').insert({
+          patient_id:     patId,
           hospital_id:    currentHospital.id,
           appointment_id: apptId,
-          token_number:   tokenNumber,
+          token_number:   tokenNum,
           opd_department: doctor,
           status:         'waiting',
           checked_in_at:  new Date().toISOString(),
         });
 
-        showToast(`✅ ${patientName} checked in. Token: ${tokenNumber}`, 'success');
+        showToast(`✅ ${name} checked in. Token: ${tokenNum}`, 'success');
         await loadOverview();
-        await loadTodayAppointments();
-
+        await loadAppointments();
       } catch (err) {
         showToast(err.message || 'Check-in failed.', 'error');
       }
     };
 
-    /* ── MARK COMPLETED ── */
-    window.markCompleted = async function(apptId) {
-      await supabase
-        .from('appointments')
-        .update({ status: 'completed' })
-        .eq('id', apptId);
-      showToast('Appointment marked as completed.', 'success');
-      await loadTodayAppointments();
+    window.markDone = async function(id) {
+      await supabase.from('appointments')
+        .update({ status: 'completed' }).eq('id', id);
+      showToast('Marked as completed.', 'success');
+      await loadAppointments();
     };
 
-    /* ── CANCEL ── */
-    window.cancelAppt = async function(apptId) {
+    window.cancelAppt = async function(id) {
       if (!confirm('Cancel this appointment?')) return;
-      await supabase
-        .from('appointments')
-        .update({ status: 'cancelled' })
-        .eq('id', apptId);
+      await supabase.from('appointments')
+        .update({ status: 'cancelled' }).eq('id', id);
       showToast('Appointment cancelled.', 'info');
-      await loadTodayAppointments();
+      await loadAppointments();
     };
 
     /* ── MANUAL CHECK-IN ── */
-    window.findPatientAppt = async function() {
+    window.findPatient = async function() {
       const phone = document.getElementById('checkinPhone').value.trim();
       const date  = document.getElementById('checkinDate').value || TODAY;
 
       if (!isValidPhone(phone)) {
-        showToast('Enter a valid 10-digit phone number.', 'error');
+        showToast('Enter a valid 10-digit number.', 'error');
         return;
       }
 
-      /* Find patient by phone */
       const { data: patient } = await supabase
-        .from('patients')
-        .select('id, full_name')
-        .eq('phone', phone)
-        .single();
+        .from('patients').select('id, full_name')
+        .eq('phone', phone).single();
 
       if (!patient) {
-        showToast('No patient found with this phone number.', 'error');
+        showToast('No Curaah patient found with this number.', 'error');
         return;
       }
 
-      /* Find their appointment */
       const { data: appt } = await supabase
-        .from('appointments')
-        .select('*')
+        .from('appointments').select('*')
         .eq('patient_id', patient.id)
         .eq('hospital_id', currentHospital.id)
         .eq('appointment_date', date)
         .neq('status', 'cancelled')
+        .order('created_at', { ascending: false })
+        .limit(1)
         .single();
 
       if (!appt) {
@@ -1343,116 +1418,104 @@
         return;
       }
 
-      /* Show result */
-      checkinApptId    = appt.id;
-      checkinPatientId = patient.id;
+      checkinApptId = appt.id;
+      checkinPatId  = patient.id;
 
-      document.getElementById('checkinPatientName').textContent =
-        patient.full_name;
-      document.getElementById('checkinApptDetails').textContent =
-        `${appt.doctor_name} · ${appt.time_slot} · ${
-          new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`;
-      document.getElementById('checkinCurrentStatus').textContent =
-        formatStatus(appt.status);
-      document.getElementById('checkinCurrentStatus').className =
-        `status-pill ${getStatusClass(appt.status)}`;
+      document.getElementById('checkinPatientName').textContent = patient.full_name;
+      document.getElementById('checkinApptInfo').textContent    =
+        `${appt.doctor_name} · ${appt.time_slot}`;
+      document.getElementById('checkinStatus').textContent =
+        statusText(appt.status);
+      document.getElementById('checkinStatus').className   =
+        `status-pill ${statusClass(appt.status)}`;
 
-      document.getElementById('checkinResult').style.display = 'block';
-      document.getElementById('tokenResult').style.display   = 'none';
+      document.getElementById('checkinResult').classList.add('show');
+      document.getElementById('tokenResult').classList.remove('show');
     };
 
     window.confirmCheckin = async function() {
       if (!checkinApptId) return;
-
-      const btn = document.getElementById('checkinBtn');
-      btn.textContent = 'Checking in...';
+      const btn = document.getElementById('checkinConfirmBtn');
+      btn.textContent = 'Processing...';
       btn.disabled    = true;
 
       try {
-        /* Update status */
         const { data: appt } = await supabase
           .from('appointments')
           .update({ status: 'checkedin' })
           .eq('id', checkinApptId)
-          .select()
-          .single();
+          .select().single();
 
-        /* Count tokens */
         const { count } = await supabase
           .from('tokens')
           .select('*', { count:'exact', head:true })
           .eq('hospital_id', currentHospital.id);
 
-        const tokenNumber = (count || 0) + 1;
+        const tokenNum = (count || 0) + 1;
 
-        /* Create token */
         await supabase.from('tokens').insert({
-          patient_id:     checkinPatientId,
+          patient_id:     checkinPatId,
           hospital_id:    currentHospital.id,
           appointment_id: checkinApptId,
-          token_number:   tokenNumber,
+          token_number:   tokenNum,
           opd_department: appt.doctor_name,
           status:         'waiting',
           checked_in_at:  new Date().toISOString(),
         });
 
-        btn.textContent = '✅ Check In Patient';
+        btn.textContent = '✅ Confirm Check-in & Assign Token';
         btn.disabled    = false;
 
-        document.getElementById('checkinResult').style.display = 'none';
-        document.getElementById('tokenResult').style.display   = 'block';
-        document.getElementById('assignedToken').textContent   = tokenNumber;
-        document.getElementById('assignedTokenDetails').textContent =
+        document.getElementById('checkinResult').classList.remove('show');
+        document.getElementById('tokenResult').classList.add('show');
+        document.getElementById('assignedTokenNum').textContent  = tokenNum;
+        document.getElementById('assignedTokenInfo').textContent =
           `${appt.doctor_name} · ${appt.time_slot}`;
 
-        showToast(`Token ${tokenNumber} assigned!`, 'success');
+        showToast(`Token ${tokenNum} assigned!`, 'success');
+        await loadOverview();
 
       } catch (err) {
-        btn.textContent = '✅ Check In Patient';
+        btn.textContent = '✅ Confirm Check-in & Assign Token';
         btn.disabled    = false;
-        showToast(err.message || 'Check-in failed.', 'error');
+        showToast(err.message || 'Failed.', 'error');
       }
     };
 
     window.resetCheckin = function() {
-      checkinApptId    = null;
-      checkinPatientId = null;
-      document.getElementById('checkinPhone').value          = '';
-      document.getElementById('checkinResult').style.display = 'none';
-      document.getElementById('tokenResult').style.display   = 'none';
+      checkinApptId = null;
+      checkinPatId  = null;
+      document.getElementById('checkinPhone').value = '';
+      document.getElementById('checkinResult').classList.remove('show');
+      document.getElementById('tokenResult').classList.remove('show');
     };
 
-    /* ── TOKEN QUEUE ── */
-    async function loadTokenQueue() {
+    /* ── TOKENS ── */
+    async function loadTokens() {
       const { data: tokens } = await supabase
         .from('tokens')
-        .select('*, patients(full_name), appointments(time_slot, scheme_used)')
+        .select('*, patients(full_name), appointments(time_slot)')
         .eq('hospital_id', currentHospital.id)
         .in('status', ['waiting','called'])
         .order('token_number');
 
-      const listEl = document.getElementById('tokenQueueList');
-
-      if (!tokens || tokens.length === 0) {
-        listEl.innerHTML = `
+      const el = document.getElementById('tokenList');
+      if (!tokens || !tokens.length) {
+        el.innerHTML = `
           <div class="table-empty">
             <div class="table-empty-icon">📟</div>
-            No tokens in queue. Check in patients first.
+            No tokens in queue.
           </div>`;
         return;
       }
 
-      listEl.innerHTML = `
+      el.innerHTML = `
         <div style="overflow-x:auto;">
           <table class="appt-table">
             <thead>
               <tr>
-                <th>Token</th>
-                <th>Patient</th>
-                <th>Department</th>
-                <th>Time Slot</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Token</th><th>Patient</th><th>Department</th>
+                <th>Slot</th><th>Status</th><th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -1462,26 +1525,24 @@
                     font-weight:700;color:var(--electric);">
                     ${t.token_number}
                   </td>
-                  <td>${t.patients?.full_name || 'Patient'}</td>
+                  <td>${t.patients?.full_name || '—'}</td>
                   <td>${t.opd_department || '—'}</td>
                   <td>${t.appointments?.time_slot || '—'}</td>
                   <td>
                     <span class="status-pill ${
-                      t.status === 'called' ? 'status-checkedin' : 'status-pending'
+                      t.status==='called' ? 'status-checkedin' : 'status-pending'
                     }">
-                      ${t.status === 'called' ? 'Called' : 'Waiting'}
+                      ${t.status==='called' ? 'Called' : 'Waiting'}
                     </span>
                   </td>
                   <td>
-                    ${t.status === 'waiting'
+                    ${t.status==='waiting'
                       ? `<button class="action-btn"
-                          onclick="callToken('${t.id}','${t.token_number}')">
-                          Call Token
-                        </button>`
+                          onclick="callToken('${t.id}',${t.token_number})">
+                          Call</button>`
                       : `<button class="action-btn"
-                          onclick="completeToken('${t.id}')">
-                          Mark Done
-                        </button>`}
+                          onclick="doneToken('${t.id}')">
+                          Done</button>`}
                   </td>
                 </tr>`).join('')}
             </tbody>
@@ -1489,158 +1550,264 @@
         </div>`;
     }
 
-    window.callToken = async function(tokenId, tokenNum) {
-      await supabase
-        .from('tokens')
+    window.callToken = async function(id, num) {
+      await supabase.from('tokens')
         .update({ status:'called', called_at: new Date().toISOString() })
-        .eq('id', tokenId);
-      showToast(`Token ${tokenNum} called!`, 'success');
-      loadTokenQueue();
+        .eq('id', id);
+      showToast(`Token ${num} called!`, 'success');
+      loadTokens();
     };
 
-    window.completeToken = async function(tokenId) {
-      await supabase
-        .from('tokens')
+    window.doneToken = async function(id) {
+      await supabase.from('tokens')
         .update({ status:'completed', completed_at: new Date().toISOString() })
-        .eq('id', tokenId);
-      showToast('Token marked as completed.', 'success');
-      loadTokenQueue();
+        .eq('id', id);
+      showToast('Token completed.', 'success');
+      loadTokens();
     };
 
-    /* ── BED MANAGEMENT ── */
-    function loadBedSection() {
+    /* ── BEDS ── */
+    function renderBeds() {
       const h     = currentHospital;
       const total = h.bed_count || 0;
       const avail = h.beds_available ?? total;
       const occ   = total - avail;
       const pct   = total > 0 ? Math.round((occ/total)*100) : 0;
+      const color = pct > 80 ? 'var(--danger)' :
+                    pct > 50 ? 'var(--warning)' : 'var(--electric)';
 
-      document.getElementById('bedAvailDisplay').textContent = avail;
-      document.getElementById('bedOccDisplay').textContent   = occ;
-      document.getElementById('bedTotalDisplay').textContent = total;
-      document.getElementById('bedBarDisplay').style.width   = `${pct}%`;
-      document.getElementById('bedUpdateVal').value          = avail;
+      document.getElementById('bedAvailNum').textContent  = avail;
+      document.getElementById('bedOccNum').textContent    = occ;
+      document.getElementById('bedTotalNum').textContent  = total;
+      document.getElementById('bedBarFill').style.width   = `${pct}%`;
+      document.getElementById('bedBarFill').style.background = color;
+      document.getElementById('bedPctLabel').textContent  = `${pct}% occupancy`;
+      document.getElementById('bedNewVal').value          = avail;
     }
 
-    window.changeBeds = function(delta) {
-      const input = document.getElementById('bedUpdateVal');
-      const val   = parseInt(input.value) || 0;
+    window.changeBed = function(delta) {
+      const inp   = document.getElementById('bedNewVal');
       const total = currentHospital.bed_count || 0;
-      input.value = Math.max(0, Math.min(total, val + delta));
+      inp.value   = Math.max(0, Math.min(total, (parseInt(inp.value)||0) + delta));
     };
 
-    window.updateBeds = async function() {
-      const newAvail = parseInt(document.getElementById('bedUpdateVal').value);
-      const total    = currentHospital.bed_count || 0;
+    window.saveBeds = async function() {
+      const newVal = parseInt(document.getElementById('bedNewVal').value);
+      const total  = currentHospital.bed_count || 0;
 
-      if (isNaN(newAvail) || newAvail < 0 || newAvail > total) {
-        showToast(`Available beds must be between 0 and ${total}.`, 'error');
+      if (isNaN(newVal) || newVal < 0 || newVal > total) {
+        showToast(`Value must be between 0 and ${total}.`, 'error');
         return;
       }
 
       const { error } = await supabase
         .from('hospitals')
-        .update({ beds_available: newAvail })
+        .update({ beds_available: newVal })
         .eq('id', currentHospital.id);
 
       if (error) {
-        showToast('Failed to update beds. Try again.', 'error');
+        showToast('Update failed. Check your staff permissions.', 'error');
         return;
       }
 
-      currentHospital.beds_available = newAvail;
-      document.getElementById('statBedsAvail').textContent = newAvail;
-      loadBedSection();
-      showToast(`Bed availability updated to ${newAvail}.`, 'success');
+      /* Update local state */
+      currentHospital.beds_available = newVal;
+      renderBeds();
+      document.getElementById('statBeds').textContent = newVal;
+      showToast(`✅ Bed count updated to ${newVal}. Live for all patients.`, 'success');
     };
 
-    /* ── SLOT SECTION ── */
-    function initSlotSection() {
-      const sel = document.getElementById('slotFilterDoctor');
-      if (sel.options.length <= 1) {
-        sel.innerHTML =
-          `<option value="">All Doctors</option>` +
-          demoDoctors.map(d => `<option value="${d}">${d}</option>`).join('');
+    /* ── DOCTORS ── */
+    async function loadDoctors() {
+      const { data: docs } = await supabase
+        .from('doctors')
+        .select('*')
+        .eq('hospital_id', currentHospital.id)
+        .order('created_at');
+
+      hospitalDoctors = docs || [];
+      document.getElementById('drCountLabel').textContent =
+        `${hospitalDoctors.length} doctors`;
+
+      const el = document.getElementById('doctorsList');
+      if (!hospitalDoctors.length) {
+        el.innerHTML = `
+          <div class="table-empty">
+            <div class="table-empty-icon">👨‍⚕️</div>
+            No doctors added yet.
+          </div>`;
+        return;
       }
-      document.getElementById('slotFilterDate').value = TODAY;
+
+      el.innerHTML = `
+        <div style="overflow-x:auto;">
+          <table class="appt-table">
+            <thead>
+              <tr>
+                <th>Doctor</th><th>Speciality</th><th>Qualification</th>
+                <th>OPD Days</th><th>Timings</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hospitalDoctors.map(d => `
+                <tr>
+                  <td class="patient-name">${d.name}</td>
+                  <td>${d.speciality || '—'}</td>
+                  <td>${d.qualification || '—'}</td>
+                  <td>${d.opd_days || '—'}</td>
+                  <td>${d.opd_start && d.opd_end
+                    ? `${d.opd_start}–${d.opd_end}` : '—'}</td>
+                  <td>
+                    <span class="status-pill ${
+                      d.is_available ? 'status-confirmed' : 'status-cancelled'
+                    }">
+                      ${d.is_available ? 'Available' : 'Unavailable'}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="action-btn"
+                      onclick="toggleDoctor('${d.id}',${d.is_available})">
+                      ${d.is_available ? 'Mark Off' : 'Mark On'}
+                    </button>
+                    <button class="action-btn danger"
+                      onclick="removeDoctor('${d.id}','${d.name}')">
+                      Remove
+                    </button>
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`;
+
+      /* Update slot filter */
+      const slotSel = document.getElementById('slotDoctor');
+      if (slotSel) {
+        slotSel.innerHTML =
+          '<option value="">Select Doctor</option>' +
+          hospitalDoctors.map(d =>
+            `<option value="${d.name}">${d.name}</option>`
+          ).join('');
+      }
     }
 
-    window.loadSlotView = async function() {
-      const doctor = document.getElementById('slotFilterDoctor').value;
-      const date   = document.getElementById('slotFilterDate').value || TODAY;
+    window.toggleAddDoctorForm = function() {
+      const panel = document.getElementById('addDoctorPanel');
+      panel.style.display =
+        panel.style.display === 'none' ? 'block' : 'none';
+    };
+
+    window.addDoctor = async function() {
+      const name  = document.getElementById('drName').value.trim();
+      const spec  = document.getElementById('drSpec').value.trim();
+      const qual  = document.getElementById('drQual').value.trim();
+      const days  = document.getElementById('drDays').value;
+      const start = document.getElementById('drStart').value;
+      const end   = document.getElementById('drEnd').value;
+
+      if (!name || !spec) {
+        showToast('Doctor name and speciality are required.', 'error');
+        return;
+      }
+
+      const { error } = await supabase.from('doctors').insert({
+        hospital_id:   currentHospital.id,
+        name,
+        speciality:    spec,
+        qualification: qual || null,
+        opd_days:      days || null,
+        opd_start:     start || null,
+        opd_end:       end   || null,
+        is_available:  true,
+      });
+
+      if (error) {
+        showToast(error.message || 'Failed to add doctor.', 'error');
+        return;
+      }
+
+      showToast(`Dr. ${name} added successfully!`, 'success');
+
+      /* Reset form */
+      ['drName','drSpec','drQual','drStart','drEnd'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('drDays').value = '';
+
+      document.getElementById('addDoctorPanel').style.display = 'none';
+      await loadDoctors();
+    };
+
+    window.toggleDoctor = async function(id, isAvail) {
+      await supabase.from('doctors')
+        .update({ is_available: !isAvail }).eq('id', id);
+      showToast(`Doctor marked as ${!isAvail ? 'available' : 'unavailable'}.`, 'success');
+      await loadDoctors();
+    };
+
+    window.removeDoctor = async function(id, name) {
+      if (!confirm(`Remove ${name} from your hospital?`)) return;
+      await supabase.from('doctors').delete().eq('id', id);
+      showToast(`${name} removed.`, 'info');
+      await loadDoctors();
+    };
+
+    /* ── SLOTS ── */
+    function initSlots() {
+      document.getElementById('slotDate').value = TODAY;
+    }
+
+    window.loadSlots = async function() {
+      const doctor = document.getElementById('slotDoctor').value;
+      const date   = document.getElementById('slotDate').value || TODAY;
       const grid   = document.getElementById('slotsGrid');
 
       if (!doctor) {
-        grid.innerHTML =
-          `<div style="grid-column:1/-1;text-align:center;
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;
             padding:24px;color:var(--text-muted);font-size:14px;">
             Select a doctor to see their slot availability.
           </div>`;
         return;
       }
 
-      /* Fetch booked slots */
-      const { data: bookedSlots } = await supabase
+      const { data: booked } = await supabase
         .from('appointment_slots')
         .select('slot_time, booked_count, max_count')
         .eq('hospital_id', currentHospital.id)
         .eq('slot_date', date)
         .eq('doctor_name', doctor);
 
-      const bookedMap = {};
-      (bookedSlots || []).forEach(s => {
-        bookedMap[s.slot_time] = {
-          booked: s.booked_count,
-          max:    s.max_count,
-        };
+      const map = {};
+      (booked || []).forEach(s => {
+        map[s.slot_time] = { booked: s.booked_count, max: s.max_count };
       });
 
       const maxPerSlot = currentHospital.slots_per_hour || 10;
 
       grid.innerHTML = ALL_SLOTS.map(slot => {
-        const data     = bookedMap[slot];
-        const booked   = data?.booked || 0;
-        const max      = data?.max    || maxPerSlot;
-        const pct      = Math.round((booked / max) * 100);
-        const isFull   = booked >= max;
-        const stateClass = isFull ? 'full' : booked > max * 0.7 ? 'busy' : 'available';
-        const barColor = isFull ? 'var(--danger)' :
-          booked > max * 0.7 ? 'var(--warning)' : 'var(--success)';
-
+        const d    = map[slot];
+        const bk   = d?.booked || 0;
+        const mx   = d?.max    || maxPerSlot;
+        const pct  = Math.round((bk/mx)*100);
+        const full = bk >= mx;
+        const cls  = full ? 'full' : bk > mx*0.7 ? 'busy' : 'available';
+        const col  = full ? 'var(--danger)' :
+          bk > mx*0.7 ? 'var(--warning)' : 'var(--success)';
         return `
-          <div class="slot-card ${stateClass}">
+          <div class="slot-card ${cls}">
             <div class="slot-time">${slot}</div>
-            <div class="slot-count">${booked}/${max} booked</div>
+            <div class="slot-count">${bk}/${mx} booked</div>
             <div class="slot-bar">
               <div class="slot-bar-fill"
-                style="width:${pct}%;background:${barColor};"></div>
+                style="width:${pct}%;background:${col};"></div>
             </div>
           </div>`;
       }).join('');
     };
 
-    /* ── HELPERS ── */
-    function getStatusClass(status) {
-      return {
-        confirmed: 'status-confirmed',
-        pending:   'status-pending',
-        checkedin: 'status-checkedin',
-        completed: 'status-completed',
-        cancelled: 'status-cancelled',
-      }[status] || 'status-pending';
-    }
-
-    function formatStatus(status) {
-      return {
-        confirmed: 'Confirmed',
-        pending:   'Pending',
-        checkedin: 'Checked In',
-        completed: 'Completed',
-        cancelled: 'Cancelled',
-      }[status] || 'Pending';
-    }
+    /* ── START ── */
+    checkExistingSession();
 
   </script>
-
 </body>
 </html>
