@@ -447,9 +447,13 @@
     const name = patient?.full_name || 'there';
     showToast(`Welcome back, ${name}! 👋`, 'success');
 
-    setTimeout(() => {
-      window.location.href = 'dashboard.html';
-    }, 900);
+    /* Check if there is a return URL */
+const returnUrl = new URLSearchParams(window.location.search).get('return');
+setTimeout(() => {
+  window.location.href = returnUrl
+    ? decodeURIComponent(returnUrl)
+    : 'dashboard.html';
+}, 900);
 
   } catch (err) {
     btn.textContent = 'Login to My Account';
