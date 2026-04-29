@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Generator — Curaah Staff</title>
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- QR Code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body { background: var(--off-white); }
+
+    .qr-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 40px) 5% 60px;
+    }
+
+    .qr-page-title {
+      font-family: 'Georgia', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .qr-page-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    /* Select hospital */
+    .select-panel {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .select-panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .hospital-select-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    /* QR cards grid */
+    .qr-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    /* QR card */
+    .qr-card {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .qr-card-header {
+      background: var(--navy);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qr-card-logo {
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .qr-card-tag {
+      font-size: 10px;
+      color: var(--electric);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .qr-card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .qr-hospital-name {
+      font-family: 'Georgia', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .qr-hospital-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: -8px;
+    }
+
+    .qr-code-wrap {
+      background: var(--white);
+      border: 2px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .qr-instruction {
+      background: rgba(61,158,255,0.05);
+      border: 1px solid rgba(61,158,255,0.15);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      text-align: center;
+      width: 100%;
+    }
+
+    .qr-card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Print styles */
+    .print-sheet {
+      display: none;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      .print-area, .print-area * { visibility: visible; }
+      .print-area {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        background: white;
+      }
+
+      .print-qr-card {
+        page-break-inside: avoid;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 16px auto;
+        max-width: 300px;
+        text-align: center;
+      }
+
+      .print-qr-card h2 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 12px 0 4px;
+        color: #060d1f;
+      }
+
+      .print-qr-card p {
+        font-size: 12px;
+        color: #8a9bb0;
+        margin: 0 0 16px;
+      }
+
+      .print-instruction {
+        font-size: 13px;
+        color: #4a5568;
+        line-height: 1.6;
+        border: 1px solid #dde6f5;
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .print-curaah {
+        font-size: 14px;
+        font-weight: 700;
+        color: #3d9eff;
+        margin-top: 16px;
+      }
+    }
+
+    /* Loading */
+    .qr-loading {
+      padding: 48px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z"
+          fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z"
+          fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">QR Generator</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="staff-portal.html" class="btn btn-ghost btn-sm">Staff Portal</a>
+      <a href="index.html" class="btn btn-primary btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <div class="qr-page">
+    <div class="qr-page-title">QR Code Generator</div>
+    <p class="qr-page-sub">
+      Generate and print QR codes for each hospital's OPD entrance.
+      When patients scan these with their phone, they check in automatically
+      and get their token number — no staff needed.
+    </p>
+
+    <!-- Select hospital -->
+    <div class="select-panel">
+      <div class="select-panel-title">Select Hospital to Generate QR</div>
+      <div class="hospital-select-grid">
+        <div class="form-group" style="margin:0;">
+          <label class="form-label">Hospital</label>
+          <select class="form-input form-select" id="hospitalSelect"
+            onchange="generateQR()">
+            <option value="" disabled selected>Choose a hospital...</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="generateAll()">
+          Generate All
+        </button>
+      </div>
+    </div>
+
+    <!-- QR cards -->
+    <div id="qrOutput">
+      <div class="empty-state">
+        <div class="empty-icon">📱</div>
+        Select a hospital above to generate its QR code.
+        Or click "Generate All" to generate for all onboarded hospitals.
+      </div>
+    </div>
+
+    <!-- Print area (hidden, only visible when printing) -->
+    <div class="print-area" id="printArea" style="display:none;"></div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    let hospitals = [];
+
+    /* ── Fetch all verified hospitals ── */
+    async function fetchHospitals() {
+      const { data, error } = await supabase
+        .from('hospitals')
+        .select('id, name, type, address, city')
+        .eq('is_verified', true)
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) { console.error(error); return []; }
+      return data || [];
+    }
+
+    /* ── Build check-in URL for a hospital ── */
+    function buildCheckinUrl(hospitalId) {
+      const base = window.location.origin +
+        window.location.pathname.replace('qr-generator.html', '');
+      return `${base}checkin.html?hospital=${hospitalId}`;
+    }
+
+    /* ── Render QR card HTML ── */
+    function renderQrCard(hospital, containerId) {
+      const url = buildCheckinUrl(hospital.id);
+
+      const card = document.createElement('div');
+      card.className = 'qr-card';
+      card.id = `card-${hospital.id}`;
+
+      card.innerHTML = `
+        <div class="qr-card-header">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z"
+              fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z"
+              fill="#3d9eff" opacity="0.9"/>
+            <circle cx="18" cy="22" r="3.5" fill="white"/>
+          </svg>
+          <div>
+            <div class="qr-card-logo">curaah</div>
+            <div class="qr-card-tag">OPD CHECK-IN</div>
+          </div>
+        </div>
+        <div class="qr-card-body">
+          <div class="qr-hospital-name">${hospital.name}</div>
+          <div class="qr-hospital-sub">
+            ${hospital.address || ''}, ${hospital.city || ''}
+          </div>
+          <div class="qr-code-wrap" id="qr-${hospital.id}">
+            <!-- QR code renders here -->
+          </div>
+          <div class="qr-instruction">
+            📱 <strong>Scan with your phone camera</strong><br/>
+            Opens Curaah check-in — get your token number instantly.<br/>
+            No phone? Ask staff to check you in.
+          </div>
+        </div>
+        <div class="qr-card-footer">
+          <button class="btn btn-primary btn-sm"
+            onclick="printQR('${hospital.id}', '${hospital.name}')">
+            🖨️ Print
+          </button>
+          <button class="btn btn-secondary btn-sm"
+            onclick="copyUrl('${url}')">
+            🔗 Copy URL
+          </button>
+          <button class="btn btn-secondary btn-sm"
+            onclick="downloadQR('${hospital.id}', '${hospital.name}')">
+            ⬇️ Download
+          </button>
+        </div>`;
+
+      document.getElementById(containerId).appendChild(card);
+
+      /* Generate QR code */
+      setTimeout(() => {
+        new QRCode(document.getElementById(`qr-${hospital.id}`), {
+          text:            url,
+          width:           200,
+          height:          200,
+          colorDark:       '#060d1f',
+          colorLight:      '#ffffff',
+          correctLevel:    QRCode.CorrectLevel.H,
+        });
+      }, 100);
+    }
+
+    /* ── Generate QR for selected hospital ── */
+    window.generateQR = function() {
+      const id  = document.getElementById('hospitalSelect').value;
+      const h   = hospitals.find(h => h.id === id);
+      if (!h) return;
+
+      const output = document.getElementById('qrOutput');
+      output.innerHTML = '<div class="qr-cards-grid" id="qrGrid"></div>';
+      renderQrCard(h, 'qrGrid');
+    };
+
+    /* ── Generate QR for all hospitals ── */
+    window.generateAll = function() {
+      if (hospitals.length === 0) {
+        showToast('No hospitals found.', 'error');
+        return;
+      }
+
+      const output = document.getElementById('qrOutput');
+      output.innerHTML = '<div class="qr-cards-grid" id="qrGrid"></div>';
+
+      hospitals.forEach(h => renderQrCard(h, 'qrGrid'));
+      showToast(`Generated ${hospitals.length} QR codes.`, 'success');
+    };
+
+    /* ── Copy URL ── */
+    window.copyUrl = function(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Check-in URL copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast('Could not copy. URL: ' + url, 'info');
+      });
+    };
+
+    /* ── Print single QR ── */
+    window.printQR = function(hospitalId, hospitalName) {
+      const qrEl = document.getElementById(`qr-${hospitalId}`);
+      if (!qrEl) return;
+
+      const canvas = qrEl.querySelector('canvas');
+      const img    = qrEl.querySelector('img');
+      const qrSrc  = canvas ? canvas.toDataURL() : (img ? img.src : '');
+
+      const printArea = document.getElementById('printArea');
+      printArea.style.display = 'block';
+      printArea.innerHTML = `
+        <div class="print-qr-card">
+          <h2>${hospitalName}</h2>
+          <p>OPD Check-in — Curaah</p>
+          ${qrSrc ? `<img src="${qrSrc}" width="200" height="200" />` : ''}
+          <div class="print-instruction">
+            📱 Scan this QR code with your phone camera to check in
+            and get your token number automatically.
+            No smartphone? Ask staff to check you in.
+          </div>
+          <div class="print-curaah">curaah.dev</div>
+        </div>`;
+
+      window.print();
+      printArea.style.display = 'none';
+    };
+
+    /* ── Download QR as image ── */
+    window.downloadQR = function(hospitalId, hospitalName) {
+      const qrEl  = document.getElementById(`qr-${hospitalId}`);
+      if (!qrEl) return;
+
+      const canvas = qrEl.querySelector('canvas');
+      if (!canvas) {
+        showToast('QR not ready yet. Wait a moment.', 'error');
+        return;
+      }
+
+      /* Create download canvas with label */
+      const dlCanvas = document.createElement('canvas');
+      dlCanvas.width  = 280;
+      dlCanvas.height = 320;
+      const ctx = dlCanvas.getContext('2d');
+
+      /* Background */
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 280, 320);
+
+      /* Hospital name */
+      ctx.fillStyle = '#060d1f';
+      ctx.font      = 'bold 14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(hospitalName, 140, 28);
+
+      /* Subtitle */
+      ctx.fillStyle = '#8a9bb0';
+      ctx.font      = '11px Arial';
+      ctx.fillText('Scan to check in — Curaah OPD', 140, 46);
+
+      /* QR code */
+      ctx.drawImage(canvas, 40, 60, 200, 200);
+
+      /* Bottom label */
+      ctx.fillStyle = '#3d9eff';
+      ctx.font      = 'bold 13px Arial';
+      ctx.fillText('curaah.dev', 140, 295);
+
+      /* Download */
+      const link    = document.createElement('a');
+      link.download = `curaah-qr-${hospitalName.replace(/\s+/g,'-').toLowerCase()}.png`;
+      link.href     = dlCanvas.toDataURL('image/png');
+      link.click();
+
+      showToast('QR code downloaded!', 'success');
+    };
+
+    /* ── Init ── */
+    async function init() {
+      hospitals = await fetchHospitals();
+
+      const sel = document.getElementById('hospitalSelect');
+      if (hospitals.length === 0) {
+        sel.innerHTML =
+          '<option disabled selected>No hospitals onboarded yet</option>';
+        return;
+      }
+
+      sel.innerHTML =
+        '<option value="" disabled selected>Choose a hospital...</option>' +
+        hospitals.map(h =>
+          `<option value="${h.id}">${h.name} — ${h.city || ''}</option>`
+        ).join('');
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
