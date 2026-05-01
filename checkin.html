@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Curaah — OPD Check-in" />
   <title>OPD Check-in — Curaah</title>
-
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
-
   <style>
     body {
       background: var(--navy);
@@ -20,7 +18,6 @@
       padding: 24px;
     }
 
-    /* ── CHECKIN CARD ── */
     .checkin-card {
       background: var(--white);
       border-radius: var(--radius-xl);
@@ -30,7 +27,6 @@
       box-shadow: var(--shadow-lg);
     }
 
-    /* Card header */
     .checkin-card-header {
       background: var(--navy-mid);
       padding: 24px;
@@ -46,43 +42,17 @@
       margin-bottom: 16px;
     }
 
-    .checkin-logo-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--white);
-    }
+    .checkin-logo-name { font-size: 20px; font-weight: 700; color: var(--white); }
+    .checkin-logo-tag  { font-size: 10px; color: var(--electric); font-weight: 600; letter-spacing: 1px; display: block; text-align: left; }
 
-    .checkin-logo-tag {
-      font-size: 10px;
-      color: var(--electric);
-      font-weight: 600;
-      letter-spacing: 1px;
-      display: block;
-      text-align: left;
-    }
+    .checkin-hospital-name { font-family: 'Georgia', serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .checkin-hospital-sub  { font-size: 12px; color: var(--text-on-dark-muted); }
 
-    .checkin-hospital-name {
-      font-family: 'Georgia', serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 4px;
-    }
-
-    .checkin-hospital-sub {
-      font-size: 12px;
-      color: var(--text-on-dark-muted);
-    }
-
-    /* ── STATES ── */
-    .checkin-state { display: none; padding: 32px 28px; }
+    /* States */
+    .checkin-state        { display: none; padding: 32px 28px; }
     .checkin-state.active { display: block; }
 
-    /* Loading state */
-    .state-loading {
-      text-align: center;
-      padding: 48px 28px;
-    }
+    .state-loading { text-align: center; padding: 48px 28px; }
 
     .loading-spinner {
       width: 48px; height: 48px;
@@ -93,194 +63,51 @@
       margin: 0 auto 20px;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .loading-text {
-      font-size: 15px;
-      color: var(--text-muted);
-    }
+    .loading-text { font-size: 15px; color: var(--text-muted); }
 
-    /* Login required state */
-    .state-login {
-      text-align: center;
-    }
+    .state-icon  { font-size: 52px; margin-bottom: 16px; }
+    .state-title { font-family: 'Georgia', serif; font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+    .state-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; max-width: 320px; margin-left: auto; margin-right: auto; }
+    .state-btns  { display: flex; flex-direction: column; gap: 10px; }
 
-    .state-icon { font-size: 52px; margin-bottom: 16px; }
-
-    .state-title {
-      font-family: 'Georgia', serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 10px;
-    }
-
-    .state-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 24px;
-      max-width: 320px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .state-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    /* Appointment found state */
-    .appt-card {
-      background: var(--off-white);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .appt-card-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border-card);
-    }
-
+    /* Appointment card */
+    .appt-card { background: var(--off-white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
+    .appt-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--border-card); }
     .appt-card-row:last-child { border-bottom: none; }
     .appt-card-label { color: var(--text-muted); font-weight: 500; }
     .appt-card-value { color: var(--text-primary); font-weight: 600; }
 
-    /* Token state */
-    .token-display {
-      background: var(--navy);
-      border-radius: var(--radius-xl);
-      padding: 36px 24px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    /* Token display */
+    .token-display { background: var(--navy); border-radius: var(--radius-xl); padding: 36px 24px; text-align: center; margin-bottom: 20px; }
 
-    .token-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--electric);
-      margin-bottom: 16px;
-    }
+    .token-label  { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--electric); margin-bottom: 16px; }
+    .token-number { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 12px; }
+    .token-doctor { font-size: 14px; color: var(--text-on-dark-muted); margin-bottom: 4px; }
+    .token-time   { font-size: 12px; color: rgba(255,255,255,0.4); }
 
-    .token-number {
-      font-family: 'Georgia', serif;
-      font-size: 96px;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 12px;
-    }
-
-    .token-doctor {
-      font-size: 14px;
-      color: var(--text-on-dark-muted);
-      margin-bottom: 4px;
-    }
-
-    .token-time {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-    }
-
-    /* Queue position card */
-    .queue-card {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .queue-stat {
-      background: var(--off-white);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius-md);
-      padding: 14px;
-      text-align: center;
-    }
-
-    .queue-stat-num {
-      font-family: 'Georgia', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--electric);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .queue-stat-label {
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    /* No appointment state */
-    .no-appt-info {
-      background: rgba(255,159,0,0.05);
-      border: 1px solid rgba(255,159,0,0.2);
-      border-radius: var(--radius-md);
-      padding: 14px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
+    /* Queue position */
+    .queue-card { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+    .queue-stat { background: var(--off-white); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; text-align: center; }
+    .queue-stat-num   { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: var(--electric); line-height: 1; margin-bottom: 4px; }
+    .queue-stat-label { font-size: 10px; color: var(--text-muted); }
 
     /* Already checked in */
-    .already-in {
-      background: rgba(61,158,255,0.05);
-      border: 1px solid rgba(61,158,255,0.2);
-      border-radius: var(--radius-md);
-      padding: 14px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
+    .already-in { background: rgba(61,158,255,0.05); border: 1px solid rgba(61,158,255,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
 
-    /* Bottom bar */
-    .checkin-footer {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border-card);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--off-white);
-    }
+    /* No appointment */
+    .no-appt-info { background: rgba(255,159,0,0.05); border: 1px solid rgba(255,159,0,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
 
-    .checkin-footer-logo {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
+    /* Live pulse */
+    .token-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
 
-    .checkin-footer-logo span { color: var(--electric); }
+    /* Footer */
+    .checkin-footer { padding: 16px 24px; border-top: 1px solid var(--border-card); display: flex; justify-content: space-between; align-items: center; background: var(--off-white); }
+    .checkin-footer-brand { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .checkin-footer-brand span { color: var(--electric); }
 
-    /* Pulse animation for token */
-    .token-pulse {
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: var(--success);
-      display: inline-block;
-      margin-right: 6px;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(0.85); }
-    }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 480px) {
       body { padding: 0; justify-content: flex-start; }
       .checkin-card { border-radius: 0; min-height: 100vh; }
@@ -288,7 +115,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <div class="checkin-card">
@@ -297,10 +123,8 @@
     <div class="checkin-card-header">
       <div class="checkin-logo">
         <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
-          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z"
-            fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
-          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z"
-            fill="#3d9eff" opacity="0.9"/>
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
           <circle cx="18" cy="22" r="3.5" fill="white"/>
         </svg>
         <div>
@@ -312,42 +136,30 @@
       <div class="checkin-hospital-sub" id="hospitalSub">—</div>
     </div>
 
-    <!-- ── STATE: LOADING ── -->
+    <!-- Loading -->
     <div class="state-loading" id="stateLoading">
       <div class="loading-spinner"></div>
       <div class="loading-text">Checking your appointment...</div>
     </div>
 
-    <!-- ── STATE: LOGIN REQUIRED ── -->
+    <!-- Login required -->
     <div class="checkin-state" id="stateLogin">
       <div style="text-align:center;">
         <div class="state-icon">🔐</div>
         <div class="state-title">Login to Check In</div>
-        <p class="state-desc">
-          Login to your Curaah account to check in for your appointment
-          and get your token number.
-        </p>
+        <p class="state-desc">Login to your Curaah account to check in and get your token number automatically.</p>
         <div class="state-btns">
-          <a id="loginRedirectBtn" href="login.html"
-            class="btn btn-primary btn-full btn-lg">
-            Login to Curaah
-          </a>
-          <a href="register.html" class="btn btn-secondary btn-full">
-            Register Free
-          </a>
+          <a id="loginRedirectBtn" href="login.html" class="btn btn-primary btn-full btn-lg">Login to Curaah</a>
+          <a href="register.html" class="btn btn-secondary btn-full">Register Free</a>
         </div>
       </div>
     </div>
 
-    <!-- ── STATE: APPOINTMENT FOUND ── -->
+    <!-- Appointment found -->
     <div class="checkin-state" id="stateFound">
-      <div class="state-title" style="margin-bottom:16px;">
-        👋 Hello, <span id="patientFirstName">—</span>!
-      </div>
-      <p style="font-size:14px;color:var(--text-secondary);
-        margin-bottom:20px;line-height:1.7;">
-        We found your appointment for today. Confirm your check-in
-        to get your token number.
+      <div class="state-title" style="margin-bottom:16px;">👋 Hello, <span id="patientFirstName">—</span>!</div>
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.7;">
+        We found your appointment for today. Confirm your check-in to get your token number.
       </p>
 
       <div class="appt-card">
@@ -373,32 +185,26 @@
         </div>
       </div>
 
-      <button class="btn btn-primary btn-full btn-lg"
-        id="confirmCheckinBtn" onclick="confirmCheckin()">
+      <button class="btn btn-primary btn-full btn-lg" id="confirmCheckinBtn" onclick="confirmCheckin()">
         ✅ Confirm Check-in & Get Token
       </button>
-
-      <p style="font-size:12px;color:var(--text-muted);
-        text-align:center;margin-top:14px;line-height:1.6;">
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:14px;line-height:1.6;">
         By checking in you confirm you have arrived at the hospital.
       </p>
     </div>
 
-    <!-- ── STATE: TOKEN ASSIGNED ── -->
+    <!-- Token assigned -->
     <div class="checkin-state" id="stateToken">
-
       <div style="text-align:center;margin-bottom:20px;">
         <span class="token-pulse"></span>
-        <span style="font-size:13px;font-weight:600;color:var(--success);">
-          Checked in successfully
-        </span>
+        <span style="font-size:13px;font-weight:600;color:var(--success);">Checked in successfully</span>
       </div>
 
       <div class="token-display">
         <div class="token-label">Your Token Number</div>
         <div class="token-number" id="tokenNum">—</div>
         <div class="token-doctor" id="tokenDoctor">—</div>
-        <div class="token-time" id="tokenTime">—</div>
+        <div class="token-time" id="tokenSlot">—</div>
       </div>
 
       <div class="queue-card">
@@ -416,31 +222,19 @@
         </div>
       </div>
 
-      <div style="background:rgba(61,158,255,0.05);
-        border:1px solid rgba(61,158,255,0.15);
-        border-radius:var(--radius-md);padding:14px;
-        font-size:13px;color:var(--text-secondary);
-        line-height:1.7;margin-bottom:20px;">
-        🪑 <strong>Sit and relax.</strong>
-        You will receive an SMS when your turn is approaching.
-        Watch the token display screen in the OPD waiting area.
+      <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:20px;">
+        🪑 <strong>Sit and relax.</strong> You will receive an SMS when your turn is approaching. Watch the token display screen in the OPD waiting area.
       </div>
 
-      <a href="dashboard.html"
-        class="btn btn-secondary btn-full">
-        View in My Dashboard
-      </a>
+      <a href="dashboard.html" class="btn btn-secondary btn-full">View in My Dashboard</a>
     </div>
 
-    <!-- ── STATE: ALREADY CHECKED IN ── -->
+    <!-- Already checked in -->
     <div class="checkin-state" id="stateAlready">
       <div style="text-align:center;margin-bottom:20px;">
         <div class="state-icon">📟</div>
         <div class="state-title">Already Checked In</div>
-        <p class="state-desc">
-          You have already checked in for your appointment today.
-          Here is your token number.
-        </p>
+        <p class="state-desc">You have already checked in for today. Here is your token number.</p>
       </div>
 
       <div class="token-display">
@@ -449,64 +243,56 @@
         <div class="token-doctor" id="existingTokenDoctor">—</div>
       </div>
 
-      <a href="dashboard.html" class="btn btn-secondary btn-full">
-        Go to My Dashboard
-      </a>
+      <div class="queue-card">
+        <div class="queue-stat">
+          <div class="queue-stat-num" id="existingCurrent">—</div>
+          <div class="queue-stat-label">Now serving</div>
+        </div>
+        <div class="queue-stat">
+          <div class="queue-stat-num" id="existingPosition">—</div>
+          <div class="queue-stat-label">Your position</div>
+        </div>
+        <div class="queue-stat">
+          <div class="queue-stat-num" id="existingWait">—</div>
+          <div class="queue-stat-label">Est. wait</div>
+        </div>
+      </div>
+
+      <a href="dashboard.html" class="btn btn-secondary btn-full">Go to My Dashboard</a>
     </div>
 
-    <!-- ── STATE: NO APPOINTMENT ── -->
+    <!-- No appointment -->
     <div class="checkin-state" id="stateNoAppt">
       <div style="text-align:center;margin-bottom:20px;">
         <div class="state-icon">📅</div>
         <div class="state-title">No Appointment Found</div>
-        <p class="state-desc">
-          We could not find a confirmed appointment for you at
-          this hospital today.
-        </p>
+        <p class="state-desc">We could not find a confirmed appointment for you at this hospital today.</p>
       </div>
 
       <div class="no-appt-info">
-        This could mean you have not booked an appointment yet,
-        or your appointment was cancelled. You can book one now
-        or ask the hospital staff to check you in manually.
+        This could mean you have not booked an appointment yet, or your appointment was cancelled. You can book one now or ask the hospital staff to check you in manually.
       </div>
 
       <div class="state-btns">
-        <a id="bookNowBtn" href="hospitals.html"
-          class="btn btn-primary btn-full">
-          Book an Appointment
-        </a>
-        <a href="dashboard.html" class="btn btn-secondary btn-full">
-          My Dashboard
-        </a>
+        <a id="bookNowBtn" href="hospitals.html" class="btn btn-primary btn-full">Book an Appointment</a>
+        <a href="dashboard.html" class="btn btn-secondary btn-full">My Dashboard</a>
       </div>
     </div>
 
-    <!-- ── STATE: ERROR ── -->
+    <!-- Error -->
     <div class="checkin-state" id="stateError">
       <div style="text-align:center;">
         <div class="state-icon">⚠️</div>
         <div class="state-title">Something went wrong</div>
-        <p class="state-desc" id="errorMsg">
-          Could not load hospital information.
-          Please try again or ask staff for help.
-        </p>
-        <button class="btn btn-primary btn-full"
-          onclick="window.location.reload()">
-          Try Again
-        </button>
+        <p class="state-desc" id="errorMsg">Could not load hospital information. Please try again or ask staff for help.</p>
+        <button class="btn btn-primary btn-full" onclick="window.location.reload()">Try Again</button>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="checkin-footer">
-      <span class="checkin-footer-logo">
-        <span>curaah</span> · Your Health, Your Control
-      </span>
-      <a href="index.html"
-        style="font-size:12px;color:var(--text-muted);">
-        Home
-      </a>
+      <span class="checkin-footer-brand"><span>curaah</span> · Your Health, Your Control</span>
+      <a href="index.html" style="font-size:12px;color:var(--text-muted);">Home</a>
     </div>
 
   </div>
@@ -521,87 +307,81 @@
 
     const TODAY = new Date().toISOString().split('T')[0];
 
-    /* ── Get URL params ── */
     function getParams() {
       const p = new URLSearchParams(window.location.search);
-      return {
-        hospitalId: p.get('hospital'),
-        redirect:   p.get('redirect'), /* Used to return after login */
-      };
+      return { hospitalId: p.get('hospital') };
     }
 
-    /* ── Show a specific state ── */
     function showState(name) {
       document.getElementById('stateLoading').style.display = 'none';
-      ['login','found','token','already','noAppt','error'].forEach(s => {
-        const el = document.getElementById('state' +
-          s.charAt(0).toUpperCase() + s.slice(1));
+      ['Login','Found','Token','Already','NoAppt','Error'].forEach(s => {
+        const el = document.getElementById('state' + s);
         if (el) el.classList.remove('active');
       });
-      const target = document.getElementById('state' +
-        name.charAt(0).toUpperCase() + name.slice(1));
+      const target = document.getElementById('state' + name.charAt(0).toUpperCase() + name.slice(1));
       if (target) target.classList.add('active');
     }
 
-    /* ── Fetch hospital ── */
     async function fetchHospital(id) {
-      const { data, error } = await supabase
-        .from('hospitals').select('*').eq('id', id).single();
+      const { data, error } = await supabase.from('hospitals').select('*').eq('id', id).single();
       if (error) return null;
       return data;
     }
 
-    /* ── Fetch today's appointment for current user ── */
     async function fetchAppointment(userId, hospitalId) {
       const { data, error } = await supabase
-        .from('appointments')
-        .select('*')
+        .from('appointments').select('*')
         .eq('patient_id', userId)
         .eq('hospital_id', hospitalId)
         .eq('appointment_date', TODAY)
         .neq('status', 'cancelled')
         .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
+        .limit(1).single();
       if (error) return null;
       return data;
     }
 
-    /* ── Check existing token ── */
-    async function fetchToken(apptId) {
+    async function fetchExistingToken(apptId) {
       const { data } = await supabase
-        .from('tokens')
-        .select('*')
-        .eq('appointment_id', apptId)
-        .single();
+        .from('tokens').select('*').eq('appointment_id', apptId).single();
       return data || null;
     }
 
-    /* ── Count tokens ahead in queue ── */
-    async function getQueuePosition(hospitalId, tokenNum) {
-      const { count } = await supabase
-        .from('tokens')
-        .select('*', { count:'exact', head:true })
-        .eq('hospital_id', hospitalId)
-        .in('status', ['waiting','called'])
-        .lt('token_number', tokenNum);
-
-      return count || 0;
+    /* ── Get next token using atomic RPC ── */
+    async function getNextToken(hospitalId) {
+      const { data, error } = await supabase.rpc('get_next_token', {
+        p_hospital_id: hospitalId,
+        p_date:        TODAY,
+      });
+      if (error) throw new Error('Could not get next token: ' + error.message);
+      return data;
     }
 
-    /* ── Get currently serving token ── */
-    async function getCurrentToken(hospitalId) {
-      const { data } = await supabase
-        .from('tokens')
-        .select('token_number')
+    async function getQueueInfo(hospitalId, myTokenNum) {
+      /* Currently serving */
+      const { data: called } = await supabase
+        .from('tokens').select('token_number')
         .eq('hospital_id', hospitalId)
         .eq('status', 'called')
         .order('token_number', { ascending: false })
-        .limit(1)
-        .single();
+        .limit(1);
 
-      return data?.token_number || '—';
+      const current = called?.[0]?.token_number || '—';
+
+      /* How many are ahead of me */
+      const { count: ahead } = await supabase
+        .from('tokens').select('*', { count:'exact', head:true })
+        .eq('hospital_id', hospitalId)
+        .in('status', ['waiting','called'])
+        .lt('token_number', myTokenNum);
+
+      const position    = ahead || 0;
+      const waitMinutes = position * 10;
+      const waitDisplay = position === 0 ? 'Next!'
+        : waitMinutes < 60 ? `~${waitMinutes}m`
+        : `~${Math.round(waitMinutes/60)}h`;
+
+      return { current, position, waitDisplay };
     }
 
     /* ── CONFIRM CHECK-IN ── */
@@ -612,20 +392,13 @@
 
       try {
         /* Update appointment status */
-        await supabase
-          .from('appointments')
-          .update({ status: 'checkedin' })
-          .eq('id', apptData.id);
+        await supabase.from('appointments')
+          .update({ status: 'checkedin' }).eq('id', apptData.id);
 
-        /* Count existing tokens for this hospital today */
-        const { count } = await supabase
-          .from('tokens')
-          .select('*', { count:'exact', head:true })
-          .eq('hospital_id', hospital.id);
+        /* Get next token atomically */
+        const tokenNumber = await getNextToken(hospital.id);
 
-        const tokenNumber = (count || 0) + 1;
-
-        /* Create token */
+        /* Insert token record */
         await supabase.from('tokens').insert({
           patient_id:     currentUser.id,
           hospital_id:    hospital.id,
@@ -633,29 +406,21 @@
           token_number:   tokenNumber,
           opd_department: apptData.doctor_name,
           status:         'waiting',
+          is_offline:     false,
           checked_in_at:  new Date().toISOString(),
         });
 
         /* Get queue info */
-        const [position, current] = await Promise.all([
-          getQueuePosition(hospital.id, tokenNumber),
-          getCurrentToken(hospital.id),
-        ]);
-
-        const waitMinutes = position * 15; /* ~15 min per patient */
-        const waitDisplay = waitMinutes < 60
-          ? `~${waitMinutes}m`
-          : `~${Math.round(waitMinutes/60)}h`;
+        const { current, position, waitDisplay } =
+          await getQueueInfo(hospital.id, tokenNumber);
 
         /* Show token state */
         document.getElementById('tokenNum').textContent    = tokenNumber;
         document.getElementById('tokenDoctor').textContent = apptData.doctor_name;
-        document.getElementById('tokenTime').textContent   = apptData.time_slot;
+        document.getElementById('tokenSlot').textContent   = apptData.time_slot;
         document.getElementById('queueCurrent').textContent= current;
-        document.getElementById('queuePosition').textContent=
-          position === 0 ? 'Next!' : `#${position}`;
-        document.getElementById('queueWait').textContent   =
-          position === 0 ? 'Now' : waitDisplay;
+        document.getElementById('queuePosition').textContent= position === 0 ? 'Next!' : `#${position + 1}`;
+        document.getElementById('queueWait').textContent   = waitDisplay;
 
         showState('token');
         showToast(`Token ${tokenNumber} assigned! You are in the queue.`, 'success');
@@ -663,7 +428,7 @@
       } catch (err) {
         btn.textContent = '✅ Confirm Check-in & Get Token';
         btn.disabled    = false;
-        showToast(err.message || 'Check-in failed. Please ask staff for help.', 'error');
+        showToast(err.message || 'Check-in failed. Ask staff for help.', 'error');
       }
     };
 
@@ -673,44 +438,33 @@
 
       if (!hospitalId) {
         document.getElementById('stateLoading').style.display = 'none';
-        document.getElementById('errorMsg').textContent =
-          'Invalid QR code — no hospital ID found. Please scan again or ask staff.';
+        document.getElementById('errorMsg').textContent = 'Invalid QR code — no hospital ID found. Please scan again or ask staff.';
         showState('error');
         return;
       }
 
-      /* Fetch hospital */
       hospital = await fetchHospital(hospitalId);
       if (!hospital) {
         document.getElementById('stateLoading').style.display = 'none';
-        document.getElementById('errorMsg').textContent =
-          'Hospital not found. This QR code may be outdated.';
+        document.getElementById('errorMsg').textContent = 'Hospital not found. This QR code may be outdated.';
         showState('error');
         return;
       }
 
-      /* Update header */
       document.getElementById('hospitalName').textContent = hospital.name;
-      document.getElementById('hospitalSub').textContent  =
-        `${hospital.address || ''}, ${hospital.city || ''}`;
+      document.getElementById('hospitalSub').textContent  = `${hospital.address || ''}, ${hospital.city || ''}`;
       document.title = `Check-in — ${hospital.name}`;
 
-      /* Update "Book now" link */
       const bookBtn = document.getElementById('bookNowBtn');
-      if (bookBtn) {
-        bookBtn.href = `hospital-profile.html?id=${hospital.id}`;
-      }
+      if (bookBtn) bookBtn.href = `hospital-profile.html?id=${hospital.id}`;
 
       /* Check auth */
       const { data:{ session } } = await supabase.auth.getSession();
 
       if (!session) {
-        /* Save return URL so after login we come back here */
         const returnUrl = encodeURIComponent(window.location.href);
         const loginBtn  = document.getElementById('loginRedirectBtn');
-        if (loginBtn) {
-          loginBtn.href = `login.html?return=${returnUrl}`;
-        }
+        if (loginBtn) loginBtn.href = `login.html?return=${returnUrl}`;
         document.getElementById('stateLoading').style.display = 'none';
         showState('login');
         return;
@@ -720,10 +474,7 @@
 
       /* Fetch patient name */
       const { data: patient } = await supabase
-        .from('patients')
-        .select('full_name')
-        .eq('id', currentUser.id)
-        .single();
+        .from('patients').select('full_name').eq('id', currentUser.id).single();
 
       const firstName = patient?.full_name?.split(' ')[0] || 'Patient';
       document.getElementById('patientFirstName').textContent = firstName;
@@ -740,19 +491,24 @@
 
       /* Check if already checked in */
       if (apptData.status === 'checkedin' || apptData.status === 'completed') {
-        /* Fetch existing token */
-        const existingToken = await fetchToken(apptData.id);
+        const existingToken = await fetchExistingToken(apptData.id);
         if (existingToken) {
-          document.getElementById('existingTokenNum').textContent    =
-            existingToken.token_number;
-          document.getElementById('existingTokenDoctor').textContent =
-            apptData.doctor_name + ' · ' + apptData.time_slot;
+          document.getElementById('existingTokenNum').textContent    = existingToken.token_number;
+          document.getElementById('existingTokenDoctor').textContent = apptData.doctor_name + ' · ' + apptData.time_slot;
+
+          const { current, position, waitDisplay } =
+            await getQueueInfo(hospital.id, existingToken.token_number);
+
+          document.getElementById('existingCurrent').textContent  = current;
+          document.getElementById('existingPosition').textContent = position === 0 ? 'Next!' : `#${position + 1}`;
+          document.getElementById('existingWait').textContent     = waitDisplay;
+
           showState('already');
           return;
         }
       }
 
-      /* Show appointment details */
+      /* Show appointment details for confirmation */
       document.getElementById('foundDoctor').textContent = apptData.doctor_name || '—';
       document.getElementById('foundSlot').textContent   = apptData.time_slot   || '—';
       document.getElementById('foundDate').textContent   =
@@ -760,12 +516,10 @@
           weekday:'long', day:'numeric', month:'long'
         });
 
-      /* Show fee if applicable */
       const fee = apptData.fee_amount || hospital.appointment_fee || 0;
       if (fee > 0) {
         document.getElementById('foundFeeRow').style.display = 'flex';
-        document.getElementById('foundFee').textContent      =
-          `₹${fee} (pay at counter)`;
+        document.getElementById('foundFee').textContent      = `₹${fee} (pay at counter)`;
       }
 
       showState('found');
