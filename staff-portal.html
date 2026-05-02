@@ -9,314 +9,152 @@
   <style>
     body { background: var(--off-white); min-height: 100vh; }
 
-    .staff-login-page {
-      min-height: 100vh;
-      background: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 24px;
-    }
+    .staff-login-page { min-height:100vh; background:var(--navy); display:flex; align-items:center; justify-content:center; padding:80px 24px; }
+    .staff-login-card { background:var(--white); border-radius:var(--radius-xl); padding:48px; width:100%; max-width:400px; box-shadow:var(--shadow-lg); }
+    .staff-login-logo { display:flex; align-items:center; gap:10px; margin-bottom:32px; }
+    .staff-login-logo-name { font-size:20px; font-weight:700; color:var(--navy); }
+    .staff-login-logo-tag  { font-size:11px; color:var(--electric); font-weight:600; letter-spacing:1px; display:block; }
+    .staff-login-title { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+    .staff-login-sub   { font-size:14px; color:var(--text-muted); margin-bottom:28px; line-height:1.6; }
+    .staff-login-form  { display:flex; flex-direction:column; gap:16px; }
+    .staff-error-box   { background:rgba(255,71,87,0.06); border:1px solid rgba(255,71,87,0.2); border-radius:var(--radius-md); padding:12px 14px; font-size:13px; color:var(--danger); display:none; line-height:1.5; }
+    .staff-error-box.show { display:block; }
 
-    .staff-login-card {
-      background: var(--white);
-      border-radius: var(--radius-xl);
-      padding: 48px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: var(--shadow-lg);
-    }
+    .portal-layout { display:flex; min-height:100vh; padding-top:var(--nav-height); }
 
-    .staff-login-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
-    }
+    .sidebar { width:240px; flex-shrink:0; background:var(--navy-mid); border-right:1px solid var(--border-dark); position:fixed; top:var(--nav-height); left:0; bottom:0; display:flex; flex-direction:column; overflow-y:auto; z-index:90; }
+    .sidebar-hospital { padding:20px 16px; border-bottom:1px solid var(--border-dark); }
+    .sidebar-hospital-name { font-size:14px; font-weight:600; color:var(--white); margin-bottom:3px; }
+    .sidebar-hospital-tag  { font-size:11px; color:var(--electric); font-weight:500; }
+    .sidebar-nav    { padding:12px 8px; flex:1; display:flex; flex-direction:column; gap:2px; }
+    .sidebar-section-label { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.25); padding:10px 8px 6px; margin-top:6px; }
+    .sidebar-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-md); font-size:13px; font-weight:500; color:var(--text-on-dark-muted); cursor:pointer; transition:var(--transition); border:none; background:none; width:100%; text-align:left; }
+    .sidebar-item:hover  { background:rgba(255,255,255,0.06); color:var(--white); }
+    .sidebar-item.active { background:rgba(61,158,255,0.15); color:var(--electric); font-weight:600; }
+    .sidebar-item-icon   { font-size:15px; width:18px; text-align:center; flex-shrink:0; }
+    .sidebar-bottom { padding:12px 8px; border-top:1px solid var(--border-dark); }
 
-    .staff-login-logo-name { font-size: 20px; font-weight: 700; color: var(--navy); }
-    .staff-login-logo-tag  { font-size: 11px; color: var(--electric); font-weight: 600; letter-spacing: 1px; display: block; }
-    .staff-login-title     { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
-    .staff-login-sub       { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6; }
-    .staff-login-form      { display: flex; flex-direction: column; gap: 16px; }
+    .portal-main { margin-left:240px; flex:1; padding:28px 32px; }
+    .portal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+    .portal-title  { font-family:'Georgia',serif; font-size:24px; font-weight:700; color:var(--text-primary); }
+    .portal-date   { font-size:13px; color:var(--text-muted); margin-top:3px; }
 
-    .staff-error-box {
-      background: rgba(255,71,87,0.06);
-      border: 1px solid rgba(255,71,87,0.2);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      font-size: 13px;
-      color: var(--danger);
-      display: none;
-      line-height: 1.5;
-    }
-    .staff-error-box.show { display: block; }
-
-    .portal-layout { display: flex; min-height: 100vh; padding-top: var(--nav-height); }
-
-    .sidebar {
-      width: 240px;
-      flex-shrink: 0;
-      background: var(--navy-mid);
-      border-right: 1px solid var(--border-dark);
-      position: fixed;
-      top: var(--nav-height);
-      left: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: 90;
-    }
-
-    .sidebar-hospital { padding: 20px 16px; border-bottom: 1px solid var(--border-dark); }
-    .sidebar-hospital-name { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 3px; }
-    .sidebar-hospital-tag  { font-size: 11px; color: var(--electric); font-weight: 500; }
-
-    .sidebar-nav { padding: 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
-
-    .sidebar-section-label {
-      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-      text-transform: uppercase; color: rgba(255,255,255,0.25);
-      padding: 10px 8px 6px; margin-top: 6px;
-    }
-
-    .sidebar-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: var(--radius-md);
-      font-size: 13px; font-weight: 500; color: var(--text-on-dark-muted);
-      cursor: pointer; transition: var(--transition);
-      border: none; background: none; width: 100%; text-align: left;
-    }
-    .sidebar-item:hover   { background: rgba(255,255,255,0.06); color: var(--white); }
-    .sidebar-item.active  { background: rgba(61,158,255,0.15); color: var(--electric); font-weight: 600; }
-    .sidebar-item-icon    { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
-    .sidebar-bottom       { padding: 12px 8px; border-top: 1px solid var(--border-dark); }
-
-    .portal-main  { margin-left: 240px; flex: 1; padding: 28px 32px; }
-
-    .portal-header {
-      display: flex; justify-content: space-between;
-      align-items: flex-start; margin-bottom: 24px;
-      flex-wrap: wrap; gap: 12px;
-    }
-
-    .portal-title { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: var(--text-primary); }
-    .portal-date  { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
-
-    .portal-stats { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-bottom: 24px; }
-
-    .portal-stat {
-      background: var(--white); border: 1px solid var(--border-card);
-      border-radius: var(--radius-lg); padding: 16px;
-    }
-    .portal-stat-num   { font-family: 'Georgia', serif; font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 4px; }
-    .portal-stat-label { font-size: 11px; color: var(--text-muted); }
+    .portal-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    .portal-stat   { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; }
+    .portal-stat-num   { font-family:'Georgia',serif; font-size:28px; font-weight:700; color:var(--text-primary); line-height:1; margin-bottom:4px; }
+    .portal-stat-label { font-size:11px; color:var(--text-muted); }
 
     /* Offline button */
-    .offline-btn {
-      background: var(--navy);
-      color: var(--white);
-      border: 2px solid var(--electric);
-      border-radius: var(--radius-lg);
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: 'Inter', sans-serif;
-    }
-    .offline-btn:hover { background: rgba(61,158,255,0.15); transform: scale(1.02); }
-    .offline-btn-icon  { font-size: 28px; }
-    .offline-btn-label { font-size: 13px; font-weight: 700; color: var(--electric); }
-    .offline-btn-sub   { font-size: 11px; color: var(--text-on-dark-muted); }
+    .offline-btn { background:var(--navy); color:var(--white); border:2px solid var(--electric); border-radius:var(--radius-lg); padding:14px 18px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; transition:var(--transition); font-family:'Inter',sans-serif; }
+    .offline-btn:hover { background:rgba(61,158,255,0.15); transform:scale(1.02); }
+    .offline-btn-icon  { font-size:24px; }
+    .offline-btn-label { font-size:12px; font-weight:700; color:var(--electric); }
+    .offline-btn-sub   { font-size:10px; color:var(--text-on-dark-muted); }
 
-    /* Token display */
-    .token-live-display {
-      background: var(--navy);
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+    /* Token live display */
+    .token-live-display { background:var(--navy); border-radius:var(--radius-xl); padding:24px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; align-items:center; margin-bottom:20px; }
+    .token-current { text-align:center; border-right:1px solid var(--border-dark); padding-right:20px; }
+    .token-current-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--electric); margin-bottom:8px; }
+    .token-current-num   { font-family:'Georgia',serif; font-size:60px; font-weight:700; color:var(--white); line-height:1; }
+    .token-current-sub   { font-size:11px; color:var(--text-on-dark-muted); margin-top:4px; }
+    .token-stats-col   { display:flex; flex-direction:column; gap:10px; }
+    .token-stat-item   { display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.05); border:1px solid var(--border-dark); border-radius:var(--radius-md); padding:10px 14px; }
+    .token-stat-item-label { font-size:11px; color:var(--text-on-dark-muted); }
+    .token-stat-item-val   { font-size:16px; font-weight:700; color:var(--white); font-family:'Georgia',serif; }
+    .offline-action-col { display:flex; flex-direction:column; gap:8px; align-items:center; }
 
-    .token-current {
-      text-align: center;
-      border-right: 1px solid var(--border-dark);
-      padding-right: 20px;
-    }
-
-    .token-current-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--electric); margin-bottom: 10px;
-    }
-
-    .token-current-num {
-      font-family: 'Georgia', serif; font-size: 72px;
-      font-weight: 700; color: var(--white); line-height: 1;
-    }
-
-    .token-current-sub { font-size: 12px; color: var(--text-on-dark-muted); margin-top: 6px; }
-
-    .token-stats-col { display: flex; flex-direction: column; gap: 14px; }
-
-    .token-stat-item {
-      display: flex; align-items: center; justify-content: space-between;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-dark);
-      border-radius: var(--radius-md);
-      padding: 12px 16px;
-    }
-    .token-stat-item-label { font-size: 12px; color: var(--text-on-dark-muted); }
-    .token-stat-item-val   { font-size: 18px; font-weight: 700; color: var(--white); font-family: 'Georgia',serif; }
-
-    .offline-action-col { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    /* OPD tabs */
+    .opd-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .opd-tab  { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; border:1.5px solid var(--border-card); background:var(--white); color:var(--text-muted); cursor:pointer; transition:var(--transition); }
+    .opd-tab:hover  { border-color:rgba(61,158,255,0.3); color:var(--electric); }
+    .opd-tab.active { background:var(--electric); color:var(--white); border-color:var(--electric); }
 
     /* Panel */
-    .panel { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 20px; }
-    .panel-header { padding: 14px 20px; border-bottom: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; }
-    .panel-title  { font-size: 14px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-    .panel-body   { padding: 16px 20px; }
+    .panel { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
+    .panel-header { padding:14px 20px; border-bottom:1px solid var(--border-card); display:flex; align-items:center; justify-content:space-between; }
+    .panel-title  { font-size:14px; font-weight:600; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
+    .panel-body   { padding:16px 20px; }
 
     /* Table */
-    .appt-table { width: 100%; border-collapse: collapse; }
-    .appt-table th {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
-      text-transform: uppercase; color: var(--text-muted);
-      padding: 10px 14px; text-align: left;
-      border-bottom: 1px solid var(--border-card);
-      background: var(--off-white);
-    }
-    .appt-table td {
-      padding: 11px 14px; font-size: 13px; color: var(--text-primary);
-      border-bottom: 1px solid var(--border-card); vertical-align: middle;
-    }
-    .appt-table tr:last-child td { border-bottom: none; }
-    .appt-table tr:hover td      { background: rgba(61,158,255,0.02); }
-    .patient-name  { font-weight: 600; }
-    .patient-phone { font-size: 11px; color: var(--text-muted); }
+    .appt-table { width:100%; border-collapse:collapse; }
+    .appt-table th { font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-muted); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border-card); background:var(--off-white); }
+    .appt-table td { padding:11px 14px; font-size:13px; color:var(--text-primary); border-bottom:1px solid var(--border-card); vertical-align:middle; }
+    .appt-table tr:last-child td { border-bottom:none; }
+    .appt-table tr:hover td      { background:rgba(61,158,255,0.02); }
+    .patient-name  { font-weight:600; }
+    .patient-phone { font-size:11px; color:var(--text-muted); }
 
-    .status-pill  { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
-    .status-confirmed { background: rgba(0,196,140,0.1);  color: var(--success); }
-    .status-pending   { background: rgba(255,159,0,0.1);  color: var(--warning); }
-    .status-checkedin { background: rgba(61,158,255,0.1); color: var(--electric); }
-    .status-completed { background: rgba(100,100,100,0.1);color: var(--text-muted); }
-    .status-cancelled { background: rgba(255,71,87,0.1);  color: var(--danger); }
+    .status-pill      { font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+    .status-confirmed { background:rgba(0,196,140,0.1);  color:var(--success); }
+    .status-pending   { background:rgba(255,159,0,0.1);  color:var(--warning); }
+    .status-checkedin { background:rgba(61,158,255,0.1); color:var(--electric); }
+    .status-completed { background:rgba(100,100,100,0.1);color:var(--text-muted); }
+    .status-cancelled { background:rgba(255,71,87,0.1);  color:var(--danger); }
 
-    .action-btn {
-      font-size: 11px; font-weight: 600; padding: 5px 12px;
-      border-radius: 6px; border: 1px solid var(--border-card);
-      background: var(--white); cursor: pointer;
-      transition: var(--transition); color: var(--text-secondary);
-      margin-right: 4px;
-    }
-    .action-btn:hover       { background: var(--electric); color: white; border-color: var(--electric); }
-    .action-btn.danger:hover{ background: var(--danger);   color: white; border-color: var(--danger); }
+    .action-btn { font-size:11px; font-weight:600; padding:5px 12px; border-radius:6px; border:1px solid var(--border-card); background:var(--white); cursor:pointer; transition:var(--transition); color:var(--text-secondary); margin-right:4px; }
+    .action-btn:hover       { background:var(--electric); color:white; border-color:var(--electric); }
+    .action-btn.danger:hover{ background:var(--danger);   color:white; border-color:var(--danger); }
 
-    /* Token queue rows */
-    .token-row-online  { background: rgba(0,196,140,0.02); }
-    .token-row-offline { background: rgba(255,159,0,0.02); }
+    .token-num-big { font-family:'Georgia',serif; font-size:22px; font-weight:700; color:var(--electric); }
 
-    .token-num-big {
-      font-family: 'Georgia', serif; font-size: 22px;
-      font-weight: 700; color: var(--electric);
-    }
+    /* OPD card */
+    .opd-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .opd-card:last-child { margin-bottom:0; }
+    .opd-card-info  { flex:1; }
+    .opd-card-name  { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
+    .opd-card-meta  { font-size:12px; color:var(--text-muted); }
+    .opd-card-fee   { font-size:13px; font-weight:700; color:var(--electric); margin-right:12px; }
 
-    /* Bed section */
-    .bed-section { padding: 24px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
-    .bed-circle {
-      width: 100px; height: 100px; border-radius: 50%;
-      border: 4px solid var(--electric);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .bed-circle-num   { font-family: 'Georgia',serif; font-size: 32px; font-weight: 700; color: var(--electric); line-height: 1; }
-    .bed-circle-label { font-size: 10px; color: var(--text-muted); }
-    .bed-info         { flex: 1; }
-    .bed-bar          { height: 10px; background: var(--light-bg); border-radius: 5px; overflow: hidden; margin-bottom: 8px; max-width: 300px; }
-    .bed-bar-fill     { height: 100%; border-radius: 5px; transition: width 0.5s; }
-    .bed-update-wrap  { padding: 0 24px 24px; border-top: 1px solid var(--border-card); padding-top: 20px; }
-
-    .bed-counter { display: flex; align-items: center; gap: 0; border: 1px solid var(--border-card); border-radius: var(--radius-md); overflow: hidden; width: fit-content; }
-    .bed-counter-btn {
-      width: 40px; height: 40px; background: var(--off-white);
-      border: none; font-size: 20px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition); color: var(--text-primary);
-    }
-    .bed-counter-btn:hover { background: var(--electric); color: white; }
-    .bed-counter-val {
-      width: 60px; height: 40px; text-align: center;
-      font-size: 16px; font-weight: 700; color: var(--text-primary);
-      border: none; border-left: 1px solid var(--border-card);
-      border-right: 1px solid var(--border-card);
-      outline: none; font-family: 'Inter', sans-serif;
-    }
+    /* Bed */
+    .bed-section { padding:24px; display:flex; gap:32px; align-items:center; flex-wrap:wrap; }
+    .bed-circle  { width:100px; height:100px; border-radius:50%; border:4px solid var(--electric); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+    .bed-circle-num   { font-family:'Georgia',serif; font-size:32px; font-weight:700; color:var(--electric); line-height:1; }
+    .bed-circle-label { font-size:10px; color:var(--text-muted); }
+    .bed-info  { flex:1; }
+    .bed-bar   { height:10px; background:var(--light-bg); border-radius:5px; overflow:hidden; margin-bottom:8px; max-width:300px; }
+    .bed-bar-fill { height:100%; border-radius:5px; transition:width 0.5s; }
+    .bed-update-wrap { padding:0 24px 24px; border-top:1px solid var(--border-card); padding-top:20px; }
+    .bed-counter { display:flex; align-items:center; border:1px solid var(--border-card); border-radius:var(--radius-md); overflow:hidden; width:fit-content; }
+    .bed-counter-btn { width:40px; height:40px; background:var(--off-white); border:none; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--transition); color:var(--text-primary); }
+    .bed-counter-btn:hover { background:var(--electric); color:white; }
+    .bed-counter-val { width:60px; height:40px; text-align:center; font-size:16px; font-weight:700; color:var(--text-primary); border:none; border-left:1px solid var(--border-card); border-right:1px solid var(--border-card); outline:none; font-family:'Inter',sans-serif; }
 
     /* Check-in */
-    .checkin-form { padding: 20px; display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
-    .checkin-form .form-group { flex: 1; min-width: 180px; }
+    .checkin-form { padding:20px; display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; }
+    .checkin-form .form-group { flex:1; min-width:180px; }
+    .checkin-result { display:none; margin:0 20px 20px; background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; }
+    .checkin-result.show { display:block; }
+    .token-result { display:none; margin:0 20px 20px; background:var(--navy); border-radius:var(--radius-lg); padding:28px; text-align:center; }
+    .token-result.show { display:block; }
+    .token-big { font-family:'Georgia',serif; font-size:72px; font-weight:700; color:var(--white); line-height:1; }
 
-    .checkin-result {
-      display: none; margin: 0 20px 20px;
-      background: var(--off-white); border: 1px solid var(--border-card);
-      border-radius: var(--radius-lg); padding: 20px;
-    }
-    .checkin-result.show { display: block; }
-
-    .token-result {
-      display: none; margin: 0 20px 20px;
-      background: var(--navy); border-radius: var(--radius-lg);
-      padding: 28px; text-align: center;
-    }
-    .token-result.show { display: block; }
-    .token-big { font-family: 'Georgia',serif; font-size: 72px; font-weight: 700; color: var(--white); line-height: 1; }
-
-    /* Doctors */
-    .doctor-form-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 16px; padding: 20px; }
+    /* Doctor form */
+    .doctor-form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; padding:20px; }
 
     /* Slots */
-    .slots-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 12px; padding: 20px; }
-    .slot-card  { border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; text-align: center; }
-    .slot-card.available { background: rgba(0,196,140,0.04);  border-color: rgba(0,196,140,0.2); }
-    .slot-card.busy      { background: rgba(255,159,0,0.04);  border-color: rgba(255,159,0,0.2); }
-    .slot-card.full      { background: rgba(255,71,87,0.04);  border-color: rgba(255,71,87,0.2); }
-    .slot-time  { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
-    .slot-count { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-    .slot-bar   { height: 4px; background: var(--border-card); border-radius: 2px; overflow: hidden; }
-    .slot-bar-fill { height: 100%; border-radius: 2px; }
+    .slots-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; padding:20px; }
+    .slot-card  { border:1px solid var(--border-card); border-radius:var(--radius-md); padding:14px; text-align:center; }
+    .slot-card.available { background:rgba(0,196,140,0.04);  border-color:rgba(0,196,140,0.2); }
+    .slot-card.busy      { background:rgba(255,159,0,0.04);  border-color:rgba(255,159,0,0.2); }
+    .slot-card.full      { background:rgba(255,71,87,0.04);  border-color:rgba(255,71,87,0.2); }
+    .slot-time  { font-size:14px; font-weight:700; color:var(--text-primary); margin-bottom:4px; }
+    .slot-count { font-size:11px; color:var(--text-muted); margin-bottom:8px; }
+    .slot-bar   { height:4px; background:var(--border-card); border-radius:2px; overflow:hidden; }
+    .slot-bar-fill { height:100%; border-radius:2px; }
 
-    .table-empty       { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
-    .table-empty-icon  { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
+    .table-empty      { padding:40px 20px; text-align:center; color:var(--text-muted); font-size:14px; }
+    .table-empty-icon { font-size:32px; margin-bottom:10px; opacity:0.4; }
 
-    /* Realtime indicator */
-    .live-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--success); display: inline-block;
-      margin-right: 6px; animation: blink 2s infinite;
-    }
+    .live-dot { width:8px; height:8px; border-radius:50%; background:var(--success); display:inline-block; margin-right:6px; animation:blink 2s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    @media (max-width: 900px) {
-      .sidebar { transform: translateX(-240px); transition: transform 0.3s; }
-      .sidebar.open { transform: translateX(0); }
-      .portal-main { margin-left: 0; padding: 20px; }
-      .portal-stats { grid-template-columns: repeat(3,1fr); }
-      .token-live-display { grid-template-columns: 1fr; }
-      .token-current { border-right: none; border-bottom: 1px solid var(--border-dark); padding-right: 0; padding-bottom: 20px; }
-    }
-
-    @media (max-width: 600px) {
-      .portal-stats { grid-template-columns: repeat(2,1fr); }
-    }
+    @media (max-width:900px) { .sidebar{transform:translateX(-240px);transition:transform 0.3s;} .sidebar.open{transform:translateX(0);} .portal-main{margin-left:0;padding:20px;} .portal-stats{grid-template-columns:repeat(2,1fr);} .token-live-display{grid-template-columns:1fr;} .token-current{border-right:none;border-bottom:1px solid var(--border-dark);padding-right:0;padding-bottom:20px;} }
+    @media (max-width:600px) { .portal-stats{grid-template-columns:1fr 1fr;} }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN PAGE -->
+  <!-- LOGIN -->
   <div id="staffLoginPage" class="staff-login-page">
     <div class="staff-login-card">
       <div class="staff-login-logo">
@@ -325,28 +163,17 @@
           <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
           <circle cx="18" cy="22" r="3.5" fill="white"/>
         </svg>
-        <div>
-          <span class="staff-login-logo-name">curaah</span>
-          <span class="staff-login-logo-tag">STAFF PORTAL</span>
-        </div>
+        <div><span class="staff-login-logo-name">curaah</span><span class="staff-login-logo-tag">STAFF PORTAL</span></div>
       </div>
       <div class="staff-login-title">Staff Login</div>
-      <p class="staff-login-sub">Login with the credentials set up by your Curaah onboarding team. Your hospital is detected automatically.</p>
+      <p class="staff-login-sub">Login with credentials set up by your Curaah onboarding team.</p>
       <div class="staff-error-box" id="staffErrorBox"></div>
       <div class="staff-login-form">
-        <div class="form-group">
-          <label class="form-label">Staff Email *</label>
-          <input class="form-input" type="email" id="staffEmail" placeholder="your@email.com" autocomplete="email" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password *</label>
-          <input class="form-input" type="password" id="staffPassword" placeholder="Enter your password" autocomplete="current-password" />
-        </div>
+        <div class="form-group"><label class="form-label">Staff Email *</label><input class="form-input" type="email" id="staffEmail" placeholder="your@email.com" autocomplete="email" /></div>
+        <div class="form-group"><label class="form-label">Password *</label><input class="form-input" type="password" id="staffPassword" placeholder="Enter your password" autocomplete="current-password" /></div>
         <button class="btn btn-primary btn-full btn-lg" id="staffLoginBtn" onclick="handleStaffLogin()">Login to Staff Portal</button>
       </div>
-      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:20px;line-height:1.6;">
-        Patient? <a href="login.html" style="color:var(--electric);font-weight:600;">Patient login →</a>
-      </p>
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:20px;">Patient? <a href="login.html" style="color:var(--electric);font-weight:600;">Patient login →</a></p>
     </div>
   </div>
 
@@ -360,15 +187,10 @@
           <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
           <circle cx="18" cy="22" r="3.5" fill="white"/>
         </svg>
-        <div class="nav-logo-text">
-          <span class="nav-logo-name">curaah</span>
-          <span class="nav-logo-tag">Staff Portal</span>
-        </div>
+        <div class="nav-logo-text"><span class="nav-logo-name">curaah</span><span class="nav-logo-tag">Staff Portal</span></div>
       </a>
       <div class="nav-actions">
-        <span style="font-size:13px;color:var(--text-on-dark-muted);">
-          <strong style="color:var(--white);" id="portalHospitalName">—</strong>
-        </span>
+        <span style="font-size:13px;color:var(--text-on-dark-muted);"><strong style="color:var(--white);" id="portalHospitalName">—</strong></span>
         <button class="btn btn-ghost btn-sm" onclick="handleStaffLogout()">Logout</button>
       </div>
       <div class="nav-hamburger" id="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></div>
@@ -387,8 +209,9 @@
           <button class="sidebar-item" onclick="showSection('appointments',this)"><span class="sidebar-item-icon">📅</span> Appointments</button>
           <button class="sidebar-item" onclick="showSection('checkin',this)"><span class="sidebar-item-icon">✅</span> Check-in Patient</button>
           <div class="sidebar-section-label">Manage</div>
-          <button class="sidebar-item" onclick="showSection('beds',this)"><span class="sidebar-item-icon">🛏️</span> Bed Management</button>
+          <button class="sidebar-item" onclick="showSection('opds',this)"><span class="sidebar-item-icon">🏥</span> Manage OPDs</button>
           <button class="sidebar-item" onclick="showSection('doctors',this)"><span class="sidebar-item-icon">👨‍⚕️</span> Manage Doctors</button>
+          <button class="sidebar-item" onclick="showSection('beds',this)"><span class="sidebar-item-icon">🛏️</span> Bed Management</button>
           <button class="sidebar-item" onclick="showSection('slots',this)"><span class="sidebar-item-icon">⏰</span> Slot Availability</button>
         </nav>
         <div class="sidebar-bottom">
@@ -401,10 +224,7 @@
         <!-- OVERVIEW -->
         <div id="section-overview">
           <div class="portal-header">
-            <div>
-              <div class="portal-title" id="overviewGreeting">Good morning</div>
-              <div class="portal-date" id="portalDate">—</div>
-            </div>
+            <div><div class="portal-title" id="overviewGreeting">Good morning</div><div class="portal-date" id="portalDate">—</div></div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
               <button class="btn btn-secondary btn-sm" onclick="showSection('checkin',document.querySelector('[onclick*=checkin]'))">+ Check In Patient</button>
               <button class="btn btn-primary btn-sm" onclick="showSection('tokens',document.querySelector('[onclick*=tokens]'))">📟 Token Queue</button>
@@ -414,34 +234,30 @@
           <div class="portal-stats">
             <div class="portal-stat"><div class="portal-stat-num" id="statTotal">—</div><div class="portal-stat-label">Today's appointments</div></div>
             <div class="portal-stat"><div class="portal-stat-num" id="statCheckedIn">—</div><div class="portal-stat-label">Checked in</div></div>
-            <div class="portal-stat"><div class="portal-stat-num" id="statOffline">—</div><div class="portal-stat-label">Offline (walk-in)</div></div>
             <div class="portal-stat"><div class="portal-stat-num" id="statBeds">—</div><div class="portal-stat-label">Beds available</div></div>
             <div class="portal-stat"><div class="portal-stat-num" id="statPending">—</div><div class="portal-stat-label">Yet to arrive</div></div>
           </div>
 
-          <!-- Live token display + offline button -->
+          <!-- Token display + offline button -->
           <div class="token-live-display">
             <div class="token-current">
               <div class="token-current-label"><span class="live-dot"></span> Now Serving</div>
               <div class="token-current-num" id="overviewCurrentToken">—</div>
-              <div class="token-current-sub" id="overviewCurrentDoctor">—</div>
+              <div class="token-current-sub" id="overviewCurrentOPD">All OPDs</div>
             </div>
             <div class="token-stats-col">
-              <div class="token-stat-item">
-                <span class="token-stat-item-label">Total tokens today</span>
-                <span class="token-stat-item-val" id="overviewTotalTokens">0</span>
-              </div>
-              <div class="token-stat-item">
-                <span class="token-stat-item-label">In queue (waiting)</span>
-                <span class="token-stat-item-val" id="overviewWaiting">0</span>
-              </div>
-              <div class="token-stat-item">
-                <span class="token-stat-item-label">Completed today</span>
-                <span class="token-stat-item-val" id="overviewCompleted">0</span>
-              </div>
+              <div class="token-stat-item"><span class="token-stat-item-label">Total tokens today</span><span class="token-stat-item-val" id="overviewTotalTokens">0</span></div>
+              <div class="token-stat-item"><span class="token-stat-item-label">Waiting in queue</span><span class="token-stat-item-val" id="overviewWaiting">0</span></div>
+              <div class="token-stat-item"><span class="token-stat-item-label">Completed</span><span class="token-stat-item-val" id="overviewCompleted">0</span></div>
             </div>
             <div class="offline-action-col">
-              <button class="offline-btn" onclick="addOfflineToken()">
+              <div style="width:100%;">
+                <label class="form-label" style="color:rgba(255,255,255,0.6);font-size:11px;">Offline Patient+ for OPD:</label>
+                <select class="form-input form-select" id="offlineOpdSelect" style="margin-bottom:8px;font-size:12px;">
+                  <option value="">Select OPD</option>
+                </select>
+              </div>
+              <button class="offline-btn" style="width:100%;" onclick="addOfflineToken()">
                 <span class="offline-btn-icon">👤➕</span>
                 <span class="offline-btn-label">Offline Patient +</span>
                 <span class="offline-btn-sub">Walk-in without Curaah</span>
@@ -451,10 +267,7 @@
           </div>
 
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📅 Today's Appointments</div>
-              <span style="font-size:13px;color:var(--electric);cursor:pointer;font-weight:500;" onclick="showSection('appointments',null)">View all</span>
-            </div>
+            <div class="panel-header"><div class="panel-title">📅 Today's Appointments</div><span style="font-size:13px;color:var(--electric);cursor:pointer;font-weight:500;" onclick="showSection('appointments',null)">View all</span></div>
             <div id="overviewList"><div class="table-empty"><div class="table-empty-icon">📅</div>Loading...</div></div>
           </div>
         </div>
@@ -462,49 +275,29 @@
         <!-- TOKEN QUEUE -->
         <div id="section-tokens" style="display:none;">
           <div class="portal-header">
-            <div>
-              <div class="portal-title">Token Queue</div>
-              <div class="portal-date"><span class="live-dot"></span> Live — updates automatically</div>
-            </div>
+            <div><div class="portal-title">Token Queue</div><div class="portal-date"><span class="live-dot"></span> Per OPD — live</div></div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="offline-btn" style="padding:10px 16px;" onclick="addOfflineToken()">
-                <span style="font-size:16px;">👤➕</span>
-                <span class="offline-btn-label" style="font-size:12px;">Offline Patient +</span>
-              </button>
+              <div>
+                <select class="form-input form-select" id="tokenOpdFilter" style="font-size:12px;min-width:160px;" onchange="loadTokenQueue()"><option value="all">All OPDs</option></select>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <select class="form-input form-select" id="offlineOpdSelect2" style="font-size:12px;"><option value="">Select OPD for offline</option></select>
+                <button class="offline-btn" style="padding:8px 12px;" onclick="addOfflineToken()">
+                  <span style="font-size:14px;">👤➕</span>
+                  <span class="offline-btn-label" style="font-size:11px;">Offline Patient +</span>
+                </button>
+              </div>
               <button class="btn btn-secondary btn-sm" onclick="loadTokenQueue()">🔄 Refresh</button>
             </div>
           </div>
 
-          <!-- Current token big display -->
-          <div class="token-live-display" style="margin-bottom:20px;">
-            <div class="token-current">
-              <div class="token-current-label"><span class="live-dot"></span> Now Serving</div>
-              <div class="token-current-num" id="tokenCurrentNum">—</div>
-              <div class="token-current-sub" id="tokenCurrentInfo">No token called yet</div>
-            </div>
-            <div class="token-stats-col">
-              <div class="token-stat-item">
-                <span class="token-stat-item-label">Last token issued</span>
-                <span class="token-stat-item-val" id="tokenLastIssued">—</span>
-              </div>
-              <div class="token-stat-item">
-                <span class="token-stat-item-label">Waiting in queue</span>
-                <span class="token-stat-item-val" id="tokenWaitingCount">—</span>
-              </div>
-            </div>
-            <div class="offline-action-col">
-              <button class="offline-btn" onclick="addOfflineToken()">
-                <span class="offline-btn-icon">👤➕</span>
-                <span class="offline-btn-label">Offline Patient +</span>
-                <span class="offline-btn-sub">Assign next token</span>
-              </button>
-            </div>
-          </div>
+          <!-- Per-OPD token summary -->
+          <div id="opdTokenSummary" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;"></div>
 
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📟 Full Queue Today</div>
-              <div style="display:flex;gap:8px;align-items:center;">
+              <div class="panel-title">📟 Queue</div>
+              <div style="display:flex;gap:8px;">
                 <span style="font-size:11px;background:rgba(0,196,140,0.1);color:var(--success);padding:2px 8px;border-radius:10px;font-weight:600;">🟢 Curaah</span>
                 <span style="font-size:11px;background:rgba(255,159,0,0.1);color:var(--warning);padding:2px 8px;border-radius:10px;font-weight:600;">🟡 Walk-in</span>
               </div>
@@ -516,25 +309,18 @@
         <!-- APPOINTMENTS -->
         <div id="section-appointments" style="display:none;">
           <div class="portal-header">
-            <div>
-              <div class="portal-title">Today's Appointments</div>
-              <div class="portal-date" id="apptDateLabel">—</div>
+            <div><div class="portal-title">Today's Appointments</div><div class="portal-date" id="apptDateLabel">—</div></div>
+            <div style="display:flex;gap:10px;">
+              <select class="form-input form-select" id="filterOPD" style="width:auto;min-width:160px;" onchange="filterAppointments()"><option value="all">All OPDs</option></select>
+              <select class="form-input form-select" id="filterDoctor" style="width:auto;min-width:160px;" onchange="filterAppointments()"><option value="all">All Doctors</option></select>
             </div>
-            <select class="form-input form-select" id="filterDoctor" style="width:auto;min-width:200px;" onchange="filterAppointments()">
-              <option value="all">All Doctors</option>
-            </select>
           </div>
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📋 Patient List</div>
-              <span style="font-size:12px;color:var(--text-muted);" id="apptCountLabel">— today</span>
-            </div>
+            <div class="panel-header"><div class="panel-title">📋 Patient List</div><span style="font-size:12px;color:var(--text-muted);" id="apptCountLabel">— today</span></div>
             <div style="overflow-x:auto;">
               <table class="appt-table">
-                <thead>
-                  <tr><th>#</th><th>Patient</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Actions</th></tr>
-                </thead>
-                <tbody id="apptTableBody"><tr><td colspan="7" class="table-empty">Loading...</td></tr></tbody>
+                <thead><tr><th>#</th><th>Patient</th><th>OPD</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="apptTableBody"><tr><td colspan="8" class="table-empty">Loading...</td></tr></tbody>
               </table>
             </div>
           </div>
@@ -542,31 +328,20 @@
 
         <!-- CHECK-IN -->
         <div id="section-checkin" style="display:none;">
-          <div class="portal-header">
-            <div>
-              <div class="portal-title">Check-in Patient</div>
-              <div class="portal-date">For patients without smartphones</div>
-            </div>
-          </div>
+          <div class="portal-header"><div><div class="portal-title">Check-in Patient</div><div class="portal-date">For patients without smartphones</div></div></div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">🔍 Find Patient by Phone</div></div>
             <div class="checkin-form">
-              <div class="form-group">
-                <label class="form-label">Patient Phone Number *</label>
-                <input class="form-input" type="tel" id="checkinPhone" placeholder="10-digit number" maxlength="10" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Date</label>
-                <input class="form-input" type="date" id="checkinDate" />
-              </div>
+              <div class="form-group"><label class="form-label">Patient Phone *</label><input class="form-input" type="tel" id="checkinPhone" placeholder="10-digit number" maxlength="10" /></div>
+              <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="checkinDate" /></div>
               <button class="btn btn-primary" style="flex-shrink:0;" onclick="findPatient()">Find Appointment</button>
             </div>
-
             <div class="checkin-result" id="checkinResult">
               <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
                 <div>
                   <p style="font-size:16px;font-weight:600;color:var(--text-primary);margin:0 0 4px;" id="checkinPatientName">—</p>
                   <p style="font-size:13px;color:var(--text-muted);margin:0;" id="checkinApptInfo">—</p>
+                  <p style="font-size:12px;color:var(--electric);margin:4px 0 0;font-weight:600;" id="checkinOpdInfo">—</p>
                 </div>
                 <span class="status-pill status-confirmed" id="checkinStatus">Confirmed</span>
               </div>
@@ -575,28 +350,78 @@
                 <button class="btn btn-secondary" onclick="resetCheckin()">Cancel</button>
               </div>
             </div>
-
             <div class="token-result" id="tokenResult">
-              <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--electric);margin-bottom:12px;">Token Assigned</p>
+              <p style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--electric);margin-bottom:8px;">Token Assigned</p>
               <div class="token-big" id="assignedTokenNum">—</div>
               <p style="font-size:13px;color:var(--text-on-dark-muted);margin-top:8px;" id="assignedTokenInfo">—</p>
+              <p style="font-size:12px;color:var(--electric);margin-top:4px;" id="assignedOpdInfo">—</p>
               <button class="btn btn-ghost" style="margin-top:20px;" onclick="resetCheckin()">Check In Another Patient</button>
             </div>
           </div>
         </div>
 
+        <!-- MANAGE OPDs -->
+        <div id="section-opds" style="display:none;">
+          <div class="portal-header">
+            <div><div class="portal-title">Manage OPDs</div><div class="portal-date">Create and manage OPD departments</div></div>
+            <button class="btn btn-primary btn-sm" onclick="toggleAddOpdForm()">+ Add OPD</button>
+          </div>
+
+          <div class="panel" id="addOpdPanel" style="display:none;">
+            <div class="panel-header"><div class="panel-title">➕ Add New OPD</div><button class="btn btn-secondary btn-sm" onclick="toggleAddOpdForm()">Cancel</button></div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:20px;">
+              <div class="form-group"><label class="form-label">OPD Name *</label><input class="form-input" type="text" id="opdName" placeholder="e.g. General Medicine OPD" /></div>
+              <div class="form-group"><label class="form-label">Department *</label><input class="form-input" type="text" id="opdDept" placeholder="e.g. General Medicine" /></div>
+              <div class="form-group"><label class="form-label">OPD Fee (₹)</label><input class="form-input" type="number" id="opdFee" placeholder="0 for free" min="0" /></div>
+            </div>
+            <div style="padding:0 20px 20px;"><button class="btn btn-primary" onclick="addOpd()">Create OPD</button></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">🏥 Your OPDs</div><span style="font-size:12px;color:var(--text-muted);" id="opdCountLabel">— OPDs</span></div>
+            <div id="opdsList"><div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs created yet. Add your first OPD above.</div></div>
+          </div>
+        </div>
+
+        <!-- MANAGE DOCTORS -->
+        <div id="section-doctors" style="display:none;">
+          <div class="portal-header">
+            <div><div class="portal-title">Manage Doctors</div><div class="portal-date">Assign doctors to OPDs</div></div>
+            <button class="btn btn-primary btn-sm" onclick="toggleAddDoctorForm()">+ Add Doctor</button>
+          </div>
+
+          <div class="panel" id="addDoctorPanel" style="display:none;">
+            <div class="panel-header"><div class="panel-title">➕ Add New Doctor</div><button class="btn btn-secondary btn-sm" onclick="toggleAddDoctorForm()">Cancel</button></div>
+            <div class="doctor-form-grid">
+              <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" id="drName" placeholder="Dr. Full Name" /></div>
+              <div class="form-group"><label class="form-label">OPD / Department *</label><select class="form-input form-select" id="drOpdId"><option value="">Select OPD</option></select></div>
+              <div class="form-group"><label class="form-label">Speciality *</label><input class="form-input" type="text" id="drSpec" placeholder="e.g. General Medicine" /></div>
+              <div class="form-group"><label class="form-label">Qualification</label><input class="form-input" type="text" id="drQual" placeholder="e.g. MBBS, MD" /></div>
+              <div class="form-group">
+                <label class="form-label">OPD Days</label>
+                <select class="form-input form-select" id="drDays">
+                  <option value="">Select</option><option>Mon – Sat</option><option>Mon – Fri</option><option>All 7 days</option><option>Mon, Wed, Fri</option><option>Tue, Thu, Sat</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="form-label">OPD Start</label><input class="form-input" type="time" id="drStart" /></div>
+              <div class="form-group"><label class="form-label">OPD End</label><input class="form-input" type="time" id="drEnd" /></div>
+            </div>
+            <div style="padding:0 20px 20px;"><button class="btn btn-primary" onclick="addDoctor()">Add Doctor</button></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">👨‍⚕️ Your Doctors</div><span style="font-size:12px;color:var(--text-muted);" id="drCountLabel">— doctors</span></div>
+            <div id="doctorsList"><div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div></div>
+          </div>
+        </div>
+
         <!-- BEDS -->
         <div id="section-beds" style="display:none;">
-          <div class="portal-header">
-            <div><div class="portal-title">Bed Management</div><div class="portal-date">Update live bed availability</div></div>
-          </div>
+          <div class="portal-header"><div><div class="portal-title">Bed Management</div><div class="portal-date">Update live bed availability</div></div></div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">🛏️ Current Status</div></div>
             <div class="bed-section">
-              <div class="bed-circle">
-                <div class="bed-circle-num" id="bedAvailNum">—</div>
-                <div class="bed-circle-label">Available</div>
-              </div>
+              <div class="bed-circle"><div class="bed-circle-num" id="bedAvailNum">—</div><div class="bed-circle-label">Available</div></div>
               <div class="bed-info">
                 <p style="font-size:14px;color:var(--text-secondary);margin:0 0 4px;"><strong id="bedOccNum">—</strong> occupied · <strong id="bedTotalNum">—</strong> total</p>
                 <div class="bed-bar"><div class="bed-bar-fill" id="bedBarFill" style="width:0%;background:var(--electric);"></div></div>
@@ -606,11 +431,7 @@
             <div class="bed-update-wrap">
               <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;">Update available beds:</p>
               <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                <div class="bed-counter">
-                  <button class="bed-counter-btn" onclick="changeBed(-1)">−</button>
-                  <input class="bed-counter-val" type="number" id="bedNewVal" min="0" />
-                  <button class="bed-counter-btn" onclick="changeBed(1)">+</button>
-                </div>
+                <div class="bed-counter"><button class="bed-counter-btn" onclick="changeBed(-1)">−</button><input class="bed-counter-val" type="number" id="bedNewVal" min="0" /><button class="bed-counter-btn" onclick="changeBed(1)">+</button></div>
                 <button class="btn btn-primary" onclick="saveBeds()">Save Update</button>
                 <span style="font-size:12px;color:var(--text-muted);">Updates live for all patients immediately.</span>
               </div>
@@ -618,57 +439,19 @@
           </div>
         </div>
 
-        <!-- DOCTORS -->
-        <div id="section-doctors" style="display:none;">
-          <div class="portal-header">
-            <div><div class="portal-title">Manage Doctors</div><div class="portal-date">Add and manage your hospital's doctors</div></div>
-            <button class="btn btn-primary btn-sm" onclick="toggleAddDoctorForm()">+ Add Doctor</button>
-          </div>
-          <div class="panel" id="addDoctorPanel" style="display:none;">
-            <div class="panel-header">
-              <div class="panel-title">➕ Add New Doctor</div>
-              <button class="btn btn-secondary btn-sm" onclick="toggleAddDoctorForm()">Cancel</button>
-            </div>
-            <div class="doctor-form-grid">
-              <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" id="drName" placeholder="Dr. Full Name" /></div>
-              <div class="form-group"><label class="form-label">Speciality *</label><input class="form-input" type="text" id="drSpec" placeholder="e.g. General Medicine" /></div>
-              <div class="form-group"><label class="form-label">Qualification</label><input class="form-input" type="text" id="drQual" placeholder="e.g. MBBS, MD" /></div>
-              <div class="form-group">
-                <label class="form-label">OPD Days</label>
-                <select class="form-input form-select" id="drDays">
-                  <option value="">Select</option>
-                  <option>Mon – Sat</option><option>Mon – Fri</option>
-                  <option>All 7 days</option><option>Mon, Wed, Fri</option><option>Tue, Thu, Sat</option>
-                </select>
-              </div>
-              <div class="form-group"><label class="form-label">OPD Start</label><input class="form-input" type="time" id="drStart" /></div>
-              <div class="form-group"><label class="form-label">OPD End</label><input class="form-input" type="time" id="drEnd" /></div>
-            </div>
-            <div style="padding:0 20px 20px;"><button class="btn btn-primary" onclick="addDoctor()">Add Doctor to Hospital</button></div>
-          </div>
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">👨‍⚕️ Your Doctors</div>
-              <span style="font-size:12px;color:var(--text-muted);" id="drCountLabel">— doctors</span>
-            </div>
-            <div id="doctorsList"><div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div></div>
-          </div>
-        </div>
-
         <!-- SLOTS -->
         <div id="section-slots" style="display:none;">
           <div class="portal-header">
-            <div><div class="portal-title">Slot Availability</div><div class="portal-date">Booking status per time slot</div></div>
+            <div><div class="portal-title">Slot Availability</div><div class="portal-date">Booking status per doctor per day</div></div>
             <div style="display:flex;gap:10px;align-items:center;">
+              <select class="form-input form-select" id="slotOpdFilter" style="width:auto;min-width:160px;" onchange="updateSlotDoctorFilter()"><option value="">All OPDs</option></select>
               <select class="form-input form-select" id="slotDoctor" style="width:auto;min-width:180px;" onchange="loadSlots()"><option value="">Select Doctor</option></select>
               <input class="form-input" type="date" id="slotDate" style="width:auto;" onchange="loadSlots()" />
             </div>
           </div>
           <div class="panel">
             <div class="panel-header"><div class="panel-title">⏰ Slot Status</div></div>
-            <div class="slots-grid" id="slotsGrid">
-              <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">Select a doctor and date to see slots.</div>
-            </div>
+            <div class="slots-grid" id="slotsGrid"><div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">Select a doctor to see slots.</div></div>
           </div>
         </div>
 
@@ -684,47 +467,41 @@
     let currentStaff    = null;
     let todayAppts      = [];
     let hospitalDoctors = [];
+    let hospitalOpds    = [];
     let checkinApptId   = null;
     let checkinPatId    = null;
+    let checkinOpdId    = null;
     let realtimeChannel = null;
 
     const TODAY = new Date().toISOString().split('T')[0];
 
-    const ALL_SLOTS = [
-      '9:00 AM','9:30 AM','10:00 AM','10:30 AM',
-      '11:00 AM','11:30 AM','12:00 PM',
-      '2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM',
-    ];
+    const ALL_SLOTS = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM'];
 
-    const portalSections = ['overview','tokens','appointments','checkin','beds','doctors','slots'];
+    const portalSections = ['overview','tokens','appointments','checkin','opds','doctors','beds','slots'];
 
-    /* ── Section switcher ── */
     window.showSection = function(name, btn) {
       portalSections.forEach(s => {
         const el = document.getElementById('section-' + s);
         if (el) el.style.display = s === name ? 'block' : 'none';
       });
-      if (btn) {
-        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-        btn.classList.add('active');
-      }
+      if (btn) { document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active')); btn.classList.add('active'); }
       document.getElementById('sidebar').classList.remove('open');
       if (name === 'tokens')       loadTokenQueue();
       if (name === 'appointments') loadAppointments();
       if (name === 'beds')         renderBeds();
       if (name === 'doctors')      loadDoctors();
+      if (name === 'opds')         loadOpds();
       if (name === 'slots')        initSlots();
     };
 
-    window.toggleSidebar = function() {
-      document.getElementById('sidebar').classList.toggle('open');
-    };
+    window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
 
-    /* ── GET NEXT TOKEN (using atomic counter) ── */
-    async function getNextToken(hospitalId) {
+    /* ── GET NEXT TOKEN per OPD ── */
+    async function getNextToken(hospitalId, opdId) {
       const { data, error } = await supabase.rpc('get_next_token', {
         p_hospital_id: hospitalId,
         p_date:        TODAY,
+        p_opd_id:      opdId,
       });
       if (error) throw new Error('Could not get next token: ' + error.message);
       return data;
@@ -732,26 +509,32 @@
 
     /* ── OFFLINE PATIENT + ── */
     window.addOfflineToken = async function() {
+      const opdId = document.getElementById('offlineOpdSelect')?.value ||
+                    document.getElementById('offlineOpdSelect2')?.value;
+
+      if (!opdId) { showToast('Please select an OPD first.', 'error'); return; }
+
+      const opd = hospitalOpds.find(o => o.id === opdId);
+      if (!opd)  { showToast('OPD not found.', 'error'); return; }
+
       try {
-        const tokenNumber = await getNextToken(currentHospital.id);
+        const tokenNumber = await getNextToken(currentHospital.id, opdId);
 
         await supabase.from('tokens').insert({
           hospital_id:   currentHospital.id,
+          opd_id:        opdId,
           token_number:  tokenNumber,
-          opd_department:'Walk-in',
+          opd_department:opd.department,
           status:        'waiting',
           is_offline:    true,
           checked_in_at: new Date().toISOString(),
         });
 
-        showToast(`✅ Walk-in token ${tokenNumber} assigned!`, 'success');
+        showToast(`✅ Walk-in token ${tokenNumber} assigned for ${opd.name}!`, 'success');
         await loadOverview();
 
-        /* If on tokens page refresh queue */
         const tokSection = document.getElementById('section-tokens');
-        if (tokSection && tokSection.style.display !== 'none') {
-          loadTokenQueue();
-        }
+        if (tokSection && tokSection.style.display !== 'none') loadTokenQueue();
 
       } catch (err) {
         showToast(err.message || 'Failed to add offline token.', 'error');
@@ -765,65 +548,37 @@
       const errorBox = document.getElementById('staffErrorBox');
       const btn      = document.getElementById('staffLoginBtn');
 
-      if (!email || !password) {
-        errorBox.textContent = 'Please enter your email and password.';
-        errorBox.classList.add('show');
-        return;
-      }
+      if (!email || !password) { errorBox.textContent = 'Please enter your email and password.'; errorBox.classList.add('show'); return; }
 
-      btn.textContent = 'Logging in...';
-      btn.disabled    = true;
-      errorBox.classList.remove('show');
+      btn.textContent = 'Logging in...'; btn.disabled = true; errorBox.classList.remove('show');
 
       try {
-        const { data: authData, error: authError } =
-          await supabase.auth.signInWithPassword({ email, password });
-
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
         if (authError) throw new Error('Incorrect email or password.');
 
         const { data: staffRow, error: staffError } = await supabase
-          .from('hospital_staff')
-          .select('*, hospitals(*)')
-          .eq('user_id', authData.user.id)
-          .eq('is_active', true)
-          .single();
+          .from('hospital_staff').select('*, hospitals(*)').eq('user_id', authData.user.id).eq('is_active', true).single();
 
-        if (staffError || !staffRow) {
-          await supabase.auth.signOut();
-          throw new Error('This account is not registered as hospital staff. If you are a patient, use the patient login.');
-        }
+        if (staffError || !staffRow) { await supabase.auth.signOut(); throw new Error('This account is not registered as hospital staff.'); }
 
         currentStaff    = staffRow;
         currentHospital = staffRow.hospitals;
-
-        btn.textContent = 'Login to Staff Portal';
-        btn.disabled    = false;
-
+        btn.textContent = 'Login to Staff Portal'; btn.disabled = false;
         document.getElementById('staffLoginPage').style.display = 'none';
         document.getElementById('staffPortal').style.display    = 'block';
-
         initPortal();
 
       } catch (err) {
-        btn.textContent = 'Login to Staff Portal';
-        btn.disabled    = false;
-        errorBox.textContent = err.message;
-        errorBox.classList.add('show');
+        btn.textContent = 'Login to Staff Portal'; btn.disabled = false;
+        errorBox.textContent = err.message; errorBox.classList.add('show');
       }
     };
 
-    /* ── CHECK EXISTING SESSION ── */
     async function checkExistingSession() {
       const { data:{ session } } = await supabase.auth.getSession();
       if (!session) return;
-
       const { data: staffRow } = await supabase
-        .from('hospital_staff')
-        .select('*, hospitals(*)')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .single();
-
+        .from('hospital_staff').select('*, hospitals(*)').eq('user_id', session.user.id).eq('is_active', true).single();
       if (staffRow && staffRow.hospitals) {
         currentStaff    = staffRow;
         currentHospital = staffRow.hospitals;
@@ -833,105 +588,96 @@
       }
     }
 
-    /* ── LOGOUT ── */
     window.handleStaffLogout = async function() {
       if (realtimeChannel) supabase.removeChannel(realtimeChannel);
       await supabase.auth.signOut();
-      currentHospital = null;
-      currentStaff    = null;
+      currentHospital = null; currentStaff = null;
       document.getElementById('staffPortal').style.display    = 'none';
       document.getElementById('staffLoginPage').style.display = 'flex';
       showToast('Logged out.', 'success');
     };
 
-    /* ── INIT PORTAL ── */
+    /* ── INIT ── */
     async function initPortal() {
       const h = currentHospital;
-
       document.getElementById('portalHospitalName').textContent  = h.name;
       document.getElementById('sidebarHospitalName').textContent = h.name;
       document.getElementById('sidebarStaffName').textContent    = currentStaff.full_name || 'Staff';
 
       const hour  = new Date().getHours();
-      const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('overviewGreeting').textContent = greet;
+      document.getElementById('overviewGreeting').textContent = (hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening');
 
-      const dateStr = new Date().toLocaleDateString('en-IN', {
-        weekday:'long', day:'numeric', month:'long', year:'numeric'
-      });
+      const dateStr = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
       document.getElementById('portalDate').textContent    = dateStr;
       document.getElementById('apptDateLabel').textContent = dateStr;
-
       document.getElementById('checkinDate').value = TODAY;
       document.getElementById('bedNewVal').value   = h.beds_available ?? h.bed_count ?? 0;
 
+      await loadOpdsData();
       await loadOverview();
       subscribeToTokens();
     }
 
-    /* ── REALTIME SUBSCRIPTION ── */
+    /* ── LOAD OPDs DATA (used throughout) ── */
+    async function loadOpdsData() {
+      const { data } = await supabase
+        .from('opds').select('*').eq('hospital_id', currentHospital.id).eq('is_active', true).order('name');
+      hospitalOpds = data || [];
+      populateOpdSelects();
+    }
+
+    function populateOpdSelects() {
+      const opdOptions = hospitalOpds.map(o => `<option value="${o.id}">${o.name} ${o.fee > 0 ? '· ₹'+o.fee : '· Free'}</option>`).join('');
+
+      ['offlineOpdSelect','offlineOpdSelect2','drOpdId','filterOPD','tokenOpdFilter','slotOpdFilter'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const isFilter = id.includes('filter') || id.includes('Filter');
+        el.innerHTML = (isFilter ? '<option value="all">All OPDs</option>' : '<option value="">Select OPD</option>') + opdOptions;
+      });
+    }
+
+    /* ── REALTIME ── */
     function subscribeToTokens() {
       realtimeChannel = supabase
         .channel('tokens-' + currentHospital.id)
-        .on('postgres_changes', {
-          event:  '*',
-          schema: 'public',
-          table:  'tokens',
-          filter: `hospital_id=eq.${currentHospital.id}`,
-        }, () => {
-          /* Refresh overview stats silently */
+        .on('postgres_changes', { event:'*', schema:'public', table:'tokens', filter:`hospital_id=eq.${currentHospital.id}` }, () => {
           loadOverviewStats();
-          /* If token queue visible, refresh it */
           const tokSection = document.getElementById('section-tokens');
-          if (tokSection && tokSection.style.display !== 'none') {
-            loadTokenQueue();
-          }
+          if (tokSection && tokSection.style.display !== 'none') loadTokenQueue();
         })
         .subscribe();
     }
 
-    /* ── LOAD OVERVIEW ── */
+    /* ── OVERVIEW ── */
     async function loadOverview() {
       await Promise.all([loadOverviewStats(), loadOverviewList()]);
     }
 
     async function loadOverviewStats() {
       const h = currentHospital;
-
-      /* Appointments */
       const { data: appts } = await supabase
-        .from('appointments')
-        .select('status')
-        .eq('hospital_id', h.id)
-        .eq('appointment_date', TODAY);
+        .from('appointments').select('status, opd_name').eq('hospital_id', h.id).eq('appointment_date', TODAY);
 
       todayAppts = appts || [];
       const checkedIn = todayAppts.filter(a => a.status === 'checkedin').length;
       const pending   = todayAppts.filter(a => a.status === 'confirmed' || a.status === 'pending').length;
 
-      /* Tokens */
       const { data: tokens } = await supabase
-        .from('tokens')
-        .select('token_number, status, is_offline, opd_department')
-        .eq('hospital_id', h.id)
-        .gte('checked_in_at', TODAY + 'T00:00:00')
-        .order('token_number');
+        .from('tokens').select('token_number, status, is_offline, opd_id, opd_department')
+        .eq('hospital_id', h.id).gte('checked_in_at', TODAY + 'T00:00:00').order('token_number');
 
-      const allTokens  = tokens || [];
-      const offline    = allTokens.filter(t => t.is_offline).length;
-      const waiting    = allTokens.filter(t => t.status === 'waiting').length;
-      const completed  = allTokens.filter(t => t.status === 'completed').length;
-      const lastToken  = allTokens.length > 0 ? Math.max(...allTokens.map(t => t.token_number)) : 0;
-      const calledTok  = allTokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number)[0];
+      const allTokens = tokens || [];
+      const waiting   = allTokens.filter(t => t.status === 'waiting').length;
+      const completed = allTokens.filter(t => t.status === 'completed').length;
+      const calledTok = allTokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number)[0];
 
       document.getElementById('statTotal').textContent     = todayAppts.length;
       document.getElementById('statCheckedIn').textContent = checkedIn;
-      document.getElementById('statOffline').textContent   = offline;
       document.getElementById('statBeds').textContent      = h.beds_available ?? h.bed_count ?? 0;
       document.getElementById('statPending').textContent   = pending;
-
       document.getElementById('overviewCurrentToken').textContent = calledTok ? calledTok.token_number : '—';
-      document.getElementById('overviewCurrentDoctor').textContent= calledTok ? calledTok.opd_department : 'No token called yet';
+      document.getElementById('overviewCurrentOPD').textContent   = calledTok ? calledTok.opd_department : 'No token called';
       document.getElementById('overviewTotalTokens').textContent  = allTokens.length;
       document.getElementById('overviewWaiting').textContent      = waiting;
       document.getElementById('overviewCompleted').textContent    = completed;
@@ -939,83 +685,76 @@
 
     async function loadOverviewList() {
       const { data: appts } = await supabase
-        .from('appointments')
-        .select('*, patients(full_name, phone)')
-        .eq('hospital_id', currentHospital.id)
-        .eq('appointment_date', TODAY)
-        .order('time_slot')
-        .limit(5);
+        .from('appointments').select('*, patients(full_name, phone)')
+        .eq('hospital_id', currentHospital.id).eq('appointment_date', TODAY).order('time_slot').limit(5);
 
       const el = document.getElementById('overviewList');
-      if (!appts || !appts.length) {
-        el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📅</div>No appointments today.</div>`;
-        return;
-      }
-      el.innerHTML = buildTable(appts);
-      populateDoctorFilter(appts);
+      if (!appts || !appts.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📅</div>No appointments today.</div>`; return; }
+      el.innerHTML = buildTable(appts, true);
+      populateFilterDropdowns(appts);
     }
 
     /* ── TOKEN QUEUE ── */
     async function loadTokenQueue() {
+      const opdFilter = document.getElementById('tokenOpdFilter')?.value || 'all';
       const h = currentHospital;
 
-      const { data: tokens } = await supabase
-        .from('tokens')
-        .select('*, patients(full_name), appointments(time_slot, doctor_name)')
-        .eq('hospital_id', h.id)
-        .gte('checked_in_at', TODAY + 'T00:00:00')
-        .order('token_number');
+      let query = supabase
+        .from('tokens').select('*, patients(full_name), appointments(time_slot, doctor_name), opds(name)')
+        .eq('hospital_id', h.id).gte('checked_in_at', TODAY + 'T00:00:00').order('token_number');
 
+      if (opdFilter !== 'all') query = query.eq('opd_id', opdFilter);
+
+      const { data: tokens } = await query;
       const allTokens = tokens || [];
-      const waiting   = allTokens.filter(t => t.status === 'waiting').length;
-      const calledTok = allTokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number)[0];
-      const lastToken = allTokens.length > 0 ? Math.max(...allTokens.map(t => t.token_number)) : 0;
 
-      document.getElementById('tokenCurrentNum').textContent  = calledTok ? calledTok.token_number : '—';
-      document.getElementById('tokenCurrentInfo').textContent = calledTok
-        ? (calledTok.is_offline ? 'Walk-in Patient' : (calledTok.patients?.full_name || '—'))
-        : 'No token called yet';
-      document.getElementById('tokenLastIssued').textContent  = lastToken || '—';
-      document.getElementById('tokenWaitingCount').textContent= waiting;
+      /* Per-OPD summary cards */
+      const summaryEl = document.getElementById('opdTokenSummary');
+      const opdGroups = {};
+      allTokens.forEach(t => {
+        const opdName = t.opds?.name || t.opd_department || 'General';
+        if (!opdGroups[opdName]) opdGroups[opdName] = { waiting:0, called:0, completed:0, total:0 };
+        opdGroups[opdName].total++;
+        opdGroups[opdName][t.status] = (opdGroups[opdName][t.status] || 0) + 1;
+      });
+
+      summaryEl.innerHTML = Object.entries(opdGroups).map(([name, stats]) => `
+        <div style="background:var(--navy);border-radius:var(--radius-lg);padding:16px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--electric);margin-bottom:8px;">${name}</div>
+          <div style="display:flex;justify-content:center;gap:16px;">
+            <div><div style="font-size:20px;font-weight:700;color:var(--warning);">${stats.waiting||0}</div><div style="font-size:10px;color:var(--text-on-dark-muted);">Waiting</div></div>
+            <div><div style="font-size:20px;font-weight:700;color:var(--success);">${stats.called||0}</div><div style="font-size:10px;color:var(--text-on-dark-muted);">Called</div></div>
+            <div><div style="font-size:20px;font-weight:700;color:var(--text-on-dark-muted);">${stats.completed||0}</div><div style="font-size:10px;color:var(--text-on-dark-muted);">Done</div></div>
+          </div>
+        </div>`).join('') || '<div style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">No tokens yet today.</div>';
 
       const listEl = document.getElementById('tokenQueueList');
-      if (!allTokens.length) {
-        listEl.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📟</div>No tokens yet today.</div>`;
-        return;
-      }
+      if (!allTokens.length) { listEl.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📟</div>No tokens yet today.</div>`; return; }
 
       listEl.innerHTML = `
         <div style="overflow-x:auto;">
           <table class="appt-table">
-            <thead>
-              <tr><th>Token</th><th>Type</th><th>Patient</th><th>Doctor</th><th>Slot</th><th>Status</th><th>Action</th></tr>
-            </thead>
+            <thead><tr><th>Token</th><th>OPD</th><th>Type</th><th>Patient</th><th>Doctor</th><th>Slot</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
               ${allTokens.map(t => {
                 const isOffline = t.is_offline;
-                const rowClass  = isOffline ? 'token-row-offline' : 'token-row-online';
                 const typeBadge = isOffline
                   ? `<span style="font-size:11px;background:rgba(255,159,0,0.1);color:var(--warning);padding:2px 8px;border-radius:10px;font-weight:600;">🟡 Walk-in</span>`
                   : `<span style="font-size:11px;background:rgba(0,196,140,0.1);color:var(--success);padding:2px 8px;border-radius:10px;font-weight:600;">🟢 Curaah</span>`;
-                const patientName = isOffline ? 'Walk-in Patient' : (t.patients?.full_name || '—');
-                const doctor      = t.appointments?.doctor_name || t.opd_department || '—';
-                const slot        = t.appointments?.time_slot || '—';
-                const sClass      = { waiting:'status-pending', called:'status-checkedin', completed:'status-completed' }[t.status] || 'status-pending';
-                const sText       = { waiting:'Waiting', called:'Called', completed:'Done' }[t.status] || t.status;
+                const sClass = { waiting:'status-pending', called:'status-checkedin', completed:'status-completed' }[t.status] || 'status-pending';
+                const sText  = { waiting:'Waiting', called:'Called', completed:'Done' }[t.status] || t.status;
                 return `
-                  <tr class="${rowClass}">
+                  <tr>
                     <td><span class="token-num-big">${t.token_number}</span></td>
+                    <td style="font-size:12px;color:var(--electric);font-weight:600;">${t.opds?.name || t.opd_department || '—'}</td>
                     <td>${typeBadge}</td>
-                    <td><div class="patient-name">${patientName}</div></td>
-                    <td>${doctor}</td>
-                    <td>${slot}</td>
+                    <td><div class="patient-name">${isOffline ? 'Walk-in Patient' : (t.patients?.full_name || '—')}</div></td>
+                    <td>${t.appointments?.doctor_name || '—'}</td>
+                    <td>${t.appointments?.time_slot || '—'}</td>
                     <td><span class="status-pill ${sClass}">${sText}</span></td>
                     <td>
-                      ${t.status === 'waiting'
-                        ? `<button class="action-btn" onclick="callToken('${t.id}',${t.token_number})">Call</button>`
-                        : t.status === 'called'
-                          ? `<button class="action-btn" onclick="doneToken('${t.id}')">Done</button>`
-                          : '—'}
+                      ${t.status === 'waiting'    ? `<button class="action-btn" onclick="callToken('${t.id}',${t.token_number})">Call</button>` : ''}
+                      ${t.status === 'called'     ? `<button class="action-btn" onclick="doneToken('${t.id}')">Done</button>` : ''}
                     </td>
                   </tr>`;
               }).join('')}
@@ -1025,76 +764,73 @@
     }
 
     window.callToken = async function(id, num) {
-      await supabase.from('tokens')
-        .update({ status:'called', called_at: new Date().toISOString() })
-        .eq('id', id);
+      await supabase.from('tokens').update({ status:'called', called_at:new Date().toISOString() }).eq('id', id);
       showToast(`Token ${num} called!`, 'success');
-      loadTokenQueue();
-      loadOverviewStats();
+      loadTokenQueue(); loadOverviewStats();
     };
 
     window.doneToken = async function(id) {
-      await supabase.from('tokens')
-        .update({ status:'completed', completed_at: new Date().toISOString() })
-        .eq('id', id);
+      await supabase.from('tokens').update({ status:'completed', completed_at:new Date().toISOString() }).eq('id', id);
       showToast('Token completed.', 'success');
-      loadTokenQueue();
-      loadOverviewStats();
+      loadTokenQueue(); loadOverviewStats();
     };
 
     /* ── APPOINTMENTS ── */
     async function loadAppointments() {
       const { data: appts } = await supabase
-        .from('appointments')
-        .select('*, patients(full_name, phone)')
-        .eq('hospital_id', currentHospital.id)
-        .eq('appointment_date', TODAY)
-        .order('time_slot');
+        .from('appointments').select('*, patients(full_name, phone)')
+        .eq('hospital_id', currentHospital.id).eq('appointment_date', TODAY).order('time_slot');
 
       todayAppts = appts || [];
       document.getElementById('apptCountLabel').textContent = `${todayAppts.length} appointments today`;
       document.getElementById('apptTableBody').innerHTML    = buildTableRows(todayAppts);
-      populateDoctorFilter(todayAppts);
+      populateFilterDropdowns(todayAppts);
     }
 
-    function populateDoctorFilter(appts) {
-      const names = [...new Set((appts || []).map(a => a.doctor_name).filter(Boolean))];
-      const sel   = document.getElementById('filterDoctor');
-      if (!sel) return;
-      sel.innerHTML =
-        '<option value="all">All Doctors</option>' +
-        names.map(n => `<option value="${n}">${n}</option>`).join('');
+    function populateFilterDropdowns(appts) {
+      const opdNames = [...new Set((appts||[]).map(a => a.opd_name).filter(Boolean))];
+      const docNames = [...new Set((appts||[]).map(a => a.doctor_name).filter(Boolean))];
+
+      const filterOPD = document.getElementById('filterOPD');
+      if (filterOPD) filterOPD.innerHTML = '<option value="all">All OPDs</option>' + opdNames.map(n => `<option value="${n}">${n}</option>`).join('');
+
+      const filterDr = document.getElementById('filterDoctor');
+      if (filterDr) filterDr.innerHTML = '<option value="all">All Doctors</option>' + docNames.map(n => `<option value="${n}">${n}</option>`).join('');
     }
 
     window.filterAppointments = function() {
-      const val      = document.getElementById('filterDoctor').value;
-      const filtered = val === 'all' ? todayAppts : todayAppts.filter(a => a.doctor_name === val);
+      const opd = document.getElementById('filterOPD')?.value    || 'all';
+      const dr  = document.getElementById('filterDoctor')?.value || 'all';
+      let filtered = todayAppts;
+      if (opd !== 'all') filtered = filtered.filter(a => a.opd_name   === opd);
+      if (dr  !== 'all') filtered = filtered.filter(a => a.doctor_name === dr);
       document.getElementById('apptTableBody').innerHTML = buildTableRows(filtered);
     };
 
-    function buildTable(appts) {
+    function buildTable(appts, compact = false) {
       if (!appts.length) return `<div class="table-empty"><div class="table-empty-icon">📅</div>No appointments.</div>`;
       return `
         <div style="overflow-x:auto;">
           <table class="appt-table">
-            <thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>#</th><th>Patient</th><th>OPD</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>${buildTableRows(appts)}</tbody>
           </table>
         </div>`;
     }
 
     function buildTableRows(appts) {
-      if (!appts.length) return `<tr><td colspan="7" class="table-empty">No appointments found.</td></tr>`;
+      if (!appts.length) return `<tr><td colspan="8" class="table-empty">No appointments found.</td></tr>`;
       return appts.map((a, i) => `
         <tr>
           <td>${i+1}</td>
           <td><div class="patient-name">${a.patients?.full_name || 'Patient'}</div><div class="patient-phone">${a.patients?.phone || '—'}</div></td>
+          <td style="font-size:12px;color:var(--electric);font-weight:600;">${a.opd_name || '—'}</td>
           <td>${a.doctor_name || '—'}</td>
           <td>${a.time_slot  || '—'}</td>
           <td>${a.scheme_used ? a.scheme_used.toUpperCase() : 'Self pay'}</td>
           <td><span class="status-pill ${statusClass(a.status)}">${statusText(a.status)}</span></td>
           <td>
-            ${canCheckin(a.status)  ? `<button class="action-btn" onclick="quickCheckin('${a.id}','${(a.patients?.full_name||'').replace(/'/g,'')}','${a.doctor_name}','${a.time_slot}','${a.patient_id}')">Check In</button>` : ''}
+            ${canCheckin(a.status)  ? `<button class="action-btn" onclick="quickCheckin('${a.id}','${(a.patients?.full_name||'').replace(/'/g,'')}','${a.doctor_name}','${a.time_slot}','${a.patient_id}','${a.opd_id||''}','${a.opd_name||''}')">Check In</button>` : ''}
             ${canComplete(a.status) ? `<button class="action-btn" onclick="markDone('${a.id}')">Done</button>` : ''}
             ${canCancel(a.status)   ? `<button class="action-btn danger" onclick="cancelAppt('${a.id}')">Cancel</button>` : ''}
           </td>
@@ -1105,35 +841,30 @@
     function canComplete(s) { return s !== 'completed' && s !== 'cancelled'; }
     function canCancel(s)   { return s !== 'cancelled'; }
 
-    function statusClass(s) {
-      return { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[s] || 'status-pending';
-    }
-
-    function statusText(s) {
-      return { confirmed:'Confirmed', pending:'Pending', checkedin:'Checked In', completed:'Completed', cancelled:'Cancelled' }[s] || 'Pending';
-    }
+    function statusClass(s) { return { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[s] || 'status-pending'; }
+    function statusText(s)  { return { confirmed:'Confirmed', pending:'Pending', checkedin:'Checked In', completed:'Completed', cancelled:'Cancelled' }[s] || 'Pending'; }
 
     /* ── QUICK CHECK-IN ── */
-    window.quickCheckin = async function(apptId, name, doctor, slot, patId) {
-      if (!confirm(`Check in ${name} for ${doctor} at ${slot}?`)) return;
+    window.quickCheckin = async function(apptId, name, doctor, slot, patId, opdId, opdName) {
+      if (!confirm(`Check in ${name} for ${doctor} (${opdName}) at ${slot}?`)) return;
       try {
         await supabase.from('appointments').update({ status:'checkedin' }).eq('id', apptId);
-        const tokenNumber = await getNextToken(currentHospital.id);
+
+        const resolvedOpdId = opdId || (hospitalOpds.find(o => o.department === doctor)?.id) || hospitalOpds[0]?.id;
+        if (!resolvedOpdId) throw new Error('Could not determine OPD for this appointment.');
+
+        const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
+        const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
 
         await supabase.from('tokens').insert({
-          patient_id:     patId,
-          hospital_id:    currentHospital.id,
-          appointment_id: apptId,
-          token_number:   tokenNumber,
-          opd_department: doctor,
-          status:         'waiting',
-          is_offline:     false,
-          checked_in_at:  new Date().toISOString(),
+          patient_id: patId, hospital_id: currentHospital.id,
+          appointment_id: apptId, opd_id: resolvedOpdId,
+          token_number: tokenNumber, opd_department: opd?.department || doctor,
+          status: 'waiting', is_offline: false, checked_in_at: new Date().toISOString(),
         });
 
-        showToast(`✅ ${name} checked in. Token: ${tokenNumber}`, 'success');
-        await loadOverview();
-        await loadAppointments();
+        showToast(`✅ ${name} checked in. Token: ${tokenNumber} (${opd?.name || opdName})`, 'success');
+        await loadOverview(); await loadAppointments();
       } catch (err) {
         showToast(err.message || 'Check-in failed.', 'error');
       }
@@ -1141,45 +872,40 @@
 
     window.markDone = async function(id) {
       await supabase.from('appointments').update({ status:'completed' }).eq('id', id);
-      showToast('Marked as completed.', 'success');
-      await loadAppointments();
+      showToast('Marked as completed.', 'success'); await loadAppointments();
     };
 
     window.cancelAppt = async function(id) {
       if (!confirm('Cancel this appointment?')) return;
       await supabase.from('appointments').update({ status:'cancelled' }).eq('id', id);
-      showToast('Appointment cancelled.', 'info');
-      await loadAppointments();
+      showToast('Appointment cancelled.', 'info'); await loadAppointments();
     };
 
     /* ── MANUAL CHECK-IN ── */
     window.findPatient = async function() {
       const phone = document.getElementById('checkinPhone').value.trim();
       const date  = document.getElementById('checkinDate').value || TODAY;
-
       if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
 
-      const { data: patient } = await supabase
-        .from('patients').select('id, full_name').eq('phone', phone).single();
-
+      const { data: patient } = await supabase.from('patients').select('id, full_name').eq('phone', phone).single();
       if (!patient) { showToast('No Curaah patient found with this number.', 'error'); return; }
 
-      const { data: appt } = await supabase
-        .from('appointments').select('*')
-        .eq('patient_id', patient.id)
-        .eq('hospital_id', currentHospital.id)
-        .eq('appointment_date', date)
-        .neq('status', 'cancelled')
-        .order('created_at', { ascending:false })
-        .limit(1).single();
+      const { data: appt } = await supabase.from('appointments').select('*')
+        .eq('patient_id', patient.id).eq('hospital_id', currentHospital.id)
+        .eq('appointment_date', date).neq('status', 'cancelled')
+        .order('created_at', { ascending:false }).limit(1).single();
 
       if (!appt) { showToast('No appointment found for this patient today.', 'error'); return; }
 
       checkinApptId = appt.id;
       checkinPatId  = patient.id;
+      checkinOpdId  = appt.opd_id || null;
+
+      const opd = hospitalOpds.find(o => o.id === checkinOpdId);
 
       document.getElementById('checkinPatientName').textContent = patient.full_name;
       document.getElementById('checkinApptInfo').textContent    = `${appt.doctor_name} · ${appt.time_slot}`;
+      document.getElementById('checkinOpdInfo').textContent     = opd ? `OPD: ${opd.name}` : 'OPD not assigned';
       document.getElementById('checkinStatus').textContent      = statusText(appt.status);
       document.getElementById('checkinStatus').className        = `status-pill ${statusClass(appt.status)}`;
       document.getElementById('checkinResult').classList.add('show');
@@ -1189,124 +915,125 @@
     window.confirmCheckin = async function() {
       if (!checkinApptId) return;
       const btn = document.getElementById('checkinConfirmBtn');
-      btn.textContent = 'Processing...';
-      btn.disabled    = true;
+      btn.textContent = 'Processing...'; btn.disabled = true;
 
       try {
-        const { data: appt } = await supabase
-          .from('appointments').update({ status:'checkedin' })
-          .eq('id', checkinApptId).select().single();
+        const { data: appt } = await supabase.from('appointments')
+          .update({ status:'checkedin' }).eq('id', checkinApptId).select().single();
 
-        const tokenNumber = await getNextToken(currentHospital.id);
+        const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
+        if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
+
+        const opd         = hospitalOpds.find(o => o.id === resolvedOpdId);
+        const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
 
         await supabase.from('tokens').insert({
-          patient_id:     checkinPatId,
-          hospital_id:    currentHospital.id,
-          appointment_id: checkinApptId,
-          token_number:   tokenNumber,
-          opd_department: appt.doctor_name,
-          status:         'waiting',
-          is_offline:     false,
-          checked_in_at:  new Date().toISOString(),
+          patient_id: checkinPatId, hospital_id: currentHospital.id,
+          appointment_id: checkinApptId, opd_id: resolvedOpdId,
+          token_number: tokenNumber, opd_department: opd?.department || appt.doctor_name,
+          status: 'waiting', is_offline: false, checked_in_at: new Date().toISOString(),
         });
 
-        btn.textContent = '✅ Confirm Check-in & Assign Token';
-        btn.disabled    = false;
-
+        btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
         document.getElementById('checkinResult').classList.remove('show');
         document.getElementById('tokenResult').classList.add('show');
         document.getElementById('assignedTokenNum').textContent  = tokenNumber;
         document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
+        document.getElementById('assignedOpdInfo').textContent   = opd ? `OPD: ${opd.name}` : '';
 
-        showToast(`Token ${tokenNumber} assigned!`, 'success');
+        showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
         await loadOverview();
 
       } catch (err) {
-        btn.textContent = '✅ Confirm Check-in & Assign Token';
-        btn.disabled    = false;
+        btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
         showToast(err.message || 'Failed.', 'error');
       }
     };
 
     window.resetCheckin = function() {
-      checkinApptId = null;
-      checkinPatId  = null;
+      checkinApptId = null; checkinPatId = null; checkinOpdId = null;
       document.getElementById('checkinPhone').value = '';
       document.getElementById('checkinResult').classList.remove('show');
       document.getElementById('tokenResult').classList.remove('show');
     };
 
-    /* ── BEDS ── */
-    function renderBeds() {
-      const h     = currentHospital;
-      const total = h.bed_count || 0;
-      const avail = h.beds_available ?? total;
-      const occ   = total - avail;
-      const pct   = total > 0 ? Math.round((occ/total)*100) : 0;
-      const color = pct > 80 ? 'var(--danger)' : pct > 50 ? 'var(--warning)' : 'var(--electric)';
+    /* ── MANAGE OPDs ── */
+    async function loadOpds() {
+      await loadOpdsData();
+      const el = document.getElementById('opdsList');
+      document.getElementById('opdCountLabel').textContent = `${hospitalOpds.length} OPDs`;
 
-      document.getElementById('bedAvailNum').textContent   = avail;
-      document.getElementById('bedOccNum').textContent     = occ;
-      document.getElementById('bedTotalNum').textContent   = total;
-      document.getElementById('bedBarFill').style.width    = `${pct}%`;
-      document.getElementById('bedBarFill').style.background = color;
-      document.getElementById('bedPctLabel').textContent   = `${pct}% occupancy`;
-      document.getElementById('bedNewVal').value           = avail;
+      if (!hospitalOpds.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs yet. Add your first OPD above.</div>`; return; }
+
+      el.innerHTML = hospitalOpds.map(o => `
+        <div class="opd-card">
+          <div class="opd-card-info">
+            <div class="opd-card-name">${o.name}</div>
+            <div class="opd-card-meta">${o.department}</div>
+          </div>
+          <span class="opd-card-fee">${o.fee > 0 ? '₹'+o.fee : 'Free'}</span>
+          <button class="action-btn danger" onclick="removeOpd('${o.id}','${o.name}')">Remove</button>
+        </div>`).join('');
     }
 
-    window.changeBed = function(delta) {
-      const inp   = document.getElementById('bedNewVal');
-      const total = currentHospital.bed_count || 0;
-      inp.value   = Math.max(0, Math.min(total, (parseInt(inp.value)||0) + delta));
+    window.toggleAddOpdForm = function() {
+      const panel = document.getElementById('addOpdPanel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     };
 
-    window.saveBeds = async function() {
-      const newVal = parseInt(document.getElementById('bedNewVal').value);
-      const total  = currentHospital.bed_count || 0;
+    window.addOpd = async function() {
+      const name = document.getElementById('opdName').value.trim();
+      const dept = document.getElementById('opdDept').value.trim();
+      const fee  = parseInt(document.getElementById('opdFee').value) || 0;
 
-      if (isNaN(newVal) || newVal < 0 || newVal > total) {
-        showToast(`Value must be between 0 and ${total}.`, 'error');
-        return;
-      }
+      if (!name || !dept) { showToast('OPD name and department are required.', 'error'); return; }
 
-      const { error } = await supabase
-        .from('hospitals').update({ beds_available: newVal }).eq('id', currentHospital.id);
+      const { error } = await supabase.from('opds').insert({
+        hospital_id: currentHospital.id, name, department: dept, fee, is_active: true,
+      });
 
-      if (error) { showToast('Update failed. Check your staff permissions.', 'error'); return; }
+      if (error) { showToast(error.message || 'Failed to create OPD.', 'error'); return; }
 
-      currentHospital.beds_available = newVal;
-      renderBeds();
-      document.getElementById('statBeds').textContent = newVal;
-      showToast(`✅ Bed count updated to ${newVal}. Live for all patients.`, 'success');
+      showToast(`${name} created!`, 'success');
+      document.getElementById('opdName').value = '';
+      document.getElementById('opdDept').value = '';
+      document.getElementById('opdFee').value  = '';
+      document.getElementById('addOpdPanel').style.display = 'none';
+      await loadOpds();
     };
 
-    /* ── DOCTORS ── */
+    window.removeOpd = async function(id, name) {
+      if (!confirm(`Remove ${name}? This will affect doctors assigned to this OPD.`)) return;
+      await supabase.from('opds').update({ is_active: false }).eq('id', id);
+      showToast(`${name} removed.`, 'info');
+      await loadOpds();
+    };
+
+    /* ── MANAGE DOCTORS ── */
     async function loadDoctors() {
       const { data: docs } = await supabase
-        .from('doctors').select('*').eq('hospital_id', currentHospital.id).order('name');
+        .from('doctors').select('*, opds(name)').eq('hospital_id', currentHospital.id).order('name');
 
       hospitalDoctors = docs || [];
       document.getElementById('drCountLabel').textContent = `${hospitalDoctors.length} doctors`;
 
       const el = document.getElementById('doctorsList');
-      if (!hospitalDoctors.length) {
-        el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div>`;
-        return;
-      }
+      if (!hospitalDoctors.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div>`; return; }
 
       el.innerHTML = `
         <div style="overflow-x:auto;">
           <table class="appt-table">
-            <thead><tr><th>Doctor</th><th>Speciality</th><th>Qualification</th><th>OPD Days</th><th>Timings</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>Doctor</th><th>OPD</th><th>Speciality</th><th>Qualification</th><th>Days</th><th>Timings</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
               ${hospitalDoctors.map(d => `
                 <tr>
                   <td class="patient-name">${d.name}</td>
+                  <td style="font-size:12px;color:var(--electric);font-weight:600;">${d.opds?.name || d.opd_name || '—'}</td>
                   <td>${d.speciality || '—'}</td>
                   <td>${d.qualification || '—'}</td>
                   <td>${d.opd_days || '—'}</td>
                   <td>${d.opd_start && d.opd_end ? `${d.opd_start}–${d.opd_end}` : '—'}</td>
-                  <td><span class="status-pill ${d.is_available ? 'status-confirmed' : 'status-cancelled'}">${d.is_available ? 'Available' : 'Unavailable'}</span></td>
+                  <td><span class="status-pill ${d.is_available ? 'status-confirmed' : 'status-cancelled'}">${d.is_available ? 'Available' : 'Off'}</span></td>
                   <td>
                     <button class="action-btn" onclick="toggleDoctor('${d.id}',${d.is_available})">${d.is_available ? 'Mark Off' : 'Mark On'}</button>
                     <button class="action-btn danger" onclick="removeDoctor('${d.id}','${d.name}')">Remove</button>
@@ -1316,40 +1043,49 @@
           </table>
         </div>`;
 
-      const slotSel = document.getElementById('slotDoctor');
-      if (slotSel) {
-        slotSel.innerHTML = '<option value="">Select Doctor</option>' +
-          hospitalDoctors.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+      /* Update slot filter doctor dropdown */
+      const slotDr = document.getElementById('slotDoctor');
+      if (slotDr) {
+        slotDr.innerHTML = '<option value="">Select Doctor</option>' +
+          hospitalDoctors.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name || ''}</option>`).join('');
       }
     }
 
     window.toggleAddDoctorForm = function() {
       const panel = document.getElementById('addDoctorPanel');
       panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      /* Populate OPD dropdown */
+      const sel = document.getElementById('drOpdId');
+      if (sel) sel.innerHTML = '<option value="">Select OPD</option>' + hospitalOpds.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
     };
 
     window.addDoctor = async function() {
       const name  = document.getElementById('drName').value.trim();
+      const opdId = document.getElementById('drOpdId').value;
       const spec  = document.getElementById('drSpec').value.trim();
       const qual  = document.getElementById('drQual').value.trim();
       const days  = document.getElementById('drDays').value;
       const start = document.getElementById('drStart').value;
       const end   = document.getElementById('drEnd').value;
 
-      if (!name || !spec) { showToast('Doctor name and speciality are required.', 'error'); return; }
+      if (!name || !spec)  { showToast('Doctor name and speciality are required.', 'error'); return; }
+      if (!opdId)          { showToast('Please select an OPD for this doctor.', 'error'); return; }
+
+      const opd = hospitalOpds.find(o => o.id === opdId);
 
       const { error } = await supabase.from('doctors').insert({
-        hospital_id: currentHospital.id,
-        name, speciality: spec, qualification: qual || null,
-        opd_days: days || null, opd_start: start || null, opd_end: end || null,
-        is_available: true,
+        hospital_id: currentHospital.id, name, opd_id: opdId,
+        opd_name: opd?.name || '', speciality: spec,
+        qualification: qual || null, opd_days: days || null,
+        opd_start: start || null, opd_end: end || null, is_available: true,
       });
 
       if (error) { showToast(error.message || 'Failed to add doctor.', 'error'); return; }
 
-      showToast(`Dr. ${name} added successfully!`, 'success');
+      showToast(`Dr. ${name} added to ${opd?.name}!`, 'success');
       ['drName','drSpec','drQual','drStart','drEnd'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('drDays').value = '';
+      document.getElementById('drOpdId').value = '';
+      document.getElementById('drDays').value  = '';
       document.getElementById('addDoctorPanel').style.display = 'none';
       await loadDoctors();
     };
@@ -1367,27 +1103,76 @@
       await loadDoctors();
     };
 
+    /* ── BEDS ── */
+    function renderBeds() {
+      const h = currentHospital;
+      const total = h.bed_count || 0;
+      const avail = h.beds_available ?? total;
+      const occ   = total - avail;
+      const pct   = total > 0 ? Math.round((occ/total)*100) : 0;
+      const color = pct > 80 ? 'var(--danger)' : pct > 50 ? 'var(--warning)' : 'var(--electric)';
+
+      document.getElementById('bedAvailNum').textContent   = avail;
+      document.getElementById('bedOccNum').textContent     = occ;
+      document.getElementById('bedTotalNum').textContent   = total;
+      document.getElementById('bedBarFill').style.width    = `${pct}%`;
+      document.getElementById('bedBarFill').style.background = color;
+      document.getElementById('bedPctLabel').textContent   = `${pct}% occupancy`;
+      document.getElementById('bedNewVal').value           = avail;
+    }
+
+    window.changeBed = function(delta) {
+      const inp = document.getElementById('bedNewVal');
+      const total = currentHospital.bed_count || 0;
+      inp.value = Math.max(0, Math.min(total, (parseInt(inp.value)||0) + delta));
+    };
+
+    window.saveBeds = async function() {
+      const newVal = parseInt(document.getElementById('bedNewVal').value);
+      const total  = currentHospital.bed_count || 0;
+      if (isNaN(newVal) || newVal < 0 || newVal > total) { showToast(`Value must be 0–${total}.`, 'error'); return; }
+
+      const { error } = await supabase.from('hospitals').update({ beds_available: newVal }).eq('id', currentHospital.id);
+      if (error) { showToast('Update failed.', 'error'); return; }
+
+      currentHospital.beds_available = newVal;
+      renderBeds();
+      document.getElementById('statBeds').textContent = newVal;
+      showToast(`✅ Beds updated to ${newVal}.`, 'success');
+    };
+
     /* ── SLOTS ── */
     function initSlots() {
       document.getElementById('slotDate').value = TODAY;
+      updateSlotDoctorFilter();
     }
+
+    window.updateSlotDoctorFilter = function() {
+      const opdFilter = document.getElementById('slotOpdFilter')?.value || '';
+      const slotDr    = document.getElementById('slotDoctor');
+      if (!slotDr) return;
+
+      const filtered = opdFilter
+        ? hospitalDoctors.filter(d => d.opd_id === opdFilter)
+        : hospitalDoctors;
+
+      slotDr.innerHTML = '<option value="">Select Doctor</option>' +
+        filtered.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name || ''}</option>`).join('');
+    };
 
     window.loadSlots = async function() {
       const doctor = document.getElementById('slotDoctor').value;
       const date   = document.getElementById('slotDate').value || TODAY;
       const grid   = document.getElementById('slotsGrid');
 
-      if (!doctor) {
-        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">Select a doctor to see slot availability.</div>`;
-        return;
-      }
+      if (!doctor) { grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);">Select a doctor to see slots.</div>`; return; }
 
       const { data: booked } = await supabase
         .from('appointment_slots').select('slot_time, booked_count, max_count')
         .eq('hospital_id', currentHospital.id).eq('slot_date', date).eq('doctor_name', doctor);
 
       const map = {};
-      (booked || []).forEach(s => { map[s.slot_time] = { booked: s.booked_count, max: s.max_count }; });
+      (booked || []).forEach(s => { map[s.slot_time] = { booked:s.booked_count, max:s.max_count }; });
       const maxPerSlot = currentHospital.slots_per_hour || 10;
 
       grid.innerHTML = ALL_SLOTS.map(slot => {
@@ -1398,12 +1183,7 @@
         const full = bk >= mx;
         const cls  = full ? 'full' : bk > mx*0.7 ? 'busy' : 'available';
         const col  = full ? 'var(--danger)' : bk > mx*0.7 ? 'var(--warning)' : 'var(--success)';
-        return `
-          <div class="slot-card ${cls}">
-            <div class="slot-time">${slot}</div>
-            <div class="slot-count">${bk}/${mx} booked</div>
-            <div class="slot-bar"><div class="slot-bar-fill" style="width:${pct}%;background:${col};"></div></div>
-          </div>`;
+        return `<div class="slot-card ${cls}"><div class="slot-time">${slot}</div><div class="slot-count">${bk}/${mx}</div><div class="slot-bar"><div class="slot-bar-fill" style="width:${pct}%;background:${col};"></div></div></div>`;
       }).join('');
     };
 
