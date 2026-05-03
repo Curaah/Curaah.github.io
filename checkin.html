@@ -22,7 +22,7 @@
       background: var(--white);
       border-radius: var(--radius-xl);
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       overflow: hidden;
       box-shadow: var(--shadow-lg);
     }
@@ -44,7 +44,6 @@
 
     .checkin-logo-name { font-size: 20px; font-weight: 700; color: var(--white); }
     .checkin-logo-tag  { font-size: 10px; color: var(--electric); font-weight: 600; letter-spacing: 1px; display: block; text-align: left; }
-
     .checkin-hospital-name { font-family: 'Georgia', serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
     .checkin-hospital-sub  { font-size: 12px; color: var(--text-on-dark-muted); }
 
@@ -53,60 +52,50 @@
     .checkin-state.active { display: block; }
 
     .state-loading { text-align: center; padding: 48px 28px; }
-
-    .loading-spinner {
-      width: 48px; height: 48px;
-      border: 4px solid var(--border-card);
-      border-top-color: var(--electric);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 20px;
-    }
-
+    .loading-spinner { width: 48px; height: 48px; border: 4px solid var(--border-card); border-top-color: var(--electric); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .loading-text { font-size: 15px; color: var(--text-muted); }
 
     .state-icon  { font-size: 52px; margin-bottom: 16px; }
     .state-title { font-family: 'Georgia', serif; font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
-    .state-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; max-width: 320px; margin-left: auto; margin-right: auto; }
+    .state-desc  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; max-width: 340px; margin-left: auto; margin-right: auto; }
     .state-btns  { display: flex; flex-direction: column; gap: 10px; }
 
     /* Appointment card */
-    .appt-card { background: var(--off-white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
-    .appt-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--border-card); }
+    .appt-card { background: var(--off-white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 18px; }
+    .appt-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border-card); }
     .appt-card-row:last-child { border-bottom: none; }
     .appt-card-label { color: var(--text-muted); font-weight: 500; }
-    .appt-card-value { color: var(--text-primary); font-weight: 600; }
+    .appt-card-value { color: var(--text-primary); font-weight: 600; text-align: right; max-width: 200px; }
+
+    /* OPD badge */
+    .opd-badge { background: rgba(61,158,255,0.1); color: var(--electric); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(61,158,255,0.2); }
 
     /* Token display */
-    .token-display { background: var(--navy); border-radius: var(--radius-xl); padding: 36px 24px; text-align: center; margin-bottom: 20px; }
-
-    .token-label  { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--electric); margin-bottom: 16px; }
-    .token-number { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 12px; }
+    .token-display { background: var(--navy); border-radius: var(--radius-xl); padding: 32px 24px; text-align: center; margin-bottom: 18px; }
+    .token-opd-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--electric); margin-bottom: 8px; }
+    .token-label  { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+    .token-number { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 10px; }
     .token-doctor { font-size: 14px; color: var(--text-on-dark-muted); margin-bottom: 4px; }
     .token-time   { font-size: 12px; color: rgba(255,255,255,0.4); }
 
-    /* Queue position */
-    .queue-card { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+    /* Queue */
+    .queue-card { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
     .queue-stat { background: var(--off-white); border: 1px solid var(--border-card); border-radius: var(--radius-md); padding: 14px; text-align: center; }
     .queue-stat-num   { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: var(--electric); line-height: 1; margin-bottom: 4px; }
     .queue-stat-label { font-size: 10px; color: var(--text-muted); }
 
-    /* Already checked in */
-    .already-in { background: rgba(61,158,255,0.05); border: 1px solid rgba(61,158,255,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
-
-    /* No appointment */
-    .no-appt-info { background: rgba(255,159,0,0.05); border: 1px solid rgba(255,159,0,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
-
-    /* Live pulse */
+    /* Pulse */
     .token-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
 
     /* Footer */
-    .checkin-footer { padding: 16px 24px; border-top: 1px solid var(--border-card); display: flex; justify-content: space-between; align-items: center; background: var(--off-white); }
+    .checkin-footer { padding: 14px 24px; border-top: 1px solid var(--border-card); display: flex; justify-content: space-between; align-items: center; background: var(--off-white); }
     .checkin-footer-brand { font-size: 13px; font-weight: 600; color: var(--text-muted); }
     .checkin-footer-brand span { color: var(--electric); }
+
+    /* No appointment */
+    .no-appt-info { background: rgba(255,159,0,0.05); border: 1px solid rgba(255,159,0,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 18px; }
 
     @media (max-width: 480px) {
       body { padding: 0; justify-content: flex-start; }
@@ -136,18 +125,18 @@
       <div class="checkin-hospital-sub" id="hospitalSub">—</div>
     </div>
 
-    <!-- Loading -->
+    <!-- LOADING -->
     <div class="state-loading" id="stateLoading">
       <div class="loading-spinner"></div>
       <div class="loading-text">Checking your appointment...</div>
     </div>
 
-    <!-- Login required -->
+    <!-- LOGIN REQUIRED -->
     <div class="checkin-state" id="stateLogin">
       <div style="text-align:center;">
         <div class="state-icon">🔐</div>
         <div class="state-title">Login to Check In</div>
-        <p class="state-desc">Login to your Curaah account to check in and get your token number automatically.</p>
+        <p class="state-desc">Login to your Curaah account to check in for your appointment and get your OPD token number automatically.</p>
         <div class="state-btns">
           <a id="loginRedirectBtn" href="login.html" class="btn btn-primary btn-full btn-lg">Login to Curaah</a>
           <a href="register.html" class="btn btn-secondary btn-full">Register Free</a>
@@ -155,14 +144,18 @@
       </div>
     </div>
 
-    <!-- Appointment found -->
+    <!-- APPOINTMENT FOUND -->
     <div class="checkin-state" id="stateFound">
       <div class="state-title" style="margin-bottom:16px;">👋 Hello, <span id="patientFirstName">—</span>!</div>
-      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.7;">
-        We found your appointment for today. Confirm your check-in to get your token number.
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:18px;line-height:1.7;">
+        We found your appointment. Confirm check-in to get your token number for the OPD queue.
       </p>
 
       <div class="appt-card">
+        <div class="appt-card-row">
+          <span class="appt-card-label">OPD</span>
+          <span class="opd-badge" id="foundOpd">—</span>
+        </div>
         <div class="appt-card-row">
           <span class="appt-card-label">Doctor</span>
           <span class="appt-card-value" id="foundDoctor">—</span>
@@ -188,19 +181,20 @@
       <button class="btn btn-primary btn-full btn-lg" id="confirmCheckinBtn" onclick="confirmCheckin()">
         ✅ Confirm Check-in & Get Token
       </button>
-      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:14px;line-height:1.6;">
-        By checking in you confirm you have arrived at the hospital.
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.6;">
+        By checking in you confirm you have arrived at the hospital OPD.
       </p>
     </div>
 
-    <!-- Token assigned -->
+    <!-- TOKEN ASSIGNED -->
     <div class="checkin-state" id="stateToken">
-      <div style="text-align:center;margin-bottom:20px;">
+      <div style="text-align:center;margin-bottom:18px;">
         <span class="token-pulse"></span>
         <span style="font-size:13px;font-weight:600;color:var(--success);">Checked in successfully</span>
       </div>
 
       <div class="token-display">
+        <div class="token-opd-label" id="tokenOpdName">—</div>
         <div class="token-label">Your Token Number</div>
         <div class="token-number" id="tokenNum">—</div>
         <div class="token-doctor" id="tokenDoctor">—</div>
@@ -222,22 +216,25 @@
         </div>
       </div>
 
-      <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:20px;">
-        🪑 <strong>Sit and relax.</strong> You will receive an SMS when your turn is approaching. Watch the token display screen in the OPD waiting area.
+      <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:18px;">
+        🪑 <strong>Sit and relax in the <span id="waitOpdName">OPD</span> waiting area.</strong>
+        You will receive an SMS when your turn is approaching.
+        Watch the token display screen at your OPD counter.
       </div>
 
       <a href="dashboard.html" class="btn btn-secondary btn-full">View in My Dashboard</a>
     </div>
 
-    <!-- Already checked in -->
+    <!-- ALREADY CHECKED IN -->
     <div class="checkin-state" id="stateAlready">
-      <div style="text-align:center;margin-bottom:20px;">
+      <div style="text-align:center;margin-bottom:18px;">
         <div class="state-icon">📟</div>
         <div class="state-title">Already Checked In</div>
-        <p class="state-desc">You have already checked in for today. Here is your token number.</p>
+        <p class="state-desc">You have already checked in for today's appointment. Here is your current token number.</p>
       </div>
 
       <div class="token-display">
+        <div class="token-opd-label" id="existingOpdName">—</div>
         <div class="token-label">Your Token Number</div>
         <div class="token-number" id="existingTokenNum">—</div>
         <div class="token-doctor" id="existingTokenDoctor">—</div>
@@ -261,16 +258,16 @@
       <a href="dashboard.html" class="btn btn-secondary btn-full">Go to My Dashboard</a>
     </div>
 
-    <!-- No appointment -->
+    <!-- NO APPOINTMENT -->
     <div class="checkin-state" id="stateNoAppt">
-      <div style="text-align:center;margin-bottom:20px;">
+      <div style="text-align:center;margin-bottom:18px;">
         <div class="state-icon">📅</div>
         <div class="state-title">No Appointment Found</div>
         <p class="state-desc">We could not find a confirmed appointment for you at this hospital today.</p>
       </div>
 
       <div class="no-appt-info">
-        This could mean you have not booked an appointment yet, or your appointment was cancelled. You can book one now or ask the hospital staff to check you in manually.
+        This could mean you have not booked yet, your appointment was cancelled, or it is for a different date. You can book an appointment now or ask hospital staff to check you in manually.
       </div>
 
       <div class="state-btns">
@@ -279,7 +276,7 @@
       </div>
     </div>
 
-    <!-- Error -->
+    <!-- ERROR -->
     <div class="checkin-state" id="stateError">
       <div style="text-align:center;">
         <div class="state-icon">⚠️</div>
@@ -329,7 +326,7 @@
     }
 
     async function fetchAppointment(userId, hospitalId) {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('appointments').select('*')
         .eq('patient_id', userId)
         .eq('hospital_id', hospitalId)
@@ -337,41 +334,50 @@
         .neq('status', 'cancelled')
         .order('created_at', { ascending: false })
         .limit(1).single();
-      if (error) return null;
-      return data;
+      return data || null;
     }
 
     async function fetchExistingToken(apptId) {
       const { data } = await supabase
-        .from('tokens').select('*').eq('appointment_id', apptId).single();
+        .from('tokens').select('*, opds(name)').eq('appointment_id', apptId).single();
       return data || null;
     }
 
-    /* ── Get next token using atomic RPC ── */
-    async function getNextToken(hospitalId) {
+    async function fetchOpd(opdId) {
+      if (!opdId) return null;
+      const { data } = await supabase.from('opds').select('*').eq('id', opdId).single();
+      return data || null;
+    }
+
+    /* ── Get next token using atomic RPC per OPD ── */
+    async function getNextToken(hospitalId, opdId) {
       const { data, error } = await supabase.rpc('get_next_token', {
         p_hospital_id: hospitalId,
         p_date:        TODAY,
+        p_opd_id:      opdId,
       });
       if (error) throw new Error('Could not get next token: ' + error.message);
       return data;
     }
 
-    async function getQueueInfo(hospitalId, myTokenNum) {
-      /* Currently serving */
+    /* ── Get queue info for a specific OPD ── */
+    async function getQueueInfo(hospitalId, opdId, myTokenNum) {
+      /* Currently serving in this OPD */
       const { data: called } = await supabase
         .from('tokens').select('token_number')
         .eq('hospital_id', hospitalId)
+        .eq('opd_id', opdId)
         .eq('status', 'called')
         .order('token_number', { ascending: false })
         .limit(1);
 
       const current = called?.[0]?.token_number || '—';
 
-      /* How many are ahead of me */
+      /* Tokens ahead of mine in same OPD */
       const { count: ahead } = await supabase
         .from('tokens').select('*', { count:'exact', head:true })
         .eq('hospital_id', hospitalId)
+        .eq('opd_id', opdId)
         .in('status', ['waiting','called'])
         .lt('token_number', myTokenNum);
 
@@ -391,39 +397,46 @@
       btn.disabled    = true;
 
       try {
+        /* Get OPD for this appointment */
+        const opd = await fetchOpd(apptData.opd_id);
+        if (!opd) throw new Error('OPD not found for this appointment. Ask staff to check you in.');
+
         /* Update appointment status */
         await supabase.from('appointments')
           .update({ status: 'checkedin' }).eq('id', apptData.id);
 
-        /* Get next token atomically */
-        const tokenNumber = await getNextToken(hospital.id);
+        /* Get next token for this OPD atomically */
+        const tokenNumber = await getNextToken(hospital.id, opd.id);
 
         /* Insert token record */
         await supabase.from('tokens').insert({
           patient_id:     currentUser.id,
           hospital_id:    hospital.id,
+          opd_id:         opd.id,
           appointment_id: apptData.id,
           token_number:   tokenNumber,
-          opd_department: apptData.doctor_name,
+          opd_department: opd.department,
           status:         'waiting',
           is_offline:     false,
           checked_in_at:  new Date().toISOString(),
         });
 
-        /* Get queue info */
+        /* Get OPD-specific queue info */
         const { current, position, waitDisplay } =
-          await getQueueInfo(hospital.id, tokenNumber);
+          await getQueueInfo(hospital.id, opd.id, tokenNumber);
 
         /* Show token state */
-        document.getElementById('tokenNum').textContent    = tokenNumber;
-        document.getElementById('tokenDoctor').textContent = apptData.doctor_name;
-        document.getElementById('tokenSlot').textContent   = apptData.time_slot;
-        document.getElementById('queueCurrent').textContent= current;
-        document.getElementById('queuePosition').textContent= position === 0 ? 'Next!' : `#${position + 1}`;
-        document.getElementById('queueWait').textContent   = waitDisplay;
+        document.getElementById('tokenOpdName').textContent  = opd.name;
+        document.getElementById('tokenNum').textContent      = tokenNumber;
+        document.getElementById('tokenDoctor').textContent   = apptData.doctor_name;
+        document.getElementById('tokenSlot').textContent     = apptData.time_slot;
+        document.getElementById('queueCurrent').textContent  = current;
+        document.getElementById('queuePosition').textContent = position === 0 ? 'Next!' : `#${position + 1}`;
+        document.getElementById('queueWait').textContent     = waitDisplay;
+        document.getElementById('waitOpdName').textContent   = opd.name;
 
         showState('token');
-        showToast(`Token ${tokenNumber} assigned! You are in the queue.`, 'success');
+        showToast(`Token ${tokenNumber} assigned for ${opd.name}!`, 'success');
 
       } catch (err) {
         btn.textContent = '✅ Confirm Check-in & Get Token';
@@ -438,7 +451,7 @@
 
       if (!hospitalId) {
         document.getElementById('stateLoading').style.display = 'none';
-        document.getElementById('errorMsg').textContent = 'Invalid QR code — no hospital ID found. Please scan again or ask staff.';
+        document.getElementById('errorMsg').textContent = 'Invalid QR code — no hospital ID found. Please scan again.';
         showState('error');
         return;
       }
@@ -492,23 +505,32 @@
       /* Check if already checked in */
       if (apptData.status === 'checkedin' || apptData.status === 'completed') {
         const existingToken = await fetchExistingToken(apptData.id);
+
         if (existingToken) {
-          document.getElementById('existingTokenNum').textContent    = existingToken.token_number;
-          document.getElementById('existingTokenDoctor').textContent = apptData.doctor_name + ' · ' + apptData.time_slot;
+          const opdName = existingToken.opds?.name || apptData.opd_name || 'OPD';
 
-          const { current, position, waitDisplay } =
-            await getQueueInfo(hospital.id, existingToken.token_number);
+          document.getElementById('existingOpdName').textContent      = opdName;
+          document.getElementById('existingTokenNum').textContent     = existingToken.token_number;
+          document.getElementById('existingTokenDoctor').textContent  = `${apptData.doctor_name} · ${apptData.time_slot}`;
 
-          document.getElementById('existingCurrent').textContent  = current;
-          document.getElementById('existingPosition').textContent = position === 0 ? 'Next!' : `#${position + 1}`;
-          document.getElementById('existingWait').textContent     = waitDisplay;
+          /* Get OPD queue info */
+          if (apptData.opd_id) {
+            const { current, position, waitDisplay } =
+              await getQueueInfo(hospital.id, apptData.opd_id, existingToken.token_number);
+            document.getElementById('existingCurrent').textContent  = current;
+            document.getElementById('existingPosition').textContent = position === 0 ? 'Next!' : `#${position + 1}`;
+            document.getElementById('existingWait').textContent     = waitDisplay;
+          }
 
           showState('already');
           return;
         }
       }
 
-      /* Show appointment details for confirmation */
+      /* Show appointment for confirmation */
+      const opd = await fetchOpd(apptData.opd_id);
+
+      document.getElementById('foundOpd').textContent    = opd?.name || apptData.opd_name || 'OPD';
       document.getElementById('foundDoctor').textContent = apptData.doctor_name || '—';
       document.getElementById('foundSlot').textContent   = apptData.time_slot   || '—';
       document.getElementById('foundDate').textContent   =
@@ -516,7 +538,8 @@
           weekday:'long', day:'numeric', month:'long'
         });
 
-      const fee = apptData.fee_amount || hospital.appointment_fee || 0;
+      /* Show fee if applicable */
+      const fee = apptData.fee_amount || opd?.fee || 0;
       if (fee > 0) {
         document.getElementById('foundFeeRow').style.display = 'flex';
         document.getElementById('foundFee').textContent      = `₹${fee} (pay at counter)`;
