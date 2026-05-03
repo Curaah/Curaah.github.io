@@ -602,59 +602,143 @@
       if (card) card.classList.add('selected');
 
       document.getElementById('selectedDoctorLabel').textContent = `${selectedDoc.name} — ${selectedDoc.speciality||''}`;
-      document.getElementById('bookingFooter').style.display = 'block';
+document.getElementById('bookingFooter').style.display = 'block';
 
-      setMinDate();
-      updateSteps(3);
+setMinDate();
+updateSteps(3);
+
+/* Auto-validate slots for current date when doctor is selected */
+setTimeout(() => loadSlots(), 100);
     };
 
     /* ── SET MIN DATE ── */
     function setMinDate() {
-      const el = document.getElementById('apptDate');
-      if (!el) return;
-      const today = new Date().toISOString().split('T')[0];
-      el.min = today;
-      el.value = today;
-      loadSlots();
-    }
+  const el = document.getElementById('apptDate');
+  if (!el) return;
+  const today = new Date().toISOString().split('T')[0];
+  el.min   = today;
+  el.value = today;
+  loadSlots();
+}
 
     /* ── LOAD SLOTS ── */
     window.loadSlots = async function() {
-      const dateEl = document.getElementById('apptDate');
-      const selEl  = document.getElementById('selectSlot');
-      const hint   = document.getElementById('slotHint');
-      if (!dateEl || !selEl || !selectedDoc) return;
+  const dateEl = document.getElementById('apptDate');
+  const selEl  = document.getElementById('selectSlot');
+  const hint   = document.getElementById('slotHint');
+  if (!dateEl || !selEl || !selectedDoc) return;
 
-      const date = dateEl.value;
-      if (!date) return;
+  const date = dateEl.value;
+  if (!date) return;
 
-      selEl.innerHTML = '<option value="" disabled selected>Loading slots...</option>';
-      if (hint) hint.textContent = '';
+  selEl.innerHTML = '<option value="" disabled selected>Checking availability...</option>';
+  if (hint) hint.textContent = '';
 
-      const { data: booked } = await supabase
-        .from('appointment_slots').select('slot_time, booked_count, max_count')
-        .eq('hospital_id', facility.id).eq('slot_date', date).eq('doctor_name', selectedDoc.name);
+  /* ── Check if doctor is off on this date ── */
+  const { data: offDay } = await supabase
+    .from('doctor_schedules')
+    .select('id, reason')
+    .eq('doctor_id', selectedDoc.id)
+    .eq('off_date', date)
+    .single();
 
-      const bookedMap = {};
-      (booked || []).forEach(s => { bookedMap[s.slot_time] = { booked:s.booked_count, max:s.max_count }; });
+  if (offDay) {
+    selEl.innerHTML =
+      '<option value="" disabled selected>Doctor unavailable on this date</option>';
+    if (hint) {
+      hint.textContent = '';
+      hint.innerHTML = '';
+    }
 
-      const maxPerSlot = facility.slots_per_hour || 10;
-      let available    = 0;
+    /* Show popup notice */
+    const reason = offDay.reason ? ` (${offDay.reason})` : '';
+    showToast(
+      `${selectedDoc.name} is not available on this date${reason}. Please choose another date or doctor.`,
+      'error'
+    );
 
-      selEl.innerHTML = '<option value="" disabled selected>Choose a time slot</option>' +
-        ALL_SLOTS.map(slot => {
-          const d    = bookedMap[slot];
-          const bk   = d?.booked || 0;
-          const mx   = d?.max    || maxPerSlot;
-          const full = bk >= mx;
-          if (!full) available++;
-          return full
-            ? `<option value="${slot}" disabled class="slot-option-full">${slot} — Full (${bk}/${mx})</option>`
-            : `<option value="${slot}">${slot} — ${mx-bk} slots left</option>`;
-        }).join('');
+    /* Show inline warning below slot selector */
+    const slotErr = document.getElementById('slotError');
+    if (slotErr) {
+      slotErr.textContent =
+        `${selectedDoc.name} is off on this date${reason}. Choose another date or go back and select a different doctor.`;
+    }
+    return;
+  }
 
-      if (hint) hint.textContent = `${available} slots available for ${selectedDoc.name}.`;
-    };
+  /* Clear any previous error */
+  const slotErr = document.getElementById('slotError');
+  if (slotErr) slotErr.textContent = '';
+
+  /* ── Fetch booked slots ── */
+  const { data: booked } = await supabase
+    .from('appointment_slots')
+    .select('slot_time, booked_count, max_count')
+    .eq('hospital_id', facility.id)
+    .eq('slot_date', date)
+    .eq('doctor_name', selectedDoc.name);
+
+  const bookedMap = {};
+  (booked || []).forEach(s => {
+    bookedMap[s.slot_time] = { booked: s.booked_count, max: s.max_count };
+  });
+
+  const maxPerSlot = facility.slots_per_hour || 10;
+
+  /* ── For today, filter out past time slots ── */
+  const isToday = date === new Date().toISOString().split('T')[0];
+  const now     = new Date();
+  const currentHour   = now.getHours();
+  const currentMinute = now.getMinutes();
+
+  function slotIsPast(slotStr) {
+    if (!isToday) return false;
+    /* Parse slot time e.g. "9:00 AM", "2:30 PM" */
+    const [timePart, period] = slotStr.split(' ');
+    let [hours, minutes]     = timePart.split(':').map(Number);
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
+    /* Add 30 min buffer — no booking within 30 min of slot start */
+    const slotTotalMins    = hours * 60 + minutes;
+    const currentTotalMins = currentHour * 60 + currentMinute + 30;
+    return slotTotalMins <= currentTotalMins;
+  }
+
+  let available = 0;
+
+  selEl.innerHTML =
+    '<option value="" disabled selected>Choose a time slot</option>' +
+    ALL_SLOTS.map(slot => {
+      const d    = bookedMap[slot];
+      const bk   = d?.booked || 0;
+      const mx   = d?.max    || maxPerSlot;
+      const full = bk >= mx;
+      const past = slotIsPast(slot);
+
+      if (full) {
+        return `<option value="${slot}" disabled class="slot-option-full">
+          ${slot} — Full (${bk}/${mx})</option>`;
+      }
+      if (past) {
+        return `<option value="${slot}" disabled class="slot-option-full">
+          ${slot} — Time passed</option>`;
+      }
+      available++;
+      return `<option value="${slot}">${slot} — ${mx - bk} slots left</option>`;
+    }).join('');
+
+  if (hint) {
+    if (available === 0) {
+      hint.textContent = isToday
+        ? 'No more slots available for today. Please choose a future date.'
+        : 'No slots available for this date.';
+      hint.style.color = 'var(--danger)';
+    } else {
+      hint.textContent = `${available} slots available for ${selectedDoc.name}.`;
+      hint.style.color = '';
+    }
+  }
+};
 
     /* ── HANDLE BOOKING ── */
     window.handleBooking = async function() {
