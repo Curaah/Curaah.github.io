@@ -11,46 +11,36 @@
 
     .dashboard-layout { display: flex; min-height: 100vh; padding-top: var(--nav-height); }
 
-    .sidebar {
-      width: 260px; flex-shrink: 0;
-      background: var(--navy); border-right: 1px solid var(--border-dark);
-      position: fixed; top: var(--nav-height); left: 0; bottom: 0;
-      display: flex; flex-direction: column; overflow-y: auto; z-index: 90;
-    }
-
+    .sidebar { width: 260px; flex-shrink: 0; background: var(--navy); border-right: 1px solid var(--border-dark); position: fixed; top: var(--nav-height); left: 0; bottom: 0; display: flex; flex-direction: column; overflow-y: auto; z-index: 90; }
     .sidebar-profile { padding: 24px 20px; border-bottom: 1px solid var(--border-dark); display: flex; align-items: center; gap: 12px; }
     .sidebar-avatar  { width: 44px; height: 44px; border-radius: 50%; background: rgba(61,158,255,0.15); border: 2px solid var(--electric); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: var(--electric); flex-shrink: 0; }
     .sidebar-profile-name { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
     .sidebar-profile-tag  { font-size: 11px; color: var(--text-on-dark-muted); }
-
     .sidebar-nav    { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
     .sidebar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 10px 8px 6px; margin-top: 8px; }
-
     .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; color: var(--text-on-dark-muted); cursor: pointer; transition: var(--transition); border: none; background: none; width: 100%; text-align: left; text-decoration: none; }
     .sidebar-item:hover  { background: rgba(255,255,255,0.06); color: var(--white); }
     .sidebar-item.active { background: rgba(61,158,255,0.12); color: var(--electric); font-weight: 600; }
     .sidebar-item-icon   { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
-
-    .sidebar-item-badge { margin-left: auto; background: var(--electric); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; min-width: 18px; text-align: center; }
+    .sidebar-item-badge  { margin-left: auto; background: var(--electric); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; min-width: 18px; text-align: center; }
     .sidebar-bottom { padding: 16px 12px; border-top: 1px solid var(--border-dark); }
 
     .dashboard-main { margin-left: 260px; flex: 1; padding: 32px 36px; min-height: calc(100vh - var(--nav-height)); }
-
     .dash-page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; flex-wrap: wrap; gap: 16px; }
-    .dash-greeting    { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
-    .dash-title       { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
+    .dash-greeting { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+    .dash-title    { font-family: 'Georgia', serif; font-size: 26px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
 
     .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
     .stat-card { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 8px; transition: var(--transition); }
-    .stat-card:hover    { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
-    .stat-card-icon     { font-size: 22px; margin-bottom: 2px; }
-    .stat-card-num      { font-family: 'Georgia', serif; font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; }
-    .stat-card-label    { font-size: 12px; color: var(--text-muted); }
-    .stat-card-sub      { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; width: fit-content; }
+    .stat-card:hover { box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    .stat-card-icon  { font-size: 22px; margin-bottom: 2px; }
+    .stat-card-num   { font-family: 'Georgia', serif; font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+    .stat-card-label { font-size: 12px; color: var(--text-muted); }
+    .stat-card-sub   { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; width: fit-content; }
 
     .quick-actions { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
     .quick-action-btn { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: var(--transition); text-decoration: none; text-align: center; }
-    .quick-action-btn:hover  { border-color: rgba(61,158,255,0.3); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    .quick-action-btn:hover { border-color: rgba(61,158,255,0.3); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
     .quick-action-btn.highlight { background: var(--navy); border-color: var(--navy); }
     .quick-action-icon  { font-size: 26px; }
     .quick-action-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); line-height: 1.3; }
@@ -61,27 +51,24 @@
     .panel { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); overflow: hidden; }
     .panel-header { padding: 18px 20px; border-bottom: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; }
     .panel-title  { font-size: 15px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-    .panel-title-icon { font-size: 16px; }
     .panel-link   { font-size: 13px; color: var(--electric); font-weight: 500; cursor: pointer; }
     .panel-link:hover { text-decoration: underline; }
     .panel-body   { padding: 16px 20px; }
-
-    .panel-empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .panel-empty  { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
     .panel-empty-icon { font-size: 36px; opacity: 0.4; }
     .panel-empty-text { line-height: 1.6; max-width: 240px; }
 
     .appt-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border-card); cursor: pointer; transition: var(--transition); }
     .appt-item:hover     { opacity: 0.8; }
     .appt-item:last-child{ border-bottom: none; }
-
     .appt-date-box { width: 52px; height: 56px; border-radius: var(--radius-md); background: rgba(61,158,255,0.07); border: 1px solid rgba(61,158,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
     .appt-date-day { font-size: 20px; font-weight: 700; color: var(--electric); line-height: 1; }
     .appt-date-mon { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-
-    .appt-info    { flex: 1; }
-    .appt-doctor  { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
-    .appt-hospital{ font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
-    .appt-slot    { font-size: 11px; color: var(--text-muted); }
+    .appt-info     { flex: 1; }
+    .appt-doctor   { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .appt-opd      { font-size: 11px; color: var(--electric); font-weight: 600; margin-bottom: 2px; }
+    .appt-hospital { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
+    .appt-slot     { font-size: 11px; color: var(--text-muted); }
 
     .status-badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
     .status-confirmed { background: rgba(0,196,140,0.1);  color: var(--success); }
@@ -100,42 +87,32 @@
     .ai-panel-title { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
     .ai-panel-desc  { font-size: 13px; color: var(--text-on-dark-muted); line-height: 1.6; }
 
-    /* ── TOKEN SECTION ── */
-    .token-live-card { background: var(--navy); border-radius: var(--radius-xl); padding: 36px; text-align: center; margin-bottom: 20px; }
-    .token-live-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--electric); margin-bottom: 16px; }
-    .token-live-num   { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 8px; }
-    .token-live-sub   { font-size: 14px; color: var(--text-on-dark-muted); margin-bottom: 24px; }
-
-    .token-stats { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .token-stat-box { background: rgba(255,255,255,0.06); border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: 14px 20px; min-width: 110px; }
-    .token-stat-num   { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 4px; font-family: 'Georgia',serif; }
-    .token-stat-label { font-size: 11px; color: var(--text-on-dark-muted); }
-
-    /* Live pulse */
-    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: blink 2s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    /* Token active state */
+    /* TOKEN SECTION */
     .token-active-card { background: var(--navy); border-radius: var(--radius-xl); padding: 36px; text-align: center; margin-bottom: 20px; }
-    .token-active-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--electric); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
-    .token-active-num   { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 8px; }
-    .token-active-doctor{ font-size: 15px; color: var(--text-on-dark-muted); margin-bottom: 6px; }
-    .token-active-slot  { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+    .token-active-opd    { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--electric); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .token-active-num    { font-family: 'Georgia', serif; font-size: 96px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 8px; }
+    .token-active-doctor { font-size: 15px; color: var(--text-on-dark-muted); margin-bottom: 4px; }
+    .token-active-slot   { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
 
     .token-queue-info { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
     .token-queue-box  { background: rgba(255,255,255,0.06); border: 1px solid var(--border-dark); border-radius: var(--radius-lg); padding: 16px; text-align: center; }
     .token-queue-box-num   { font-family: 'Georgia',serif; font-size: 28px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px; }
     .token-queue-box-label { font-size: 11px; color: var(--text-on-dark-muted); }
 
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* No token state */
+    .token-empty-card { background: var(--navy); border-radius: var(--radius-xl); padding: 36px; text-align: center; margin-bottom: 20px; }
+    .token-empty-num  { font-family: 'Georgia', serif; font-size: 64px; font-weight: 700; color: rgba(255,255,255,0.15); line-height: 1; margin-bottom: 16px; }
+    .token-empty-text { font-size: 14px; color: var(--text-on-dark-muted); line-height: 1.7; }
+
     /* Profile */
     .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-    .skeleton { background: linear-gradient(90deg, var(--light-bg) 25%, var(--border-card) 50%, var(--light-bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius-md); }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-    @media (max-width: 1024px) { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} }
-    @media (max-width: 860px)  { .sidebar{transform:translateX(-260px);transition:transform 0.3s ease;} .sidebar.open{transform:translateX(0);} .dashboard-main{margin-left:0;padding:20px;} .content-grid{grid-template-columns:1fr;} }
-    @media (max-width: 600px)  { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} .dash-page-header{flex-direction:column;} .profile-grid{grid-template-columns:1fr;} .token-queue-info{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width:1024px) { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:860px)  { .sidebar{transform:translateX(-260px);transition:transform 0.3s;} .sidebar.open{transform:translateX(0);} .dashboard-main{margin-left:0;padding:20px;} .content-grid{grid-template-columns:1fr;} }
+    @media (max-width:600px)  { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} .profile-grid{grid-template-columns:1fr;} .token-queue-info{grid-template-columns:repeat(3,1fr);} }
   </style>
 </head>
 <body>
@@ -147,10 +124,7 @@
         <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
         <circle cx="18" cy="22" r="3.5" fill="white"/>
       </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">curaah</span>
-        <span class="nav-logo-tag">Your Health · Your Control</span>
-      </div>
+      <div class="nav-logo-text"><span class="nav-logo-name">curaah</span><span class="nav-logo-tag">Your Health · Your Control</span></div>
     </a>
     <ul class="nav-links"><li><a href="hospitals.html">Find Hospitals</a></li></ul>
     <div class="nav-actions">
@@ -193,10 +167,7 @@
       <!-- OVERVIEW -->
       <div id="section-overview">
         <div class="dash-page-header">
-          <div>
-            <div class="dash-greeting" id="greeting">Good morning 👋</div>
-            <div class="dash-title" id="dashTitle">Welcome back</div>
-          </div>
+          <div><div class="dash-greeting" id="greeting">Good morning 👋</div><div class="dash-title" id="dashTitle">Welcome back</div></div>
           <a href="hospitals.html" class="btn btn-primary">+ Book Appointment</a>
         </div>
 
@@ -211,7 +182,7 @@
             <div class="stat-card-icon">📟</div>
             <div class="stat-card-num" id="statToken">—</div>
             <div class="stat-card-label">My Token Today</div>
-            <div class="stat-card-sub" id="statTokenSub" style="background:rgba(0,196,140,0.08);color:var(--success);">Check token queue</div>
+            <div class="stat-card-sub" id="statTokenSub" style="background:rgba(0,196,140,0.08);color:var(--success);">No token yet</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-icon">🛡️</div>
@@ -238,17 +209,15 @@
         <div class="content-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title"><span class="panel-title-icon">📅</span> Upcoming Appointments</div>
+              <div class="panel-title">📅 Upcoming Appointments</div>
               <span class="panel-link" onclick="showSection('appointments',null)">View all</span>
             </div>
-            <div id="overviewAppts">
-              <div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">Loading your appointments...</div></div>
-            </div>
+            <div id="overviewAppts"><div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">Loading appointments...</div></div></div>
           </div>
 
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title"><span class="panel-title-icon">🛡️</span> Your Health Schemes</div>
+              <div class="panel-title">🛡️ Your Health Schemes</div>
               <span class="panel-link" onclick="showSection('claims',null)">Manage</span>
             </div>
             <div class="panel-body">
@@ -260,10 +229,10 @@
 
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title"><span class="panel-title-icon">📋</span> Health Records</div>
+              <div class="panel-title">📋 Health Records</div>
               <span class="panel-link" onclick="showSection('records',null)">View all</span>
             </div>
-            <div class="panel-empty"><div class="panel-empty-icon">📋</div><div class="panel-empty-text">No records yet. Upload prescriptions, reports, or scans.</div><button class="btn btn-secondary btn-sm" onclick="showSection('records',null)">Upload Record</button></div>
+            <div class="panel-empty"><div class="panel-empty-icon">📋</div><div class="panel-empty-text">No records yet.</div><button class="btn btn-secondary btn-sm" onclick="showSection('records',null)">Upload Record</button></div>
           </div>
 
           <div class="panel" style="border:none;background:transparent;">
@@ -271,7 +240,7 @@
               <div>
                 <div class="ai-panel-tag">AI Health Assistant</div>
                 <div class="ai-panel-title">Not sure what's wrong?</div>
-                <div class="ai-panel-desc">Describe symptoms. AI suggests the right hospital near you.</div>
+                <div class="ai-panel-desc">Describe symptoms. AI suggests the right hospital and OPD.</div>
               </div>
               <button class="btn btn-primary" onclick="showSection('ai',null)" style="white-space:nowrap;">Try AI Assistant</button>
             </div>
@@ -286,7 +255,7 @@
           <a href="hospitals.html" class="btn btn-primary">+ Book New</a>
         </div>
         <div class="panel">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">📅</span> All Appointments</div></div>
+          <div class="panel-header"><div class="panel-title">📅 All Appointments</div></div>
           <div id="allAppts"><div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">Loading appointments...</div></div></div>
         </div>
       </div>
@@ -298,75 +267,70 @@
           <button class="btn btn-secondary btn-sm" onclick="loadMyToken()">🔄 Refresh</button>
         </div>
 
-        <!-- No token state -->
+        <!-- No token -->
         <div id="tokenNoState">
-          <div class="token-live-card">
-            <div class="token-live-label">No active token today</div>
-            <div class="token-live-num" style="font-size:64px;opacity:0.3;">—</div>
-            <p class="token-live-sub">
-              You don't have a token yet. Book an appointment and check in at
-              the hospital OPD to get your token number automatically.
+          <div class="token-empty-card">
+            <div class="token-empty-num">—</div>
+            <p class="token-empty-text">
+              You don't have a token yet today.<br/>
+              Book an appointment and scan the Curaah QR code at the hospital OPD entrance to get your token automatically.
             </p>
-            <div class="token-stats">
-              <div class="token-stat-box"><div class="token-stat-num">—</div><div class="token-stat-label">Currently serving</div></div>
-              <div class="token-stat-box"><div class="token-stat-num">—</div><div class="token-stat-label">Est. wait</div></div>
-              <div class="token-stat-box"><div class="token-stat-num">—</div><div class="token-stat-label">Your position</div></div>
-            </div>
           </div>
 
           <div class="panel">
-            <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">📟</span> How the token system works</div></div>
+            <div class="panel-header"><div class="panel-title">📟 How the token system works</div></div>
             <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">📱</span>
-                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Scan QR at hospital entrance</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Scan the Curaah QR code at OPD entrance. Token assigned instantly. No standing in registration queue.</p></div>
+                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Scan QR at your OPD entrance</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Each OPD has its own QR code and separate token queue. Scan at your OPD entrance. Token assigned instantly.</p></div>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">🪑</span>
-                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Sit and relax</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Track your position here. SMS when your turn is near.</p></div>
+                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Sit and track your position</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">See exactly how many patients are ahead of you in your OPD queue. SMS when your turn is near.</p></div>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">👤</span>
-                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">No phone? No problem</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Hospital staff checks you in manually using your phone number.</p></div>
+                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">No phone? Ask staff</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Hospital staff can check you in manually using your phone number. Token assigned to the right OPD queue.</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Active token state -->
+        <!-- Active token -->
         <div id="tokenActiveState" style="display:none;">
           <div class="token-active-card">
-            <div class="token-active-label"><span class="live-dot"></span> Your Token — Live</div>
+            <div class="token-active-opd"><span class="live-dot"></span><span id="myTokenOpdName">—</span></div>
             <div class="token-active-num" id="myTokenNum">—</div>
             <div class="token-active-doctor" id="myTokenDoctor">—</div>
             <div class="token-active-slot" id="myTokenSlot">—</div>
           </div>
 
           <div class="token-queue-info">
-            <div class="token-queue-box">
+            <div class="token-queue-box" style="background:var(--navy);">
               <div class="token-queue-box-num" id="myTokenCurrent">—</div>
               <div class="token-queue-box-label">Now serving</div>
             </div>
-            <div class="token-queue-box">
+            <div class="token-queue-box" style="background:var(--navy);">
               <div class="token-queue-box-num" id="myTokenPosition">—</div>
               <div class="token-queue-box-label">Your position</div>
             </div>
-            <div class="token-queue-box">
+            <div class="token-queue-box" style="background:var(--navy);">
               <div class="token-queue-box-num" id="myTokenWait">—</div>
               <div class="token-queue-box-label">Est. wait</div>
             </div>
           </div>
 
           <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-lg);padding:18px;margin-bottom:20px;font-size:13px;color:var(--text-secondary);line-height:1.7;">
-            🪑 <strong>Sit and relax.</strong> This page refreshes automatically every 30 seconds.
-            You will get an SMS when your turn is approaching. Watch the OPD display screen in the waiting area.
+            🪑 <strong>Sit and relax in the <span id="waitOpdName">OPD</span> waiting area.</strong>
+            This page refreshes automatically every 30 seconds.
+            You will get an SMS when your turn is approaching.
           </div>
 
           <!-- Queue visual -->
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title"><span class="live-dot"></span> Queue Status</div>
-              <span id="myTokenStatus" class="status-badge status-confirmed">Waiting</span>
+              <div class="panel-title"><span class="live-dot" style="margin-right:6px;"></span> <span id="queueOpdTitle">OPD Queue</span></div>
+              <span id="myTokenStatusBadge" class="status-badge status-confirmed">Waiting</span>
             </div>
             <div class="panel-body" id="myTokenQueueVisual">
               <div style="text-align:center;color:var(--text-muted);font-size:14px;padding:16px 0;">Loading queue...</div>
@@ -379,11 +343,11 @@
       <div id="section-claims" style="display:none;">
         <div class="dash-page-header"><div><div class="dash-greeting">Track transparently</div><div class="dash-title">Insurance Claims</div></div></div>
         <div class="panel">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🛡️</span> Claim History</div></div>
-          <div class="panel-empty"><div class="panel-empty-icon">🛡️</div><div class="panel-empty-text">No claims yet. Once you visit a hospital and use your scheme, claims appear here with live status.</div></div>
+          <div class="panel-header"><div class="panel-title">🛡️ Claim History</div></div>
+          <div class="panel-empty"><div class="panel-empty-icon">🛡️</div><div class="panel-empty-text">No claims yet. Claims appear here with live status once you use your scheme at a hospital.</div></div>
         </div>
         <div class="panel" style="margin-top:16px;">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">📜</span> Linked Schemes</div></div>
+          <div class="panel-header"><div class="panel-title">📜 Linked Schemes</div></div>
           <div class="panel-body">
             <div class="scheme-item"><div><div class="scheme-item-name">Ayushman Bharat PM-JAY</div><div class="scheme-item-sub">₹5 lakh / year · Central govt.</div></div><span class="badge badge-orange">Not linked</span></div>
             <div class="scheme-item"><div><div class="scheme-item-name">Mukhyamantri Sehat Bima Yojana</div><div class="scheme-item-sub">₹10 lakh / year · Punjab govt.</div></div><span class="badge badge-orange">Not linked</span></div>
@@ -396,10 +360,10 @@
       <div id="section-records" style="display:none;">
         <div class="dash-page-header">
           <div><div class="dash-greeting">Your medical history</div><div class="dash-title">Health Records</div></div>
-          <button class="btn btn-primary" onclick="showToast('File upload available once Supabase storage is connected.','info')">+ Upload Record</button>
+          <button class="btn btn-primary" onclick="showToast('File upload coming soon.','info')">+ Upload Record</button>
         </div>
         <div class="panel">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">📋</span> All Records</div></div>
+          <div class="panel-header"><div class="panel-title">📋 All Records</div></div>
           <div class="panel-empty"><div class="panel-empty-icon">📋</div><div class="panel-empty-text">No records yet. Upload prescriptions, lab reports, discharge summaries, or scans.</div><button class="btn btn-secondary btn-sm" onclick="showToast('Coming soon.','info')">Upload First Record</button></div>
         </div>
       </div>
@@ -408,7 +372,7 @@
       <div id="section-referrals" style="display:none;">
         <div class="dash-page-header"><div><div class="dash-greeting">Track your referrals</div><div class="dash-title">My Referrals</div></div></div>
         <div class="panel">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">🔗</span> Referral History</div></div>
+          <div class="panel-header"><div class="panel-title">🔗 Referral History</div></div>
           <div class="panel-empty"><div class="panel-empty-icon">🔗</div><div class="panel-empty-text">No referrals yet. When a doctor refers you to another hospital, your digital referral letter appears here.</div></div>
         </div>
       </div>
@@ -420,7 +384,7 @@
           <div class="panel-body" style="padding:48px 32px;text-align:center;">
             <div style="font-size:56px;margin-bottom:20px;">🤖</div>
             <div style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">AI Assistant is almost here</div>
-            <p style="font-size:15px;color:var(--text-secondary);line-height:1.75;max-width:480px;margin:0 auto 28px;">Describe symptoms by text or voice, upload a report or scan — AI analyzes your condition and suggests the right hospital with a direct booking link.</p>
+            <p style="font-size:15px;color:var(--text-secondary);line-height:1.75;max-width:480px;margin:0 auto;">Describe symptoms by text or voice, upload a report — AI analyzes your condition, suggests the right OPD and hospital with a direct booking link.</p>
           </div>
         </div>
       </div>
@@ -432,7 +396,7 @@
           <button class="btn btn-secondary" onclick="showToast('Profile editing coming soon.','info')">Edit Profile</button>
         </div>
         <div class="panel">
-          <div class="panel-header"><div class="panel-title"><span class="panel-title-icon">👤</span> Personal Details</div></div>
+          <div class="panel-header"><div class="panel-title">👤 Personal Details</div></div>
           <div class="panel-body">
             <div class="profile-grid">
               <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" id="profileName" value="—" disabled style="background:var(--off-white);cursor:not-allowed;" /></div>
@@ -488,9 +452,9 @@
 
     /* ── RENDER APPOINTMENT ITEM ── */
     function renderApptItem(appt, hospitalName) {
-      const date = new Date(appt.appointment_date);
-      const day  = date.getDate();
-      const mon  = date.toLocaleDateString('en-IN', { month:'short' });
+      const date   = new Date(appt.appointment_date);
+      const day    = date.getDate();
+      const mon    = date.toLocaleDateString('en-IN', { month:'short' });
       const sClass = { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[appt.status] || 'status-pending';
       const sText  = appt.status ? appt.status.charAt(0).toUpperCase() + appt.status.slice(1) : 'Pending';
 
@@ -501,6 +465,7 @@
             <div class="appt-date-mon">${mon}</div>
           </div>
           <div class="appt-info">
+            ${appt.opd_name ? `<div class="appt-opd">${appt.opd_name}</div>` : ''}
             <div class="appt-doctor">${appt.doctor_name || 'Doctor'}</div>
             <div class="appt-hospital">${hospitalName || 'Hospital'}</div>
             <div class="appt-slot">⏰ ${appt.time_slot || '—'}</div>
@@ -512,19 +477,14 @@
     /* ── LOAD APPOINTMENTS ── */
     async function loadAppointments(userId) {
       const { data: upcoming } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name)')
-        .eq('patient_id', userId)
-        .gte('appointment_date', TODAY)
+        .from('appointments').select('*, hospitals(name)')
+        .eq('patient_id', userId).gte('appointment_date', TODAY)
         .in('status', ['confirmed','pending','checkedin'])
-        .order('appointment_date', { ascending:true })
-        .limit(3);
+        .order('appointment_date', { ascending:true }).limit(3);
 
       const { data: all } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name)')
-        .eq('patient_id', userId)
-        .order('appointment_date', { ascending:false });
+        .from('appointments').select('*, hospitals(name)')
+        .eq('patient_id', userId).order('appointment_date', { ascending:false });
 
       const upcomingCount = upcoming?.length || 0;
       document.getElementById('statAppts').textContent   = upcomingCount;
@@ -537,19 +497,18 @@
 
       if (upcomingCount > 0) {
         const badge = document.getElementById('apptBadge');
-        badge.textContent   = upcomingCount;
-        badge.style.display = 'inline-block';
+        badge.textContent = upcomingCount; badge.style.display = 'inline-block';
       }
 
       const overviewEl = document.getElementById('overviewAppts');
-      if (!upcoming || upcoming.length === 0) {
+      if (!upcoming || !upcoming.length) {
         overviewEl.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">No upcoming appointments.</div><a href="hospitals.html" class="btn btn-primary btn-sm">Find Hospitals</a></div>`;
       } else {
         overviewEl.innerHTML = `<div style="padding:0 20px;">` + upcoming.map(a => renderApptItem(a, a.hospitals?.name)).join('') + `</div>`;
       }
 
       const allEl = document.getElementById('allAppts');
-      if (!all || all.length === 0) {
+      if (!all || !all.length) {
         allEl.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">No appointments yet.</div><a href="hospitals.html" class="btn btn-primary">Browse Hospitals</a></div>`;
       } else {
         allEl.innerHTML = `<div style="padding:0 20px;">` + all.map(a => renderApptItem(a, a.hospitals?.name)).join('') + `</div>`;
@@ -560,14 +519,14 @@
     window.loadMyToken = async function() {
       if (!patientData) return;
 
-      /* Find today's token for this patient */
+      /* Find today's active token for this patient */
       const { data: myToken } = await supabase
         .from('tokens')
-        .select('*, appointments(time_slot, hospital_id, doctor_name), hospitals(name)')
+        .select('*, appointments(time_slot, hospital_id, doctor_name, opd_name), opds(name, department)')
         .eq('patient_id', patientData.id)
         .gte('checked_in_at', TODAY + 'T00:00:00')
         .neq('status', 'completed')
-        .order('token_number', { ascending:false })
+        .order('token_number', { ascending: false })
         .limit(1)
         .single();
 
@@ -580,68 +539,72 @@
         return;
       }
 
-      /* Token found — show active state */
+      /* Token found */
       document.getElementById('tokenNoState').style.display    = 'none';
       document.getElementById('tokenActiveState').style.display= 'block';
 
       const hospitalId = myToken.appointments?.hospital_id || myToken.hospital_id;
+      const opdId      = myToken.opd_id;
+      const opdName    = myToken.opds?.name || myToken.appointments?.opd_name || myToken.opd_department || 'OPD';
 
-      /* Get currently served token at this hospital */
+      /* Get currently served token in this specific OPD */
       const { data: calledTokens } = await supabase
-        .from('tokens')
-        .select('token_number, opd_department')
+        .from('tokens').select('token_number')
         .eq('hospital_id', hospitalId)
+        .eq('opd_id', opdId)
         .eq('status', 'called')
-        .order('token_number', { ascending:false })
+        .order('token_number', { ascending: false })
         .limit(1);
 
       const currentServing = calledTokens?.[0]?.token_number || '—';
 
-      /* Get queue position (tokens before mine that are still waiting) */
+      /* Queue position in this OPD only */
       const { count: ahead } = await supabase
-        .from('tokens')
-        .select('*', { count:'exact', head:true })
+        .from('tokens').select('*', { count:'exact', head:true })
         .eq('hospital_id', hospitalId)
+        .eq('opd_id', opdId)
         .in('status', ['waiting','called'])
         .lt('token_number', myToken.token_number);
 
-      const position    = (ahead || 0) + 1;
-      const waitMinutes = ahead * 10;
-      const waitDisplay = waitMinutes === 0 ? 'Next!'
+      const position    = ahead || 0;
+      const waitMinutes = position * 10;
+      const waitDisplay = position === 0 ? 'Next!'
         : waitMinutes < 60 ? `~${waitMinutes}m`
         : `~${Math.round(waitMinutes/60)}h`;
 
-      /* Get all waiting tokens for queue visual */
+      /* Get OPD queue for visual */
       const { data: queueTokens } = await supabase
-        .from('tokens')
-        .select('token_number, status, is_offline, patients(full_name)')
+        .from('tokens').select('token_number, status, is_offline, patients(full_name)')
         .eq('hospital_id', hospitalId)
+        .eq('opd_id', opdId)
         .in('status', ['waiting','called'])
         .order('token_number')
         .limit(10);
 
       /* Update UI */
+      document.getElementById('myTokenOpdName').textContent  = opdName;
       document.getElementById('myTokenNum').textContent      = myToken.token_number;
       document.getElementById('myTokenDoctor').textContent   = myToken.appointments?.doctor_name || myToken.opd_department || '—';
       document.getElementById('myTokenSlot').textContent     = myToken.appointments?.time_slot || '—';
       document.getElementById('myTokenCurrent').textContent  = currentServing;
-      document.getElementById('myTokenPosition').textContent = ahead === 0 ? 'Next!' : `#${position}`;
+      document.getElementById('myTokenPosition').textContent = position === 0 ? 'Next!' : `#${position + 1}`;
       document.getElementById('myTokenWait').textContent     = waitDisplay;
+      document.getElementById('waitOpdName').textContent     = opdName;
+      document.getElementById('queueOpdTitle').textContent   = `${opdName} Queue`;
 
       document.getElementById('statToken').textContent    = myToken.token_number;
-      document.getElementById('statTokenSub').textContent = `Position: ${ahead === 0 ? 'Next!' : '#'+position}`;
+      document.getElementById('statTokenSub').textContent = `${opdName} — Position: ${position === 0 ? 'Next!' : '#'+(position+1)}`;
 
-      /* Token badge in sidebar */
       const badge = document.getElementById('tokenBadge');
       badge.style.display = 'inline-block';
 
       /* Status badge */
-      const statusEl = document.getElementById('myTokenStatus');
-      const sMap = { waiting:'Waiting in queue', called:'Being called now!', completed:'Completed' };
+      const statusEl = document.getElementById('myTokenStatusBadge');
+      const sMap = { waiting:'Waiting in queue', called:'Being called now! 🔔', completed:'Completed' };
       statusEl.textContent = sMap[myToken.status] || myToken.status;
       statusEl.className   = `status-badge ${myToken.status === 'called' ? 'status-checkedin' : 'status-confirmed'}`;
 
-      /* Queue visual */
+      /* Queue visual — show only this OPD's queue */
       const queueEl = document.getElementById('myTokenQueueVisual');
       if (queueTokens && queueTokens.length > 0) {
         queueEl.innerHTML = `
@@ -652,45 +615,42 @@
               const name      = isOffline ? 'Walk-in Patient' : (t.patients?.full_name || 'Patient');
               const bgColor   = isMe ? 'rgba(61,158,255,0.1)' : 'var(--off-white)';
               const border    = isMe ? '2px solid var(--electric)' : '1px solid var(--border-card)';
-              const sColor    = t.status === 'called' ? 'var(--success)' : 'var(--text-muted)';
+              const dotColor  = t.status === 'called' ? 'var(--success)' : 'var(--border-card)';
               return `
-                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;
-                  background:${bgColor};border:${border};border-radius:var(--radius-md);">
-                  <span style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:var(--electric);min-width:36px;">${t.token_number}</span>
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${bgColor};border:${border};border-radius:var(--radius-md);">
+                  <span style="width:8px;height:8px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block;"></span>
+                  <span style="font-family:'Georgia',serif;font-size:20px;font-weight:700;color:var(--electric);min-width:32px;">${t.token_number}</span>
                   <span style="flex:1;font-size:13px;font-weight:${isMe?'700':'400'};color:var(--text-primary);">${name}${isMe ? ' 👈 You' : ''}</span>
-                  <span style="font-size:11px;font-weight:600;color:${sColor};">${t.status === 'called' ? 'Now calling' : 'Waiting'}</span>
+                  <span style="font-size:11px;color:${t.status==='called'?'var(--success)':'var(--text-muted)'};font-weight:600;">${t.status==='called'?'Now calling':'Waiting'}</span>
                 </div>`;
             }).join('')}
           </div>`;
+      } else {
+        queueEl.innerHTML = `<p style="font-size:13px;color:var(--text-muted);text-align:center;padding:12px 0;">You are the only one in this OPD queue right now.</p>`;
       }
 
-      /* Subscribe to realtime updates */
-      subscribeToMyToken(hospitalId);
+      /* Subscribe to realtime updates for this OPD */
+      subscribeToMyToken(hospitalId, opdId);
     };
 
-    /* ── REALTIME TOKEN SUBSCRIPTION ── */
-    function subscribeToMyToken(hospitalId) {
+    /* ── REALTIME SUBSCRIPTION ── */
+    function subscribeToMyToken(hospitalId, opdId) {
       if (tokenChannel) supabase.removeChannel(tokenChannel);
 
       tokenChannel = supabase
-        .channel('patient-token-' + patientData.id)
+        .channel(`patient-token-${patientData.id}-opd-${opdId}`)
         .on('postgres_changes', {
-          event:  '*',
-          schema: 'public',
-          table:  'tokens',
+          event: '*', schema: 'public', table: 'tokens',
           filter: `hospital_id=eq.${hospitalId}`,
         }, () => {
           loadMyToken();
         })
         .subscribe();
 
-      /* Also auto-refresh every 30 seconds */
       if (tokenRefreshInt) clearInterval(tokenRefreshInt);
       tokenRefreshInt = setInterval(() => {
         const tokenSection = document.getElementById('section-token');
-        if (tokenSection && tokenSection.style.display !== 'none') {
-          loadMyToken();
-        }
+        if (tokenSection && tokenSection.style.display !== 'none') loadMyToken();
       }, 30000);
     }
 
@@ -699,7 +659,7 @@
       if (tokenChannel) supabase.removeChannel(tokenChannel);
       if (tokenRefreshInt) clearInterval(tokenRefreshInt);
       await supabase.auth.signOut();
-      showToast('Logged out successfully.', 'success');
+      showToast('Logged out.', 'success');
       setTimeout(() => { window.location.href = 'index.html'; }, 800);
     };
 
@@ -724,7 +684,6 @@
       document.getElementById('sidebarAvatar').textContent = initials;
       document.getElementById('sidebarCity').textContent   = patient.city || 'Punjab';
       document.getElementById('dashTitle').textContent     = `Welcome back, ${firstName} 👋`;
-
       document.getElementById('profileName').value   = name;
       document.getElementById('profileGender').value = patient.gender || '—';
       document.getElementById('profilePhone').value  = patient.phone  || '—';
