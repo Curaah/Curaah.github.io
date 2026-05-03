@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendant Portal — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--navy); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 44px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .login-logo-name { font-size: 20px; font-weight: 700; color: var(--navy); }
+    .login-logo-tag  { font-size: 11px; color: var(--warning); font-weight: 600; letter-spacing: 1px; display: block; }
+    .login-title     { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .login-sub       { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+    .login-form      { display: flex; flex-direction: column; gap: 14px; }
+
+    .login-error-box { background: rgba(255,71,87,0.06); border: 1px solid rgba(255,71,87,0.2); border-radius: var(--radius-md); padding: 12px 14px; font-size: 13px; color: var(--danger); display: none; line-height: 1.5; }
+    .login-error-box.show { display: block; }
+
+    /* ── PORTAL ── */
+    .portal-page {
+      display: none;
+      min-height: 100vh;
+      background: var(--off-white);
+    }
+
+    /* Navbar */
+    .portal-nav {
+      background: var(--navy);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .portal-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .portal-nav-name { font-size: 16px; font-weight: 700; color: var(--white); }
+    .portal-nav-tag  { font-size: 10px; color: var(--warning); font-weight: 600; letter-spacing: 1px; }
+
+    .portal-nav-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .portal-nav-hospital {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+    }
+
+    .portal-nav-hospital strong { color: var(--white); }
+
+    /* Main content */
+    .portal-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* OPD selector */
+    .opd-selector {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .opd-selector-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* Current token display */
+    .current-token-card {
+      background: var(--navy);
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .current-token-card::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,158,255,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .current-token-opd {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--electric);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .current-token-label {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 12px;
+    }
+
+    .current-token-num {
+      font-family: 'Georgia', serif;
+      font-size: 120px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .current-token-patient {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .current-token-slot {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Action buttons */
+    .token-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-call-next {
+      background: var(--electric);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 18px 36px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-call-next:hover { background: #2d8df0; transform: translateY(-2px); }
+    .btn-call-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-done {
+      background: rgba(0,196,140,0.15);
+      color: var(--success);
+      border: 2px solid var(--success);
+      border-radius: var(--radius-lg);
+      padding: 18px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-done:hover { background: var(--success); color: white; }
+    .btn-done:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* No token state */
+    .no-token-card {
+      background: var(--navy);
+      border-radius: var(--radius-xl);
+      padding: 60px 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .no-token-icon  { font-size: 56px; margin-bottom: 16px; opacity: 0.4; }
+    .no-token-title { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+    .no-token-desc  { font-size: 14px; color: var(--text-on-dark-muted); line-height: 1.7; }
+
+    /* Queue panel */
+    .queue-panel {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .queue-panel-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--off-white);
+    }
+
+    .queue-panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .queue-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .queue-stat {
+      text-align: center;
+    }
+
+    .queue-stat-num {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--electric);
+      line-height: 1;
+    }
+
+    .queue-stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Queue items */
+    .queue-list {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .queue-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-card);
+      transition: var(--transition);
+    }
+
+    .queue-item.current {
+      background: rgba(61,158,255,0.06);
+      border-color: var(--electric);
+      border-width: 2px;
+    }
+
+    .queue-item.waiting  { background: var(--off-white); }
+    .queue-item.completed{ background: rgba(100,100,100,0.04); opacity: 0.6; }
+
+    .queue-item-num {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--electric);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .queue-item.current .queue-item-num { color: var(--electric); font-size: 28px; }
+    .queue-item.completed .queue-item-num { color: var(--text-muted); }
+
+    .queue-item-info { flex: 1; }
+    .queue-item-patient { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .queue-item-meta    { font-size: 11px; color: var(--text-muted); }
+    .queue-item.completed .queue-item-patient { color: var(--text-muted); text-decoration: line-through; }
+
+    .queue-item-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-calling { background: rgba(61,158,255,0.1);  color: var(--electric); animation: pulse-badge 1.5s infinite; }
+    .badge-waiting { background: rgba(255,159,0,0.1);   color: var(--warning); }
+    .badge-done    { background: rgba(100,100,100,0.08); color: var(--text-muted); }
+    .badge-walkin  { background: rgba(255,159,0,0.1);   color: var(--warning); }
+
+    @keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+    /* Live indicator */
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; margin-right: 6px; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stats-bar-item {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stats-bar-num   { font-family: 'Georgia', serif; font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 4px; }
+    .stats-bar-label { font-size: 11px; color: var(--text-muted); }
+
+    /* Empty queue */
+    .queue-empty { padding: 32px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+    .queue-empty-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
+
+    /* Toast override for this page */
+    @media (max-width: 600px) {
+      .current-token-num { font-size: 80px; }
+      .btn-call-next     { padding: 16px 28px; font-size: 16px; }
+      .btn-done          { padding: 16px 24px; font-size: 14px; }
+      .stats-bar         { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div class="login-page" id="loginPage">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+          <circle cx="18" cy="22" r="3.5" fill="white"/>
+        </svg>
+        <div>
+          <span class="login-logo-name">curaah</span>
+          <span class="login-logo-tag">DOCTOR ATTENDANT</span>
+        </div>
+      </div>
+
+      <div class="login-title">Attendant Login</div>
+      <p class="login-sub">
+        Login with your attendant credentials. You can call and complete tokens for your OPD.
+        For full staff access use the <a href="staff-portal.html" style="color:var(--electric);">Staff Portal</a>.
+      </p>
+
+      <div class="login-error-box" id="loginErrorBox"></div>
+
+      <div class="login-form">
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input class="form-input" type="email" id="attEmail" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input class="form-input" type="password" id="attPassword" placeholder="Enter your password" autocomplete="current-password" />
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">
+          Login to Attendant Portal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTAL PAGE -->
+  <div class="portal-page" id="portalPage">
+
+    <!-- Navbar -->
+    <div class="portal-nav">
+      <div class="portal-nav-brand">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+          <circle cx="18" cy="22" r="3.5" fill="white"/>
+        </svg>
+        <div>
+          <div class="portal-nav-name">curaah</div>
+          <div class="portal-nav-tag">ATTENDANT PORTAL</div>
+        </div>
+      </div>
+      <div class="portal-nav-info">
+        <span class="portal-nav-hospital">
+          <strong id="navHospitalName">—</strong>
+        </span>
+        <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Logout</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="portal-content">
+
+      <!-- OPD Selector -->
+      <div class="opd-selector">
+        <span class="opd-selector-label">Your OPD:</span>
+        <select class="form-input form-select" id="opdSelector"
+          style="flex:1;max-width:320px;"
+          onchange="onOpdChange()">
+          <option value="">Select your OPD to start</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="refreshQueue()">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <!-- No OPD selected -->
+      <div id="noOpdState">
+        <div class="no-token-card">
+          <div class="no-token-icon">🏥</div>
+          <div class="no-token-title">Select your OPD above</div>
+          <p class="no-token-desc">
+            Choose the OPD you are managing to see the token queue
+            and start calling patients.
+          </p>
+        </div>
+      </div>
+
+      <!-- OPD active state -->
+      <div id="opdActiveState" style="display:none;">
+
+        <!-- Stats bar -->
+        <div class="stats-bar">
+          <div class="stats-bar-item">
+            <div class="stats-bar-num" id="statWaiting">—</div>
+            <div class="stats-bar-label">Waiting</div>
+          </div>
+          <div class="stats-bar-item">
+            <div class="stats-bar-num" id="statCalled">—</div>
+            <div class="stats-bar-label">Currently serving</div>
+          </div>
+          <div class="stats-bar-item">
+            <div class="stats-bar-num" id="statDone">—</div>
+            <div class="stats-bar-label">Completed today</div>
+          </div>
+        </div>
+
+        <!-- Current token being served -->
+        <div id="currentTokenSection">
+
+          <!-- Has a token called -->
+          <div id="tokenCalledCard" class="current-token-card" style="display:none;">
+            <div class="current-token-opd">
+              <span class="live-dot"></span>
+              <span id="calledOpdName">—</span>
+            </div>
+            <div class="current-token-label">Now Serving</div>
+            <div class="current-token-num" id="calledTokenNum">—</div>
+            <div class="current-token-patient" id="calledPatientName">—</div>
+            <div class="current-token-slot" id="calledTokenMeta">—</div>
+
+            <div class="token-actions">
+              <button class="btn-done" id="doneBtn" onclick="markCurrentDone()">
+                ✅ Done — Call Next
+              </button>
+              <button class="btn-call-next" id="callNextBtn" onclick="callNext()" style="background:rgba(255,255,255,0.1);font-size:14px;padding:18px 24px;">
+                ⏭ Skip
+              </button>
+            </div>
+          </div>
+
+          <!-- No token called yet / queue empty -->
+          <div id="noTokenCard" class="no-token-card">
+            <div class="no-token-icon">📟</div>
+            <div class="no-token-title" id="noTokenTitle">Ready to start</div>
+            <p class="no-token-desc" id="noTokenDesc">
+              Press "Call Next Token" below to call the first patient in the queue.
+            </p>
+            <div class="token-actions" style="margin-top:24px;">
+              <button class="btn-call-next" id="callNextBtnEmpty" onclick="callNext()">
+                📟 Call Next Token
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Queue list -->
+        <div class="queue-panel">
+          <div class="queue-panel-header">
+            <div class="queue-panel-title">
+              <span class="live-dot"></span> Queue
+            </div>
+            <div class="queue-stats">
+              <div class="queue-stat">
+                <div class="queue-stat-num" id="queueWaitingCount">—</div>
+                <div class="queue-stat-label">Waiting</div>
+              </div>
+            </div>
+          </div>
+          <div id="queueList">
+            <div class="queue-empty">
+              <div class="queue-empty-icon">📟</div>
+              Loading queue...
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    let currentHospital = null;
+    let currentStaff    = null;
+    let selectedOpdId   = null;
+    let selectedOpd     = null;
+    let calledToken     = null;
+    let realtimeChannel = null;
+    let allOpds         = [];
+
+    const TODAY = new Date().toISOString().split('T')[0];
+
+    /* ── LOGIN ── */
+    window.handleLogin = async function() {
+      const email    = document.getElementById('attEmail').value.trim();
+      const password = document.getElementById('attPassword').value;
+      const errorBox = document.getElementById('loginErrorBox');
+      const btn      = document.getElementById('loginBtn');
+
+      if (!email || !password) {
+        errorBox.textContent = 'Please enter your email and password.';
+        errorBox.classList.add('show');
+        return;
+      }
+
+      btn.textContent = 'Logging in...';
+      btn.disabled    = true;
+      errorBox.classList.remove('show');
+
+      try {
+        const { data: authData, error: authError } =
+          await supabase.auth.signInWithPassword({ email, password });
+        if (authError) throw new Error('Incorrect email or password.');
+
+        /* Must be hospital staff */
+        const { data: staffRow, error: staffError } = await supabase
+          .from('hospital_staff')
+          .select('*, hospitals(*)')
+          .eq('user_id', authData.user.id)
+          .eq('is_active', true)
+          .single();
+
+        if (staffError || !staffRow) {
+          await supabase.auth.signOut();
+          throw new Error('This account is not registered as hospital staff. Contact your hospital administrator.');
+        }
+
+        currentStaff    = staffRow;
+        currentHospital = staffRow.hospitals;
+
+        btn.textContent = 'Login to Attendant Portal';
+        btn.disabled    = false;
+
+        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('portalPage').style.display = 'block';
+        initPortal();
+
+      } catch (err) {
+        btn.textContent = 'Login to Attendant Portal';
+        btn.disabled    = false;
+        errorBox.textContent = err.message;
+        errorBox.classList.add('show');
+      }
+    };
+
+    /* ── CHECK SESSION ── */
+    async function checkSession() {
+      const { data:{ session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: staffRow } = await supabase
+        .from('hospital_staff')
+        .select('*, hospitals(*)')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (staffRow && staffRow.hospitals) {
+        currentStaff    = staffRow;
+        currentHospital = staffRow.hospitals;
+        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('portalPage').style.display = 'block';
+        initPortal();
+      }
+    }
+
+    /* ── LOGOUT ── */
+    window.handleLogout = async function() {
+      if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+      await supabase.auth.signOut();
+      currentHospital = null;
+      currentStaff    = null;
+      selectedOpdId   = null;
+      calledToken     = null;
+      document.getElementById('portalPage').style.display = 'none';
+      document.getElementById('loginPage').style.display  = 'flex';
+      showToast('Logged out.', 'success');
+    };
+
+    /* ── INIT PORTAL ── */
+    async function initPortal() {
+      document.getElementById('navHospitalName').textContent = currentHospital.name;
+
+      /* Load OPDs */
+      const { data: opds } = await supabase
+        .from('opds')
+        .select('*')
+        .eq('hospital_id', currentHospital.id)
+        .eq('is_active', true)
+        .order('name');
+
+      allOpds = opds || [];
+
+      const sel = document.getElementById('opdSelector');
+      if (!allOpds.length) {
+        sel.innerHTML = '<option value="">No OPDs configured yet</option>';
+        return;
+      }
+
+      sel.innerHTML =
+        '<option value="">Select your OPD to start</option>' +
+        allOpds.map(o =>
+          `<option value="${o.id}">${o.name} — ${o.department}</option>`
+        ).join('');
+    }
+
+    /* ── OPD CHANGE ── */
+    window.onOpdChange = function() {
+      const opdId = document.getElementById('opdSelector').value;
+      if (!opdId) {
+        document.getElementById('noOpdState').style.display    = 'block';
+        document.getElementById('opdActiveState').style.display= 'none';
+        if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+        return;
+      }
+
+      selectedOpdId = opdId;
+      selectedOpd   = allOpds.find(o => o.id === opdId);
+      calledToken   = null;
+
+      document.getElementById('noOpdState').style.display    = 'none';
+      document.getElementById('opdActiveState').style.display= 'block';
+
+      loadQueue();
+      subscribeToQueue();
+    };
+
+    window.refreshQueue = function() {
+      if (selectedOpdId) loadQueue();
+    };
+
+    /* ── SUBSCRIBE TO REALTIME ── */
+    function subscribeToQueue() {
+      if (realtimeChannel) supabase.removeChannel(realtimeChannel);
+
+      realtimeChannel = supabase
+        .channel(`attendant-tokens-${selectedOpdId}`)
+        .on('postgres_changes', {
+          event:  '*',
+          schema: 'public',
+          table:  'tokens',
+          filter: `hospital_id=eq.${currentHospital.id}`,
+        }, () => {
+          loadQueue();
+        })
+        .subscribe();
+    }
+
+    /* ── LOAD QUEUE ── */
+    async function loadQueue() {
+      if (!selectedOpdId) return;
+
+      const { data: tokens } = await supabase
+        .from('tokens')
+        .select('*, patients(full_name), appointments(time_slot, doctor_name)')
+        .eq('hospital_id', currentHospital.id)
+        .eq('opd_id', selectedOpdId)
+        .gte('checked_in_at', TODAY + 'T00:00:00')
+        .order('token_number');
+
+      const allTokens = tokens || [];
+
+      const waiting   = allTokens.filter(t => t.status === 'waiting');
+      const called    = allTokens.filter(t => t.status === 'called');
+      const completed = allTokens.filter(t => t.status === 'completed');
+
+      /* Update stats */
+      document.getElementById('statWaiting').textContent = waiting.length;
+      document.getElementById('statCalled').textContent  = called.length;
+      document.getElementById('statDone').textContent    = completed.length;
+      document.getElementById('queueWaitingCount').textContent = waiting.length;
+
+      /* Update called token display */
+      const currentlyCalled = called.sort((a,b) => b.token_number - a.token_number)[0];
+
+      if (currentlyCalled) {
+        calledToken = currentlyCalled;
+        showCalledToken(currentlyCalled);
+      } else {
+        calledToken = null;
+        showNoToken(waiting.length);
+      }
+
+      /* Render queue list */
+      renderQueueList(allTokens);
+    }
+
+    function showCalledToken(token) {
+      document.getElementById('tokenCalledCard').style.display = 'block';
+      document.getElementById('noTokenCard').style.display     = 'none';
+
+      const opdName     = selectedOpd?.name || 'OPD';
+      const patientName = token.is_offline ? 'Walk-in Patient' : (token.patients?.full_name || 'Patient');
+      const doctor      = token.appointments?.doctor_name || token.opd_department || '—';
+      const slot        = token.appointments?.time_slot || '—';
+
+      document.getElementById('calledOpdName').textContent    = opdName;
+      document.getElementById('calledTokenNum').textContent   = token.token_number;
+      document.getElementById('calledPatientName').textContent= patientName;
+      document.getElementById('calledTokenMeta').textContent  = `${doctor} · ${slot}`;
+    }
+
+    function showNoToken(waitingCount) {
+      document.getElementById('tokenCalledCard').style.display = 'none';
+      document.getElementById('noTokenCard').style.display     = 'block';
+
+      const titleEl = document.getElementById('noTokenTitle');
+      const descEl  = document.getElementById('noTokenDesc');
+      const btnEl   = document.getElementById('callNextBtnEmpty');
+
+      if (waitingCount === 0) {
+        titleEl.textContent = 'Queue is empty';
+        descEl.textContent  = 'No patients waiting in this OPD right now. New patients will appear here automatically.';
+        if (btnEl) btnEl.disabled = true;
+      } else {
+        titleEl.textContent = 'Ready to call';
+        descEl.textContent  = `${waitingCount} patient${waitingCount > 1 ? 's' : ''} waiting. Press the button to call the next token.`;
+        if (btnEl) btnEl.disabled = false;
+      }
+    }
+
+    function renderQueueList(tokens) {
+      const el = document.getElementById('queueList');
+      if (!tokens.length) {
+        el.innerHTML = `<div class="queue-empty"><div class="queue-empty-icon">📟</div>No tokens yet for this OPD today.</div>`;
+        return;
+      }
+
+      /* Sort: called first, then waiting by token number, then completed */
+      const sorted = [
+        ...tokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number),
+        ...tokens.filter(t => t.status === 'waiting').sort((a,b) => a.token_number - b.token_number),
+        ...tokens.filter(t => t.status === 'completed').sort((a,b) => b.token_number - a.token_number),
+      ];
+
+      el.innerHTML = `
+        <div class="queue-list">
+          ${sorted.map(t => {
+            const isOffline = t.is_offline;
+            const name      = isOffline ? 'Walk-in Patient' : (t.patients?.full_name || 'Patient');
+            const doctor    = t.appointments?.doctor_name || t.opd_department || '—';
+            const slot      = t.appointments?.time_slot || '—';
+
+            let itemClass  = 'waiting';
+            let badgeClass = 'badge-waiting';
+            let badgeText  = 'Waiting';
+
+            if (t.status === 'called') {
+              itemClass  = 'current';
+              badgeClass = 'badge-calling';
+              badgeText  = '🔔 Now calling';
+            } else if (t.status === 'completed') {
+              itemClass  = 'completed';
+              badgeClass = 'badge-done';
+              badgeText  = 'Done';
+            }
+
+            return `
+              <div class="queue-item ${itemClass}">
+                <div class="queue-item-num">${t.token_number}</div>
+                <div class="queue-item-info">
+                  <div class="queue-item-patient">${name}
+                    ${isOffline ? '<span style="font-size:10px;color:var(--warning);margin-left:4px;">Walk-in</span>' : ''}
+                  </div>
+                  <div class="queue-item-meta">${doctor} · ${slot}</div>
+                </div>
+                <span class="queue-item-badge ${badgeClass}">${badgeText}</span>
+              </div>`;
+          }).join('')}
+        </div>`;
+    }
+
+    /* ── CALL NEXT TOKEN ── */
+    window.callNext = async function() {
+      if (!selectedOpdId) return;
+
+      const btnMain  = document.getElementById('callNextBtn');
+      const btnEmpty = document.getElementById('callNextBtnEmpty');
+      if (btnMain)  { btnMain.disabled  = true; btnMain.textContent  = 'Calling...'; }
+      if (btnEmpty) { btnEmpty.disabled = true; btnEmpty.textContent = 'Calling...'; }
+
+      try {
+        /* Get next waiting token in this OPD */
+        const { data: nextTokens } = await supabase
+          .from('tokens')
+          .select('*')
+          .eq('hospital_id', currentHospital.id)
+          .eq('opd_id', selectedOpdId)
+          .eq('status', 'waiting')
+          .order('token_number', { ascending: true })
+          .limit(1);
+
+        if (!nextTokens || !nextTokens.length) {
+          showToast('No more patients waiting in this OPD.', 'info');
+          await loadQueue();
+          return;
+        }
+
+        const nextToken = nextTokens[0];
+
+        /* Update to called */
+        await supabase
+          .from('tokens')
+          .update({ status: 'called', called_at: new Date().toISOString() })
+          .eq('id', nextToken.id);
+
+        showToast(`Token ${nextToken.token_number} called!`, 'success');
+        await loadQueue();
+
+      } catch (err) {
+        showToast(err.message || 'Failed to call token.', 'error');
+      } finally {
+        if (btnMain)  { btnMain.disabled  = false; btnMain.textContent  = '⏭ Skip'; }
+        if (btnEmpty) { btnEmpty.disabled = false; btnEmpty.textContent = '📟 Call Next Token'; }
+      }
+    };
+
+    /* ── MARK CURRENT TOKEN DONE ── */
+    window.markCurrentDone = async function() {
+      if (!calledToken) return;
+
+      const btn = document.getElementById('doneBtn');
+      btn.textContent = 'Saving...';
+      btn.disabled    = true;
+
+      try {
+        /* Mark current as completed */
+        await supabase
+          .from('tokens')
+          .update({ status: 'completed', completed_at: new Date().toISOString() })
+          .eq('id', calledToken.id);
+
+        /* Also check if there is a next waiting token and auto-call it */
+        const { data: nextTokens } = await supabase
+          .from('tokens')
+          .select('*')
+          .eq('hospital_id', currentHospital.id)
+          .eq('opd_id', selectedOpdId)
+          .eq('status', 'waiting')
+          .order('token_number', { ascending: true })
+          .limit(1);
+
+        if (nextTokens && nextTokens.length > 0) {
+          await supabase
+            .from('tokens')
+            .update({ status: 'called', called_at: new Date().toISOString() })
+            .eq('id', nextTokens[0].id);
+          showToast(`✅ Done! Token ${nextTokens[0].token_number} called next.`, 'success');
+        } else {
+          showToast('✅ Token completed. Queue is now empty.', 'success');
+        }
+
+        await loadQueue();
+
+      } catch (err) {
+        showToast(err.message || 'Failed.', 'error');
+      } finally {
+        btn.textContent = '✅ Done — Call Next';
+        btn.disabled    = false;
+      }
+    };
+
+    /* ── START ── */
+    checkSession();
+  </script>
+
+</body>
+</html>
