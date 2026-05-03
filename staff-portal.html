@@ -44,14 +44,12 @@
     .portal-stat-num   { font-family:'Georgia',serif; font-size:28px; font-weight:700; color:var(--text-primary); line-height:1; margin-bottom:4px; }
     .portal-stat-label { font-size:11px; color:var(--text-muted); }
 
-    /* Offline button */
     .offline-btn { background:var(--navy); color:var(--white); border:2px solid var(--electric); border-radius:var(--radius-lg); padding:14px 18px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; transition:var(--transition); font-family:'Inter',sans-serif; }
     .offline-btn:hover { background:rgba(61,158,255,0.15); transform:scale(1.02); }
     .offline-btn-icon  { font-size:24px; }
     .offline-btn-label { font-size:12px; font-weight:700; color:var(--electric); }
     .offline-btn-sub   { font-size:10px; color:var(--text-on-dark-muted); }
 
-    /* Token live display */
     .token-live-display { background:var(--navy); border-radius:var(--radius-xl); padding:24px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; align-items:center; margin-bottom:20px; }
     .token-current { text-align:center; border-right:1px solid var(--border-dark); padding-right:20px; }
     .token-current-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--electric); margin-bottom:8px; }
@@ -63,19 +61,11 @@
     .token-stat-item-val   { font-size:16px; font-weight:700; color:var(--white); font-family:'Georgia',serif; }
     .offline-action-col { display:flex; flex-direction:column; gap:8px; align-items:center; }
 
-    /* OPD tabs */
-    .opd-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
-    .opd-tab  { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; border:1.5px solid var(--border-card); background:var(--white); color:var(--text-muted); cursor:pointer; transition:var(--transition); }
-    .opd-tab:hover  { border-color:rgba(61,158,255,0.3); color:var(--electric); }
-    .opd-tab.active { background:var(--electric); color:var(--white); border-color:var(--electric); }
-
-    /* Panel */
     .panel { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
     .panel-header { padding:14px 20px; border-bottom:1px solid var(--border-card); display:flex; align-items:center; justify-content:space-between; }
     .panel-title  { font-size:14px; font-weight:600; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
     .panel-body   { padding:16px 20px; }
 
-    /* Table */
     .appt-table { width:100%; border-collapse:collapse; }
     .appt-table th { font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-muted); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border-card); background:var(--off-white); }
     .appt-table td { padding:11px 14px; font-size:13px; color:var(--text-primary); border-bottom:1px solid var(--border-card); vertical-align:middle; }
@@ -97,15 +87,28 @@
 
     .token-num-big { font-family:'Georgia',serif; font-size:22px; font-weight:700; color:var(--electric); }
 
-    /* OPD card */
     .opd-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
     .opd-card:last-child { margin-bottom:0; }
-    .opd-card-info  { flex:1; }
-    .opd-card-name  { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
-    .opd-card-meta  { font-size:12px; color:var(--text-muted); }
-    .opd-card-fee   { font-size:13px; font-weight:700; color:var(--electric); margin-right:12px; }
+    .opd-card-name { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
+    .opd-card-meta { font-size:12px; color:var(--text-muted); }
+    .opd-card-fee  { font-size:13px; font-weight:700; color:var(--electric); margin-right:12px; }
 
-    /* Bed */
+    /* Doctor schedule styles */
+    .doctor-schedule-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; margin-bottom:12px; }
+    .doctor-schedule-card:last-child { margin-bottom:0; }
+    .doctor-schedule-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .doctor-schedule-name   { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+    .doctor-schedule-opd    { font-size:11px; color:var(--electric); font-weight:600; }
+    .doctor-schedule-status { display:flex; align-items:center; gap:8px; }
+
+    .schedule-off-dates { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .off-date-chip { display:flex; align-items:center; gap:6px; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.2); border-radius:20px; padding:4px 10px; font-size:12px; color:var(--danger); }
+    .off-date-chip button { background:none; border:none; cursor:pointer; color:var(--danger); font-size:14px; padding:0; line-height:1; }
+
+    .add-off-date-form { display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .add-off-date-form input { font-size:12px; padding:6px 10px; border:1px solid var(--border-card); border-radius:var(--radius-md); outline:none; font-family:'Inter',sans-serif; }
+    .add-off-date-form input:focus { border-color:var(--electric); }
+
     .bed-section { padding:24px; display:flex; gap:32px; align-items:center; flex-wrap:wrap; }
     .bed-circle  { width:100px; height:100px; border-radius:50%; border:4px solid var(--electric); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
     .bed-circle-num   { font-family:'Georgia',serif; font-size:32px; font-weight:700; color:var(--electric); line-height:1; }
@@ -119,7 +122,6 @@
     .bed-counter-btn:hover { background:var(--electric); color:white; }
     .bed-counter-val { width:60px; height:40px; text-align:center; font-size:16px; font-weight:700; color:var(--text-primary); border:none; border-left:1px solid var(--border-card); border-right:1px solid var(--border-card); outline:none; font-family:'Inter',sans-serif; }
 
-    /* Check-in */
     .checkin-form { padding:20px; display:flex; gap:14px; align-items:flex-end; flex-wrap:wrap; }
     .checkin-form .form-group { flex:1; min-width:180px; }
     .checkin-result { display:none; margin:0 20px 20px; background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; }
@@ -128,10 +130,8 @@
     .token-result.show { display:block; }
     .token-big { font-family:'Georgia',serif; font-size:72px; font-weight:700; color:var(--white); line-height:1; }
 
-    /* Doctor form */
     .doctor-form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; padding:20px; }
 
-    /* Slots */
     .slots-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; padding:20px; }
     .slot-card  { border:1px solid var(--border-card); border-radius:var(--radius-md); padding:14px; text-align:center; }
     .slot-card.available { background:rgba(0,196,140,0.04);  border-color:rgba(0,196,140,0.2); }
@@ -174,6 +174,7 @@
         <button class="btn btn-primary btn-full btn-lg" id="staffLoginBtn" onclick="handleStaffLogin()">Login to Staff Portal</button>
       </div>
       <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:20px;">Patient? <a href="login.html" style="color:var(--electric);font-weight:600;">Patient login →</a></p>
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:8px;">Doctor attendant? <a href="attendant-portal.html" style="color:var(--electric);font-weight:600;">Attendant login →</a></p>
     </div>
   </div>
 
@@ -238,12 +239,11 @@
             <div class="portal-stat"><div class="portal-stat-num" id="statPending">—</div><div class="portal-stat-label">Yet to arrive</div></div>
           </div>
 
-          <!-- Token display + offline button -->
           <div class="token-live-display">
             <div class="token-current">
               <div class="token-current-label"><span class="live-dot"></span> Now Serving</div>
               <div class="token-current-num" id="overviewCurrentToken">—</div>
-              <div class="token-current-sub" id="overviewCurrentOPD">All OPDs</div>
+              <div class="token-current-sub" id="overviewCurrentOPD">No token called</div>
             </div>
             <div class="token-stats-col">
               <div class="token-stat-item"><span class="token-stat-item-label">Total tokens today</span><span class="token-stat-item-val" id="overviewTotalTokens">0</span></div>
@@ -253,9 +253,7 @@
             <div class="offline-action-col">
               <div style="width:100%;">
                 <label class="form-label" style="color:rgba(255,255,255,0.6);font-size:11px;">Offline Patient+ for OPD:</label>
-                <select class="form-input form-select" id="offlineOpdSelect" style="margin-bottom:8px;font-size:12px;">
-                  <option value="">Select OPD</option>
-                </select>
+                <select class="form-input form-select" id="offlineOpdSelect" style="margin-bottom:8px;font-size:12px;"><option value="">Select OPD</option></select>
               </div>
               <button class="offline-btn" style="width:100%;" onclick="addOfflineToken()">
                 <span class="offline-btn-icon">👤➕</span>
@@ -277,11 +275,9 @@
           <div class="portal-header">
             <div><div class="portal-title">Token Queue</div><div class="portal-date"><span class="live-dot"></span> Per OPD — live</div></div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <div>
-                <select class="form-input form-select" id="tokenOpdFilter" style="font-size:12px;min-width:160px;" onchange="loadTokenQueue()"><option value="all">All OPDs</option></select>
-              </div>
+              <select class="form-input form-select" id="tokenOpdFilter" style="font-size:12px;min-width:160px;" onchange="loadTokenQueue()"><option value="all">All OPDs</option></select>
               <div style="display:flex;flex-direction:column;gap:4px;">
-                <select class="form-input form-select" id="offlineOpdSelect2" style="font-size:12px;"><option value="">Select OPD for offline</option></select>
+                <select class="form-input form-select" id="offlineOpdSelect2" style="font-size:12px;"><option value="">OPD for offline</option></select>
                 <button class="offline-btn" style="padding:8px 12px;" onclick="addOfflineToken()">
                   <span style="font-size:14px;">👤➕</span>
                   <span class="offline-btn-label" style="font-size:11px;">Offline Patient +</span>
@@ -291,7 +287,6 @@
             </div>
           </div>
 
-          <!-- Per-OPD token summary -->
           <div id="opdTokenSummary" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;"></div>
 
           <div class="panel">
@@ -366,7 +361,6 @@
             <div><div class="portal-title">Manage OPDs</div><div class="portal-date">Create and manage OPD departments</div></div>
             <button class="btn btn-primary btn-sm" onclick="toggleAddOpdForm()">+ Add OPD</button>
           </div>
-
           <div class="panel" id="addOpdPanel" style="display:none;">
             <div class="panel-header"><div class="panel-title">➕ Add New OPD</div><button class="btn btn-secondary btn-sm" onclick="toggleAddOpdForm()">Cancel</button></div>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:20px;">
@@ -376,20 +370,23 @@
             </div>
             <div style="padding:0 20px 20px;"><button class="btn btn-primary" onclick="addOpd()">Create OPD</button></div>
           </div>
-
           <div class="panel">
             <div class="panel-header"><div class="panel-title">🏥 Your OPDs</div><span style="font-size:12px;color:var(--text-muted);" id="opdCountLabel">— OPDs</span></div>
-            <div id="opdsList"><div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs created yet. Add your first OPD above.</div></div>
+            <div id="opdsList"><div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs yet. Add your first OPD above.</div></div>
           </div>
         </div>
 
         <!-- MANAGE DOCTORS -->
         <div id="section-doctors" style="display:none;">
           <div class="portal-header">
-            <div><div class="portal-title">Manage Doctors</div><div class="portal-date">Assign doctors to OPDs</div></div>
-            <button class="btn btn-primary btn-sm" onclick="toggleAddDoctorForm()">+ Add Doctor</button>
+            <div><div class="portal-title">Manage Doctors</div><div class="portal-date">Assign doctors to OPDs and manage their schedules</div></div>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-secondary btn-sm" onclick="showDoctorView('schedule')">📅 Schedule View</button>
+              <button class="btn btn-primary btn-sm" onclick="showDoctorView('list')">+ Add Doctor</button>
+            </div>
           </div>
 
+          <!-- Add doctor form -->
           <div class="panel" id="addDoctorPanel" style="display:none;">
             <div class="panel-header"><div class="panel-title">➕ Add New Doctor</div><button class="btn btn-secondary btn-sm" onclick="toggleAddDoctorForm()">Cancel</button></div>
             <div class="doctor-form-grid">
@@ -409,9 +406,25 @@
             <div style="padding:0 20px 20px;"><button class="btn btn-primary" onclick="addDoctor()">Add Doctor</button></div>
           </div>
 
-          <div class="panel">
-            <div class="panel-header"><div class="panel-title">👨‍⚕️ Your Doctors</div><span style="font-size:12px;color:var(--text-muted);" id="drCountLabel">— doctors</span></div>
-            <div id="doctorsList"><div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div></div>
+          <!-- Doctor list view -->
+          <div id="doctorListView">
+            <div class="panel">
+              <div class="panel-header"><div class="panel-title">👨‍⚕️ Your Doctors</div><span style="font-size:12px;color:var(--text-muted);" id="drCountLabel">— doctors</span></div>
+              <div id="doctorsList"><div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div></div>
+            </div>
+          </div>
+
+          <!-- Doctor schedule view -->
+          <div id="doctorScheduleView" style="display:none;">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">📅 Doctor Off-Day Schedules</div>
+                <span style="font-size:12px;color:var(--text-muted);">Mark doctors unavailable for specific dates</span>
+              </div>
+              <div class="panel-body" id="doctorScheduleList">
+                <div class="table-empty"><div class="table-empty-icon">📅</div>Loading schedules...</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -474,7 +487,6 @@
     let realtimeChannel = null;
 
     const TODAY = new Date().toISOString().split('T')[0];
-
     const ALL_SLOTS = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM'];
 
     const portalSections = ['overview','tokens','appointments','checkin','opds','doctors','beds','slots'];
@@ -496,12 +508,24 @@
 
     window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
 
-    /* ── GET NEXT TOKEN per OPD ── */
+    /* ── DOCTOR VIEW SWITCHER ── */
+    window.showDoctorView = function(view) {
+      if (view === 'list') {
+        toggleAddDoctorForm();
+        document.getElementById('doctorListView').style.display     = 'block';
+        document.getElementById('doctorScheduleView').style.display = 'none';
+      } else {
+        document.getElementById('doctorListView').style.display     = 'none';
+        document.getElementById('doctorScheduleView').style.display = 'block';
+        document.getElementById('addDoctorPanel').style.display     = 'none';
+        loadDoctorSchedules();
+      }
+    };
+
+    /* ── GET NEXT TOKEN ── */
     async function getNextToken(hospitalId, opdId) {
       const { data, error } = await supabase.rpc('get_next_token', {
-        p_hospital_id: hospitalId,
-        p_date:        TODAY,
-        p_opd_id:      opdId,
+        p_hospital_id: hospitalId, p_date: TODAY, p_opd_id: opdId,
       });
       if (error) throw new Error('Could not get next token: ' + error.message);
       return data;
@@ -511,7 +535,6 @@
     window.addOfflineToken = async function() {
       const opdId = document.getElementById('offlineOpdSelect')?.value ||
                     document.getElementById('offlineOpdSelect2')?.value;
-
       if (!opdId) { showToast('Please select an OPD first.', 'error'); return; }
 
       const opd = hospitalOpds.find(o => o.id === opdId);
@@ -519,23 +542,15 @@
 
       try {
         const tokenNumber = await getNextToken(currentHospital.id, opdId);
-
         await supabase.from('tokens').insert({
-          hospital_id:   currentHospital.id,
-          opd_id:        opdId,
-          token_number:  tokenNumber,
-          opd_department:opd.department,
-          status:        'waiting',
-          is_offline:    true,
-          checked_in_at: new Date().toISOString(),
+          hospital_id: currentHospital.id, opd_id: opdId,
+          token_number: tokenNumber, opd_department: opd.department,
+          status: 'waiting', is_offline: true, checked_in_at: new Date().toISOString(),
         });
-
         showToast(`✅ Walk-in token ${tokenNumber} assigned for ${opd.name}!`, 'success');
         await loadOverview();
-
         const tokSection = document.getElementById('section-tokens');
         if (tokSection && tokSection.style.display !== 'none') loadTokenQueue();
-
       } catch (err) {
         showToast(err.message || 'Failed to add offline token.', 'error');
       }
@@ -561,13 +576,11 @@
 
         if (staffError || !staffRow) { await supabase.auth.signOut(); throw new Error('This account is not registered as hospital staff.'); }
 
-        currentStaff    = staffRow;
-        currentHospital = staffRow.hospitals;
+        currentStaff = staffRow; currentHospital = staffRow.hospitals;
         btn.textContent = 'Login to Staff Portal'; btn.disabled = false;
         document.getElementById('staffLoginPage').style.display = 'none';
         document.getElementById('staffPortal').style.display    = 'block';
         initPortal();
-
       } catch (err) {
         btn.textContent = 'Login to Staff Portal'; btn.disabled = false;
         errorBox.textContent = err.message; errorBox.classList.add('show');
@@ -580,8 +593,7 @@
       const { data: staffRow } = await supabase
         .from('hospital_staff').select('*, hospitals(*)').eq('user_id', session.user.id).eq('is_active', true).single();
       if (staffRow && staffRow.hospitals) {
-        currentStaff    = staffRow;
-        currentHospital = staffRow.hospitals;
+        currentStaff = staffRow; currentHospital = staffRow.hospitals;
         document.getElementById('staffLoginPage').style.display = 'none';
         document.getElementById('staffPortal').style.display    = 'block';
         initPortal();
@@ -604,8 +616,8 @@
       document.getElementById('sidebarHospitalName').textContent = h.name;
       document.getElementById('sidebarStaffName').textContent    = currentStaff.full_name || 'Staff';
 
-      const hour  = new Date().getHours();
-      document.getElementById('overviewGreeting').textContent = (hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening');
+      const hour = new Date().getHours();
+      document.getElementById('overviewGreeting').textContent = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
       const dateStr = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
       document.getElementById('portalDate').textContent    = dateStr;
@@ -618,17 +630,14 @@
       subscribeToTokens();
     }
 
-    /* ── LOAD OPDs DATA (used throughout) ── */
     async function loadOpdsData() {
-      const { data } = await supabase
-        .from('opds').select('*').eq('hospital_id', currentHospital.id).eq('is_active', true).order('name');
+      const { data } = await supabase.from('opds').select('*').eq('hospital_id', currentHospital.id).eq('is_active', true).order('name');
       hospitalOpds = data || [];
       populateOpdSelects();
     }
 
     function populateOpdSelects() {
       const opdOptions = hospitalOpds.map(o => `<option value="${o.id}">${o.name} ${o.fee > 0 ? '· ₹'+o.fee : '· Free'}</option>`).join('');
-
       ['offlineOpdSelect','offlineOpdSelect2','drOpdId','filterOPD','tokenOpdFilter','slotOpdFilter'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -637,7 +646,6 @@
       });
     }
 
-    /* ── REALTIME ── */
     function subscribeToTokens() {
       realtimeChannel = supabase
         .channel('tokens-' + currentHospital.id)
@@ -649,7 +657,6 @@
         .subscribe();
     }
 
-    /* ── OVERVIEW ── */
     async function loadOverview() {
       await Promise.all([loadOverviewStats(), loadOverviewList()]);
     }
@@ -690,25 +697,21 @@
 
       const el = document.getElementById('overviewList');
       if (!appts || !appts.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📅</div>No appointments today.</div>`; return; }
-      el.innerHTML = buildTable(appts, true);
+      el.innerHTML = buildTable(appts);
       populateFilterDropdowns(appts);
     }
 
     /* ── TOKEN QUEUE ── */
     async function loadTokenQueue() {
       const opdFilter = document.getElementById('tokenOpdFilter')?.value || 'all';
-      const h = currentHospital;
-
       let query = supabase
         .from('tokens').select('*, patients(full_name), appointments(time_slot, doctor_name), opds(name)')
-        .eq('hospital_id', h.id).gte('checked_in_at', TODAY + 'T00:00:00').order('token_number');
-
+        .eq('hospital_id', currentHospital.id).gte('checked_in_at', TODAY + 'T00:00:00').order('token_number');
       if (opdFilter !== 'all') query = query.eq('opd_id', opdFilter);
 
       const { data: tokens } = await query;
       const allTokens = tokens || [];
 
-      /* Per-OPD summary cards */
       const summaryEl = document.getElementById('opdTokenSummary');
       const opdGroups = {};
       allTokens.forEach(t => {
@@ -753,8 +756,8 @@
                     <td>${t.appointments?.time_slot || '—'}</td>
                     <td><span class="status-pill ${sClass}">${sText}</span></td>
                     <td>
-                      ${t.status === 'waiting'    ? `<button class="action-btn" onclick="callToken('${t.id}',${t.token_number})">Call</button>` : ''}
-                      ${t.status === 'called'     ? `<button class="action-btn" onclick="doneToken('${t.id}')">Done</button>` : ''}
+                      ${t.status === 'waiting' ? `<button class="action-btn" onclick="callToken('${t.id}',${t.token_number})">Call</button>` : ''}
+                      ${t.status === 'called'  ? `<button class="action-btn" onclick="doneToken('${t.id}')">Done</button>` : ''}
                     </td>
                   </tr>`;
               }).join('')}
@@ -790,10 +793,8 @@
     function populateFilterDropdowns(appts) {
       const opdNames = [...new Set((appts||[]).map(a => a.opd_name).filter(Boolean))];
       const docNames = [...new Set((appts||[]).map(a => a.doctor_name).filter(Boolean))];
-
       const filterOPD = document.getElementById('filterOPD');
       if (filterOPD) filterOPD.innerHTML = '<option value="all">All OPDs</option>' + opdNames.map(n => `<option value="${n}">${n}</option>`).join('');
-
       const filterDr = document.getElementById('filterDoctor');
       if (filterDr) filterDr.innerHTML = '<option value="all">All Doctors</option>' + docNames.map(n => `<option value="${n}">${n}</option>`).join('');
     }
@@ -807,15 +808,9 @@
       document.getElementById('apptTableBody').innerHTML = buildTableRows(filtered);
     };
 
-    function buildTable(appts, compact = false) {
+    function buildTable(appts) {
       if (!appts.length) return `<div class="table-empty"><div class="table-empty-icon">📅</div>No appointments.</div>`;
-      return `
-        <div style="overflow-x:auto;">
-          <table class="appt-table">
-            <thead><tr><th>#</th><th>Patient</th><th>OPD</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody>${buildTableRows(appts)}</tbody>
-          </table>
-        </div>`;
+      return `<div style="overflow-x:auto;"><table class="appt-table"><thead><tr><th>#</th><th>Patient</th><th>OPD</th><th>Doctor</th><th>Slot</th><th>Scheme</th><th>Status</th><th>Actions</th></tr></thead><tbody>${buildTableRows(appts)}</tbody></table></div>`;
     }
 
     function buildTableRows(appts) {
@@ -840,34 +835,26 @@
     function canCheckin(s)  { return s === 'confirmed' || s === 'pending'; }
     function canComplete(s) { return s !== 'completed' && s !== 'cancelled'; }
     function canCancel(s)   { return s !== 'cancelled'; }
-
     function statusClass(s) { return { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[s] || 'status-pending'; }
     function statusText(s)  { return { confirmed:'Confirmed', pending:'Pending', checkedin:'Checked In', completed:'Completed', cancelled:'Cancelled' }[s] || 'Pending'; }
 
-    /* ── QUICK CHECK-IN ── */
     window.quickCheckin = async function(apptId, name, doctor, slot, patId, opdId, opdName) {
       if (!confirm(`Check in ${name} for ${doctor} (${opdName}) at ${slot}?`)) return;
       try {
         await supabase.from('appointments').update({ status:'checkedin' }).eq('id', apptId);
-
-        const resolvedOpdId = opdId || (hospitalOpds.find(o => o.department === doctor)?.id) || hospitalOpds[0]?.id;
-        if (!resolvedOpdId) throw new Error('Could not determine OPD for this appointment.');
-
+        const resolvedOpdId = opdId || hospitalOpds[0]?.id;
+        if (!resolvedOpdId) throw new Error('Could not determine OPD.');
         const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
         const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
-
         await supabase.from('tokens').insert({
-          patient_id: patId, hospital_id: currentHospital.id,
-          appointment_id: apptId, opd_id: resolvedOpdId,
-          token_number: tokenNumber, opd_department: opd?.department || doctor,
-          status: 'waiting', is_offline: false, checked_in_at: new Date().toISOString(),
+          patient_id: patId, hospital_id: currentHospital.id, appointment_id: apptId,
+          opd_id: resolvedOpdId, token_number: tokenNumber,
+          opd_department: opd?.department || doctor, status: 'waiting',
+          is_offline: false, checked_in_at: new Date().toISOString(),
         });
-
         showToast(`✅ ${name} checked in. Token: ${tokenNumber} (${opd?.name || opdName})`, 'success');
         await loadOverview(); await loadAppointments();
-      } catch (err) {
-        showToast(err.message || 'Check-in failed.', 'error');
-      }
+      } catch (err) { showToast(err.message || 'Check-in failed.', 'error'); }
     };
 
     window.markDone = async function(id) {
@@ -897,10 +884,7 @@
 
       if (!appt) { showToast('No appointment found for this patient today.', 'error'); return; }
 
-      checkinApptId = appt.id;
-      checkinPatId  = patient.id;
-      checkinOpdId  = appt.opd_id || null;
-
+      checkinApptId = appt.id; checkinPatId = patient.id; checkinOpdId = appt.opd_id || null;
       const opd = hospitalOpds.find(o => o.id === checkinOpdId);
 
       document.getElementById('checkinPatientName').textContent = patient.full_name;
@@ -920,30 +904,24 @@
       try {
         const { data: appt } = await supabase.from('appointments')
           .update({ status:'checkedin' }).eq('id', checkinApptId).select().single();
-
         const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
         if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
-
-        const opd         = hospitalOpds.find(o => o.id === resolvedOpdId);
+        const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
         const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
-
         await supabase.from('tokens').insert({
           patient_id: checkinPatId, hospital_id: currentHospital.id,
           appointment_id: checkinApptId, opd_id: resolvedOpdId,
           token_number: tokenNumber, opd_department: opd?.department || appt.doctor_name,
           status: 'waiting', is_offline: false, checked_in_at: new Date().toISOString(),
         });
-
         btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
         document.getElementById('checkinResult').classList.remove('show');
         document.getElementById('tokenResult').classList.add('show');
         document.getElementById('assignedTokenNum').textContent  = tokenNumber;
         document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
         document.getElementById('assignedOpdInfo').textContent   = opd ? `OPD: ${opd.name}` : '';
-
         showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
         await loadOverview();
-
       } catch (err) {
         btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
         showToast(err.message || 'Failed.', 'error');
@@ -962,12 +940,10 @@
       await loadOpdsData();
       const el = document.getElementById('opdsList');
       document.getElementById('opdCountLabel').textContent = `${hospitalOpds.length} OPDs`;
-
-      if (!hospitalOpds.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs yet. Add your first OPD above.</div>`; return; }
-
+      if (!hospitalOpds.length) { el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">🏥</div>No OPDs yet.</div>`; return; }
       el.innerHTML = hospitalOpds.map(o => `
         <div class="opd-card">
-          <div class="opd-card-info">
+          <div>
             <div class="opd-card-name">${o.name}</div>
             <div class="opd-card-meta">${o.department}</div>
           </div>
@@ -979,41 +955,32 @@
     window.toggleAddOpdForm = function() {
       const panel = document.getElementById('addOpdPanel');
       panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      document.getElementById('doctorListView').style.display     = 'block';
+      document.getElementById('doctorScheduleView').style.display = 'none';
     };
 
     window.addOpd = async function() {
       const name = document.getElementById('opdName').value.trim();
       const dept = document.getElementById('opdDept').value.trim();
       const fee  = parseInt(document.getElementById('opdFee').value) || 0;
-
       if (!name || !dept) { showToast('OPD name and department are required.', 'error'); return; }
-
-      const { error } = await supabase.from('opds').insert({
-        hospital_id: currentHospital.id, name, department: dept, fee, is_active: true,
-      });
-
+      const { error } = await supabase.from('opds').insert({ hospital_id:currentHospital.id, name, department:dept, fee, is_active:true });
       if (error) { showToast(error.message || 'Failed to create OPD.', 'error'); return; }
-
       showToast(`${name} created!`, 'success');
-      document.getElementById('opdName').value = '';
-      document.getElementById('opdDept').value = '';
-      document.getElementById('opdFee').value  = '';
+      document.getElementById('opdName').value = ''; document.getElementById('opdDept').value = ''; document.getElementById('opdFee').value = '';
       document.getElementById('addOpdPanel').style.display = 'none';
       await loadOpds();
     };
 
     window.removeOpd = async function(id, name) {
-      if (!confirm(`Remove ${name}? This will affect doctors assigned to this OPD.`)) return;
-      await supabase.from('opds').update({ is_active: false }).eq('id', id);
-      showToast(`${name} removed.`, 'info');
-      await loadOpds();
+      if (!confirm(`Remove ${name}?`)) return;
+      await supabase.from('opds').update({ is_active:false }).eq('id', id);
+      showToast(`${name} removed.`, 'info'); await loadOpds();
     };
 
     /* ── MANAGE DOCTORS ── */
     async function loadDoctors() {
-      const { data: docs } = await supabase
-        .from('doctors').select('*, opds(name)').eq('hospital_id', currentHospital.id).order('name');
-
+      const { data: docs } = await supabase.from('doctors').select('*, opds(name)').eq('hospital_id', currentHospital.id).order('name');
       hospitalDoctors = docs || [];
       document.getElementById('drCountLabel').textContent = `${hospitalDoctors.length} doctors`;
 
@@ -1023,19 +990,18 @@
       el.innerHTML = `
         <div style="overflow-x:auto;">
           <table class="appt-table">
-            <thead><tr><th>Doctor</th><th>OPD</th><th>Speciality</th><th>Qualification</th><th>Days</th><th>Timings</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>Doctor</th><th>OPD</th><th>Speciality</th><th>Days</th><th>Timings</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
               ${hospitalDoctors.map(d => `
                 <tr>
                   <td class="patient-name">${d.name}</td>
                   <td style="font-size:12px;color:var(--electric);font-weight:600;">${d.opds?.name || d.opd_name || '—'}</td>
                   <td>${d.speciality || '—'}</td>
-                  <td>${d.qualification || '—'}</td>
                   <td>${d.opd_days || '—'}</td>
                   <td>${d.opd_start && d.opd_end ? `${d.opd_start}–${d.opd_end}` : '—'}</td>
-                  <td><span class="status-pill ${d.is_available ? 'status-confirmed' : 'status-cancelled'}">${d.is_available ? 'Available' : 'Off'}</span></td>
+                  <td><span class="status-pill ${d.is_available ? 'status-confirmed' : 'status-cancelled'}">${d.is_available ? 'Available' : 'Off today'}</span></td>
                   <td>
-                    <button class="action-btn" onclick="toggleDoctor('${d.id}',${d.is_available})">${d.is_available ? 'Mark Off' : 'Mark On'}</button>
+                    <button class="action-btn" onclick="toggleDoctorToday('${d.id}',${d.is_available})">${d.is_available ? 'Mark Off Today' : 'Mark Available'}</button>
                     <button class="action-btn danger" onclick="removeDoctor('${d.id}','${d.name}')">Remove</button>
                   </td>
                 </tr>`).join('')}
@@ -1043,20 +1009,17 @@
           </table>
         </div>`;
 
-      /* Update slot filter doctor dropdown */
       const slotDr = document.getElementById('slotDoctor');
-      if (slotDr) {
-        slotDr.innerHTML = '<option value="">Select Doctor</option>' +
-          hospitalDoctors.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name || ''}</option>`).join('');
-      }
+      if (slotDr) slotDr.innerHTML = '<option value="">Select Doctor</option>' + hospitalDoctors.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name||''}</option>`).join('');
     }
 
     window.toggleAddDoctorForm = function() {
       const panel = document.getElementById('addDoctorPanel');
       panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-      /* Populate OPD dropdown */
-      const sel = document.getElementById('drOpdId');
-      if (sel) sel.innerHTML = '<option value="">Select OPD</option>' + hospitalOpds.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
+      if (panel.style.display === 'block') {
+        const sel = document.getElementById('drOpdId');
+        if (sel) sel.innerHTML = '<option value="">Select OPD</option>' + hospitalOpds.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
+      }
     };
 
     window.addDoctor = async function() {
@@ -1068,39 +1031,130 @@
       const start = document.getElementById('drStart').value;
       const end   = document.getElementById('drEnd').value;
 
-      if (!name || !spec)  { showToast('Doctor name and speciality are required.', 'error'); return; }
+      if (!name || !spec) { showToast('Doctor name and speciality are required.', 'error'); return; }
       if (!opdId)          { showToast('Please select an OPD for this doctor.', 'error'); return; }
 
       const opd = hospitalOpds.find(o => o.id === opdId);
-
       const { error } = await supabase.from('doctors').insert({
-        hospital_id: currentHospital.id, name, opd_id: opdId,
-        opd_name: opd?.name || '', speciality: spec,
-        qualification: qual || null, opd_days: days || null,
+        hospital_id: currentHospital.id, name, opd_id: opdId, opd_name: opd?.name || '',
+        speciality: spec, qualification: qual || null, opd_days: days || null,
         opd_start: start || null, opd_end: end || null, is_available: true,
       });
-
       if (error) { showToast(error.message || 'Failed to add doctor.', 'error'); return; }
-
       showToast(`Dr. ${name} added to ${opd?.name}!`, 'success');
       ['drName','drSpec','drQual','drStart','drEnd'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('drOpdId').value = '';
-      document.getElementById('drDays').value  = '';
+      document.getElementById('drOpdId').value = ''; document.getElementById('drDays').value = '';
       document.getElementById('addDoctorPanel').style.display = 'none';
       await loadDoctors();
     };
 
-    window.toggleDoctor = async function(id, isAvail) {
+    /* ── TOGGLE DOCTOR TODAY ── */
+    window.toggleDoctorToday = async function(id, isAvail) {
       await supabase.from('doctors').update({ is_available: !isAvail }).eq('id', id);
-      showToast(`Doctor marked as ${!isAvail ? 'available' : 'unavailable'}.`, 'success');
+      showToast(`Doctor marked as ${!isAvail ? 'available' : 'off today'}.`, 'success');
       await loadDoctors();
     };
 
     window.removeDoctor = async function(id, name) {
       if (!confirm(`Remove ${name}?`)) return;
       await supabase.from('doctors').delete().eq('id', id);
-      showToast(`${name} removed.`, 'info');
-      await loadDoctors();
+      showToast(`${name} removed.`, 'info'); await loadDoctors();
+    };
+
+    /* ── DOCTOR SCHEDULE MANAGEMENT (future dates) ── */
+    async function loadDoctorSchedules() {
+      const el = document.getElementById('doctorScheduleList');
+      if (!hospitalDoctors.length) {
+        el.innerHTML = `<div class="table-empty"><div class="table-empty-icon">👨‍⚕️</div>No doctors added yet.</div>`;
+        return;
+      }
+
+      /* Fetch existing off dates */
+      const { data: offDates } = await supabase
+        .from('doctor_schedules')
+        .select('*')
+        .eq('hospital_id', currentHospital.id)
+        .gte('off_date', TODAY)
+        .order('off_date');
+
+      const offMap = {};
+      (offDates || []).forEach(d => {
+        if (!offMap[d.doctor_id]) offMap[d.doctor_id] = [];
+        offMap[d.doctor_id].push({ id: d.id, date: d.off_date, reason: d.reason });
+      });
+
+      el.innerHTML = hospitalDoctors.map(d => {
+        const dOffDates = offMap[d.id] || [];
+        const initials  = d.name.split(' ').slice(-2).map(n => n[0]).join('').toUpperCase();
+        return `
+          <div class="doctor-schedule-card">
+            <div class="doctor-schedule-header">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:40px;height:40px;border-radius:50%;background:rgba(61,158,255,0.1);border:1.5px solid rgba(61,158,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--electric);flex-shrink:0;">${initials}</div>
+                <div>
+                  <div class="doctor-schedule-name">${d.name}</div>
+                  <div class="doctor-schedule-opd">${d.opds?.name || d.opd_name || '—'} · ${d.speciality || ''}</div>
+                </div>
+              </div>
+              <div class="doctor-schedule-status">
+                <span class="status-pill ${d.is_available ? 'status-confirmed' : 'status-cancelled'}">${d.is_available ? 'Available today' : 'Off today'}</span>
+              </div>
+            </div>
+
+            <!-- Off dates chips -->
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">
+              Upcoming Off Days ${dOffDates.length > 0 ? `(${dOffDates.length})` : ''}
+            </div>
+            <div class="schedule-off-dates" id="offDates-${d.id}">
+              ${dOffDates.length === 0
+                ? `<span style="font-size:12px;color:var(--text-muted);">No off days scheduled.</span>`
+                : dOffDates.map(od => `
+                    <div class="off-date-chip">
+                      <span>📅 ${new Date(od.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+                      ${od.reason ? `<span style="color:var(--text-muted);font-size:10px;">· ${od.reason}</span>` : ''}
+                      <button onclick="removeOffDate('${od.id}','${d.id}')" title="Remove">×</button>
+                    </div>`).join('')}
+            </div>
+
+            <!-- Add off date form -->
+            <div class="add-off-date-form">
+              <input type="date" id="offDateInput-${d.id}" min="${TODAY}" placeholder="Select date" />
+              <input type="text" id="offReasonInput-${d.id}" placeholder="Reason (optional)" style="flex:1;min-width:120px;" />
+              <button class="btn btn-secondary btn-sm" onclick="addOffDate('${d.id}')">+ Mark Off Day</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    window.addOffDate = async function(doctorId) {
+      const dateEl   = document.getElementById(`offDateInput-${doctorId}`);
+      const reasonEl = document.getElementById(`offReasonInput-${doctorId}`);
+      const date     = dateEl?.value;
+      const reason   = reasonEl?.value.trim() || null;
+
+      if (!date) { showToast('Please select a date.', 'error'); return; }
+      if (date < TODAY) { showToast('Cannot mark past dates as off.', 'error'); return; }
+
+      const { error } = await supabase.from('doctor_schedules').insert({
+        doctor_id: doctorId, hospital_id: currentHospital.id, off_date: date, reason,
+      });
+
+      if (error) {
+        if (error.code === '23505') { showToast('This date is already marked as off for this doctor.', 'error'); }
+        else { showToast(error.message || 'Failed to add off day.', 'error'); }
+        return;
+      }
+
+      showToast('Off day added successfully!', 'success');
+      if (dateEl) dateEl.value = '';
+      if (reasonEl) reasonEl.value = '';
+      await loadDoctorSchedules();
+    };
+
+    window.removeOffDate = async function(scheduleId, doctorId) {
+      await supabase.from('doctor_schedules').delete().eq('id', scheduleId);
+      showToast('Off day removed.', 'info');
+      await loadDoctorSchedules();
     };
 
     /* ── BEDS ── */
@@ -1111,7 +1165,6 @@
       const occ   = total - avail;
       const pct   = total > 0 ? Math.round((occ/total)*100) : 0;
       const color = pct > 80 ? 'var(--danger)' : pct > 50 ? 'var(--warning)' : 'var(--electric)';
-
       document.getElementById('bedAvailNum').textContent   = avail;
       document.getElementById('bedOccNum').textContent     = occ;
       document.getElementById('bedTotalNum').textContent   = total;
@@ -1131,10 +1184,8 @@
       const newVal = parseInt(document.getElementById('bedNewVal').value);
       const total  = currentHospital.bed_count || 0;
       if (isNaN(newVal) || newVal < 0 || newVal > total) { showToast(`Value must be 0–${total}.`, 'error'); return; }
-
-      const { error } = await supabase.from('hospitals').update({ beds_available: newVal }).eq('id', currentHospital.id);
+      const { error } = await supabase.from('hospitals').update({ beds_available:newVal }).eq('id', currentHospital.id);
       if (error) { showToast('Update failed.', 'error'); return; }
-
       currentHospital.beds_available = newVal;
       renderBeds();
       document.getElementById('statBeds').textContent = newVal;
@@ -1142,29 +1193,20 @@
     };
 
     /* ── SLOTS ── */
-    function initSlots() {
-      document.getElementById('slotDate').value = TODAY;
-      updateSlotDoctorFilter();
-    }
+    function initSlots() { document.getElementById('slotDate').value = TODAY; updateSlotDoctorFilter(); }
 
     window.updateSlotDoctorFilter = function() {
       const opdFilter = document.getElementById('slotOpdFilter')?.value || '';
       const slotDr    = document.getElementById('slotDoctor');
       if (!slotDr) return;
-
-      const filtered = opdFilter
-        ? hospitalDoctors.filter(d => d.opd_id === opdFilter)
-        : hospitalDoctors;
-
-      slotDr.innerHTML = '<option value="">Select Doctor</option>' +
-        filtered.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name || ''}</option>`).join('');
+      const filtered = opdFilter ? hospitalDoctors.filter(d => d.opd_id === opdFilter) : hospitalDoctors;
+      slotDr.innerHTML = '<option value="">Select Doctor</option>' + filtered.map(d => `<option value="${d.name}">${d.name} — ${d.opds?.name||''}</option>`).join('');
     };
 
     window.loadSlots = async function() {
       const doctor = document.getElementById('slotDoctor').value;
       const date   = document.getElementById('slotDate').value || TODAY;
       const grid   = document.getElementById('slotsGrid');
-
       if (!doctor) { grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);">Select a doctor to see slots.</div>`; return; }
 
       const { data: booked } = await supabase
@@ -1187,7 +1229,6 @@
       }).join('');
     };
 
-    /* ── START ── */
     checkExistingSession();
   </script>
 </body>
