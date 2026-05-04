@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Referral System — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--off-white); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .login-page { min-height:100vh; background:var(--navy); display:flex; align-items:center; justify-content:center; padding:40px 24px; }
+    .login-card { background:var(--white); border-radius:var(--radius-xl); padding:44px; width:100%; max-width:400px; box-shadow:var(--shadow-lg); }
+    .login-logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+    .login-logo-name { font-size:20px; font-weight:700; color:var(--navy); }
+    .login-logo-tag  { font-size:11px; color:var(--electric); font-weight:600; letter-spacing:1px; display:block; }
+    .login-title { font-family:'Georgia',serif; font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+    .login-sub   { font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.6; }
+    .login-form  { display:flex; flex-direction:column; gap:14px; }
+    .login-error { background:rgba(255,71,87,0.06); border:1px solid rgba(255,71,87,0.2); border-radius:var(--radius-md); padding:12px 14px; font-size:13px; color:var(--danger); display:none; line-height:1.5; }
+    .login-error.show { display:block; }
+
+    /* ── PORTAL ── */
+    .portal-page { display:none; min-height:100vh; }
+
+    .portal-nav { background:var(--navy); border-bottom:1px solid var(--border-dark); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+    .portal-nav-brand { display:flex; align-items:center; gap:10px; }
+    .portal-nav-name  { font-size:16px; font-weight:700; color:var(--white); }
+    .portal-nav-tag   { font-size:10px; color:var(--electric); font-weight:600; letter-spacing:1px; }
+    .portal-nav-right { display:flex; align-items:center; gap:14px; }
+    .portal-nav-hospital { font-size:13px; color:var(--text-on-dark-muted); }
+    .portal-nav-hospital strong { color:var(--white); }
+
+    .portal-content { max-width:960px; margin:0 auto; padding:32px 24px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom:28px; }
+    .page-title  { font-family:'Georgia',serif; font-size:28px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+    .page-sub    { font-size:14px; color:var(--text-muted); line-height:1.6; }
+
+    /* ── STEPS ── */
+    .steps-bar { display:flex; align-items:center; gap:0; margin-bottom:32px; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; }
+    .step-item { flex:1; padding:14px 16px; display:flex; align-items:center; gap:10px; cursor:pointer; transition:var(--transition); border-right:1px solid var(--border-card); }
+    .step-item:last-child { border-right:none; }
+    .step-item.active { background:rgba(61,158,255,0.06); }
+    .step-item.done   { background:rgba(0,196,140,0.04); }
+    .step-num  { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+    .step-num.active  { background:var(--electric); color:white; }
+    .step-num.done    { background:var(--success);  color:white; }
+    .step-num.pending { background:var(--border-card); color:var(--text-muted); }
+    .step-label { font-size:12px; font-weight:600; color:var(--text-muted); }
+    .step-item.active .step-label { color:var(--electric); }
+    .step-item.done   .step-label { color:var(--success); }
+
+    /* ── PANEL ── */
+    .panel { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
+    .panel-header { padding:16px 20px; border-bottom:1px solid var(--border-card); display:flex; align-items:center; justify-content:space-between; }
+    .panel-title  { font-size:15px; font-weight:600; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
+    .panel-body   { padding:20px; }
+
+    /* ── STEP SECTIONS ── */
+    .step-section { display:none; }
+    .step-section.active { display:block; }
+
+    /* ── PATIENT SEARCH ── */
+    .search-form { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
+    .search-form .form-group { flex:1; min-width:200px; margin:0; }
+
+    .patient-found-card { background:var(--off-white); border:1.5px solid var(--electric); border-radius:var(--radius-lg); padding:18px 20px; display:flex; align-items:center; gap:16px; margin-top:16px; }
+    .patient-avatar { width:48px; height:48px; border-radius:50%; background:rgba(61,158,255,0.1); border:2px solid rgba(61,158,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:var(--electric); flex-shrink:0; }
+    .patient-info  { flex:1; }
+    .patient-name  { font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
+    .patient-meta  { font-size:12px; color:var(--text-muted); }
+
+    /* ── APPOINTMENT CARD ── */
+    .appt-select-card { background:var(--off-white); border:1.5px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; cursor:pointer; transition:var(--transition); margin-bottom:10px; display:flex; align-items:center; gap:14px; }
+    .appt-select-card:hover { border-color:rgba(61,158,255,0.3); }
+    .appt-select-card.selected { border-color:var(--electric); background:rgba(61,158,255,0.04); }
+    .appt-select-card:last-child { margin-bottom:0; }
+    .appt-date-box { width:48px; height:52px; border-radius:var(--radius-md); background:rgba(61,158,255,0.08); border:1px solid rgba(61,158,255,0.15); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+    .appt-date-day { font-size:18px; font-weight:700; color:var(--electric); line-height:1; }
+    .appt-date-mon { font-size:10px; font-weight:600; color:var(--text-muted); text-transform:uppercase; }
+    .appt-card-info { flex:1; }
+    .appt-card-doctor  { font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+    .appt-card-opd     { font-size:11px; color:var(--electric); font-weight:600; margin-bottom:2px; }
+    .appt-card-hospital{ font-size:11px; color:var(--text-muted); }
+
+    /* ── REFERRAL FORM ── */
+    .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+    .urgency-pills { display:flex; gap:8px; flex-wrap:wrap; }
+    .urgency-pill  { padding:8px 16px; border-radius:20px; font-size:12px; font-weight:600; border:1.5px solid var(--border-card); background:var(--white); cursor:pointer; transition:var(--transition); }
+    .urgency-pill.routine   { }
+    .urgency-pill.urgent    { }
+    .urgency-pill.emergency { }
+    .urgency-pill.selected.routine   { background:rgba(61,158,255,0.1);  border-color:var(--electric); color:var(--electric); }
+    .urgency-pill.selected.urgent    { background:rgba(255,159,0,0.1);   border-color:var(--warning);  color:var(--warning); }
+    .urgency-pill.selected.emergency { background:rgba(255,71,87,0.1);   border-color:var(--danger);   color:var(--danger); }
+
+    /* Consent box */
+    .consent-box { background:rgba(0,196,140,0.04); border:1.5px solid rgba(0,196,140,0.2); border-radius:var(--radius-lg); padding:18px 20px; display:flex; align-items:flex-start; gap:14px; }
+    .consent-box-icon { font-size:22px; flex-shrink:0; }
+    .consent-box-text { flex:1; }
+    .consent-box-title{ font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:4px; }
+    .consent-box-desc { font-size:12px; color:var(--text-secondary); line-height:1.6; }
+    .consent-toggle   { display:flex; align-items:center; gap:8px; margin-top:12px; cursor:pointer; }
+    .consent-toggle input { width:16px; height:16px; accent-color:var(--success); cursor:pointer; }
+    .consent-toggle-label { font-size:13px; font-weight:600; color:var(--text-primary); }
+
+    /* Summary card */
+    .summary-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; margin-bottom:16px; }
+    .summary-row  { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:8px 0; border-bottom:1px solid var(--border-card); font-size:13px; }
+    .summary-row:last-child { border-bottom:none; }
+    .summary-label { color:var(--text-muted); font-weight:500; flex-shrink:0; }
+    .summary-value { color:var(--text-primary); font-weight:600; text-align:right; }
+
+    /* Urgency badge */
+    .urgency-badge-routine   { background:rgba(61,158,255,0.1); color:var(--electric); }
+    .urgency-badge-urgent    { background:rgba(255,159,0,0.1);  color:var(--warning); }
+    .urgency-badge-emergency { background:rgba(255,71,87,0.1);  color:var(--danger); }
+
+    /* ── SUCCESS ── */
+    .success-card { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-xl); padding:40px 32px; text-align:center; }
+    .success-icon { width:80px; height:80px; border-radius:50%; background:rgba(0,196,140,0.1); border:2px solid var(--success); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; }
+    .success-title { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); margin-bottom:10px; }
+    .success-desc  { font-size:14px; color:var(--text-secondary); line-height:1.7; max-width:480px; margin:0 auto 28px; }
+
+    /* Referral slip */
+    .referral-slip { background:var(--white); border:2px solid var(--border-card); border-radius:var(--radius-lg); padding:24px; max-width:560px; margin:0 auto 24px; text-align:left; }
+    .slip-header   { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:14px; border-bottom:2px solid var(--border-card); }
+    .slip-brand    { font-size:18px; font-weight:700; color:var(--navy); }
+    .slip-tag      { font-size:10px; color:var(--electric); font-weight:600; letter-spacing:1px; }
+    .slip-id       { font-size:11px; color:var(--text-muted); text-align:right; }
+
+    .slip-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+    .slip-item { }
+    .slip-item-label { font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:3px; }
+    .slip-item-value { font-size:13px; font-weight:600; color:var(--text-primary); }
+
+    .slip-diagnosis { background:var(--off-white); border-radius:var(--radius-md); padding:12px 14px; margin-bottom:14px; }
+    .slip-diagnosis-label { font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+    .slip-diagnosis-text  { font-size:13px; color:var(--text-primary); line-height:1.6; }
+
+    .slip-urgency { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; }
+
+    /* Referral history list */
+    .referral-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:18px 20px; margin-bottom:12px; }
+    .referral-item:last-child { margin-bottom:0; }
+    .referral-item-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .referral-item-title  { font-size:14px; font-weight:600; color:var(--text-primary); }
+    .referral-item-meta   { font-size:12px; color:var(--text-muted); margin-top:2px; }
+    .referral-status-pill { font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
+    .referral-status-pending   { background:rgba(255,159,0,0.1);  color:var(--warning); }
+    .referral-status-accepted  { background:rgba(0,196,140,0.1);  color:var(--success); }
+    .referral-status-completed { background:rgba(100,100,100,0.1);color:var(--text-muted); }
+
+    /* Nav tabs */
+    .page-tabs { display:flex; gap:0; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:24px; }
+    .page-tab  { flex:1; padding:12px 20px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; transition:var(--transition); border:none; background:none; border-right:1px solid var(--border-card); }
+    .page-tab:last-child { border-right:none; }
+    .page-tab.active { background:var(--electric); color:var(--white); }
+    .page-tab:hover:not(.active) { background:var(--off-white); }
+
+    @media (max-width:700px) {
+      .form-grid-2 { grid-template-columns:1fr; }
+      .form-grid-3 { grid-template-columns:1fr; }
+      .slip-grid   { grid-template-columns:1fr; }
+      .steps-bar   { flex-direction:column; border-radius:var(--radius-lg); }
+      .step-item   { border-right:none; border-bottom:1px solid var(--border-card); }
+      .step-item:last-child { border-bottom:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-page" id="loginPage">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+          <circle cx="18" cy="22" r="3.5" fill="white"/>
+        </svg>
+        <div><span class="login-logo-name">curaah</span><span class="login-logo-tag">REFERRAL SYSTEM</span></div>
+      </div>
+      <div class="login-title">Staff Login</div>
+      <p class="login-sub">Login with your hospital staff credentials to create and manage patient referrals.</p>
+      <div class="login-error" id="loginError"></div>
+      <div class="login-form">
+        <div class="form-group"><label class="form-label">Staff Email *</label><input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" /></div>
+        <div class="form-group"><label class="form-label">Password *</label><input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" /></div>
+        <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">Login to Referral System</button>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:20px;">
+        <a href="staff-portal.html" style="color:var(--electric);font-weight:600;">← Back to Staff Portal</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- PORTAL -->
+  <div class="portal-page" id="portalPage">
+
+    <div class="portal-nav">
+      <div class="portal-nav-brand">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+          <circle cx="18" cy="22" r="3.5" fill="white"/>
+        </svg>
+        <div><div class="portal-nav-name">curaah</div><div class="portal-nav-tag">REFERRAL SYSTEM</div></div>
+      </div>
+      <div class="portal-nav-right">
+        <span class="portal-nav-hospital">Referring from: <strong id="navHospitalName">—</strong></span>
+        <a href="staff-portal.html" class="btn btn-ghost btn-sm">Staff Portal</a>
+        <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="portal-content">
+
+      <div class="page-header">
+        <div class="page-title">Patient Referral System</div>
+        <p class="page-sub">Create referrals for patients, book appointments at referred hospitals, and track referral history.</p>
+      </div>
+
+      <!-- Page tabs -->
+      <div class="page-tabs">
+        <button class="page-tab active" onclick="switchTab('new', this)">➕ New Referral</button>
+        <button class="page-tab" onclick="switchTab('history', this)">📋 Referral History</button>
+        <button class="page-tab" onclick="switchTab('incoming', this)">📥 Incoming Referrals</button>
+      </div>
+
+      <!-- ── NEW REFERRAL TAB ── -->
+      <div id="tab-new">
+
+        <!-- Progress steps -->
+        <div class="steps-bar">
+          <div class="step-item active" id="stepItem1">
+            <div class="step-num active" id="stepNum1">1</div>
+            <div class="step-label">Find Patient</div>
+          </div>
+          <div class="step-item" id="stepItem2">
+            <div class="step-num pending" id="stepNum2">2</div>
+            <div class="step-label">Select Appointment</div>
+          </div>
+          <div class="step-item" id="stepItem3">
+            <div class="step-num pending" id="stepNum3">3</div>
+            <div class="step-label">Referral Details</div>
+          </div>
+          <div class="step-item" id="stepItem4">
+            <div class="step-num pending" id="stepNum4">4</div>
+            <div class="step-label">Review & Submit</div>
+          </div>
+        </div>
+
+        <!-- STEP 1: Find Patient -->
+        <div class="step-section active" id="section-step1">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">🔍 Find Patient by Phone</div></div>
+            <div class="panel-body">
+              <div class="search-form">
+                <div class="form-group">
+                  <label class="form-label">Patient Phone Number *</label>
+                  <input class="form-input" type="tel" id="searchPhone" placeholder="10-digit mobile number" maxlength="10" />
+                </div>
+                <button class="btn btn-primary" style="flex-shrink:0;" onclick="searchPatient()">Find Patient</button>
+              </div>
+
+              <div id="patientFoundCard" style="display:none;" class="patient-found-card">
+                <div class="patient-avatar" id="patientInitials">—</div>
+                <div class="patient-info">
+                  <div class="patient-name" id="patientName">—</div>
+                  <div class="patient-meta" id="patientMeta">—</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="goToStep(2)">
+                  Select → Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Select Appointment -->
+        <div class="step-section" id="section-step2">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📅 Select Patient's Current Appointment</div>
+              <button class="btn btn-secondary btn-sm" onclick="goToStep(1)">← Back</button>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+                Select the appointment at your hospital that this referral is being created from.
+                Or create a referral without a specific appointment.
+              </p>
+              <div id="patientApptsList">
+                <div style="text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">Loading appointments...</div>
+              </div>
+              <div style="margin-top:14px;">
+                <button class="btn btn-secondary btn-sm" onclick="selectNoAppt()">
+                  Continue without appointment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Referral Details -->
+        <div class="step-section" id="section-step3">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📝 Referral Details</div>
+              <button class="btn btn-secondary btn-sm" onclick="goToStep(2)">← Back</button>
+            </div>
+            <div class="panel-body" style="display:flex;flex-direction:column;gap:18px;">
+
+              <!-- Referred to -->
+              <div>
+                <p style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Refer To</p>
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Referred Hospital *</label>
+                    <select class="form-input form-select" id="referredHospital" onchange="loadReferredOpds()">
+                      <option value="">Select hospital</option>
+                    </select>
+                    <span class="form-error" id="refHospitalError"></span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Referred OPD / Department *</label>
+                    <select class="form-input form-select" id="referredOpd">
+                      <option value="">Select hospital first</option>
+                    </select>
+                    <span class="form-error" id="refOpdError"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Referring doctor -->
+              <div>
+                <p style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Referring Doctor</p>
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Doctor Name *</label>
+                    <select class="form-input form-select" id="referringDoctor">
+                      <option value="">Select doctor</option>
+                    </select>
+                    <span class="form-error" id="refDoctorError"></span>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Urgency Level *</label>
+                    <div class="urgency-pills" style="margin-top:6px;">
+                      <button class="urgency-pill routine selected" onclick="setUrgency('routine', this)">🟢 Routine</button>
+                      <button class="urgency-pill urgent"  onclick="setUrgency('urgent', this)">🟡 Urgent</button>
+                      <button class="urgency-pill emergency" onclick="setUrgency('emergency', this)">🔴 Emergency</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Appointment booking at referred hospital -->
+              <div>
+                <p style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Book Appointment at Referred Hospital</p>
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label class="form-label">Doctor at Referred Hospital</label>
+                    <select class="form-input form-select" id="refApptDoctor">
+                      <option value="">Select OPD first</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Appointment Date</label>
+                    <input class="form-input" type="date" id="refApptDate" onchange="loadRefSlots()" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Time Slot</label>
+                    <select class="form-input form-select" id="refApptSlot">
+                      <option value="">Select date & doctor first</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Diagnosis -->
+              <div>
+                <p style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Clinical Notes</p>
+                <div class="form-group">
+                  <label class="form-label">Diagnosis / Reason for Referral *</label>
+                  <textarea class="form-input form-textarea" id="diagnosisNotes" rows="4"
+                    placeholder="Enter diagnosis, clinical findings, reason for referral, and any special instructions for the referred hospital..."></textarea>
+                  <span class="form-error" id="diagnosisError"></span>
+                </div>
+              </div>
+
+              <!-- Patient consent -->
+              <div class="consent-box">
+                <div class="consent-box-icon">🤝</div>
+                <div class="consent-box-text">
+                  <div class="consent-box-title">Patient Consent Required</div>
+                  <div class="consent-box-desc">
+                    The patient must be informed about this referral, the referred hospital,
+                    and the reason. Their verbal or written consent is required before creating
+                    this referral. This referral will be visible to the patient in their Curaah dashboard.
+                  </div>
+                  <label class="consent-toggle">
+                    <input type="checkbox" id="consentCheck" />
+                    <span class="consent-toggle-label">Patient has given consent for this referral</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn-primary btn-lg" onclick="goToStep(4)">
+                  Review Referral →
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: Review & Submit -->
+        <div class="step-section" id="section-step4">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">✅ Review & Submit Referral</div>
+              <button class="btn btn-secondary btn-sm" onclick="goToStep(3)">← Back</button>
+            </div>
+            <div class="panel-body">
+              <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+                Please review all details carefully before submitting. Once submitted,
+                the referral will be visible to the patient and the referred hospital.
+              </p>
+
+              <div class="summary-card" id="summaryCard">
+                <!-- Filled by buildSummary() -->
+              </div>
+
+              <div id="urgencyBanner" style="padding:12px 16px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px;font-weight:600;"></div>
+
+              <div style="display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;">
+                <button class="btn btn-secondary" onclick="goToStep(3)">← Edit Details</button>
+                <button class="btn btn-primary btn-lg" id="submitBtn" onclick="submitReferral()">
+                  Submit Referral & Book Appointment →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="step-section" id="section-success">
+          <div class="success-card">
+            <div class="success-icon">✅</div>
+            <div class="success-title">Referral Created Successfully!</div>
+            <p class="success-desc">
+              The referral has been created and the appointment has been booked at the referred hospital.
+              The patient can see this referral in their Curaah dashboard.
+            </p>
+
+            <!-- Referral slip -->
+            <div class="referral-slip" id="referralSlip">
+              <div class="slip-header">
+                <div>
+                  <div class="slip-brand">curaah</div>
+                  <div class="slip-tag">REFERRAL LETTER</div>
+                </div>
+                <div class="slip-id" id="slipId">—</div>
+              </div>
+              <div class="slip-grid" id="slipGrid">
+                <!-- Filled dynamically -->
+              </div>
+              <div class="slip-diagnosis">
+                <div class="slip-diagnosis-label">Diagnosis / Clinical Notes</div>
+                <div class="slip-diagnosis-text" id="slipDiagnosis">—</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span class="slip-urgency" id="slipUrgency">—</span>
+                <span style="font-size:11px;color:var(--text-muted);">Verified via Curaah</span>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="window.print()">🖨️ Print Referral</button>
+              <button class="btn btn-secondary" onclick="newReferral()">+ New Referral</button>
+              <a href="staff-portal.html" class="btn btn-secondary">← Staff Portal</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── HISTORY TAB ── -->
+      <div id="tab-history" style="display:none;">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📋 Referrals Sent from <span id="historyHospitalName">—</span></div>
+            <button class="btn btn-secondary btn-sm" onclick="loadHistory()">🔄 Refresh</button>
+          </div>
+          <div class="panel-body" id="historyList">
+            <div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">Loading referral history...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── INCOMING TAB ── -->
+      <div id="tab-incoming" style="display:none;">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📥 Referrals Received by <span id="incomingHospitalName">—</span></div>
+            <button class="btn btn-secondary btn-sm" onclick="loadIncoming()">🔄 Refresh</button>
+          </div>
+          <div class="panel-body" id="incomingList">
+            <div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">Loading incoming referrals...</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    let currentHospital  = null;
+    let currentStaff     = null;
+    let selectedPatient  = null;
+    let selectedAppt     = null;
+    let selectedUrgency  = 'routine';
+    let referredHospital = null;
+    let referredOpd      = null;
+    let allHospitals     = [];
+    let referredDoctors  = [];
+    let submittedReferral= null;
+
+    const TODAY = new Date().toISOString().split('T')[0];
+
+    const ALL_SLOTS = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM'];
+
+    /* ── LOGIN ── */
+    window.handleLogin = async function() {
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorBox = document.getElementById('loginError');
+      const btn      = document.getElementById('loginBtn');
+
+      if (!email || !password) { errorBox.textContent = 'Please enter email and password.'; errorBox.classList.add('show'); return; }
+
+      btn.textContent = 'Logging in...'; btn.disabled = true; errorBox.classList.remove('show');
+
+      try {
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+        if (authError) throw new Error('Incorrect email or password.');
+
+        const { data: staffRow, error: staffError } = await supabase
+          .from('hospital_staff').select('*, hospitals(*)').eq('user_id', authData.user.id).eq('is_active', true).single();
+
+        if (staffError || !staffRow) { await supabase.auth.signOut(); throw new Error('This account is not registered as hospital staff.'); }
+
+        currentStaff = staffRow; currentHospital = staffRow.hospitals;
+        btn.textContent = 'Login to Referral System'; btn.disabled = false;
+        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('portalPage').style.display = 'block';
+        initPortal();
+
+      } catch (err) {
+        btn.textContent = 'Login to Referral System'; btn.disabled = false;
+        errorBox.textContent = err.message; errorBox.classList.add('show');
+      }
+    };
+
+    async function checkSession() {
+      const { data:{ session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const { data: staffRow } = await supabase
+        .from('hospital_staff').select('*, hospitals(*)').eq('user_id', session.user.id).eq('is_active', true).single();
+      if (staffRow && staffRow.hospitals) {
+        currentStaff = staffRow; currentHospital = staffRow.hospitals;
+        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('portalPage').style.display = 'block';
+        initPortal();
+      }
+    }
+
+    window.handleLogout = async function() {
+      await supabase.auth.signOut();
+      currentHospital = null; currentStaff = null;
+      document.getElementById('portalPage').style.display = 'none';
+      document.getElementById('loginPage').style.display  = 'flex';
+      showToast('Logged out.', 'success');
+    };
+
+    /* ── INIT PORTAL ── */
+    async function initPortal() {
+      document.getElementById('navHospitalName').textContent   = currentHospital.name;
+      document.getElementById('historyHospitalName').textContent  = currentHospital.name;
+      document.getElementById('incomingHospitalName').textContent = currentHospital.name;
+
+      /* Set min date */
+      const dateEl = document.getElementById('refApptDate');
+      if (dateEl) { dateEl.min = TODAY; dateEl.value = TODAY; }
+
+      /* Load all hospitals for referral target */
+      const { data: hospitals } = await supabase
+        .from('hospitals').select('id, name, city, type').eq('is_verified', true).eq('is_active', true).order('name');
+
+      allHospitals = (hospitals || []).filter(h => h.id !== currentHospital.id);
+
+      const sel = document.getElementById('referredHospital');
+      sel.innerHTML = '<option value="">Select hospital</option>' +
+        allHospitals.map(h =>
+          `<option value="${h.id}">${h.name} — ${h.city || ''}</option>`
+        ).join('');
+
+      /* Load referring hospital's doctors */
+      const { data: myDoctors } = await supabase
+        .from('doctors').select('*').eq('hospital_id', currentHospital.id).eq('is_available', true).order('name');
+
+      const drSel = document.getElementById('referringDoctor');
+      drSel.innerHTML = '<option value="">Select doctor</option>' +
+        (myDoctors || []).map(d => `<option value="${d.name}">${d.name} — ${d.speciality||''}</option>`).join('');
+    }
+
+    /* ── TAB SWITCHER ── */
+    window.switchTab = function(tab, btn) {
+      ['new','history','incoming'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.style.display = t === tab ? 'block' : 'none';
+      });
+      document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (tab === 'history')  loadHistory();
+      if (tab === 'incoming') loadIncoming();
+    };
+
+    /* ── STEP NAVIGATION ── */
+    window.goToStep = function(step) {
+      if (step === 2 && !selectedPatient) { showToast('Please find a patient first.', 'error'); return; }
+      if (step === 4 && !validateStep3()) return;
+
+      [1,2,3,4,'success'].forEach(s => {
+        const el = document.getElementById('section-step' + s);
+        if (el) el.classList.remove('active');
+      });
+
+      const target = document.getElementById('section-step' + step);
+      if (target) target.classList.add('active');
+
+      /* Update step indicators */
+      for (let i = 1; i <= 4; i++) {
+        const numEl  = document.getElementById('stepNum' + i);
+        const itemEl = document.getElementById('stepItem' + i);
+        if (!numEl || !itemEl) continue;
+        if (i < step)       { numEl.className = 'step-num done';    numEl.textContent = '✓'; itemEl.className = 'step-item done'; }
+        else if (i === step){ numEl.className = 'step-num active';  numEl.textContent = i;   itemEl.className = 'step-item active'; }
+        else                { numEl.className = 'step-num pending'; numEl.textContent = i;   itemEl.className = 'step-item'; }
+      }
+
+      if (step === 2) loadPatientAppointments();
+      if (step === 4) buildSummary();
+    };
+
+    /* ── SEARCH PATIENT ── */
+    window.searchPatient = async function() {
+      const phone = document.getElementById('searchPhone').value.trim();
+      if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
+
+      const { data: patient } = await supabase
+        .from('patients').select('*').eq('phone', phone).single();
+
+      if (!patient) { showToast('No Curaah patient found with this number.', 'error'); return; }
+
+      selectedPatient = patient;
+
+      const name     = patient.full_name || 'Patient';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+
+      document.getElementById('patientInitials').textContent = initials;
+      document.getElementById('patientName').textContent     = name;
+      document.getElementById('patientMeta').textContent     = `📞 ${patient.phone} · ${patient.city || '—'} · ${patient.gender || '—'}`;
+      document.getElementById('patientFoundCard').style.display = 'flex';
+
+      showToast(`Patient found: ${name}`, 'success');
+    };
+
+    /* ── LOAD PATIENT APPOINTMENTS ── */
+    async function loadPatientAppointments() {
+      if (!selectedPatient) return;
+
+      const { data: appts } = await supabase
+        .from('appointments').select('*, hospitals(name)')
+        .eq('patient_id', selectedPatient.id)
+        .eq('hospital_id', currentHospital.id)
+        .in('status', ['confirmed','checkedin','completed'])
+        .order('appointment_date', { ascending: false })
+        .limit(10);
+
+      const el = document.getElementById('patientApptsList');
+
+      if (!appts || !appts.length) {
+        el.innerHTML = `<p style="font-size:13px;color:var(--text-muted);line-height:1.7;">No appointments found for this patient at <strong>${currentHospital.name}</strong>. You can still create a referral without a specific appointment.</p>`;
+        return;
+      }
+
+      el.innerHTML = appts.map(a => {
+        const date = new Date(a.appointment_date);
+        const day  = date.getDate();
+        const mon  = date.toLocaleDateString('en-IN', { month:'short' });
+        return `
+          <div class="appt-select-card" id="apptCard-${a.id}" onclick="selectAppt('${a.id}')">
+            <div class="appt-date-box">
+              <div class="appt-date-day">${day}</div>
+              <div class="appt-date-mon">${mon}</div>
+            </div>
+            <div class="appt-card-info">
+              ${a.opd_name ? `<div class="appt-card-opd">${a.opd_name}</div>` : ''}
+              <div class="appt-card-doctor">${a.doctor_name || '—'}</div>
+              <div class="appt-card-hospital">${a.hospitals?.name || '—'} · ${a.time_slot || '—'}</div>
+            </div>
+            <span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(0,196,140,0.1);color:var(--success);">${a.status}</span>
+          </div>`;
+      }).join('');
+    }
+
+    window.selectAppt = function(apptId) {
+      selectedAppt = apptId;
+      document.querySelectorAll('.appt-select-card').forEach(c => c.classList.remove('selected'));
+      const card = document.getElementById('apptCard-' + apptId);
+      if (card) card.classList.add('selected');
+      setTimeout(() => goToStep(3), 300);
+    };
+
+    window.selectNoAppt = function() {
+      selectedAppt = null;
+      goToStep(3);
+    };
+
+    /* ── LOAD REFERRED HOSPITAL OPDs ── */
+    window.loadReferredOpds = async function() {
+      const hospId = document.getElementById('referredHospital').value;
+      const opdSel = document.getElementById('referredOpd');
+      const drSel  = document.getElementById('refApptDoctor');
+
+      if (!hospId) {
+        opdSel.innerHTML = '<option value="">Select hospital first</option>';
+        drSel.innerHTML  = '<option value="">Select OPD first</option>';
+        return;
+      }
+
+      referredHospital = allHospitals.find(h => h.id === hospId);
+
+      const { data: opds } = await supabase
+        .from('opds').select('*').eq('hospital_id', hospId).eq('is_active', true).order('name');
+
+      opdSel.innerHTML = '<option value="">Select OPD / department</option>' +
+        (opds || []).map(o => `<option value="${o.id}" data-name="${o.name}" data-dept="${o.department}">${o.name} — ${o.department}</option>`).join('');
+
+      /* Load doctors for this hospital */
+      const { data: doctors } = await supabase
+        .from('doctors').select('*, opds(name)').eq('hospital_id', hospId).eq('is_available', true).order('name');
+
+      referredDoctors = doctors || [];
+      drSel.innerHTML = '<option value="">Select OPD first</option>';
+
+      /* When OPD changes, filter doctors */
+      opdSel.onchange = function() {
+        const opdId   = opdSel.value;
+        const opdOpt  = opdSel.options[opdSel.selectedIndex];
+        referredOpd   = { id: opdId, name: opdOpt.dataset.name, department: opdOpt.dataset.dept };
+
+        const filtered = referredDoctors.filter(d => d.opd_id === opdId);
+        drSel.innerHTML = '<option value="">Select doctor (optional)</option>' +
+          filtered.map(d => `<option value="${d.name}">${d.name} — ${d.speciality||''}</option>`).join('');
+      };
+    };
+
+    /* ── LOAD REFERRED HOSPITAL SLOTS ── */
+    window.loadRefSlots = async function() {
+      const hospId = document.getElementById('referredHospital').value;
+      const doctor = document.getElementById('refApptDoctor').value;
+      const date   = document.getElementById('refApptDate').value;
+      const slotSel= document.getElementById('refApptSlot');
+
+      if (!hospId || !doctor || !date) {
+        slotSel.innerHTML = '<option value="">Select date & doctor first</option>';
+        return;
+      }
+
+      slotSel.innerHTML = '<option value="">Loading slots...</option>';
+
+      const { data: booked } = await supabase
+        .from('appointment_slots').select('slot_time, booked_count, max_count')
+        .eq('hospital_id', hospId).eq('slot_date', date).eq('doctor_name', doctor);
+
+      const map = {};
+      (booked || []).forEach(s => { map[s.slot_time] = { booked:s.booked_count, max:s.max_count }; });
+
+      slotSel.innerHTML = '<option value="">Choose a slot</option>' +
+        ALL_SLOTS.map(slot => {
+          const d    = map[slot];
+          const bk   = d?.booked || 0;
+          const mx   = d?.max    || 10;
+          const full = bk >= mx;
+          return full
+            ? `<option value="${slot}" disabled>${slot} — Full</option>`
+            : `<option value="${slot}">${slot} — ${mx-bk} left</option>`;
+        }).join('');
+    };
+
+    /* ── URGENCY ── */
+    window.setUrgency = function(level, btn) {
+      selectedUrgency = level;
+      document.querySelectorAll('.urgency-pill').forEach(p => p.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+
+    /* ── VALIDATE STEP 3 ── */
+    function validateStep3() {
+      let valid = true;
+
+      const hospId    = document.getElementById('referredHospital').value;
+      const opdId     = document.getElementById('referredOpd').value;
+      const doctor    = document.getElementById('referringDoctor').value;
+      const diagnosis = document.getElementById('diagnosisNotes').value.trim();
+      const consent   = document.getElementById('consentCheck').checked;
+
+      if (!hospId)    { document.getElementById('refHospitalError').textContent = 'Please select a hospital.'; valid = false; }
+      else              document.getElementById('refHospitalError').textContent = '';
+
+      if (!opdId)     { document.getElementById('refOpdError').textContent = 'Please select an OPD.'; valid = false; }
+      else              document.getElementById('refOpdError').textContent = '';
+
+      if (!doctor)    { document.getElementById('refDoctorError').textContent = 'Please select the referring doctor.'; valid = false; }
+      else              document.getElementById('refDoctorError').textContent = '';
+
+      if (!diagnosis) { document.getElementById('diagnosisError').textContent = 'Please enter diagnosis notes.'; valid = false; }
+      else              document.getElementById('diagnosisError').textContent = '';
+
+      if (!consent)   { showToast('Please confirm patient consent before proceeding.', 'error'); valid = false; }
+
+      return valid;
+    }
+
+    /* ── BUILD SUMMARY ── */
+    function buildSummary() {
+      const hospSel   = document.getElementById('referredHospital');
+      const opdSel    = document.getElementById('referredOpd');
+      const drSel     = document.getElementById('referringDoctor');
+      const refDrSel  = document.getElementById('refApptDoctor');
+      const dateEl    = document.getElementById('refApptDate');
+      const slotSel   = document.getElementById('refApptSlot');
+      const diagnosis = document.getElementById('diagnosisNotes').value.trim();
+
+      const hospName = hospSel.options[hospSel.selectedIndex]?.text || '—';
+      const opdName  = opdSel.options[opdSel.selectedIndex]?.text  || '—';
+      const drName   = drSel.options[drSel.selectedIndex]?.text    || '—';
+      const refDr    = refDrSel.value || 'Not specified';
+      const date     = dateEl.value;
+      const slot     = slotSel.value;
+
+      const urgencyMap = {
+        routine:   { label:'Routine',   color:'rgba(61,158,255,0.1)',  text:'var(--electric)' },
+        urgent:    { label:'Urgent',    color:'rgba(255,159,0,0.1)',   text:'var(--warning)' },
+        emergency: { label:'Emergency', color:'rgba(255,71,87,0.1)',   text:'var(--danger)' },
+      };
+      const u = urgencyMap[selectedUrgency] || urgencyMap.routine;
+
+      document.getElementById('summaryCard').innerHTML = `
+        <div class="summary-row"><span class="summary-label">Patient</span><span class="summary-value">${selectedPatient?.full_name || '—'} · ${selectedPatient?.phone || '—'}</span></div>
+        <div class="summary-row"><span class="summary-label">Referring Hospital</span><span class="summary-value">${currentHospital.name}</span></div>
+        <div class="summary-row"><span class="summary-label">Referring Doctor</span><span class="summary-value">${drName}</span></div>
+        <div class="summary-row"><span class="summary-label">Referred To</span><span class="summary-value">${hospName}</span></div>
+        <div class="summary-row"><span class="summary-label">OPD / Department</span><span class="summary-value">${opdName}</span></div>
+        <div class="summary-row"><span class="summary-label">Doctor at Referred Hospital</span><span class="summary-value">${refDr}</span></div>
+        <div class="summary-row"><span class="summary-label">Appointment</span><span class="summary-value">${date && slot ? date + ' · ' + slot : 'Not booked'}</span></div>
+        <div class="summary-row"><span class="summary-label">Urgency</span><span class="summary-value" style="background:${u.color};color:${u.text};padding:3px 10px;border-radius:20px;font-weight:700;">${u.label}</span></div>
+        <div class="summary-row"><span class="summary-label">Diagnosis</span><span class="summary-value" style="max-width:320px;text-align:left;">${diagnosis}</span></div>
+        <div class="summary-row"><span class="summary-label">Patient Consent</span><span class="summary-value" style="color:var(--success);">✓ Confirmed</span></div>`;
+
+      const bannerEl = document.getElementById('urgencyBanner');
+      bannerEl.style.background = u.color;
+      bannerEl.style.color      = u.text;
+      bannerEl.textContent = selectedUrgency === 'emergency'
+        ? '🔴 EMERGENCY referral — please ensure the referred hospital is notified immediately.'
+        : selectedUrgency === 'urgent'
+          ? '🟡 URGENT referral — patient should be seen within 24-48 hours.'
+          : '🟢 Routine referral — patient can be scheduled at the next available slot.';
+    }
+
+    /* ── SUBMIT REFERRAL ── */
+    window.submitReferral = async function() {
+      const btn      = document.getElementById('submitBtn');
+      const hospId   = document.getElementById('referredHospital').value;
+      const opdId    = document.getElementById('referredOpd').value;
+      const doctor   = document.getElementById('referringDoctor').value;
+      const refDr    = document.getElementById('refApptDoctor').value;
+      const date     = document.getElementById('refApptDate').value;
+      const slot     = document.getElementById('refApptSlot').value;
+      const diagnosis= document.getElementById('diagnosisNotes').value.trim();
+      const opdOpt   = document.getElementById('referredOpd').options[document.getElementById('referredOpd').selectedIndex];
+      const opdName  = opdOpt?.dataset?.name || opdOpt?.text || '';
+
+      btn.textContent = 'Submitting...'; btn.disabled = true;
+
+      try {
+        let referredApptId = null;
+
+        /* Step 1 — Book appointment at referred hospital if doctor + date + slot selected */
+        if (refDr && date && slot) {
+          const { data: appt, error: apptErr } = await supabase
+            .from('appointments').insert({
+              patient_id:       selectedPatient.id,
+              hospital_id:      hospId,
+              opd_id:           opdId,
+              opd_name:         opdName,
+              doctor_name:      refDr,
+              appointment_date: date,
+              time_slot:        slot,
+              status:           'confirmed',
+              fee_amount:       0,
+              booked_by:        'referral',
+              booked_by_hospital_id: currentHospital.id,
+              notes:            `Referred from ${currentHospital.name} — ${diagnosis}`,
+            }).select().single();
+
+          if (apptErr) throw new Error('Failed to book appointment: ' + apptErr.message);
+          referredApptId = appt.id;
+
+          /* Update slot count */
+          const { data: existing } = await supabase
+            .from('appointment_slots').select('id, booked_count')
+            .eq('hospital_id', hospId).eq('slot_date', date)
+            .eq('slot_time', slot).eq('doctor_name', refDr).single();
+
+          if (existing) {
+            await supabase.from('appointment_slots')
+              .update({ booked_count: existing.booked_count + 1 }).eq('id', existing.id);
+          } else {
+            await supabase.from('appointment_slots').insert({
+              hospital_id: hospId, slot_date: date, slot_time: slot,
+              doctor_name: refDr, booked_count: 1, max_count: 10,
+            });
+          }
+        }
+
+        /* Step 2 — Create referral record */
+        const { data: referral, error: refErr } = await supabase
+          .from('referrals').insert({
+            patient_id:            selectedPatient.id,
+            referring_hospital_id: currentHospital.id,
+            referred_hospital_id:  hospId,
+            referring_doctor_name: doctor,
+            referred_opd_name:     opdName,
+            diagnosis_notes:       diagnosis,
+            urgency_level:         selectedUrgency,
+            appointment_id:        selectedAppt || null,
+            referred_appointment_id: referredApptId,
+            status:                'pending',
+            patient_consent:       true,
+            consent_requested_at:  new Date().toISOString(),
+          }).select().single();
+
+        if (refErr) throw new Error('Failed to create referral: ' + refErr.message);
+
+        submittedReferral = referral;
+
+        /* Show success */
+        btn.textContent = 'Submit Referral & Book Appointment →'; btn.disabled = false;
+
+        [1,2,3,4].forEach(s => {
+          const el = document.getElementById('section-step' + s);
+          if (el) el.classList.remove('active');
+        });
+        document.getElementById('section-success').classList.add('active');
+
+        /* Fill referral slip */
+        const hospName = document.getElementById('referredHospital').options[document.getElementById('referredHospital').selectedIndex].text;
+        const drText   = document.getElementById('referringDoctor').options[document.getElementById('referringDoctor').selectedIndex].text;
+        const u        = { routine:'🟢 Routine', urgent:'🟡 Urgent', emergency:'🔴 Emergency' }[selectedUrgency];
+
+        document.getElementById('slipId').innerHTML = `Referral ID<br><strong style="color:var(--navy);font-size:12px;">${referral.id.split('-')[0].toUpperCase()}</strong>`;
+        document.getElementById('slipDiagnosis').textContent = diagnosis;
+        document.getElementById('slipUrgency').textContent   = u;
+
+        const urgColor = { routine:'rgba(61,158,255,0.1)', urgent:'rgba(255,159,0,0.1)', emergency:'rgba(255,71,87,0.1)' }[selectedUrgency];
+        const urgText  = { routine:'var(--electric)', urgent:'var(--warning)', emergency:'var(--danger)' }[selectedUrgency];
+        document.getElementById('slipUrgency').style.background = urgColor;
+        document.getElementById('slipUrgency').style.color      = urgText;
+
+        document.getElementById('slipGrid').innerHTML = `
+          <div class="slip-item"><div class="slip-item-label">Patient</div><div class="slip-item-value">${selectedPatient.full_name}</div></div>
+          <div class="slip-item"><div class="slip-item-label">Phone</div><div class="slip-item-value">${selectedPatient.phone}</div></div>
+          <div class="slip-item"><div class="slip-item-label">Referring Doctor</div><div class="slip-item-value">${drText.split('—')[0].trim()}</div></div>
+          <div class="slip-item"><div class="slip-item-label">From Hospital</div><div class="slip-item-value">${currentHospital.name}</div></div>
+          <div class="slip-item"><div class="slip-item-label">Referred To</div><div class="slip-item-value">${hospName.split('—')[0].trim()}</div></div>
+          <div class="slip-item"><div class="slip-item-label">OPD</div><div class="slip-item-value">${opdName}</div></div>
+          ${referredApptId && date && slot ? `
+            <div class="slip-item"><div class="slip-item-label">Appointment Date</div><div class="slip-item-value">${new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div></div>
+            <div class="slip-item"><div class="slip-item-label">Time Slot</div><div class="slip-item-value">${slot}</div></div>` : ''}
+          <div class="slip-item"><div class="slip-item-label">Date of Referral</div><div class="slip-item-value">${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div></div>
+          <div class="slip-item"><div class="slip-item-label">Consent</div><div class="slip-item-value" style="color:var(--success);">✓ Patient Verified</div></div>`;
+
+        showToast('Referral created successfully!', 'success');
+
+      } catch (err) {
+        btn.textContent = 'Submit Referral & Book Appointment →'; btn.disabled = false;
+        showToast(err.message || 'Submission failed. Try again.', 'error');
+      }
+    };
+
+    /* ── NEW REFERRAL ── */
+    window.newReferral = function() {
+      selectedPatient  = null; selectedAppt = null;
+      selectedUrgency  = 'routine'; submittedReferral = null;
+      referredHospital = null; referredOpd = null;
+
+      document.getElementById('searchPhone').value = '';
+      document.getElementById('patientFoundCard').style.display = 'none';
+      document.getElementById('diagnosisNotes').value = '';
+      document.getElementById('consentCheck').checked = false;
+      document.querySelectorAll('.urgency-pill').forEach(p => p.classList.remove('selected'));
+      document.querySelector('.urgency-pill.routine').classList.add('selected');
+
+      document.getElementById('section-success').classList.remove('active');
+      goToStep(1);
+    };
+
+    /* ── LOAD HISTORY ── */
+    async function loadHistory() {
+      const el = document.getElementById('historyList');
+      el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Loading...</div>';
+
+      const { data: referrals } = await supabase
+        .from('referrals')
+        .select('*, patients(full_name, phone), hospitals!referred_hospital_id(name)')
+        .eq('referring_hospital_id', currentHospital.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (!referrals || !referrals.length) {
+        el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No referrals sent yet. Create your first referral using the New Referral tab.</div>`;
+        return;
+      }
+
+      el.innerHTML = referrals.map(r => {
+        const u     = { routine:'🟢', urgent:'🟡', emergency:'🔴' }[r.urgency_level] || '🟢';
+        const date  = new Date(r.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+        const sClass = `referral-status-${r.status}`;
+        const sText  = r.status ? r.status.charAt(0).toUpperCase() + r.status.slice(1) : 'Pending';
+        return `
+          <div class="referral-item">
+            <div class="referral-item-header">
+              <div>
+                <div class="referral-item-title">${r.patients?.full_name || '—'} → ${r.hospitals?.name || '—'}</div>
+                <div class="referral-item-meta">${r.referred_opd_name || '—'} · ${u} ${r.urgency_level} · ${date}</div>
+              </div>
+              <span class="referral-status-pill ${sClass}">${sText}</span>
+            </div>
+            ${r.diagnosis_notes ? `<p style="font-size:12px;color:var(--text-muted);margin:0;line-height:1.6;background:var(--off-white);padding:10px 12px;border-radius:var(--radius-md);">${r.diagnosis_notes}</p>` : ''}
+          </div>`;
+      }).join('');
+    }
+
+    /* ── LOAD INCOMING ── */
+    async function loadIncoming() {
+      const el = document.getElementById('incomingList');
+      el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Loading...</div>';
+
+      const { data: referrals } = await supabase
+        .from('referrals')
+        .select('*, patients(full_name, phone), hospitals!referring_hospital_id(name)')
+        .eq('referred_hospital_id', currentHospital.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (!referrals || !referrals.length) {
+        el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No incoming referrals yet.</div>`;
+        return;
+      }
+
+      el.innerHTML = referrals.map(r => {
+        const u    = { routine:'🟢', urgent:'🟡', emergency:'🔴' }[r.urgency_level] || '🟢';
+        const date = new Date(r.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+        const urgClass = r.urgency_level === 'emergency' ? 'color:var(--danger);font-weight:700;' : r.urgency_level === 'urgent' ? 'color:var(--warning);font-weight:700;' : '';
+        return `
+          <div class="referral-item" style="${r.urgency_level === 'emergency' ? 'border-color:rgba(255,71,87,0.3);' : ''}">
+            <div class="referral-item-header">
+              <div>
+                <div class="referral-item-title">${r.patients?.full_name || '—'} <span style="font-size:12px;color:var(--text-muted);font-weight:400;">from ${r.hospitals?.name || '—'}</span></div>
+                <div class="referral-item-meta">${r.referred_opd_name || '—'} · ${u} <span style="${urgClass}">${r.urgency_level}</span> · ${date}</div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                ${r.urgency_level === 'emergency' ? '<span style="font-size:11px;font-weight:700;color:var(--danger);background:rgba(255,71,87,0.1);padding:3px 10px;border-radius:20px;">EMERGENCY</span>' : ''}
+                <button class="action-btn" onclick="updateReferralStatus('${r.id}','accepted')">Accept</button>
+                <button class="action-btn" onclick="updateReferralStatus('${r.id}','completed')">Mark Done</button>
+              </div>
+            </div>
+            ${r.diagnosis_notes ? `<p style="font-size:12px;color:var(--text-secondary);margin:0;line-height:1.6;background:var(--off-white);padding:10px 12px;border-radius:var(--radius-md);">${r.diagnosis_notes}</p>` : ''}
+            <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+              <span style="font-size:11px;color:var(--text-muted);">Patient: ${r.patients?.phone || '—'}</span>
+              ${r.patient_consent ? '<span style="font-size:11px;color:var(--success);font-weight:600;">✓ Consent verified</span>' : ''}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    window.updateReferralStatus = async function(id, status) {
+      await supabase.from('referrals').update({ status }).eq('id', id);
+      showToast(`Referral marked as ${status}.`, 'success');
+      await loadIncoming();
+    };
+
+    /* Helper */
+    window.action_btn = undefined;
+    document.addEventListener('DOMContentLoaded', () => {});
+
+    const actionBtnStyle = `font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;border:1px solid var(--border-card);background:var(--white);cursor:pointer;color:var(--text-secondary);`;
+
+    checkSession();
+  </script>
+
+</body>
+</html>
