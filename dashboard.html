@@ -369,13 +369,73 @@
       </div>
 
       <!-- REFERRALS -->
-      <div id="section-referrals" style="display:none;">
-        <div class="dash-page-header"><div><div class="dash-greeting">Track your referrals</div><div class="dash-title">My Referrals</div></div></div>
-        <div class="panel">
-          <div class="panel-header"><div class="panel-title">🔗 Referral History</div></div>
-          <div class="panel-empty"><div class="panel-empty-icon">🔗</div><div class="panel-empty-text">No referrals yet. When a doctor refers you to another hospital, your digital referral letter appears here.</div></div>
+      <!-- REFERRALS -->
+<div id="section-referrals" style="display:none;">
+  <div class="dash-page-header">
+    <div>
+      <div class="dash-greeting">Track your referrals</div>
+      <div class="dash-title">My Referrals</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">🔗</span> Referral History
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="loadReferrals()">
+        🔄 Refresh
+      </button>
+    </div>
+    <div id="referralsList">
+      <div class="panel-empty">
+        <div class="panel-empty-icon">🔗</div>
+        <div class="panel-empty-text">Loading referrals...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:0;">
+    <div class="panel-header">
+      <div class="panel-title">ℹ️ How referrals work</div>
+    </div>
+    <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">1️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            Doctor creates digital referral</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Doctor fills diagnosis, urgency level, and selects the referred
+            hospital and OPD. Appointment is booked simultaneously.</p>
         </div>
       </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">2️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            You get referral + appointment together</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Referral letter and appointment confirmation appear here
+            and in your Appointments section. No paper files needed.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">3️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            Records travel with you</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Referred hospital receives your clinical notes before
+            you arrive. No information gets lost between hospitals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- AI -->
       <div id="section-ai" style="display:none;">
@@ -437,6 +497,7 @@
       }
       document.getElementById('sidebar').classList.remove('open');
       if (name === 'token') loadMyToken();
+      if (name === 'referrals') loadReferrals();
     };
 
     window.toggleSidebar = function() {
@@ -653,6 +714,127 @@
         if (tokenSection && tokenSection.style.display !== 'none') loadMyToken();
       }, 30000);
     }
+
+    /* ── LOAD REFERRALS ── */
+window.loadReferrals = async function() {
+  if (!patientData) return;
+
+  const el = document.getElementById('referralsList');
+  if (!el) return;
+
+  el.innerHTML = `
+    <div class="panel-empty">
+      <div class="panel-empty-icon">🔗</div>
+      <div class="panel-empty-text">Loading...</div>
+    </div>`;
+
+  const { data: referrals, error } = await supabase
+    .from('referrals')
+    .select(`
+      *,
+      referring:referring_hospital_id ( name ),
+      referred:referred_hospital_id   ( name )
+    `)
+    .eq('patient_id', patientData.id)
+    .order('created_at', { ascending: false });
+
+  if (error || !referrals || referrals.length === 0) {
+    el.innerHTML = `
+      <div class="panel-empty">
+        <div class="panel-empty-icon">🔗</div>
+        <div class="panel-empty-text">
+          No referrals yet. When a doctor refers you to another
+          hospital, your referral letter appears here automatically.
+        </div>
+      </div>`;
+    return;
+  }
+
+  const urgencyIcon = {
+    routine:   '🟢',
+    urgent:    '🟡',
+    emergency: '🔴',
+  };
+
+  const statusClass = {
+    pending:   'status-pending',
+    accepted:  'status-confirmed',
+    completed: 'status-completed',
+  };
+
+  const statusText = {
+    pending:   'Pending',
+    accepted:  'Accepted',
+    completed: 'Completed',
+  };
+
+  el.innerHTML = `<div style="padding:0 4px;">` +
+    referrals.map(r => {
+      const date = new Date(r.created_at).toLocaleDateString('en-IN', {
+        day:'numeric', month:'short', year:'numeric'
+      });
+      const icon   = urgencyIcon[r.urgency_level] || '🟢';
+      const sClass = statusClass[r.status] || 'status-pending';
+      const sText  = statusText[r.status]  || 'Pending';
+      const urgColor = r.urgency_level === 'emergency'
+        ? 'border-color:rgba(255,71,87,0.3);'
+        : r.urgency_level === 'urgent'
+          ? 'border-color:rgba(255,159,0,0.3);'
+          : '';
+
+      return `
+        <div style="background:var(--white);border:1px solid var(--border-card);
+          ${urgColor}border-radius:var(--radius-lg);padding:18px 20px;
+          margin-bottom:12px;">
+          <div style="display:flex;align-items:flex-start;
+            justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">
+                ${icon} Referred to ${r.referred?.name || '—'}
+              </div>
+              <div style="font-size:12px;color:var(--text-muted);">
+                From ${r.referring?.name || '—'}
+                · ${r.referred_opd_name || '—'}
+                · ${date}
+              </div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
+                By Dr. ${r.referring_doctor_name || '—'}
+                · ${r.urgency_level || 'routine'} priority
+              </div>
+            </div>
+            <span class="status-badge ${sClass}">${sText}</span>
+          </div>
+
+          ${r.diagnosis_notes ? `
+            <div style="background:var(--off-white);border-radius:var(--radius-md);
+              padding:10px 14px;margin-bottom:12px;">
+              <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;
+                text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">
+                Clinical Notes
+              </div>
+              <div style="font-size:13px;color:var(--text-primary);line-height:1.6;">
+                ${r.diagnosis_notes}
+              </div>
+            </div>` : ''}
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            ${r.patient_consent ? `
+              <span style="font-size:11px;color:var(--success);font-weight:600;">
+                ✓ Consent verified
+              </span>` : ''}
+            ${r.referred_appointment_id ? `
+              <span style="font-size:11px;color:var(--electric);font-weight:600;">
+                📅 Appointment booked at referred hospital
+              </span>` : ''}
+            ${r.urgency_level === 'emergency' ? `
+              <span style="font-size:11px;font-weight:700;color:var(--danger);
+                background:rgba(255,71,87,0.1);padding:2px 8px;border-radius:10px;">
+                🔴 EMERGENCY — Visit immediately
+              </span>` : ''}
+          </div>
+        </div>`;
+    }).join('') + `</div>`;
+};
 
     /* ── LOGOUT ── */
     window.handleLogout = async function() {
