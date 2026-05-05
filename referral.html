@@ -399,13 +399,19 @@
                 <div class="consent-box-text">
                   <div class="consent-box-title">Patient Consent Required</div>
                   <div class="consent-box-desc">
-                    The patient must be informed about this referral, the referred hospital,
-                    and the reason. Their verbal or written consent is required before creating
-                    this referral. This referral will be visible to the patient in their Curaah dashboard.
-                  </div>
+  The patient must be informed about this referral, the referred hospital,
+  and the reason. Their verbal or written consent is required before creating
+  this referral. This referral will be visible to the patient in their Curaah dashboard.
+  <br/><br/>
+  <span style="color:var(--warning);font-weight:600;">⚠️ Future update:</span>
+  Patient OTP verification via SMS will be required before referral submission.
+  This will prevent unauthorized appointments from being made on behalf of patients.
+</div>
                   <label class="consent-toggle">
                     <input type="checkbox" id="consentCheck" />
-                    <span class="consent-toggle-label">Patient has given consent for this referral</span>
+                    <span class="consent-toggle-label">
+  Patient has been informed and has given verbal consent for this referral
+</span>
                   </label>
                 </div>
               </div>
@@ -604,7 +610,10 @@
 
       /* Load all hospitals for referral target */
       const { data: hospitals } = await supabase
-        .from('hospitals').select('id, name, city, type').eq('is_verified', true).eq('is_active', true).order('name');
+  .from('hospitals').select('id, name, city, type')
+  .eq('is_verified', true).eq('is_active', true)
+  .in('type', ['hospital', 'dispensary'])
+  .order('name');
 
       allHospitals = (hospitals || []).filter(h => h.id !== currentHospital.id);
 
