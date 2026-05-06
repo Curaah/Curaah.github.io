@@ -438,18 +438,27 @@
     }
 
     /* Fetch patient name */
-    const { data: patient } = await supabase
-      .from('patients')
-      .select('full_name')
-      .eq('id', data.user.id)
-      .single();
+    /* Verify this is a patient account — not staff */
+const { data: patient, error: patientError } = await supabase
+  .from('patients')
+  .select('full_name')
+  .eq('id', data.user.id)
+  .single();
 
-    const name = patient?.full_name || 'there';
-    showToast(`Welcome back, ${name}! 👋`, 'success');
+if (patientError || !patient) {
+  /* Sign them out immediately */
+  await supabase.auth.signOut();
+  throw new Error(
+    'This account is not registered as a patient. ' +
+    'If you are hospital staff, please use the Staff Portal.'
+  );
+}
 
-    /* Check if there is a return URL */
-const returnUrl = new URLSearchParams(window.location.search).get('return');
+const name = patient.full_name || 'there';
+showToast(`Welcome back, ${name}! 👋`, 'success');
+
 setTimeout(() => {
+  const returnUrl = new URLSearchParams(window.location.search).get('return');
   window.location.href = returnUrl
     ? decodeURIComponent(returnUrl)
     : 'dashboard.html';
