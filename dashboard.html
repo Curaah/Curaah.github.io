@@ -513,27 +513,45 @@
 
     /* ── RENDER APPOINTMENT ITEM ── */
     function renderApptItem(appt, hospitalName) {
-      const date   = new Date(appt.appointment_date);
-      const day    = date.getDate();
-      const mon    = date.toLocaleDateString('en-IN', { month:'short' });
-      const sClass = { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[appt.status] || 'status-pending';
-      const sText  = appt.status ? appt.status.charAt(0).toUpperCase() + appt.status.slice(1) : 'Pending';
+  const date   = new Date(appt.appointment_date);
+  const day    = date.getDate();
+  const mon    = date.toLocaleDateString('en-IN', { month:'short' });
+  const sClass = { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[appt.status] || 'status-pending';
+  const sText  = appt.status ? appt.status.charAt(0).toUpperCase() + appt.status.slice(1) : 'Pending';
 
-      return `
-        <div class="appt-item" onclick="window.location.href='hospital-profile.html?id=${appt.hospital_id}'">
-          <div class="appt-date-box">
-            <div class="appt-date-day">${day}</div>
-            <div class="appt-date-mon">${mon}</div>
-          </div>
-          <div class="appt-info">
-            ${appt.opd_name ? `<div class="appt-opd">${appt.opd_name}</div>` : ''}
-            <div class="appt-doctor">${appt.doctor_name || 'Doctor'}</div>
-            <div class="appt-hospital">${hospitalName || 'Hospital'}</div>
-            <div class="appt-slot">⏰ ${appt.time_slot || '—'}</div>
-          </div>
-          <span class="status-badge ${sClass}">${sText}</span>
-        </div>`;
-    }
+  const isProxy    = appt.booked_by === 'proxy';
+  const isReferral = appt.booked_by === 'referral';
+
+  const proxyBadge = isProxy ? `
+    <div style="font-size:10px;font-weight:600;color:var(--warning);
+      background:rgba(255,159,0,0.08);border:1px solid rgba(255,159,0,0.2);
+      border-radius:6px;padding:2px 8px;margin-top:4px;display:inline-block;">
+      ⚡ Booked on your behalf
+    </div>` : '';
+
+  const referralBadge = isReferral ? `
+    <div style="font-size:10px;font-weight:600;color:var(--electric);
+      background:rgba(61,158,255,0.08);border:1px solid rgba(61,158,255,0.15);
+      border-radius:6px;padding:2px 8px;margin-top:4px;display:inline-block;">
+      🔗 Via referral
+    </div>` : '';
+
+  return `
+    <div class="appt-item" onclick="window.location.href='hospital-profile.html?id=${appt.hospital_id}'">
+      <div class="appt-date-box">
+        <div class="appt-date-day">${day}</div>
+        <div class="appt-date-mon">${mon}</div>
+      </div>
+      <div class="appt-info">
+        ${appt.opd_name ? `<div class="appt-opd">${appt.opd_name}</div>` : ''}
+        <div class="appt-doctor">${appt.doctor_name || 'Doctor'}</div>
+        <div class="appt-hospital">${hospitalName || 'Hospital'}</div>
+        <div class="appt-slot">⏰ ${appt.time_slot || '—'}</div>
+        ${proxyBadge}${referralBadge}
+      </div>
+      <span class="status-badge ${sClass}">${sText}</span>
+    </div>`;
+}
 
     /* ── LOAD APPOINTMENTS ── */
     async function loadAppointments(userId) {
