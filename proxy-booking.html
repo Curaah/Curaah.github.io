@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proxy Appointment Booking — Curaah</title>
+  <title>Proxy Booking — Curaah</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
@@ -11,7 +11,7 @@
 
     /* ── LOGIN ── */
     .login-page { min-height:100vh; background:var(--navy); display:flex; align-items:center; justify-content:center; padding:40px 24px; }
-    .login-card { background:var(--white); border-radius:var(--radius-xl); padding:44px; width:100%; max-width:400px; box-shadow:var(--shadow-lg); }
+    .login-card { background:var(--white); border-radius:var(--radius-xl); padding:44px; width:100%; max-width:420px; box-shadow:var(--shadow-lg); }
     .login-logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
     .login-logo-name { font-size:20px; font-weight:700; color:var(--navy); }
     .login-logo-tag  { font-size:11px; color:var(--warning); font-weight:600; letter-spacing:1px; display:block; }
@@ -29,28 +29,21 @@
     .portal-nav-name { font-size:16px; font-weight:700; color:var(--white); }
     .portal-nav-tag  { font-size:10px; color:var(--warning); font-weight:600; letter-spacing:1px; }
     .portal-nav-right { display:flex; align-items:center; gap:14px; }
-    .portal-nav-hospital { font-size:13px; color:var(--text-on-dark-muted); }
-    .portal-nav-hospital strong { color:var(--white); }
+    .portal-nav-agent { font-size:13px; color:var(--text-on-dark-muted); }
+    .portal-nav-agent strong { color:var(--white); }
 
-    .portal-content { max-width:900px; margin:0 auto; padding:32px 24px; }
+    .portal-content { max-width:860px; margin:0 auto; padding:32px 24px; }
 
     .page-header { margin-bottom:28px; }
     .page-title  { font-family:'Georgia',serif; font-size:28px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
     .page-sub    { font-size:14px; color:var(--text-muted); line-height:1.6; }
 
-    /* ── STEPS ── */
-    .steps-bar { display:flex; align-items:center; gap:0; margin-bottom:32px; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; }
-    .step-item { flex:1; padding:14px 16px; display:flex; align-items:center; gap:10px; border-right:1px solid var(--border-card); }
-    .step-item:last-child { border-right:none; }
-    .step-item.active { background:rgba(61,158,255,0.06); }
-    .step-item.done   { background:rgba(0,196,140,0.04); }
-    .step-num   { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
-    .step-num.active  { background:var(--electric); color:white; }
-    .step-num.done    { background:var(--success);  color:white; }
-    .step-num.pending { background:var(--border-card); color:var(--text-muted); }
-    .step-label { font-size:12px; font-weight:600; color:var(--text-muted); }
-    .step-item.active .step-label { color:var(--electric); }
-    .step-item.done   .step-label { color:var(--success); }
+    /* ── TABS ── */
+    .page-tabs { display:flex; gap:0; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:24px; }
+    .page-tab  { flex:1; padding:12px 20px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; transition:var(--transition); border:none; background:none; border-right:1px solid var(--border-card); }
+    .page-tab:last-child { border-right:none; }
+    .page-tab.active { background:var(--electric); color:var(--white); }
+    .page-tab:hover:not(.active) { background:var(--off-white); }
 
     /* ── PANEL ── */
     .panel { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
@@ -58,79 +51,88 @@
     .panel-title  { font-size:15px; font-weight:600; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
     .panel-body   { padding:20px; }
 
-    /* ── STEP SECTIONS ── */
-    .step-section        { display:none; }
-    .step-section.active { display:block; }
+    /* ── PHONE SEARCH ── */
+    .phone-search-wrap { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px; }
+    .phone-search-wrap .form-group { flex:1; min-width:200px; margin:0; }
 
-    /* ── PATIENT FOUND ── */
-    .patient-found-card { background:var(--off-white); border:1.5px solid var(--electric); border-radius:var(--radius-lg); padding:18px 20px; display:flex; align-items:center; gap:16px; margin-top:16px; }
-    .patient-avatar { width:48px; height:48px; border-radius:50%; background:rgba(61,158,255,0.1); border:2px solid rgba(61,158,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:var(--electric); flex-shrink:0; }
-    .patient-name   { font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
-    .patient-meta   { font-size:12px; color:var(--text-muted); }
+    /* ── PATIENT STATUS CARD ── */
+    .patient-status-card {
+      border-radius:var(--radius-lg);
+      padding:18px 20px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:20px;
+      border:1.5px solid;
+    }
 
-    /* ── FORM ── */
-    .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    .patient-status-card.existing {
+      background:rgba(0,196,140,0.04);
+      border-color:rgba(0,196,140,0.25);
+    }
 
-    /* ── HOSPITAL CARDS ── */
-    .hospital-option-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
-    .hospital-option-card { background:var(--off-white); border:1.5px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; cursor:pointer; transition:var(--transition); }
-    .hospital-option-card:hover   { border-color:rgba(61,158,255,0.3); background:rgba(61,158,255,0.02); }
-    .hospital-option-card.selected{ border-color:var(--electric); background:rgba(61,158,255,0.06); }
-    .hospital-option-name { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:4px; }
-    .hospital-option-meta { font-size:12px; color:var(--text-muted); }
-    .hospital-option-schemes { display:flex; gap:4px; flex-wrap:wrap; margin-top:8px; }
-    .scheme-mini { font-size:10px; font-weight:600; padding:2px 8px; border-radius:10px; background:rgba(0,196,140,0.1); color:var(--success); border:1px solid rgba(0,196,140,0.2); }
+    .patient-status-card.new-patient {
+      background:rgba(255,159,0,0.04);
+      border-color:rgba(255,159,0,0.25);
+    }
 
-    /* ── CONSENT BOX ── */
-    .consent-box { background:rgba(255,159,0,0.04); border:1.5px solid rgba(255,159,0,0.2); border-radius:var(--radius-lg); padding:18px 20px; display:flex; align-items:flex-start; gap:14px; }
-    .consent-box-icon  { font-size:22px; flex-shrink:0; }
-    .consent-box-title { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:4px; }
-    .consent-box-desc  { font-size:12px; color:var(--text-secondary); line-height:1.6; }
-    .consent-toggle    { display:flex; align-items:center; gap:8px; margin-top:12px; cursor:pointer; }
-    .consent-toggle input { width:16px; height:16px; accent-color:var(--success); cursor:pointer; }
-    .consent-toggle-label { font-size:13px; font-weight:600; color:var(--text-primary); }
+    .patient-status-avatar {
+      width:48px; height:48px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:700; flex-shrink:0;
+    }
 
-    /* ── SUMMARY ── */
-    .summary-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; margin-bottom:16px; }
-    .summary-row  { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding:8px 0; border-bottom:1px solid var(--border-card); font-size:13px; }
-    .summary-row:last-child { border-bottom:none; }
-    .summary-label { color:var(--text-muted); font-weight:500; flex-shrink:0; }
-    .summary-value { color:var(--text-primary); font-weight:600; text-align:right; }
+    .patient-status-card.existing .patient-status-avatar { background:rgba(0,196,140,0.12); color:var(--success); border:2px solid rgba(0,196,140,0.2); }
+    .patient-status-card.new-patient .patient-status-avatar { background:rgba(255,159,0,0.12); color:var(--warning); border:2px solid rgba(255,159,0,0.2); font-size:22px; }
+
+    .patient-status-info { flex:1; }
+    .patient-status-name { font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
+    .patient-status-meta { font-size:12px; color:var(--text-muted); }
+    .patient-status-tag  { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; flex-shrink:0; }
+    .tag-existing   { background:rgba(0,196,140,0.1); color:var(--success); }
+    .tag-new-patient{ background:rgba(255,159,0,0.1); color:var(--warning); }
+
+    /* ── MINI REGISTRATION ── */
+    .mini-reg-form { background:rgba(255,159,0,0.03); border:1px solid rgba(255,159,0,0.15); border-radius:var(--radius-lg); padding:18px 20px; margin-bottom:20px; }
+    .mini-reg-title{ font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .form-grid-2   { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .form-grid-3   { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+
+    /* ── BOOKING FORM ── */
+    .booking-form-wrap { display:flex; flex-direction:column; gap:16px; }
+    .booking-section-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
 
     /* ── SUCCESS ── */
-    .success-card { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-xl); padding:40px 32px; text-align:center; }
+    .success-wrap { text-align:center; padding:40px 24px; }
     .success-icon  { width:80px; height:80px; border-radius:50%; background:rgba(0,196,140,0.1); border:2px solid var(--success); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; }
     .success-title { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); margin-bottom:10px; }
     .success-desc  { font-size:14px; color:var(--text-secondary); line-height:1.7; max-width:480px; margin:0 auto 24px; }
 
-    .appt-confirm-card { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; max-width:480px; margin:0 auto 20px; text-align:left; }
-    .confirm-row   { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border-card); }
-    .confirm-row:last-child { border-bottom:none; }
-    .confirm-label { color:var(--text-muted); font-weight:500; }
-    .confirm-value { color:var(--text-primary); font-weight:600; }
+    .appt-slip { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; max-width:440px; margin:0 auto 24px; text-align:left; }
+    .slip-row  { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border-card); }
+    .slip-row:last-child { border-bottom:none; }
+    .slip-label{ color:var(--text-muted); font-weight:500; }
+    .slip-value{ color:var(--text-primary); font-weight:600; text-align:right; }
 
-    /* Proxy badge */
-    .proxy-badge { background:rgba(255,159,0,0.1); color:var(--warning); border:1px solid rgba(255,159,0,0.2); border-radius:var(--radius-md); padding:12px 16px; font-size:12px; font-weight:600; line-height:1.6; margin-bottom:20px; display:flex; align-items:flex-start; gap:10px; }
-
-    /* History */
-    .history-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px 20px; margin-bottom:12px; }
+    /* ── HISTORY ── */
+    .history-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px 20px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     .history-item:last-child { margin-bottom:0; }
-    .history-item-name { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
-    .history-item-meta { font-size:12px; color:var(--text-muted); }
+    .history-patient { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+    .history-meta    { font-size:12px; color:var(--text-muted); }
 
-    .page-tabs  { display:flex; gap:0; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:24px; }
-    .page-tab   { flex:1; padding:12px 20px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; transition:var(--transition); border:none; background:none; border-right:1px solid var(--border-card); }
-    .page-tab:last-child { border-right:none; }
-    .page-tab.active { background:var(--electric); color:var(--white); }
-    .page-tab:hover:not(.active) { background:var(--off-white); }
+    /* Slot */
+    .slot-passed { color:var(--text-muted) !important; }
 
-    @media (max-width:700px) {
+    /* Stats strip */
+    .stats-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
+    .stats-strip-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; text-align:center; }
+    .stats-strip-num   { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); line-height:1; margin-bottom:4px; }
+    .stats-strip-label { font-size:11px; color:var(--text-muted); }
+
+    @media (max-width:600px) {
       .form-grid-2 { grid-template-columns:1fr; }
       .form-grid-3 { grid-template-columns:1fr; }
-      .steps-bar   { flex-direction:column; }
-      .step-item   { border-right:none; border-bottom:1px solid var(--border-card); }
-      .step-item:last-child { border-bottom:none; }
+      .stats-strip { grid-template-columns:repeat(3,1fr); }
     }
   </style>
 </head>
@@ -145,18 +147,32 @@
           <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
           <circle cx="18" cy="22" r="3.5" fill="white"/>
         </svg>
-        <div><span class="login-logo-name">curaah</span><span class="login-logo-tag">PROXY BOOKING</span></div>
+        <div>
+          <span class="login-logo-name">curaah</span>
+          <span class="login-logo-tag">PROXY AGENT PORTAL</span>
+        </div>
       </div>
-      <div class="login-title">Staff Login</div>
-      <p class="login-sub">Login to book appointments on behalf of patients at any hospital on Curaah.</p>
+      <div class="login-title">Agent Login</div>
+      <p class="login-sub">
+        Login to book appointments on behalf of patients.
+        For patients without smartphones or first-time Curaah users.
+      </p>
       <div class="login-error" id="loginError"></div>
       <div class="login-form">
-        <div class="form-group"><label class="form-label">Staff Email *</label><input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" /></div>
-        <div class="form-group"><label class="form-label">Password *</label><input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" /></div>
-        <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">Login to Proxy Booking</button>
+        <div class="form-group">
+          <label class="form-label">Agent Email *</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" />
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">
+          Login to Agent Portal
+        </button>
       </div>
       <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:20px;">
-        <a href="staff-portal.html" style="color:var(--electric);font-weight:600;">← Back to Staff Portal</a>
+        Hospital staff? <a href="staff-portal.html" style="color:var(--electric);font-weight:600;">Staff Portal →</a>
       </p>
     </div>
   </div>
@@ -171,11 +187,15 @@
           <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
           <circle cx="18" cy="22" r="3.5" fill="white"/>
         </svg>
-        <div><div class="portal-nav-name">curaah</div><div class="portal-nav-tag">PROXY BOOKING</div></div>
+        <div>
+          <div class="portal-nav-name">curaah</div>
+          <div class="portal-nav-tag">PROXY AGENT</div>
+        </div>
       </div>
       <div class="portal-nav-right">
-        <span class="portal-nav-hospital">Booking from: <strong id="navHospitalName">—</strong></span>
-        <a href="staff-portal.html" class="btn btn-ghost btn-sm">Staff Portal</a>
+        <span class="portal-nav-agent">
+          <strong id="navAgentName">—</strong> · <span id="navAgentLocation" style="color:var(--text-on-dark-muted);">—</span>
+        </span>
         <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Logout</button>
       </div>
     </div>
@@ -184,122 +204,155 @@
 
       <div class="page-header">
         <div class="page-title">Proxy Appointment Booking</div>
-        <p class="page-sub">Book appointments at any Curaah hospital on behalf of patients who need assistance. Patient consent is required.</p>
+        <p class="page-sub">
+          Book appointments for patients who need help.
+          Enter their phone number — existing Curaah users are found automatically.
+          New patients get a quick registration in seconds.
+        </p>
       </div>
 
       <!-- Tabs -->
       <div class="page-tabs">
-        <button class="page-tab active" onclick="switchTab('new', this)">➕ New Proxy Booking</button>
-        <button class="page-tab" onclick="switchTab('history', this)">📋 Booking History</button>
+        <button class="page-tab active" onclick="switchTab('book', this)">📅 Book Appointment</button>
+        <button class="page-tab" onclick="switchTab('history', this)">📋 Today's Bookings</button>
       </div>
 
-      <!-- ── NEW BOOKING TAB ── -->
-      <div id="tab-new">
+      <!-- ── BOOKING TAB ── -->
+      <div id="tab-book">
 
-        <!-- Steps -->
-        <div class="steps-bar">
-          <div class="step-item active" id="stepItem1">
-            <div class="step-num active" id="stepNum1">1</div>
-            <div class="step-label">Find Patient</div>
+        <!-- Stats strip -->
+        <div class="stats-strip">
+          <div class="stats-strip-item">
+            <div class="stats-strip-num" id="statToday">—</div>
+            <div class="stats-strip-label">Booked today</div>
           </div>
-          <div class="step-item" id="stepItem2">
-            <div class="step-num pending" id="stepNum2">2</div>
-            <div class="step-label">Select Hospital</div>
+          <div class="stats-strip-item">
+            <div class="stats-strip-num" id="statTotal">—</div>
+            <div class="stats-strip-label">Total bookings</div>
           </div>
-          <div class="step-item" id="stepItem3">
-            <div class="step-num pending" id="stepNum3">3</div>
-            <div class="step-label">Book Appointment</div>
-          </div>
-          <div class="step-item" id="stepItem4">
-            <div class="step-num pending" id="stepNum4">4</div>
-            <div class="step-label">Confirm</div>
+          <div class="stats-strip-item">
+            <div class="stats-strip-num" id="statPatients">—</div>
+            <div class="stats-strip-label">Patients helped</div>
           </div>
         </div>
 
-        <!-- STEP 1: Find Patient -->
-        <div class="step-section active" id="section-step1">
-          <div class="panel">
-            <div class="panel-header"><div class="panel-title">🔍 Find Patient by Phone</div></div>
-            <div class="panel-body">
-              <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-                <div class="form-group" style="flex:1;min-width:200px;margin:0;">
-                  <label class="form-label">Patient Phone Number *</label>
-                  <input class="form-input" type="tel" id="searchPhone" placeholder="10-digit mobile number" maxlength="10" />
-                </div>
-                <button class="btn btn-primary" style="flex-shrink:0;" onclick="searchPatient()">Find Patient</button>
+        <!-- STEP 1: Phone lookup -->
+        <div class="panel" id="phonePanel">
+          <div class="panel-header">
+            <div class="panel-title">📱 Step 1 — Enter Patient Phone</div>
+          </div>
+          <div class="panel-body">
+            <div class="phone-search-wrap">
+              <div class="form-group">
+                <label class="form-label">Patient Mobile Number *</label>
+                <input class="form-input" type="tel" id="patientPhone"
+                  placeholder="10-digit number" maxlength="10"
+                  style="font-size:18px;letter-spacing:2px;" />
               </div>
+              <button class="btn btn-primary btn-lg" style="flex-shrink:0;" onclick="lookupPhone()">
+                Search →
+              </button>
+            </div>
 
-              <div id="patientFoundCard" style="display:none;" class="patient-found-card">
-                <div class="patient-avatar" id="patientInitials">—</div>
-                <div style="flex:1;">
-                  <div class="patient-name" id="patientName">—</div>
-                  <div class="patient-meta" id="patientMeta">—</div>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="goToStep(2)">
-                  Continue →
-                </button>
+            <p style="font-size:12px;color:var(--text-muted);line-height:1.7;">
+              🔍 We check if this number is already registered on Curaah.
+              If yes, we skip registration and go straight to booking.
+              If no, we collect minimal details first.
+            </p>
+          </div>
+        </div>
+
+        <!-- STEP 2: Patient found / new registration -->
+        <div id="patientStep" style="display:none;">
+
+          <!-- Existing patient found -->
+          <div id="existingPatientCard" style="display:none;" class="patient-status-card existing">
+            <div class="patient-status-avatar" id="existingAvatar">—</div>
+            <div class="patient-status-info">
+              <div class="patient-status-name" id="existingName">—</div>
+              <div class="patient-status-meta" id="existingMeta">Existing Curaah patient</div>
+            </div>
+            <span class="patient-status-tag tag-existing">✓ Found</span>
+          </div>
+
+          <!-- New patient — mini registration -->
+          <div id="newPatientCard" style="display:none;" class="patient-status-card new-patient">
+            <div class="patient-status-avatar">👤</div>
+            <div class="patient-status-info">
+              <div class="patient-status-name">New Patient</div>
+              <div class="patient-status-meta" id="newPatientPhone">—</div>
+            </div>
+            <span class="patient-status-tag tag-new-patient">New</span>
+          </div>
+
+          <div id="miniRegForm" style="display:none;" class="mini-reg-form">
+            <div class="mini-reg-title">
+              ✏️ Quick Registration
+              <span style="font-size:11px;color:var(--text-muted);font-weight:400;">Takes 10 seconds</span>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Full Name *</label>
+                <input class="form-input" type="text" id="newName" placeholder="Patient full name" />
               </div>
-
-              <div style="margin-top:20px;padding:14px;background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);">
-                <p style="font-size:12px;color:var(--text-secondary);margin:0;line-height:1.7;">
-                  ℹ️ <strong>Proxy booking</strong> is for patients who need help booking appointments —
-                  elderly patients, those without smartphones, or discharge follow-up bookings.
-                  The appointment will appear in the patient's Curaah dashboard marked as
-                  <strong>booked on your behalf</strong>.
-                </p>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Gender</label>
+                <select class="form-input form-select" id="newGender">
+                  <option value="">Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">Age</label>
+                <input class="form-input" type="number" id="newAge" placeholder="e.g. 45" min="1" max="120" />
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label">City / Village</label>
+                <input class="form-input" type="text" id="newCity" placeholder="e.g. Nangal" />
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- STEP 2: Select Hospital -->
-        <div class="step-section" id="section-step2">
+          <!-- Change patient button -->
+          <div style="margin-bottom:16px;">
+            <button class="btn btn-secondary btn-sm" onclick="resetPatient()">
+              ← Change Patient
+            </button>
+          </div>
+
+          <!-- STEP 3: Booking form -->
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">🏥 Select Target Hospital</div>
-              <button class="btn btn-secondary btn-sm" onclick="goToStep(1)">← Back</button>
+              <div class="panel-title">📅 Step 2 — Book Appointment</div>
             </div>
-            <div class="panel-body">
-              <div class="form-group" style="margin-bottom:16px;">
-                <label class="form-label">Search hospital by name or city</label>
-                <input class="form-input" type="text" id="hospitalSearch"
-                  placeholder="e.g. Nangal, PGI, General Hospital..."
-                  oninput="filterHospitals()" />
-              </div>
+            <div class="panel-body booking-form-wrap">
 
-              <div class="hospital-option-grid" id="hospitalGrid">
-                <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);font-size:14px;">
-                  Loading hospitals...
+              <div>
+                <div class="booking-section-label">Select Hospital</div>
+                <div class="form-group" style="margin-bottom:8px;">
+                  <input class="form-input" type="text" id="hospitalSearchInput"
+                    placeholder="Search hospital by name or city..."
+                    oninput="filterHospitals()" />
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 3: Book Appointment -->
-        <div class="step-section" id="section-step3">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📅 Book Appointment</div>
-              <button class="btn btn-secondary btn-sm" onclick="goToStep(2)">← Back</button>
-            </div>
-            <div class="panel-body" style="display:flex;flex-direction:column;gap:18px;">
-
-              <div style="background:var(--off-white);border-radius:var(--radius-md);padding:12px 16px;font-size:13px;color:var(--text-secondary);line-height:1.6;">
-                Booking at: <strong id="selectedHospitalName" style="color:var(--electric);">—</strong>
+                <select class="form-input form-select" id="hospitalSelect" onchange="onHospitalChange()" style="font-size:13px;">
+                  <option value="">Choose a hospital</option>
+                </select>
+                <span class="form-error" id="hospitalError"></span>
               </div>
 
               <div class="form-grid-2">
-                <div class="form-group">
+                <div class="form-group" style="margin:0;">
                   <label class="form-label">OPD / Department *</label>
-                  <select class="form-input form-select" id="bookingOpd" onchange="loadOpdDoctors()">
-                    <option value="">Select OPD</option>
+                  <select class="form-input form-select" id="opdSelect" onchange="onOpdChange()">
+                    <option value="">Select hospital first</option>
                   </select>
                   <span class="form-error" id="opdError"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin:0;">
                   <label class="form-label">Doctor *</label>
-                  <select class="form-input form-select" id="bookingDoctor" onchange="loadSlots()">
+                  <select class="form-input form-select" id="doctorSelect" onchange="loadSlots()">
                     <option value="">Select OPD first</option>
                   </select>
                   <span class="form-error" id="doctorError"></span>
@@ -307,14 +360,14 @@
               </div>
 
               <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Appointment Date *</label>
-                  <input class="form-input" type="date" id="bookingDate" onchange="loadSlots()" />
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label">Date *</label>
+                  <input class="form-input" type="date" id="apptDate" onchange="loadSlots()" />
                   <span class="form-error" id="dateError"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin:0;">
                   <label class="form-label">Time Slot *</label>
-                  <select class="form-input form-select" id="bookingSlot">
+                  <select class="form-input form-select" id="slotSelect">
                     <option value="">Select doctor & date first</option>
                   </select>
                   <span class="form-error" id="slotError"></span>
@@ -322,101 +375,57 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="form-label">Insurance Scheme</label>
-                <select class="form-input form-select" id="bookingScheme">
-                  <option value="">None / Self pay</option>
-                  <option value="ayushman">Ayushman Bharat PM-JAY</option>
-                  <option value="mmsby">Mukhyamantri Sehat Bima (MMSBY)</option>
-                  <option value="cghs">CGHS / CSMA</option>
-                  <option value="esi">ESI Scheme</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">
-                  Reason / Notes
-                  <span style="font-size:11px;color:var(--text-muted);font-weight:400;margin-left:4px;">(optional)</span>
-                </label>
-                <textarea class="form-input form-textarea" id="bookingNotes"
-                  placeholder="Reason for visit, any special instructions..." rows="2"></textarea>
-              </div>
-
-              <!-- Consent -->
-              <div class="consent-box">
-                <div class="consent-box-icon">🤝</div>
-                <div style="flex:1;">
-                  <div class="consent-box-title">Patient Consent Required</div>
-                  <div class="consent-box-desc">
-                    The patient must be informed about this booking and verbally agree.
-                    This appointment will appear in their Curaah dashboard marked as
-                    booked by <strong>Your Hospital Name</strong>.
-                    <br/><br/>
-                    <span style="color:var(--warning);font-weight:600;">⚠️ Future update:</span>
-                    OTP verification from patient's phone will be required.
-                  </div>
-                  <label class="consent-toggle">
-                    <input type="checkbox" id="proxyConsentCheck" />
-                    <span class="consent-toggle-label">Patient has been informed and consents to this booking</span>
-                  </label>
+              <div class="form-grid-2">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label">Insurance Scheme</label>
+                  <select class="form-input form-select" id="schemeSelect">
+                    <option value="">None / Self pay</option>
+                    <option value="ayushman">Ayushman Bharat PM-JAY</option>
+                    <option value="mmsby">Mukhyamantri Sehat Bima</option>
+                    <option value="cghs">CGHS / CSMA</option>
+                    <option value="esi">ESI Scheme</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label">Notes <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                  <input class="form-input" type="text" id="apptNotes" placeholder="Symptoms or reason..." />
                 </div>
               </div>
 
-              <div style="display:flex;justify-content:flex-end;">
-                <button class="btn btn-primary btn-lg" onclick="goToStep(4)">
-                  Review Booking →
-                </button>
-              </div>
+              <button class="btn btn-primary btn-full btn-lg" id="bookBtn" onclick="confirmBooking()">
+                ✅ Confirm & Book Appointment
+              </button>
 
             </div>
           </div>
-        </div>
 
-        <!-- STEP 4: Review & Confirm -->
-        <div class="step-section" id="section-step4">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">✅ Review & Confirm</div>
-              <button class="btn btn-secondary btn-sm" onclick="goToStep(3)">← Edit</button>
-            </div>
-            <div class="panel-body">
-
-              <div class="proxy-badge">
-                <span style="font-size:18px;flex-shrink:0;">⚡</span>
-                <span>This appointment will be booked on behalf of the patient by <strong id="summaryBookedBy">—</strong>. It will appear in the patient's dashboard with a "Proxy booked" label.</span>
-              </div>
-
-              <div class="summary-card" id="summaryCard"></div>
-
-              <div style="display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;">
-                <button class="btn btn-secondary" onclick="goToStep(3)">← Edit</button>
-                <button class="btn btn-primary btn-lg" id="submitBtn" onclick="submitBooking()">
-                  Confirm & Book Appointment →
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- SUCCESS -->
-        <div class="step-section" id="section-success">
-          <div class="success-card">
-            <div class="success-icon">✅</div>
-            <div class="success-title">Appointment Booked!</div>
-            <p class="success-desc">
-              The appointment has been booked successfully on behalf of the patient.
-              It is now visible in their Curaah dashboard.
-            </p>
+        <div id="successSection" style="display:none;">
+          <div class="panel">
+            <div class="success-wrap">
+              <div class="success-icon">✅</div>
+              <div class="success-title">Appointment Booked!</div>
+              <p class="success-desc">
+                The appointment has been confirmed successfully.
+                Hand the slip below to the patient or note down the token details.
+              </p>
 
-            <div class="appt-confirm-card" id="successDetails"></div>
+              <div class="appt-slip" id="apptSlip"></div>
 
-            <div style="background:rgba(255,159,0,0.06);border:1px solid rgba(255,159,0,0.2);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--text-secondary);line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;text-align:left;">
-              📱 <strong>Token system:</strong> When the patient arrives at the hospital, staff can check them in manually using their phone number, or the patient can scan the QR code at the OPD entrance to get their token automatically.
-            </div>
+              <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;max-width:440px;margin:0 auto 20px;text-align:left;">
+                <p style="font-size:12px;color:var(--text-secondary);margin:0;line-height:1.7;">
+                  📟 <strong>Token:</strong> When patient arrives at the hospital,
+                  staff checks them in using their phone number.
+                  Token assigned to the correct OPD queue automatically.
+                </p>
+              </div>
 
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-              <button class="btn btn-primary" onclick="newBooking()">+ Book Another</button>
-              <a href="staff-portal.html" class="btn btn-secondary">← Staff Portal</a>
+              <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="bookAnother()">+ Book Another</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Slip</button>
+              </div>
             </div>
           </div>
         </div>
@@ -427,11 +436,11 @@
       <div id="tab-history" style="display:none;">
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">📋 Proxy Bookings Made by <span id="historyHospitalName">—</span></div>
+            <div class="panel-title">📋 Today's Bookings</div>
             <button class="btn btn-secondary btn-sm" onclick="loadHistory()">🔄 Refresh</button>
           </div>
           <div class="panel-body" id="historyList">
-            <div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">Loading history...</div>
+            <div style="text-align:center;padding:24px;color:var(--text-muted);">Loading...</div>
           </div>
         </div>
       </div>
@@ -443,12 +452,15 @@
   <script type="module">
     import { supabase } from './js/supabase.js';
 
-    let currentHospital  = null;
-    let currentStaff     = null;
-    let selectedPatient  = null;
+    let currentAgent     = null;
+    let currentUser      = null;
+    let patientMode      = null; /* 'existing' | 'new' */
+    let existingPatient  = null; /* patients table row */
+    let walkInPatient    = null; /* walk_in_patients row (after save) */
+    let allHospitals     = [];
+    let filteredHospitals= [];
     let selectedHospital = null;
     let selectedOpd      = null;
-    let allHospitals     = [];
     let opdDoctors       = [];
 
     const TODAY = new Date().toISOString().split('T')[0];
@@ -461,26 +473,41 @@
       const errorBox = document.getElementById('loginError');
       const btn      = document.getElementById('loginBtn');
 
-      if (!email || !password) { errorBox.textContent = 'Please enter email and password.'; errorBox.classList.add('show'); return; }
-      btn.textContent = 'Logging in...'; btn.disabled = true; errorBox.classList.remove('show');
+      if (!email || !password) {
+        errorBox.textContent = 'Please enter email and password.';
+        errorBox.classList.add('show'); return;
+      }
+
+      btn.textContent = 'Logging in...'; btn.disabled = true;
+      errorBox.classList.remove('show');
 
       try {
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+        const { data: authData, error: authError } =
+          await supabase.auth.signInWithPassword({ email, password });
         if (authError) throw new Error('Incorrect email or password.');
 
-        const { data: staffRow, error: staffError } = await supabase
-          .from('hospital_staff').select('*, hospitals(*)').eq('user_id', authData.user.id).eq('is_active', true).single();
+        /* Check proxy_agents table */
+        const { data: agentRow, error: agentError } = await supabase
+          .from('proxy_agents')
+          .select('*')
+          .eq('user_id', authData.user.id)
+          .eq('is_active', true)
+          .single();
 
-        if (staffError || !staffRow) { await supabase.auth.signOut(); throw new Error('This account is not registered as hospital staff.'); }
+        if (agentError || !agentRow) {
+          await supabase.auth.signOut();
+          throw new Error('This account is not registered as a proxy agent. Contact your Curaah administrator.');
+        }
 
-        currentStaff = staffRow; currentHospital = staffRow.hospitals;
-        btn.textContent = 'Login to Proxy Booking'; btn.disabled = false;
+        currentUser  = authData.user;
+        currentAgent = agentRow;
+        btn.textContent = 'Login to Agent Portal'; btn.disabled = false;
         document.getElementById('loginPage').style.display  = 'none';
         document.getElementById('portalPage').style.display = 'block';
         initPortal();
 
       } catch (err) {
-        btn.textContent = 'Login to Proxy Booking'; btn.disabled = false;
+        btn.textContent = 'Login to Agent Portal'; btn.disabled = false;
         errorBox.textContent = err.message; errorBox.classList.add('show');
       }
     };
@@ -488,10 +515,12 @@
     async function checkSession() {
       const { data:{ session } } = await supabase.auth.getSession();
       if (!session) return;
-      const { data: staffRow } = await supabase
-        .from('hospital_staff').select('*, hospitals(*)').eq('user_id', session.user.id).eq('is_active', true).single();
-      if (staffRow && staffRow.hospitals) {
-        currentStaff = staffRow; currentHospital = staffRow.hospitals;
+      const { data: agentRow } = await supabase
+        .from('proxy_agents')
+        .select('*').eq('user_id', session.user.id).eq('is_active', true).single();
+      if (agentRow) {
+        currentUser  = session.user;
+        currentAgent = agentRow;
         document.getElementById('loginPage').style.display  = 'none';
         document.getElementById('portalPage').style.display = 'block';
         initPortal();
@@ -500,35 +529,77 @@
 
     window.handleLogout = async function() {
       await supabase.auth.signOut();
-      currentHospital = null; currentStaff = null;
+      currentAgent = null; currentUser = null;
       document.getElementById('portalPage').style.display = 'none';
       document.getElementById('loginPage').style.display  = 'flex';
       showToast('Logged out.', 'success');
     };
 
-    /* ── INIT ── */
+    /* ── INIT PORTAL ── */
     async function initPortal() {
-      document.getElementById('navHospitalName').textContent    = currentHospital.name;
-      document.getElementById('historyHospitalName').textContent= currentHospital.name;
-      document.getElementById('summaryBookedBy').textContent    = currentHospital.name;
+      document.getElementById('navAgentName').textContent     = currentAgent.name || 'Agent';
+      document.getElementById('navAgentLocation').textContent = currentAgent.location || '—';
 
-      const dateEl = document.getElementById('bookingDate');
+      const dateEl = document.getElementById('apptDate');
       if (dateEl) { dateEl.min = TODAY; dateEl.value = TODAY; }
 
-      /* Load all verified hospitals */
+      await Promise.all([loadHospitals(), loadAgentStats()]);
+    }
+
+    /* ── LOAD HOSPITALS ── */
+    async function loadHospitals() {
       const { data: hospitals } = await supabase
-        .from('hospitals').select('id, name, city, type, schemes_accepted, doctor_count')
+        .from('hospitals').select('id, name, city, type, doctor_count, slots_per_hour, schemes_accepted')
         .eq('is_verified', true).eq('is_active', true)
-        .in('type', ['hospital', 'dispensary'])
+        .in('type', ['hospital','dispensary'])
         .order('name');
 
-      allHospitals = hospitals || [];
-      renderHospitalGrid(allHospitals);
+      allHospitals      = hospitals || [];
+      filteredHospitals = allHospitals;
+      renderHospitalOptions(allHospitals);
+    }
+
+    function renderHospitalOptions(list) {
+      const sel = document.getElementById('hospitalSelect');
+      sel.innerHTML = '<option value="">Choose a hospital</option>' +
+        list.map(h =>
+          `<option value="${h.id}">${h.name} — ${h.city || ''}</option>`
+        ).join('');
+    }
+
+    window.filterHospitals = function() {
+      const q = document.getElementById('hospitalSearchInput').value.trim().toLowerCase();
+      const filtered = q
+        ? allHospitals.filter(h =>
+            h.name.toLowerCase().includes(q) ||
+            (h.city && h.city.toLowerCase().includes(q))
+          )
+        : allHospitals;
+      renderHospitalOptions(filtered);
+    };
+
+    /* ── LOAD AGENT STATS ── */
+    async function loadAgentStats() {
+      const { data: allBookings } = await supabase
+        .from('appointments')
+        .select('id, appointment_date, patient_id, walk_in_patient_id')
+        .eq('proxy_agent_id', currentAgent.id);
+
+      const all = allBookings || [];
+      const todayBookings = all.filter(a => a.appointment_date === TODAY);
+      const uniquePatients = new Set([
+        ...all.map(a => a.patient_id).filter(Boolean),
+        ...all.map(a => a.walk_in_patient_id).filter(Boolean),
+      ]);
+
+      document.getElementById('statToday').textContent   = todayBookings.length;
+      document.getElementById('statTotal').textContent   = all.length;
+      document.getElementById('statPatients').textContent= uniquePatients.size;
     }
 
     /* ── TAB SWITCHER ── */
     window.switchTab = function(tab, btn) {
-      ['new','history'].forEach(t => {
+      ['book','history'].forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) el.style.display = t === tab ? 'block' : 'none';
       });
@@ -537,127 +608,150 @@
       if (tab === 'history') loadHistory();
     };
 
-    /* ── STEP NAVIGATION ── */
-    window.goToStep = function(step) {
-      if (step === 2 && !selectedPatient) { showToast('Please find a patient first.', 'error'); return; }
-      if (step === 4 && !validateStep3()) return;
-
-      ['step1','step2','step3','step4','success'].forEach(s => {
-        const el = document.getElementById('section-' + s);
-        if (el) el.classList.remove('active');
-      });
-
-      const target = document.getElementById('section-step' + step);
-      if (target) target.classList.add('active');
-
-      for (let i = 1; i <= 4; i++) {
-        const numEl  = document.getElementById('stepNum' + i);
-        const itemEl = document.getElementById('stepItem' + i);
-        if (!numEl || !itemEl) continue;
-        if (i < step)       { numEl.className = 'step-num done';    numEl.textContent = '✓'; itemEl.className = 'step-item done'; }
-        else if (i === step){ numEl.className = 'step-num active';  numEl.textContent = i;   itemEl.className = 'step-item active'; }
-        else                { numEl.className = 'step-num pending'; numEl.textContent = i;   itemEl.className = 'step-item'; }
-      }
-
-      if (step === 4) buildSummary();
-    };
-
-    /* ── SEARCH PATIENT ── */
-    window.searchPatient = async function() {
-      const phone = document.getElementById('searchPhone').value.trim();
+    /* ── PHONE LOOKUP ── */
+    window.lookupPhone = async function() {
+      const phone = document.getElementById('patientPhone').value.trim();
       if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
 
-      const { data: patient } = await supabase
+      /* Check patients table (Curaah registered) */
+      const { data: curaahPatient } = await supabase
         .from('patients').select('*').eq('phone', phone).single();
 
-      if (!patient) { showToast('No Curaah patient found with this number.', 'error'); return; }
+      if (curaahPatient) {
+        /* Existing Curaah patient */
+        patientMode     = 'existing';
+        existingPatient = curaahPatient;
+        walkInPatient   = null;
 
-      selectedPatient = patient;
+        const name     = curaahPatient.full_name || 'Patient';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
 
-      const name     = patient.full_name || 'Patient';
-      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+        document.getElementById('existingAvatar').textContent = initials;
+        document.getElementById('existingName').textContent   = name;
+        document.getElementById('existingMeta').textContent   = `📞 ${phone} · ${curaahPatient.city || '—'} · ${curaahPatient.gender || '—'}`;
 
-      document.getElementById('patientInitials').textContent = initials;
-      document.getElementById('patientName').textContent     = name;
-      document.getElementById('patientMeta').textContent     = `📞 ${patient.phone} · ${patient.city || '—'} · ${patient.gender || '—'}`;
-      document.getElementById('patientFoundCard').style.display = 'flex';
+        document.getElementById('existingPatientCard').style.display = 'flex';
+        document.getElementById('newPatientCard').style.display      = 'none';
+        document.getElementById('miniRegForm').style.display         = 'none';
 
-      showToast(`Patient found: ${name}`, 'success');
-    };
+        showToast(`Found: ${name} (Curaah patient)`, 'success');
 
-    /* ── HOSPITAL GRID ── */
-    function renderHospitalGrid(hospitals) {
-      const grid = document.getElementById('hospitalGrid');
-      if (!hospitals.length) {
-        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);">No hospitals found.</div>`;
-        return;
+      } else {
+        /* Check walk_in_patients */
+        const { data: walkIn } = await supabase
+          .from('walk_in_patients').select('*').eq('phone', phone).single();
+
+        if (walkIn) {
+          /* Returning walk-in patient */
+          patientMode   = 'walkin_existing';
+          walkInPatient = walkIn;
+          existingPatient = null;
+
+          const name     = walkIn.full_name || 'Patient';
+          const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+
+          document.getElementById('existingAvatar').textContent = initials;
+          document.getElementById('existingName').textContent   = name;
+          document.getElementById('existingMeta').textContent   = `📞 ${phone} · Returning patient`;
+
+          document.getElementById('existingPatientCard').style.display = 'flex';
+          document.getElementById('newPatientCard').style.display      = 'none';
+          document.getElementById('miniRegForm').style.display         = 'none';
+
+          /* Update existing card style to show it's a walk-in returning */
+          document.getElementById('existingPatientCard').classList.remove('existing');
+          document.getElementById('existingPatientCard').classList.add('new-patient');
+
+          showToast(`Found: ${name} (returning walk-in)`, 'success');
+
+        } else {
+          /* Brand new patient */
+          patientMode     = 'new';
+          existingPatient = null;
+          walkInPatient   = null;
+
+          document.getElementById('newPatientPhone').textContent = `📞 ${phone}`;
+          document.getElementById('existingPatientCard').style.display = 'none';
+          document.getElementById('newPatientCard').style.display      = 'flex';
+          document.getElementById('miniRegForm').style.display         = 'block';
+
+          showToast('New patient — please fill quick registration.', 'info');
+        }
       }
 
-      const schemeNames = { ayushman:'Ayushman', mmsby:'MMSBY', cghs:'CGHS', esi:'ESI' };
-
-      grid.innerHTML = hospitals.map(h => {
-        const schemes = h.schemes_accepted || [];
-        return `
-          <div class="hospital-option-card ${selectedHospital?.id === h.id ? 'selected' : ''}"
-            id="hcard-${h.id}" onclick="selectHospital('${h.id}')">
-            <div class="hospital-option-name">${h.name}</div>
-            <div class="hospital-option-meta">
-              📍 ${h.city || '—'} · ${h.doctor_count || 0} doctors
-            </div>
-            ${schemes.length > 0 ? `
-              <div class="hospital-option-schemes">
-                ${schemes.map(s => `<span class="scheme-mini">${schemeNames[s]||s}</span>`).join('')}
-              </div>` : ''}
-          </div>`;
-      }).join('');
-    }
-
-    window.filterHospitals = function() {
-      const query = document.getElementById('hospitalSearch').value.trim().toLowerCase();
-      if (!query) { renderHospitalGrid(allHospitals); return; }
-      const filtered = allHospitals.filter(h =>
-        h.name.toLowerCase().includes(query) ||
-        (h.city && h.city.toLowerCase().includes(query))
-      );
-      renderHospitalGrid(filtered);
+      document.getElementById('phonePanel').style.opacity = '0.6';
+      document.getElementById('patientStep').style.display = 'block';
     };
 
-    window.selectHospital = async function(hospId) {
+    /* ── RESET PATIENT ── */
+    window.resetPatient = function() {
+      patientMode = null; existingPatient = null; walkInPatient = null;
+      document.getElementById('patientPhone').value = '';
+      document.getElementById('patientStep').style.display   = 'none';
+      document.getElementById('phonePanel').style.opacity    = '1';
+      document.getElementById('existingPatientCard').style.display = 'none';
+      document.getElementById('newPatientCard').style.display      = 'none';
+      document.getElementById('miniRegForm').style.display         = 'none';
+      document.getElementById('newName').value   = '';
+      document.getElementById('newGender').value = '';
+      document.getElementById('newAge').value    = '';
+      document.getElementById('newCity').value   = '';
+      /* Reset hospital/opd/doctor */
+      document.getElementById('hospitalSelect').value = '';
+      document.getElementById('opdSelect').innerHTML   = '<option value="">Select hospital first</option>';
+      document.getElementById('doctorSelect').innerHTML= '<option value="">Select OPD first</option>';
+      document.getElementById('slotSelect').innerHTML  = '<option value="">Select doctor & date first</option>';
+      selectedHospital = null; selectedOpd = null; opdDoctors = [];
+    };
+
+    /* ── HOSPITAL CHANGE ── */
+    window.onHospitalChange = async function() {
+      const hospId = document.getElementById('hospitalSelect').value;
+      document.getElementById('hospitalError').textContent = '';
+      document.getElementById('opdSelect').innerHTML    = '<option value="">Loading OPDs...</option>';
+      document.getElementById('doctorSelect').innerHTML = '<option value="">Select OPD first</option>';
+      document.getElementById('slotSelect').innerHTML   = '<option value="">Select doctor & date first</option>';
+      if (document.getElementById('slotHint')) document.getElementById('slotHint').textContent = '';
+
+      if (!hospId) { selectedHospital = null; return; }
+
       selectedHospital = allHospitals.find(h => h.id === hospId);
-      if (!selectedHospital) return;
 
-      document.querySelectorAll('.hospital-option-card').forEach(c => c.classList.remove('selected'));
-      const card = document.getElementById('hcard-' + hospId);
-      if (card) card.classList.add('selected');
-
-      /* Load OPDs for this hospital */
       const { data: opds } = await supabase
         .from('opds').select('*').eq('hospital_id', hospId).eq('is_active', true).order('name');
 
-      const opdSel = document.getElementById('bookingOpd');
-      opdSel.innerHTML = '<option value="">Select OPD</option>' +
-        (opds || []).map(o => `<option value="${o.id}" data-name="${o.name}" data-fee="${o.fee||0}">${o.name} — ${o.department}${o.fee > 0 ? ' · ₹'+o.fee : ''}</option>`).join('');
+      if (!opds || !opds.length) {
+        document.getElementById('opdSelect').innerHTML = '<option value="">No OPDs set up yet</option>';
+        return;
+      }
 
-      document.getElementById('bookingDoctor').innerHTML = '<option value="">Select OPD first</option>';
-      document.getElementById('bookingSlot').innerHTML   = '<option value="">Select doctor & date first</option>';
-      document.getElementById('selectedHospitalName').textContent = selectedHospital.name;
-
-      /* Move to step 3 */
-      goToStep(3);
+      document.getElementById('opdSelect').innerHTML =
+        '<option value="">Select OPD</option>' +
+        opds.map(o =>
+          `<option value="${o.id}" data-name="${o.name}" data-dept="${o.department}" data-fee="${o.fee||0}">
+            ${o.name}${o.fee > 0 ? ' · ₹'+o.fee : ' · Free'}
+          </option>`
+        ).join('');
     };
 
-    /* ── LOAD OPD DOCTORS ── */
-    window.loadOpdDoctors = async function() {
-      const opdSel  = document.getElementById('bookingOpd');
+    /* ── OPD CHANGE ── */
+    window.onOpdChange = async function() {
+      const opdSel  = document.getElementById('opdSelect');
       const opdId   = opdSel.value;
       const opdOpt  = opdSel.options[opdSel.selectedIndex];
-      const drSel   = document.getElementById('bookingDoctor');
-
       document.getElementById('opdError').textContent = '';
+      document.getElementById('doctorSelect').innerHTML = '<option value="">Loading doctors...</option>';
+      document.getElementById('slotSelect').innerHTML   = '<option value="">Select doctor & date first</option>';
+      if (document.getElementById('slotHint')) document.getElementById('slotHint').textContent = '';
 
-      if (!opdId) { drSel.innerHTML = '<option value="">Select OPD first</option>'; return; }
+      if (!opdId) { selectedOpd = null; return; }
 
-      selectedOpd = { id: opdId, name: opdOpt.dataset.name, fee: parseInt(opdOpt.dataset.fee||0) };
+      selectedOpd = {
+        id:   opdId,
+        name: opdOpt.dataset.name,
+        dept: opdOpt.dataset.dept,
+        fee:  parseInt(opdOpt.dataset.fee || 0),
+      };
 
       const { data: doctors } = await supabase
         .from('doctors').select('*')
@@ -669,43 +763,51 @@
       opdDoctors = doctors || [];
 
       if (!opdDoctors.length) {
-        drSel.innerHTML = '<option value="">No doctors available for this OPD</option>';
+        document.getElementById('doctorSelect').innerHTML =
+          '<option value="">No doctors available for this OPD</option>';
         return;
       }
 
-      drSel.innerHTML = '<option value="">Select doctor</option>' +
-        opdDoctors.map(d => `<option value="${d.name}">${d.name}${d.speciality ? ' — '+d.speciality : ''}</option>`).join('');
+      document.getElementById('doctorSelect').innerHTML =
+        '<option value="">Select doctor</option>' +
+        opdDoctors.map(d =>
+          `<option value="${d.id}" data-name="${d.name}">${d.name}${d.speciality ? ' — '+d.speciality : ''}</option>`
+        ).join('');
     };
 
     /* ── LOAD SLOTS ── */
     window.loadSlots = async function() {
-      const doctor  = document.getElementById('bookingDoctor').value;
-      const date    = document.getElementById('bookingDate').value;
-      const slotSel = document.getElementById('bookingSlot');
+      const drSel   = document.getElementById('doctorSelect');
+      const drId    = drSel.value;
+      const drOpt   = drSel.options[drSel.selectedIndex];
+      const drName  = drOpt?.dataset?.name || drSel.value;
+      const date    = document.getElementById('apptDate').value;
+      const slotSel = document.getElementById('slotSelect');
       const hint    = document.getElementById('slotHint');
 
       document.getElementById('doctorError').textContent = '';
       document.getElementById('dateError').textContent   = '';
+      document.getElementById('slotError').textContent   = '';
 
-      if (!doctor || !date) {
+      if (!drId || !date) {
         slotSel.innerHTML = '<option value="">Select doctor & date first</option>';
         return;
       }
 
       /* Check doctor off day */
-      const selectedDoc = opdDoctors.find(d => d.name === doctor);
-      if (selectedDoc) {
+      const doc = opdDoctors.find(d => d.id === drId);
+      if (doc) {
         const { data: offDay } = await supabase
           .from('doctor_schedules')
           .select('id, reason')
-          .eq('doctor_id', selectedDoc.id)
+          .eq('doctor_id', doc.id)
           .eq('off_date', date)
           .single();
 
         if (offDay) {
-          slotSel.innerHTML = '<option value="">Doctor unavailable on this date</option>';
+          slotSel.innerHTML = '<option value="">Doctor not available on this date</option>';
           const reason = offDay.reason ? ` (${offDay.reason})` : '';
-          showToast(`${doctor} is not available on this date${reason}.`, 'error');
+          showToast(`${doc.name} is off on this date${reason}.`, 'error');
           if (hint) hint.textContent = '';
           return;
         }
@@ -716,7 +818,9 @@
 
       const { data: booked } = await supabase
         .from('appointment_slots').select('slot_time, booked_count, max_count')
-        .eq('hospital_id', selectedHospital.id).eq('slot_date', date).eq('doctor_name', doctor);
+        .eq('hospital_id', selectedHospital.id)
+        .eq('slot_date', date)
+        .eq('doctor_name', drName);
 
       const map = {};
       (booked || []).forEach(s => { map[s.slot_time] = { booked:s.booked_count, max:s.max_count }; });
@@ -730,171 +834,180 @@
         const [timePart, period] = slotStr.split(' ');
         let [h, m] = timePart.split(':').map(Number);
         if (period === 'PM' && h !== 12) h += 12;
-        if (period === 'AM' && h === 12) h = 0;
+        if (period === 'AM' && h === 12) h  = 0;
         return (h * 60 + m) <= curMins;
       }
 
+      const maxPerSlot = selectedHospital?.slots_per_hour || 10;
       let available = 0;
+
       slotSel.innerHTML = '<option value="">Choose a time slot</option>' +
         ALL_SLOTS.map(slot => {
           const d    = map[slot];
           const bk   = d?.booked || 0;
-          const mx   = d?.max    || 10;
+          const mx   = d?.max    || maxPerSlot;
           const full = bk >= mx;
           const past = isPast(slot);
-          if (full) return `<option value="${slot}" disabled>${slot} — Full</option>`;
+          if (full) return `<option value="${slot}" disabled>${slot} — Full (${bk}/${mx})</option>`;
           if (past) return `<option value="${slot}" disabled>${slot} — Time passed</option>`;
           available++;
-          return `<option value="${slot}">${slot} — ${mx-bk} left</option>`;
+          return `<option value="${slot}">${slot} — ${mx-bk} slots left</option>`;
         }).join('');
 
-      if (hint) hint.textContent = available > 0 ? `${available} slots available.` : 'No slots available for this date.';
+      if (hint) {
+        hint.textContent = available > 0
+          ? `${available} slots available.`
+          : 'No slots available for this date.';
+        hint.style.color = available > 0 ? '' : 'var(--danger)';
+      }
     };
 
-    /* ── VALIDATE STEP 3 ── */
-    function validateStep3() {
+    /* ── CONFIRM BOOKING ── */
+    window.confirmBooking = async function() {
+      const btn = document.getElementById('bookBtn');
+
+      /* Validate */
       let valid = true;
 
-      const opd     = document.getElementById('bookingOpd').value;
-      const doctor  = document.getElementById('bookingDoctor').value;
-      const date    = document.getElementById('bookingDate').value;
-      const slot    = document.getElementById('bookingSlot').value;
-      const consent = document.getElementById('proxyConsentCheck').checked;
+      if (patientMode === 'new') {
+        const name = document.getElementById('newName').value.trim();
+        if (!name) { showToast('Please enter patient name.', 'error'); valid = false; }
+      }
 
-      if (!opd)    { document.getElementById('opdError').textContent    = 'Please select an OPD.'; valid = false; }
-      if (!doctor) { document.getElementById('doctorError').textContent = 'Please select a doctor.'; valid = false; }
-      if (!date)   { document.getElementById('dateError').textContent   = 'Please select a date.'; valid = false; }
-      if (!slot)   { document.getElementById('slotError').textContent   = 'Please select a time slot.'; valid = false; }
-      else           document.getElementById('slotError').textContent   = '';
+      const hospId  = document.getElementById('hospitalSelect').value;
+      const opdId   = document.getElementById('opdSelect').value;
+      const drSel   = document.getElementById('doctorSelect');
+      const drId    = drSel.value;
+      const drOpt   = drSel.options[drSel.selectedIndex];
+      const drName  = drOpt?.dataset?.name || '';
+      const date    = document.getElementById('apptDate').value;
+      const slot    = document.getElementById('slotSelect').value;
+      const scheme  = document.getElementById('schemeSelect').value;
+      const notes   = document.getElementById('apptNotes').value.trim();
 
-      if (!consent) { showToast('Please confirm patient consent before proceeding.', 'error'); valid = false; }
+      if (!hospId) { document.getElementById('hospitalError').textContent = 'Select a hospital.'; valid = false; }
+      if (!opdId)  { document.getElementById('opdError').textContent      = 'Select an OPD.'; valid = false; }
+      if (!drId)   { document.getElementById('doctorError').textContent   = 'Select a doctor.'; valid = false; }
+      if (!date)   { document.getElementById('dateError').textContent     = 'Select a date.'; valid = false; }
+      if (!slot)   { document.getElementById('slotError').textContent     = 'Select a time slot.'; valid = false; }
 
-      return valid;
-    }
-
-    /* ── BUILD SUMMARY ── */
-    function buildSummary() {
-      const opdSel   = document.getElementById('bookingOpd');
-      const drVal    = document.getElementById('bookingDoctor').value;
-      const date     = document.getElementById('bookingDate').value;
-      const slot     = document.getElementById('bookingSlot').value;
-      const scheme   = document.getElementById('bookingScheme').value;
-      const notes    = document.getElementById('bookingNotes').value.trim();
-      const opdOpt   = opdSel.options[opdSel.selectedIndex];
-      const fee      = parseInt(opdOpt?.dataset?.fee || 0);
-
-      document.getElementById('summaryBookedBy').textContent = currentHospital.name;
-
-      document.getElementById('summaryCard').innerHTML = `
-        <div class="summary-row"><span class="summary-label">Patient</span><span class="summary-value">${selectedPatient?.full_name || '—'} · ${selectedPatient?.phone || '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">Hospital</span><span class="summary-value">${selectedHospital?.name || '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">OPD</span><span class="summary-value">${opdOpt?.text || '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">Doctor</span><span class="summary-value">${drVal || '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">Date</span><span class="summary-value">${date ? new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}) : '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">Time Slot</span><span class="summary-value">${slot || '—'}</span></div>
-        <div class="summary-row"><span class="summary-label">OPD Fee</span><span class="summary-value">${fee > 0 ? '₹'+fee+' (pay at hospital)' : 'Free'}</span></div>
-        <div class="summary-row"><span class="summary-label">Scheme</span><span class="summary-value">${scheme ? scheme.toUpperCase() : 'Self pay'}</span></div>
-        ${notes ? `<div class="summary-row"><span class="summary-label">Notes</span><span class="summary-value" style="text-align:left;max-width:280px;">${notes}</span></div>` : ''}
-        <div class="summary-row"><span class="summary-label">Booked By</span><span class="summary-value" style="color:var(--warning);">⚡ ${currentHospital?.name || '—'} (Proxy)</span></div>
-        <div class="summary-row"><span class="summary-label">Patient Consent</span><span class="summary-value" style="color:var(--success);">✓ Verified</span></div>`;
-    }
-
-    /* ── SUBMIT BOOKING ── */
-    window.submitBooking = async function() {
-      const btn     = document.getElementById('submitBtn');
-      const opdSel  = document.getElementById('bookingOpd');
-      const opdId   = opdSel.value;
-      const opdOpt  = opdSel.options[opdSel.selectedIndex];
-      const opdName = opdOpt?.dataset?.name || opdOpt?.text || '';
-      const fee     = parseInt(opdOpt?.dataset?.fee || 0);
-      const doctor  = document.getElementById('bookingDoctor').value;
-      const date    = document.getElementById('bookingDate').value;
-      const slot    = document.getElementById('bookingSlot').value;
-      const scheme  = document.getElementById('bookingScheme').value;
-      const notes   = document.getElementById('bookingNotes').value.trim();
+      if (!valid) return;
 
       btn.textContent = 'Booking...'; btn.disabled = true;
 
       try {
-        /* Insert appointment */
+        /* Step 1 — Ensure patient record exists */
+        let curaahPatientId  = null;
+        let walkInPatientId  = null;
+
+        if (patientMode === 'existing') {
+          curaahPatientId = existingPatient.id;
+
+        } else if (patientMode === 'walkin_existing') {
+          walkInPatientId = walkInPatient.id;
+
+        } else if (patientMode === 'new') {
+          /* Create walk-in patient record */
+          const phone  = document.getElementById('patientPhone').value.trim();
+          const name   = document.getElementById('newName').value.trim();
+          const gender = document.getElementById('newGender').value;
+          const age    = parseInt(document.getElementById('newAge').value) || null;
+          const city   = document.getElementById('newCity').value.trim() || null;
+
+          const { data: newWalkIn, error: wiErr } = await supabase
+            .from('walk_in_patients').insert({
+              full_name: name, phone, gender: gender || null, age, city,
+            }).select().single();
+
+          if (wiErr) throw new Error('Failed to register patient: ' + wiErr.message);
+          walkInPatient   = newWalkIn;
+          walkInPatientId = newWalkIn.id;
+        }
+
+        /* Step 2 — Book appointment */
+        const opdSel  = document.getElementById('opdSelect');
+        const opdOpt  = opdSel.options[opdSel.selectedIndex];
+        const opdName = opdOpt?.dataset?.name || '';
+        const fee     = parseInt(opdOpt?.dataset?.fee || 0);
+
         const { data: appt, error: apptErr } = await supabase
           .from('appointments').insert({
-            patient_id:            selectedPatient.id,
-            hospital_id:           selectedHospital.id,
-            opd_id:                opdId,
-            opd_name:              opdName,
-            doctor_name:           doctor,
-            appointment_date:      date,
-            time_slot:             slot,
-            status:                'confirmed',
-            scheme_used:           scheme || null,
-            notes:                 notes  || null,
-            fee_amount:            fee,
-            booked_by:             'proxy',
-            booked_by_hospital_id: currentHospital.id,
+            patient_id:          curaahPatientId,
+            walk_in_patient_id:  walkInPatientId,
+            hospital_id:         hospId,
+            opd_id:              opdId,
+            opd_name:            opdName,
+            doctor_name:         drName,
+            appointment_date:    date,
+            time_slot:           slot,
+            status:              'confirmed',
+            scheme_used:         scheme || null,
+            notes:               notes  || null,
+            fee_amount:          fee,
+            booked_by:           'proxy',
+            proxy_agent_id:      currentAgent.id,
           }).select().single();
 
         if (apptErr) throw new Error(apptErr.message);
 
-        /* Update slot counter */
+        /* Step 3 — Update slot counter */
         const { data: existing } = await supabase
           .from('appointment_slots').select('id, booked_count')
-          .eq('hospital_id', selectedHospital.id).eq('slot_date', date)
-          .eq('slot_time', slot).eq('doctor_name', doctor).single();
+          .eq('hospital_id', hospId).eq('slot_date', date)
+          .eq('slot_time', slot).eq('doctor_name', drName).single();
 
         if (existing) {
           await supabase.from('appointment_slots')
             .update({ booked_count: existing.booked_count + 1 }).eq('id', existing.id);
         } else {
           await supabase.from('appointment_slots').insert({
-            hospital_id: selectedHospital.id, slot_date: date, slot_time: slot,
-            doctor_name: doctor, booked_count: 1, max_count: 10,
+            hospital_id: hospId, slot_date: date, slot_time: slot,
+            doctor_name: drName, booked_count: 1, max_count: selectedHospital?.slots_per_hour || 10,
           });
         }
 
-        btn.textContent = 'Confirm & Book Appointment →'; btn.disabled = false;
-
         /* Show success */
-        ['step1','step2','step3','step4'].forEach(s => {
-          const el = document.getElementById('section-' + s);
-          if (el) el.classList.remove('active');
-        });
-        document.getElementById('section-success').classList.add('active');
+        btn.textContent = '✅ Confirm & Book Appointment'; btn.disabled = false;
 
-        document.getElementById('successDetails').innerHTML = `
-          <div class="confirm-row"><span class="confirm-label">Patient</span><span class="confirm-value">${selectedPatient.full_name}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Hospital</span><span class="confirm-value">${selectedHospital.name}</span></div>
-          <div class="confirm-row"><span class="confirm-label">OPD</span><span class="confirm-value">${opdName}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Doctor</span><span class="confirm-value">${doctor}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Date</span><span class="confirm-value">${new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Time</span><span class="confirm-value">${slot}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Fee</span><span class="confirm-value">${fee > 0 ? '₹'+fee : 'Free'}</span></div>
-          <div class="confirm-row"><span class="confirm-label">Status</span><span class="confirm-value" style="color:var(--success);">Confirmed ✓</span></div>
-          <div class="confirm-row"><span class="confirm-label">Booked By</span><span class="confirm-value" style="color:var(--warning);">⚡ ${currentHospital.name}</span></div>`;
+        const patientName = patientMode === 'existing'
+          ? existingPatient.full_name
+          : walkInPatient?.full_name || document.getElementById('newName').value.trim();
 
-        showToast('Appointment booked successfully!', 'success');
+        const phone = document.getElementById('patientPhone').value.trim();
+        const hospName = allHospitals.find(h => h.id === hospId)?.name || '—';
+
+        document.getElementById('apptSlip').innerHTML = `
+          <div class="slip-row"><span class="slip-label">Patient</span><span class="slip-value">${patientName}</span></div>
+          <div class="slip-row"><span class="slip-label">Phone</span><span class="slip-value">${phone}</span></div>
+          <div class="slip-row"><span class="slip-label">Hospital</span><span class="slip-value">${hospName}</span></div>
+          <div class="slip-row"><span class="slip-label">OPD</span><span class="slip-value">${opdName}</span></div>
+          <div class="slip-row"><span class="slip-label">Doctor</span><span class="slip-value">${drName}</span></div>
+          <div class="slip-row"><span class="slip-label">Date</span><span class="slip-value">${new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span></div>
+          <div class="slip-row"><span class="slip-label">Time</span><span class="slip-value">${slot}</span></div>
+          <div class="slip-row"><span class="slip-label">Fee</span><span class="slip-value">${fee > 0 ? '₹'+fee+' at hospital' : 'Free'}</span></div>
+          <div class="slip-row"><span class="slip-label">Booked by</span><span class="slip-value" style="color:var(--warning);">⚡ ${currentAgent.name}</span></div>
+          <div class="slip-row"><span class="slip-label">Status</span><span class="slip-value" style="color:var(--success);">Confirmed ✓</span></div>`;
+
+        document.getElementById('patientStep').style.display   = 'none';
+        document.getElementById('phonePanel').style.display    = 'none';
+        document.getElementById('successSection').style.display= 'block';
+
+        await loadAgentStats();
+        showToast('Appointment booked!', 'success');
 
       } catch (err) {
-        btn.textContent = 'Confirm & Book Appointment →'; btn.disabled = false;
+        btn.textContent = '✅ Confirm & Book Appointment'; btn.disabled = false;
         showToast(err.message || 'Booking failed. Try again.', 'error');
       }
     };
 
-    /* ── NEW BOOKING ── */
-    window.newBooking = function() {
-      selectedPatient  = null;
-      selectedHospital = null;
-      selectedOpd      = null;
-
-      document.getElementById('searchPhone').value = '';
-      document.getElementById('patientFoundCard').style.display = 'none';
-      document.getElementById('hospitalSearch').value = '';
-      document.getElementById('bookingNotes').value   = '';
-      document.getElementById('proxyConsentCheck').checked = false;
-      renderHospitalGrid(allHospitals);
-
-      document.getElementById('section-success').classList.remove('active');
-      goToStep(1);
+    /* ── BOOK ANOTHER ── */
+    window.bookAnother = function() {
+      resetPatient();
+      document.getElementById('successSection').style.display = 'none';
+      document.getElementById('phonePanel').style.display     = 'block';
+      document.getElementById('hospitalSearchInput').value    = '';
+      renderHospitalOptions(allHospitals);
     };
 
     /* ── LOAD HISTORY ── */
@@ -904,33 +1017,32 @@
 
       const { data: appts } = await supabase
         .from('appointments')
-        .select('*, patients(full_name, phone), hospitals(name)')
-        .eq('booked_by', 'proxy')
-        .eq('booked_by_hospital_id', currentHospital.id)
-        .order('created_at', { ascending: false })
-        .limit(30);
+        .select('*, hospitals(name), walk_in_patients(full_name, phone), patients(full_name, phone)')
+        .eq('proxy_agent_id', currentAgent.id)
+        .eq('appointment_date', TODAY)
+        .order('created_at', { ascending: false });
 
       if (!appts || !appts.length) {
-        el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No proxy bookings made yet.</div>`;
+        el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No bookings made today yet.</div>`;
         return;
       }
 
       el.innerHTML = appts.map(a => {
-        const date = new Date(a.appointment_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-        const sClass = { confirmed:'color:var(--success)', pending:'color:var(--warning)', completed:'color:var(--text-muted)', cancelled:'color:var(--danger)' }[a.status] || '';
+        const pName = a.patients?.full_name || a.walk_in_patients?.full_name || '—';
+        const pPhone= a.patients?.phone     || a.walk_in_patients?.phone     || '—';
+        const sColor= a.status === 'confirmed' ? 'var(--success)' : a.status === 'cancelled' ? 'var(--danger)' : 'var(--text-muted)';
         return `
           <div class="history-item">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-              <div>
-                <div class="history-item-name">${a.patients?.full_name || '—'} · ${a.patients?.phone || '—'}</div>
-                <div class="history-item-meta">
-                  ${a.hospitals?.name || '—'} · ${a.opd_name || '—'} · ${a.doctor_name || '—'}
-                </div>
-                <div class="history-item-meta" style="margin-top:2px;">
-                  📅 ${date} · ⏰ ${a.time_slot || '—'}
-                </div>
+            <div>
+              <div class="history-patient">${pName} · ${pPhone}</div>
+              <div class="history-meta">
+                ${a.hospitals?.name || '—'} · ${a.opd_name || '—'} · ${a.doctor_name || '—'}
+                · ${a.time_slot || '—'}
               </div>
-              <span style="font-size:12px;font-weight:600;${sClass}">
+              ${a.fee_amount > 0 ? `<div class="history-meta" style="margin-top:2px;">₹${a.fee_amount} fee</div>` : ''}
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:12px;font-weight:600;color:${sColor};">
                 ${a.status ? a.status.charAt(0).toUpperCase() + a.status.slice(1) : '—'}
               </span>
             </div>
