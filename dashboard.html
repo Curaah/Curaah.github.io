@@ -58,14 +58,13 @@
     .panel-empty-icon { font-size: 36px; opacity: 0.4; }
     .panel-empty-text { line-height: 1.6; max-width: 240px; }
 
-    /* Appointment items */
     .appt-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border-card); cursor: pointer; transition: var(--transition); }
     .appt-item:hover     { opacity: 0.8; }
     .appt-item:last-child{ border-bottom: none; }
     .appt-date-box { width: 52px; height: 56px; border-radius: var(--radius-md); background: rgba(61,158,255,0.07); border: 1px solid rgba(61,158,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
     .appt-date-day { font-size: 20px; font-weight: 700; color: var(--electric); line-height: 1; }
     .appt-date-mon { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-    .appt-info     { flex: 1; min-width: 0; }
+    .appt-info     { flex: 1; }
     .appt-doctor   { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
     .appt-opd      { font-size: 11px; color: var(--electric); font-weight: 600; margin-bottom: 2px; }
     .appt-hospital { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
@@ -77,11 +76,6 @@
     .status-checkedin { background: rgba(61,158,255,0.1); color: var(--electric); }
     .status-completed { background: rgba(100,100,100,0.1);color: var(--text-muted); }
     .status-cancelled { background: rgba(255,71,87,0.1);  color: var(--danger); }
-
-    /* Proxy / referral badges */
-    .booking-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 3px; }
-    .badge-proxy    { background: rgba(255,159,0,0.08); color: var(--warning); border: 1px solid rgba(255,159,0,0.2); }
-    .badge-referral { background: rgba(61,158,255,0.08); color: var(--electric); border: 1px solid rgba(61,158,255,0.15); }
 
     .scheme-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--off-white); border-radius: var(--radius-md); border: 1px solid var(--border-card); margin-bottom: 10px; }
     .scheme-item:last-child { margin-bottom: 0; }
@@ -108,16 +102,13 @@
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); display: inline-block; animation: blink 2s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+    /* No token state */
     .token-empty-card { background: var(--navy); border-radius: var(--radius-xl); padding: 36px; text-align: center; margin-bottom: 20px; }
     .token-empty-num  { font-family: 'Georgia', serif; font-size: 64px; font-weight: 700; color: rgba(255,255,255,0.15); line-height: 1; margin-bottom: 16px; }
     .token-empty-text { font-size: 14px; color: var(--text-on-dark-muted); line-height: 1.7; }
 
     /* Profile */
     .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-    /* Referral items */
-    .referral-item-card { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 12px; }
-    .referral-item-card:last-child { margin-bottom: 0; }
 
     @media (max-width:1024px) { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} }
     @media (max-width:860px)  { .sidebar{transform:translateX(-260px);transition:transform 0.3s;} .sidebar.open{transform:translateX(0);} .dashboard-main{margin-left:0;padding:20px;} .content-grid{grid-template-columns:1fr;} }
@@ -249,7 +240,7 @@
               <div>
                 <div class="ai-panel-tag">AI Health Assistant</div>
                 <div class="ai-panel-title">Not sure what's wrong?</div>
-                <div class="ai-panel-desc">Describe symptoms. AI suggests the right OPD and hospital.</div>
+                <div class="ai-panel-desc">Describe symptoms. AI suggests the right hospital and OPD.</div>
               </div>
               <button class="btn btn-primary" onclick="showSection('ai',null)" style="white-space:nowrap;">Try AI Assistant</button>
             </div>
@@ -291,7 +282,7 @@
             <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">📱</span>
-                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Scan QR at your OPD entrance</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Each OPD has its own QR code and separate token queue. Token assigned instantly.</p></div>
+                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Scan QR at your OPD entrance</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Each OPD has its own QR code and separate token queue. Scan at your OPD entrance. Token assigned instantly.</p></div>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">🪑</span>
@@ -299,7 +290,7 @@
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
                 <span style="font-size:18px;flex-shrink:0;">👤</span>
-                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">No phone? Ask staff</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Hospital staff can check you in manually using your phone number.</p></div>
+                <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">No phone? Ask staff</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Hospital staff can check you in manually using your phone number. Token assigned to the right OPD queue.</p></div>
               </div>
             </div>
           </div>
@@ -308,7 +299,7 @@
         <!-- Active token -->
         <div id="tokenActiveState" style="display:none;">
           <div class="token-active-card">
-            <div class="token-active-opd"><span class="live-dot" style="margin-right:6px;"></span><span id="myTokenOpdName">—</span></div>
+            <div class="token-active-opd"><span class="live-dot"></span><span id="myTokenOpdName">—</span></div>
             <div class="token-active-num" id="myTokenNum">—</div>
             <div class="token-active-doctor" id="myTokenDoctor">—</div>
             <div class="token-active-slot" id="myTokenSlot">—</div>
@@ -332,11 +323,13 @@
           <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-lg);padding:18px;margin-bottom:20px;font-size:13px;color:var(--text-secondary);line-height:1.7;">
             🪑 <strong>Sit and relax in the <span id="waitOpdName">OPD</span> waiting area.</strong>
             This page refreshes automatically every 30 seconds.
+            You will get an SMS when your turn is approaching.
           </div>
 
+          <!-- Queue visual -->
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title"><span class="live-dot" style="margin-right:6px;"></span><span id="queueOpdTitle">OPD Queue</span></div>
+              <div class="panel-title"><span class="live-dot" style="margin-right:6px;"></span> <span id="queueOpdTitle">OPD Queue</span></div>
               <span id="myTokenStatusBadge" class="status-badge status-confirmed">Waiting</span>
             </div>
             <div class="panel-body" id="myTokenQueueVisual">
@@ -376,39 +369,73 @@
       </div>
 
       <!-- REFERRALS -->
-      <div id="section-referrals" style="display:none;">
-        <div class="dash-page-header">
-          <div><div class="dash-greeting">Track your referrals</div><div class="dash-title">My Referrals</div></div>
-        </div>
+      <!-- REFERRALS -->
+<div id="section-referrals" style="display:none;">
+  <div class="dash-page-header">
+    <div>
+      <div class="dash-greeting">Track your referrals</div>
+      <div class="dash-title">My Referrals</div>
+    </div>
+  </div>
 
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">🔗 Referral History</div>
-            <button class="btn btn-secondary btn-sm" onclick="loadReferrals()">🔄 Refresh</button>
-          </div>
-          <div id="referralsList">
-            <div class="panel-empty"><div class="panel-empty-icon">🔗</div><div class="panel-empty-text">Loading referrals...</div></div>
-          </div>
-        </div>
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="panel-title-icon">🔗</span> Referral History
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="loadReferrals()">
+        🔄 Refresh
+      </button>
+    </div>
+    <div id="referralsList">
+      <div class="panel-empty">
+        <div class="panel-empty-icon">🔗</div>
+        <div class="panel-empty-text">Loading referrals...</div>
+      </div>
+    </div>
+  </div>
 
-        <div class="panel" style="margin-top:0;">
-          <div class="panel-header"><div class="panel-title">ℹ️ How referrals work</div></div>
-          <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
-              <span style="font-size:18px;flex-shrink:0;">1️⃣</span>
-              <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Doctor creates digital referral</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Doctor fills diagnosis, urgency level, and selects the referred hospital and OPD. Appointment booked simultaneously.</p></div>
-            </div>
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
-              <span style="font-size:18px;flex-shrink:0;">2️⃣</span>
-              <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">You get referral + appointment together</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Referral letter and appointment confirmation appear here and in Appointments. No paper files needed.</p></div>
-            </div>
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
-              <span style="font-size:18px;flex-shrink:0;">3️⃣</span>
-              <div><p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">Records travel with you</p><p style="font-size:12px;color:var(--text-secondary);margin:0;">Referred hospital receives your clinical notes before you arrive.</p></div>
-            </div>
-          </div>
+  <div class="panel" style="margin-top:0;">
+    <div class="panel-header">
+      <div class="panel-title">ℹ️ How referrals work</div>
+    </div>
+    <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">1️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            Doctor creates digital referral</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Doctor fills diagnosis, urgency level, and selects the referred
+            hospital and OPD. Appointment is booked simultaneously.</p>
         </div>
       </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">2️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            You get referral + appointment together</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Referral letter and appointment confirmation appear here
+            and in your Appointments section. No paper files needed.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;
+        padding:12px;background:var(--off-white);border-radius:var(--radius-md);">
+        <span style="font-size:18px;flex-shrink:0;">3️⃣</span>
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);margin:0 0 2px;">
+            Records travel with you</p>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">
+            Referred hospital receives your clinical notes before
+            you arrive. No information gets lost between hospitals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- AI -->
       <div id="section-ai" style="display:none;">
@@ -455,8 +482,7 @@
     let tokenChannel    = null;
     let tokenRefreshInt = null;
 
-    /* ── Use local date (IST) not UTC ── */
-    const TODAY    = new Date().toLocaleDateString('en-CA');
+    const TODAY = new Date().toISOString().split('T')[0];
 
     const sections = ['overview','appointments','token','claims','records','referrals','ai','profile'];
 
@@ -470,9 +496,8 @@
         clickedBtn.classList.add('active');
       }
       document.getElementById('sidebar').classList.remove('open');
-      if (name === 'token')     loadMyToken();
+      if (name === 'token') loadMyToken();
       if (name === 'referrals') loadReferrals();
-      if (name === 'appointments') loadAllAppointments();
     };
 
     window.toggleSidebar = function() {
@@ -488,68 +513,62 @@
 
     /* ── RENDER APPOINTMENT ITEM ── */
     function renderApptItem(appt, hospitalName) {
-      const date   = new Date(appt.appointment_date);
-      /* Use UTC date parts to avoid timezone shifting the date display */
-      const day    = date.getUTCDate();
-      const mon    = date.toLocaleDateString('en-IN', { month:'short', timeZone:'UTC' });
-      const sClass = {
-        confirmed:'status-confirmed', pending:'status-pending',
-        checkedin:'status-checkedin', completed:'status-completed',
-        cancelled:'status-cancelled'
-      }[appt.status] || 'status-pending';
-      const sText  = appt.status
-        ? appt.status.charAt(0).toUpperCase() + appt.status.slice(1)
-        : 'Pending';
+  const date   = new Date(appt.appointment_date);
+  const day    = date.getDate();
+  const mon    = date.toLocaleDateString('en-IN', { month:'short' });
+  const sClass = { confirmed:'status-confirmed', pending:'status-pending', checkedin:'status-checkedin', completed:'status-completed', cancelled:'status-cancelled' }[appt.status] || 'status-pending';
+  const sText  = appt.status ? appt.status.charAt(0).toUpperCase() + appt.status.slice(1) : 'Pending';
 
-      const isProxy    = appt.booked_by === 'proxy';
-      const isReferral = appt.booked_by === 'referral';
+  const isProxy    = appt.booked_by === 'proxy';
+  const isReferral = appt.booked_by === 'referral';
 
-      const proxyBadge = isProxy
-        ? `<div class="booking-badge badge-proxy">⚡ Booked on your behalf</div>`
-        : '';
-      const referralBadge = isReferral
-        ? `<div class="booking-badge badge-referral">🔗 Via referral</div>`
-        : '';
+  const proxyBadge = isProxy ? `
+    <div style="font-size:10px;font-weight:600;color:var(--warning);
+      background:rgba(255,159,0,0.08);border:1px solid rgba(255,159,0,0.2);
+      border-radius:6px;padding:2px 8px;margin-top:4px;display:inline-block;">
+      ⚡ Booked on your behalf
+    </div>` : '';
 
-      return `
-        <div class="appt-item" onclick="window.location.href='hospital-profile.html?id=${appt.hospital_id}'">
-          <div class="appt-date-box">
-            <div class="appt-date-day">${day}</div>
-            <div class="appt-date-mon">${mon}</div>
-          </div>
-          <div class="appt-info">
-            ${appt.opd_name ? `<div class="appt-opd">${appt.opd_name}</div>` : ''}
-            <div class="appt-doctor">${appt.doctor_name || 'Doctor'}</div>
-            <div class="appt-hospital">${hospitalName || 'Hospital'}</div>
-            <div class="appt-slot">⏰ ${appt.time_slot || '—'}</div>
-            ${proxyBadge}${referralBadge}
-          </div>
-          <span class="status-badge ${sClass}">${sText}</span>
-        </div>`;
-    }
+  const referralBadge = isReferral ? `
+    <div style="font-size:10px;font-weight:600;color:var(--electric);
+      background:rgba(61,158,255,0.08);border:1px solid rgba(61,158,255,0.15);
+      border-radius:6px;padding:2px 8px;margin-top:4px;display:inline-block;">
+      🔗 Via referral
+    </div>` : '';
 
-    /* ── LOAD OVERVIEW APPOINTMENTS ── */
-    async function loadOverviewAppointments(userId) {
-      /* Fetch upcoming — use YESTERDAY as lower bound to catch timezone edge cases */
+  return `
+    <div class="appt-item" onclick="window.location.href='hospital-profile.html?id=${appt.hospital_id}'">
+      <div class="appt-date-box">
+        <div class="appt-date-day">${day}</div>
+        <div class="appt-date-mon">${mon}</div>
+      </div>
+      <div class="appt-info">
+        ${appt.opd_name ? `<div class="appt-opd">${appt.opd_name}</div>` : ''}
+        <div class="appt-doctor">${appt.doctor_name || 'Doctor'}</div>
+        <div class="appt-hospital">${hospitalName || 'Hospital'}</div>
+        <div class="appt-slot">⏰ ${appt.time_slot || '—'}</div>
+        ${proxyBadge}${referralBadge}
+      </div>
+      <span class="status-badge ${sClass}">${sText}</span>
+    </div>`;
+}
+
+    /* ── LOAD APPOINTMENTS ── */
+    async function loadAppointments(userId) {
       const { data: upcoming } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name)')
-        .eq('patient_id', userId)
-        .gte('appointment_date', TODAY)
+        .from('appointments').select('*, hospitals(name)')
+        .eq('patient_id', userId).gte('appointment_date', TODAY)
         .in('status', ['confirmed','pending','checkedin'])
-        .order('appointment_date', { ascending: true })
-        .limit(3);
+        .order('appointment_date', { ascending:true }).limit(3);
 
-      /* Fetch all for stats */
       const { data: all } = await supabase
-        .from('appointments')
-        .select('id, hospital_id, status, appointment_date')
-        .eq('patient_id', userId);
+        .from('appointments').select('*, hospitals(name)')
+        .eq('patient_id', userId).order('appointment_date', { ascending:false });
 
       const upcomingCount = upcoming?.length || 0;
       document.getElementById('statAppts').textContent   = upcomingCount;
       document.getElementById('statApptsub').textContent = upcomingCount > 0
-        ? `Next: ${new Date(upcoming[0].appointment_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',timeZone:'UTC'})}`
+        ? `Next: ${new Date(upcoming[0].appointment_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`
         : 'Book your first';
 
       const uniqueHospitals = [...new Set((all||[]).map(a => a.hospital_id))];
@@ -557,47 +576,21 @@
 
       if (upcomingCount > 0) {
         const badge = document.getElementById('apptBadge');
-        badge.textContent = upcomingCount;
-        badge.style.display = 'inline-block';
+        badge.textContent = upcomingCount; badge.style.display = 'inline-block';
       }
 
       const overviewEl = document.getElementById('overviewAppts');
       if (!upcoming || !upcoming.length) {
-        overviewEl.innerHTML = `
-          <div class="panel-empty">
-            <div class="panel-empty-icon">📅</div>
-            <div class="panel-empty-text">No upcoming appointments.</div>
-            <a href="hospitals.html" class="btn btn-primary btn-sm">Find Hospitals</a>
-          </div>`;
+        overviewEl.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">No upcoming appointments.</div><a href="hospitals.html" class="btn btn-primary btn-sm">Find Hospitals</a></div>`;
       } else {
-        overviewEl.innerHTML =
-          `<div style="padding:0 20px;">` +
-          upcoming.map(a => renderApptItem(a, a.hospitals?.name)).join('') +
-          `</div>`;
+        overviewEl.innerHTML = `<div style="padding:0 20px;">` + upcoming.map(a => renderApptItem(a, a.hospitals?.name)).join('') + `</div>`;
       }
-    }
-
-    /* ── LOAD ALL APPOINTMENTS (Appointments section) ── */
-    async function loadAllAppointments() {
-      const { data: all } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name)')
-        .eq('patient_id', patientData.id)
-        .order('appointment_date', { ascending: false });
 
       const allEl = document.getElementById('allAppts');
       if (!all || !all.length) {
-        allEl.innerHTML = `
-          <div class="panel-empty">
-            <div class="panel-empty-icon">📅</div>
-            <div class="panel-empty-text">No appointments yet.</div>
-            <a href="hospitals.html" class="btn btn-primary">Browse Hospitals</a>
-          </div>`;
+        allEl.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">📅</div><div class="panel-empty-text">No appointments yet.</div><a href="hospitals.html" class="btn btn-primary">Browse Hospitals</a></div>`;
       } else {
-        allEl.innerHTML =
-          `<div style="padding:0 20px;">` +
-          all.map(a => renderApptItem(a, a.hospitals?.name)).join('') +
-          `</div>`;
+        allEl.innerHTML = `<div style="padding:0 20px;">` + all.map(a => renderApptItem(a, a.hospitals?.name)).join('') + `</div>`;
       }
     }
 
@@ -605,6 +598,7 @@
     window.loadMyToken = async function() {
       if (!patientData) return;
 
+      /* Find today's active token for this patient */
       const { data: myToken } = await supabase
         .from('tokens')
         .select('*, appointments(time_slot, hospital_id, doctor_name, opd_name), opds(name, department)')
@@ -624,6 +618,7 @@
         return;
       }
 
+      /* Token found */
       document.getElementById('tokenNoState').style.display    = 'none';
       document.getElementById('tokenActiveState').style.display= 'block';
 
@@ -631,7 +626,7 @@
       const opdId      = myToken.opd_id;
       const opdName    = myToken.opds?.name || myToken.appointments?.opd_name || myToken.opd_department || 'OPD';
 
-      /* Currently served token in this OPD */
+      /* Get currently served token in this specific OPD */
       const { data: calledTokens } = await supabase
         .from('tokens').select('token_number')
         .eq('hospital_id', hospitalId)
@@ -656,10 +651,9 @@
         : waitMinutes < 60 ? `~${waitMinutes}m`
         : `~${Math.round(waitMinutes/60)}h`;
 
-      /* OPD queue visual */
+      /* Get OPD queue for visual */
       const { data: queueTokens } = await supabase
-        .from('tokens')
-        .select('token_number, status, is_offline, patients(full_name)')
+        .from('tokens').select('token_number, status, is_offline, patients(full_name)')
         .eq('hospital_id', hospitalId)
         .eq('opd_id', opdId)
         .in('status', ['waiting','called'])
@@ -680,14 +674,16 @@
       document.getElementById('statToken').textContent    = myToken.token_number;
       document.getElementById('statTokenSub').textContent = `${opdName} — Position: ${position === 0 ? 'Next!' : '#'+(position+1)}`;
 
-      document.getElementById('tokenBadge').style.display = 'inline-block';
+      const badge = document.getElementById('tokenBadge');
+      badge.style.display = 'inline-block';
 
+      /* Status badge */
       const statusEl = document.getElementById('myTokenStatusBadge');
       const sMap = { waiting:'Waiting in queue', called:'Being called now! 🔔', completed:'Completed' };
       statusEl.textContent = sMap[myToken.status] || myToken.status;
       statusEl.className   = `status-badge ${myToken.status === 'called' ? 'status-checkedin' : 'status-confirmed'}`;
 
-      /* Queue visual */
+      /* Queue visual — show only this OPD's queue */
       const queueEl = document.getElementById('myTokenQueueVisual');
       if (queueTokens && queueTokens.length > 0) {
         queueEl.innerHTML = `
@@ -712,18 +708,22 @@
         queueEl.innerHTML = `<p style="font-size:13px;color:var(--text-muted);text-align:center;padding:12px 0;">You are the only one in this OPD queue right now.</p>`;
       }
 
+      /* Subscribe to realtime updates for this OPD */
       subscribeToMyToken(hospitalId, opdId);
     };
 
-    /* ── REALTIME ── */
+    /* ── REALTIME SUBSCRIPTION ── */
     function subscribeToMyToken(hospitalId, opdId) {
       if (tokenChannel) supabase.removeChannel(tokenChannel);
+
       tokenChannel = supabase
         .channel(`patient-token-${patientData.id}-opd-${opdId}`)
         .on('postgres_changes', {
           event: '*', schema: 'public', table: 'tokens',
           filter: `hospital_id=eq.${hospitalId}`,
-        }, () => { loadMyToken(); })
+        }, () => {
+          loadMyToken();
+        })
         .subscribe();
 
       if (tokenRefreshInt) clearInterval(tokenRefreshInt);
@@ -734,69 +734,125 @@
     }
 
     /* ── LOAD REFERRALS ── */
-    window.loadReferrals = async function() {
-      if (!patientData) return;
-      const el = document.getElementById('referralsList');
-      if (!el) return;
+window.loadReferrals = async function() {
+  if (!patientData) return;
 
-      el.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">🔗</div><div class="panel-empty-text">Loading...</div></div>`;
+  const el = document.getElementById('referralsList');
+  if (!el) return;
 
-      const { data: referrals } = await supabase
-        .from('referrals')
-        .select(`*, referring:referring_hospital_id(name), referred:referred_hospital_id(name)`)
-        .eq('patient_id', patientData.id)
-        .order('created_at', { ascending: false });
+  el.innerHTML = `
+    <div class="panel-empty">
+      <div class="panel-empty-icon">🔗</div>
+      <div class="panel-empty-text">Loading...</div>
+    </div>`;
 
-      if (!referrals || !referrals.length) {
-        el.innerHTML = `
-          <div class="panel-empty">
-            <div class="panel-empty-icon">🔗</div>
-            <div class="panel-empty-text">No referrals yet. When a doctor refers you to another hospital, your referral letter appears here automatically.</div>
-          </div>`;
-        return;
-      }
+  const { data: referrals, error } = await supabase
+    .from('referrals')
+    .select(`
+      *,
+      referring:referring_hospital_id ( name ),
+      referred:referred_hospital_id   ( name )
+    `)
+    .eq('patient_id', patientData.id)
+    .order('created_at', { ascending: false });
 
-      const urgencyIcon = { routine:'🟢', urgent:'🟡', emergency:'🔴' };
-      const statusClass = { pending:'status-pending', accepted:'status-confirmed', completed:'status-completed' };
-      const statusText  = { pending:'Pending', accepted:'Accepted', completed:'Completed' };
+  if (error || !referrals || referrals.length === 0) {
+    el.innerHTML = `
+      <div class="panel-empty">
+        <div class="panel-empty-icon">🔗</div>
+        <div class="panel-empty-text">
+          No referrals yet. When a doctor refers you to another
+          hospital, your referral letter appears here automatically.
+        </div>
+      </div>`;
+    return;
+  }
 
-      el.innerHTML = `<div style="padding:0 4px;">` +
-        referrals.map(r => {
-          const date   = new Date(r.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-          const icon   = urgencyIcon[r.urgency_level]  || '🟢';
-          const sClass = statusClass[r.status] || 'status-pending';
-          const sText  = statusText[r.status]  || 'Pending';
-          const urgBorder = r.urgency_level === 'emergency' ? 'border-color:rgba(255,71,87,0.3);' : r.urgency_level === 'urgent' ? 'border-color:rgba(255,159,0,0.3);' : '';
+  const urgencyIcon = {
+    routine:   '🟢',
+    urgent:    '🟡',
+    emergency: '🔴',
+  };
 
-          return `
-            <div class="referral-item-card" style="${urgBorder}">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
-                <div>
-                  <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">
-                    ${icon} Referred to ${r.referred?.name || '—'}
-                  </div>
-                  <div style="font-size:12px;color:var(--text-muted);">
-                    From ${r.referring?.name || '—'} · ${r.referred_opd_name || '—'} · ${date}
-                  </div>
-                  <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
-                    By Dr. ${r.referring_doctor_name || '—'} · ${r.urgency_level || 'routine'} priority
-                  </div>
-                </div>
-                <span class="status-badge ${sClass}">${sText}</span>
+  const statusClass = {
+    pending:   'status-pending',
+    accepted:  'status-confirmed',
+    completed: 'status-completed',
+  };
+
+  const statusText = {
+    pending:   'Pending',
+    accepted:  'Accepted',
+    completed: 'Completed',
+  };
+
+  el.innerHTML = `<div style="padding:0 4px;">` +
+    referrals.map(r => {
+      const date = new Date(r.created_at).toLocaleDateString('en-IN', {
+        day:'numeric', month:'short', year:'numeric'
+      });
+      const icon   = urgencyIcon[r.urgency_level] || '🟢';
+      const sClass = statusClass[r.status] || 'status-pending';
+      const sText  = statusText[r.status]  || 'Pending';
+      const urgColor = r.urgency_level === 'emergency'
+        ? 'border-color:rgba(255,71,87,0.3);'
+        : r.urgency_level === 'urgent'
+          ? 'border-color:rgba(255,159,0,0.3);'
+          : '';
+
+      return `
+        <div style="background:var(--white);border:1px solid var(--border-card);
+          ${urgColor}border-radius:var(--radius-lg);padding:18px 20px;
+          margin-bottom:12px;">
+          <div style="display:flex;align-items:flex-start;
+            justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">
+                ${icon} Referred to ${r.referred?.name || '—'}
               </div>
-              ${r.diagnosis_notes ? `
-                <div style="background:var(--off-white);border-radius:var(--radius-md);padding:10px 14px;margin-bottom:10px;">
-                  <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">Clinical Notes</div>
-                  <div style="font-size:13px;color:var(--text-primary);line-height:1.6;">${r.diagnosis_notes}</div>
-                </div>` : ''}
-              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-                ${r.patient_consent ? `<span style="font-size:11px;color:var(--success);font-weight:600;">✓ Consent verified</span>` : ''}
-                ${r.referred_appointment_id ? `<span style="font-size:11px;color:var(--electric);font-weight:600;">📅 Appointment booked at referred hospital</span>` : ''}
-                ${r.urgency_level === 'emergency' ? `<span style="font-size:11px;font-weight:700;color:var(--danger);background:rgba(255,71,87,0.1);padding:2px 8px;border-radius:10px;">🔴 EMERGENCY — Visit immediately</span>` : ''}
+              <div style="font-size:12px;color:var(--text-muted);">
+                From ${r.referring?.name || '—'}
+                · ${r.referred_opd_name || '—'}
+                · ${date}
               </div>
-            </div>`;
-        }).join('') + `</div>`;
-    };
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">
+                By Dr. ${r.referring_doctor_name || '—'}
+                · ${r.urgency_level || 'routine'} priority
+              </div>
+            </div>
+            <span class="status-badge ${sClass}">${sText}</span>
+          </div>
+
+          ${r.diagnosis_notes ? `
+            <div style="background:var(--off-white);border-radius:var(--radius-md);
+              padding:10px 14px;margin-bottom:12px;">
+              <div style="font-size:10px;font-weight:700;letter-spacing:0.5px;
+                text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;">
+                Clinical Notes
+              </div>
+              <div style="font-size:13px;color:var(--text-primary);line-height:1.6;">
+                ${r.diagnosis_notes}
+              </div>
+            </div>` : ''}
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            ${r.patient_consent ? `
+              <span style="font-size:11px;color:var(--success);font-weight:600;">
+                ✓ Consent verified
+              </span>` : ''}
+            ${r.referred_appointment_id ? `
+              <span style="font-size:11px;color:var(--electric);font-weight:600;">
+                📅 Appointment booked at referred hospital
+              </span>` : ''}
+            ${r.urgency_level === 'emergency' ? `
+              <span style="font-size:11px;font-weight:700;color:var(--danger);
+                background:rgba(255,71,87,0.1);padding:2px 8px;border-radius:10px;">
+                🔴 EMERGENCY — Visit immediately
+              </span>` : ''}
+          </div>
+        </div>`;
+    }).join('') + `</div>`;
+};
 
     /* ── LOGOUT ── */
     window.handleLogout = async function() {
@@ -828,17 +884,17 @@
       document.getElementById('sidebarAvatar').textContent = initials;
       document.getElementById('sidebarCity').textContent   = patient.city || 'Punjab';
       document.getElementById('dashTitle').textContent     = `Welcome back, ${firstName} 👋`;
-      document.getElementById('profileName').value         = name;
-      document.getElementById('profileGender').value       = patient.gender || '—';
-      document.getElementById('profilePhone').value        = patient.phone  || '—';
-      document.getElementById('profileCity').value         = patient.city   || '—';
-
-      setGreeting();
+      document.getElementById('profileName').value   = name;
+      document.getElementById('profileGender').value = patient.gender || '—';
+      document.getElementById('profilePhone').value  = patient.phone  || '—';
+      document.getElementById('profileCity').value   = patient.city   || '—';
 
       await Promise.all([
-        loadOverviewAppointments(session.user.id),
+        loadAppointments(session.user.id),
         loadMyToken(),
       ]);
+
+      setGreeting();
     }
 
     initDashboard();
