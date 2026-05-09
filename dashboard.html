@@ -482,7 +482,8 @@
     let tokenChannel    = null;
     let tokenRefreshInt = null;
 
-    const TODAY = new Date().toISOString().split('T')[0];
+    const TODAY = new Date().toLocaleDateString('en-CA'); 
+/* en-CA gives YYYY-MM-DD format in local timezone */
 
     const sections = ['overview','appointments','token','claims','records','referrals','ai','profile'];
 
