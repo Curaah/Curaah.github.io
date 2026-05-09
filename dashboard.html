@@ -457,11 +457,6 @@
 
     /* ── Use local date (IST) not UTC ── */
     const TODAY    = new Date().toLocaleDateString('en-CA');
-    const YESTERDAY = (() => {
-      const d = new Date();
-      d.setDate(d.getDate() - 1);
-      return d.toLocaleDateString('en-CA');
-    })();
 
     const sections = ['overview','appointments','token','claims','records','referrals','ai','profile'];
 
@@ -540,7 +535,7 @@
         .from('appointments')
         .select('*, hospitals(name)')
         .eq('patient_id', userId)
-        .gte('appointment_date', YESTERDAY)
+        .gte('appointment_date', TODAY)
         .in('status', ['confirmed','pending','checkedin'])
         .order('appointment_date', { ascending: true })
         .limit(3);
