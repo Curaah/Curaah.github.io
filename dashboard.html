@@ -485,6 +485,11 @@
     const TODAY = new Date().toLocaleDateString('en-CA'); 
 /* en-CA gives YYYY-MM-DD format in local timezone */
 
+
+    const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+const YESTERDAY = yesterday.toLocaleDateString('en-CA');
+    
     const sections = ['overview','appointments','token','claims','records','referrals','ai','profile'];
 
     window.showSection = function(name, clickedBtn) {
@@ -558,7 +563,7 @@
     async function loadAppointments(userId) {
       const { data: upcoming } = await supabase
         .from('appointments').select('*, hospitals(name)')
-        .eq('patient_id', userId).gte('appointment_date', TODAY)
+        .eq('patient_id', userId)..gte('appointment_date', YESTERDAY)
         .in('status', ['confirmed','pending','checkedin'])
         .order('appointment_date', { ascending:true }).limit(3);
 
