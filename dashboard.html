@@ -550,8 +550,12 @@ console.log('all error:', allErr);
         ? `Next: ${upcoming[0].appointment_date}`
         : 'Book your first';
 
-      const uniqueHospitals = [...new Set((all||[]).map(a => a.hospital_id))];
-      document.getElementById('statVisits').textContent = uniqueHospitals.length;
+      const visited = (all||[]).filter(a =>
+  a.appointment_date < TODAY ||
+  a.status === 'completed'
+);
+const uniqueHospitals = [...new Set(visited.map(a => a.hospital_id))];
+document.getElementById('statVisits').textContent = uniqueHospitals.length;
 
       if (upcomingCount > 0) {
         const badge = document.getElementById('apptBadge');
