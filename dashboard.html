@@ -524,21 +524,24 @@
     async function loadOverviewAppointments(userId) {
       console.log('Loading appointments for userId:', userId);
       console.log('TODAY:', TODAY);
-      const { data: upcoming } = await supabase
+      const { data: upcoming, error: upErr } = await supabase
   .from('appointments')
-  .select('*, hospitals(name)')
+  .select('id, patient_id, hospital_id, opd_name, doctor_name, time_slot, appointment_date, status, booked_by, hospitals(name)')
   .eq('patient_id', userId)
   .gte('appointment_date', TODAY)
   .in('status', ['confirmed','pending','checkedin'])
   .order('appointment_date', { ascending: true })
   .limit(3);
 
-console.log('upcoming result:', upcoming);
+console.log('upcoming error:', upErr);
+console.log('upcoming data:', upcoming);
 
-      const { data: all } = await supabase
-        .from('appointments')
-        .select('id, hospital_id')
-        .eq('patient_id', userId);
+      const { data: all, error: allErr } = await supabase
+  .from('appointments')
+  .select('id, hospital_id')
+  .eq('patient_id', userId);
+
+console.log('all error:', allErr);
 
       const upcomingCount = upcoming?.length || 0;
 
