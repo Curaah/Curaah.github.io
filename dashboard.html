@@ -581,7 +581,7 @@ console.log('all error:', allErr);
 
       const { data: all } = await supabase
         .from('appointments')
-        .select('*, hospitals(name)')
+        .select('*, hospitals!hospital_id(name)')
         .eq('patient_id', patientData.id)
         .order('appointment_date', { ascending: false });
 
