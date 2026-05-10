@@ -522,14 +522,18 @@
 
     /* ── LOAD APPOINTMENTS (overview — upcoming only) ── */
     async function loadOverviewAppointments(userId) {
+      console.log('Loading appointments for userId:', userId);
+      console.log('TODAY:', TODAY);
       const { data: upcoming } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name)')
-        .eq('patient_id', userId)
-        .gte('appointment_date', TODAY)
-        .in('status', ['confirmed','pending','checkedin'])
-        .order('appointment_date', { ascending: true })
-        .limit(3);
+  .from('appointments')
+  .select('*, hospitals(name)')
+  .eq('patient_id', userId)
+  .gte('appointment_date', TODAY)
+  .in('status', ['confirmed','pending','checkedin'])
+  .order('appointment_date', { ascending: true })
+  .limit(3);
+
+console.log('upcoming result:', upcoming);
 
       const { data: all } = await supabase
         .from('appointments')
