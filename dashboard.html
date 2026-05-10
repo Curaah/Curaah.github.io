@@ -526,7 +526,7 @@
       console.log('TODAY:', TODAY);
       const { data: upcoming, error: upErr } = await supabase
   .from('appointments')
-  .select('id, patient_id, hospital_id, opd_name, doctor_name, time_slot, appointment_date, status, booked_by, hospitals(name)')
+  .select('id, patient_id, hospital_id, opd_name, doctor_name, time_slot, appointment_date, status, booked_by, hospitals!hospital_id(name)')
   .eq('patient_id', userId)
   .gte('appointment_date', TODAY)
   .in('status', ['confirmed','pending','checkedin'])
@@ -536,11 +536,11 @@
 console.log('upcoming error:', upErr);
 console.log('upcoming data:', upcoming);
 
-      const { data: all, error: allErr } = await supabase
+     const { data: all, error: allErr } = await supabase
   .from('appointments')
-  .select('id, hospital_id')
-  .eq('patient_id', userId);
-
+  .select('id, patient_id, hospital_id, opd_name, doctor_name, time_slot, appointment_date, status, booked_by, hospitals!hospital_id(name)')
+  .eq('patient_id', userId)
+  .order('appointment_date', { ascending: false });
 console.log('all error:', allErr);
 
       const upcomingCount = upcoming?.length || 0;
