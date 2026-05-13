@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--off-white); }
+
+    .policy-hero {
+      background: var(--navy);
+      padding: calc(var(--nav-height) + 48px) 6% 48px;
+      text-align: center;
+    }
+
+    .policy-hero-tag   { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--electric); margin-bottom:12px; }
+    .policy-hero-title { font-family:'Georgia',serif; font-size:clamp(28px,4vw,42px); font-weight:700; color:var(--white); margin-bottom:12px; }
+    .policy-hero-sub   { font-size:15px; color:var(--text-on-dark-muted); max-width:560px; margin:0 auto; line-height:1.7; }
+    .policy-hero-date  { margin-top:16px; font-size:12px; color:rgba(255,255,255,0.4); }
+
+    .policy-content { max-width:780px; margin:0 auto; padding:56px 6%; }
+
+    .policy-section { margin-bottom:48px; }
+    .policy-section-num   { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--electric); margin-bottom:8px; }
+    .policy-section-title { font-family:'Georgia',serif; font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:16px; }
+    .policy-text { font-size:15px; color:var(--text-secondary); line-height:1.85; margin-bottom:16px; }
+    .policy-text:last-child { margin-bottom:0; }
+
+    .policy-list { list-style:none; padding:0; margin:0 0 16px; display:flex; flex-direction:column; gap:10px; }
+    .policy-list li { display:flex; align-items:flex-start; gap:10px; font-size:15px; color:var(--text-secondary); line-height:1.7; }
+    .policy-list li::before { content:'•'; color:var(--electric); font-weight:700; flex-shrink:0; margin-top:1px; }
+
+    .policy-highlight { background:rgba(61,158,255,0.05); border:1px solid rgba(61,158,255,0.15); border-left:3px solid var(--electric); border-radius:0 var(--radius-md) var(--radius-md) 0; padding:16px 20px; margin-bottom:16px; font-size:14px; color:var(--text-secondary); line-height:1.7; }
+    .policy-highlight strong { color:var(--text-primary); }
+
+    .policy-warning  { background:rgba(255,159,0,0.05); border:1px solid rgba(255,159,0,0.2); border-left:3px solid var(--warning); border-radius:0 var(--radius-md) var(--radius-md) 0; padding:16px 20px; margin-bottom:16px; font-size:14px; color:var(--text-secondary); line-height:1.7; }
+
+    .policy-danger   { background:rgba(255,71,87,0.05); border:1px solid rgba(255,71,87,0.2); border-left:3px solid var(--danger); border-radius:0 var(--radius-md) var(--radius-md) 0; padding:16px 20px; margin-bottom:16px; font-size:14px; color:var(--text-secondary); line-height:1.7; }
+
+    .policy-divider { height:1px; background:var(--border-card); margin:48px 0; }
+
+    .policy-toc { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:24px; margin-bottom:48px; }
+    .policy-toc-title { font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:14px; letter-spacing:0.5px; text-transform:uppercase; }
+    .policy-toc-list  { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+    .policy-toc-list li a { font-size:14px; color:var(--electric); text-decoration:none; display:flex; align-items:center; gap:8px; }
+    .policy-toc-list li a:hover { text-decoration:underline; }
+
+    .contact-box { background:var(--navy); border-radius:var(--radius-lg); padding:32px; text-align:center; }
+    .contact-box-title { font-family:'Georgia',serif; font-size:22px; font-weight:700; color:var(--white); margin-bottom:10px; }
+    .contact-box-desc  { font-size:14px; color:var(--text-on-dark-muted); line-height:1.7; margin-bottom:20px; }
+    .contact-box-email { font-size:16px; font-weight:600; color:var(--electric); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">Your Health · Your Control</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hospitals.html">Find Hospitals</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Register Free</a>
+    </div>
+  </nav>
+
+  <section class="policy-hero">
+    <div class="policy-hero-tag">Legal</div>
+    <h1 class="policy-hero-title">Terms of Service</h1>
+    <p class="policy-hero-sub">
+      By using Curaah you agree to these terms. Please read them carefully.
+      They are written in plain language — no legal jargon.
+    </p>
+    <div class="policy-hero-date">Last updated: May 2026 · Effective immediately</div>
+  </section>
+
+  <div class="policy-content">
+
+    <!-- TOC -->
+    <div class="policy-toc">
+      <div class="policy-toc-title">Contents</div>
+      <ul class="policy-toc-list">
+        <li><a href="#what-is-curaah">1. What Curaah Is (and Is Not)</a></li>
+        <li><a href="#who-can-use">2. Who Can Use Curaah</a></li>
+        <li><a href="#patient-accounts">3. Patient Accounts</a></li>
+        <li><a href="#appointment-booking">4. Appointment Booking</a></li>
+        <li><a href="#token-system">5. Token and Queue System</a></li>
+        <li><a href="#referrals">6. Referrals and Proxy Bookings</a></li>
+        <li><a href="#hospital-staff">7. Hospital Staff and Agents</a></li>
+        <li><a href="#prohibited">8. Prohibited Uses</a></li>
+        <li><a href="#liability">9. Limitation of Liability</a></li>
+        <li><a href="#medical-disclaimer">10. Medical Disclaimer</a></li>
+        <li><a href="#intellectual-property">11. Intellectual Property</a></li>
+        <li><a href="#termination">12. Termination</a></li>
+        <li><a href="#governing-law">13. Governing Law</a></li>
+        <li><a href="#changes">14. Changes to These Terms</a></li>
+        <li><a href="#contact">15. Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="policy-highlight">
+      <strong>The most important things to know:</strong> Curaah is a booking platform, not a hospital. We help you book appointments — we are not responsible for the quality of medical care you receive. Always consult a qualified doctor for medical advice.
+    </div>
+
+    <!-- Section 1 -->
+    <div class="policy-section" id="what-is-curaah">
+      <div class="policy-section-num">Section 01</div>
+      <div class="policy-section-title">What Curaah Is (and Is Not)</div>
+      <p class="policy-text">
+        Curaah is a <strong>technology platform</strong> that connects patients with hospitals and clinics for OPD appointment booking, queue management, and health record coordination.
+      </p>
+      <p class="policy-text">Curaah <strong>is:</strong></p>
+      <ul class="policy-list">
+        <li>A platform for booking OPD appointments at registered hospitals</li>
+        <li>A digital token and queue management system for hospitals</li>
+        <li>A referral coordination system between hospitals</li>
+        <li>A health appointment record for patients</li>
+      </ul>
+      <p class="policy-text">Curaah <strong>is not:</strong></p>
+      <ul class="policy-list">
+        <li>A hospital, clinic, or any kind of healthcare provider</li>
+        <li>A medical advice service</li>
+        <li>An emergency service — do not use Curaah in a medical emergency</li>
+        <li>A replacement for professional medical consultation</li>
+        <li>An insurance company or claim settlement service</li>
+      </ul>
+      <div class="policy-danger">
+        <strong>In a medical emergency, call 112 (India emergency) or go directly to the nearest hospital emergency department. Do not use Curaah for emergencies.</strong>
+      </div>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 2 -->
+    <div class="policy-section" id="who-can-use">
+      <div class="policy-section-num">Section 02</div>
+      <div class="policy-section-title">Who Can Use Curaah</div>
+      <p class="policy-text">You may use Curaah if:</p>
+      <ul class="policy-list">
+        <li>You are 18 years of age or older</li>
+        <li>You provide accurate information during registration</li>
+        <li>You agree to these terms and our Privacy Policy</li>
+        <li>You are using Curaah for legitimate healthcare coordination purposes</li>
+      </ul>
+      <p class="policy-text">
+        Parents and guardians may use Curaah to book appointments on behalf of minor children.
+        By doing so, they confirm they have the authority to share the child's information.
+      </p>
+      <p class="policy-text">
+        Curaah is currently available only for facilities within Punjab, India and surrounding areas.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 3 -->
+    <div class="policy-section" id="patient-accounts">
+      <div class="policy-section-num">Section 03</div>
+      <div class="policy-section-title">Patient Accounts</div>
+      <ul class="policy-list">
+        <li>You are responsible for maintaining the confidentiality of your password</li>
+        <li>You are responsible for all activity that occurs under your account</li>
+        <li>You must provide accurate name and phone number — inaccurate information may prevent hospital staff from identifying you at check-in</li>
+        <li>One person, one account — creating multiple accounts is not permitted</li>
+        <li>You must notify us immediately at curaahtech@gmail.com if you suspect unauthorized access to your account</li>
+      </ul>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 4 -->
+    <div class="policy-section" id="appointment-booking">
+      <div class="policy-section-num">Section 04</div>
+      <div class="policy-section-title">Appointment Booking</div>
+      <p class="policy-text">When you book an appointment through Curaah:</p>
+      <ul class="policy-list">
+        <li>The appointment is a request made to the hospital — Curaah facilitates the booking but the hospital is responsible for honoring it</li>
+        <li>You must arrive at the hospital during or before your booked time slot — late arrival may result in your token being skipped</li>
+        <li>OPD fees are paid directly to the hospital — Curaah does not collect any fees from patients</li>
+        <li>Curaah is not responsible if a hospital changes doctor schedules, closes unexpectedly, or cannot honor your appointment for reasons beyond our control</li>
+        <li>Always call the hospital directly to confirm before travelling a long distance for an appointment</li>
+        <li>Appointments can be cancelled through your dashboard or by contacting hospital staff directly</li>
+      </ul>
+      <div class="policy-warning">
+        <strong>Slot availability:</strong> Booking a slot does not guarantee that you will be seen at exactly that time. Hospital OPD schedules can vary. The token system gives you a fair queue position — actual waiting time depends on the hospital's patient flow.
+      </div>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 5 -->
+    <div class="policy-section" id="token-system">
+      <div class="policy-section-num">Section 05</div>
+      <div class="policy-section-title">Token and Queue System</div>
+      <ul class="policy-list">
+        <li>Tokens are assigned on a first-come-first-served basis within your booked slot</li>
+        <li>Token numbers reset every day — your token is valid only for the day it was issued</li>
+        <li>Each OPD has its own separate token queue</li>
+        <li>If you do not check in by scanning the QR code or through staff, you will not receive a token and may lose your place in the queue</li>
+        <li>Curaah is not responsible for delays in the hospital's token calling process — queue management is performed by hospital staff</li>
+        <li>Walk-in patients (without Curaah accounts) may be added to the same queue by hospital staff — this is by design to serve all patients fairly</li>
+      </ul>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 6 -->
+    <div class="policy-section" id="referrals">
+      <div class="policy-section-num">Section 06</div>
+      <div class="policy-section-title">Referrals and Proxy Bookings</div>
+      <p class="policy-text"><strong>Referrals:</strong></p>
+      <ul class="policy-list">
+        <li>Digital referrals are created by authorized hospital staff on your behalf</li>
+        <li>Referrals include clinical notes written by the referring doctor — these notes become part of your Curaah health record</li>
+        <li>Your verbal consent is required before a referral is created — hospital staff must confirm you agree</li>
+        <li>Curaah does not verify the medical accuracy of referral notes — the referring doctor is responsible for their content</li>
+      </ul>
+      <p class="policy-text"><strong>Proxy bookings:</strong></p>
+      <ul class="policy-list">
+        <li>Proxy agents are authorized individuals at clinics and dispensaries who can book appointments on your behalf</li>
+        <li>Proxy agents must obtain your verbal consent before making any booking</li>
+        <li>Proxy bookings appear in your Curaah dashboard if you are a registered patient</li>
+        <li>If you believe a proxy booking was made without your consent, contact us at curaahtech@gmail.com immediately</li>
+      </ul>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 7 -->
+    <div class="policy-section" id="hospital-staff">
+      <div class="policy-section-num">Section 07</div>
+      <div class="policy-section-title">Hospital Staff and Agents</div>
+      <p class="policy-text">Hospital staff and proxy agents who use Curaah agree to:</p>
+      <ul class="policy-list">
+        <li>Use Curaah only for legitimate patient care coordination purposes</li>
+        <li>Obtain patient consent before creating referrals or proxy bookings</li>
+        <li>Not share their staff login credentials with unauthorized persons</li>
+        <li>Not access patient data beyond what is necessary for their role</li>
+        <li>Accurately represent appointment and patient information — falsifying records is strictly prohibited</li>
+        <li>Report any misuse of the system to curaahtech@gmail.com immediately</li>
+      </ul>
+      <p class="policy-text">
+        Hospital staff accounts are created by Curaah administrators. Unauthorized account creation
+        is not permitted. Hospitals are responsible for notifying Curaah when a staff member leaves
+        so their access can be revoked.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 8 -->
+    <div class="policy-section" id="prohibited">
+      <div class="policy-section-num">Section 08</div>
+      <div class="policy-section-title">Prohibited Uses</div>
+      <p class="policy-text">You must not use Curaah to:</p>
+      <ul class="policy-list">
+        <li>Create fake appointments or book slots with no intention of attending</li>
+        <li>Impersonate another patient, doctor, or hospital staff member</li>
+        <li>Access another patient's data without authorization</li>
+        <li>Attempt to bypass the token system or gain an unfair queue position</li>
+        <li>Submit false or misleading information in your profile, referrals, or appointment notes</li>
+        <li>Use the platform for any commercial purpose not explicitly permitted</li>
+        <li>Attempt to hack, reverse engineer, or disrupt the Curaah platform</li>
+        <li>Scrape, crawl, or extract data from Curaah using automated tools</li>
+        <li>Use Curaah to advertise or promote any products or services</li>
+        <li>Violate any applicable Indian law including the IT Act 2000, DPDP Act 2023, or any healthcare regulation</li>
+      </ul>
+      <p class="policy-text">
+        Violation of these terms will result in immediate account suspension and may be reported to appropriate authorities.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 9 -->
+    <div class="policy-section" id="liability">
+      <div class="policy-section-num">Section 09</div>
+      <div class="policy-section-title">Limitation of Liability</div>
+      <p class="policy-text">
+        To the maximum extent permitted by Indian law, Curaah and its operators shall not be liable for:
+      </p>
+      <ul class="policy-list">
+        <li>Any medical outcome, misdiagnosis, or treatment decision made by a hospital or doctor</li>
+        <li>A hospital not honoring a booked appointment</li>
+        <li>Loss or damage arising from system downtime, technical errors, or interruptions in service</li>
+        <li>Inaccurate information provided by hospitals about their facilities, doctors, or availability</li>
+        <li>Any indirect, incidental, or consequential damages arising from use of the platform</li>
+        <li>Actions taken by hospital staff or proxy agents using the platform</li>
+      </ul>
+      <p class="policy-text">
+        Curaah's total liability to any patient or user in connection with the platform shall not exceed
+        the amount paid by that user to Curaah in the twelve months preceding the claim (which for most
+        patients will be zero, as Curaah is free for patients).
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 10 -->
+    <div class="policy-section" id="medical-disclaimer">
+      <div class="policy-section-num">Section 10</div>
+      <div class="policy-section-title">Medical Disclaimer</div>
+      <div class="policy-danger">
+        <strong>Curaah does not provide medical advice.</strong>
+      </div>
+      <p class="policy-text">
+        Nothing on the Curaah platform — including any AI assistant features, appointment recommendations, or OPD suggestions — constitutes medical advice. All health decisions should be made in consultation with a qualified, licensed medical professional.
+      </p>
+      <p class="policy-text">
+        Curaah is a booking and coordination tool. The clinical judgment, diagnosis, treatment, and care are entirely the responsibility of the hospital and doctor you consult.
+      </p>
+      <p class="policy-text">
+        If you are experiencing a medical emergency, do not use Curaah. Call 112 or go to your nearest hospital emergency room immediately.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 11 -->
+    <div class="policy-section" id="intellectual-property">
+      <div class="policy-section-num">Section 11</div>
+      <div class="policy-section-title">Intellectual Property</div>
+      <p class="policy-text">
+        The Curaah name, logo, design, and platform code are owned by Curaah and its creator.
+        You may not copy, reproduce, modify, or distribute any part of the Curaah platform
+        without explicit written permission.
+      </p>
+      <p class="policy-text">
+        Your personal data and health records remain your property at all times.
+        By using Curaah, you grant us a limited license to store and process your data
+        for the sole purpose of providing the Curaah service to you.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 12 -->
+    <div class="policy-section" id="termination">
+      <div class="policy-section-num">Section 12</div>
+      <div class="policy-section-title">Termination</div>
+      <p class="policy-text"><strong>You may terminate your account at any time</strong> by emailing curaahtech@gmail.com requesting account deletion. We will delete your data within 30 days.</p>
+      <p class="policy-text">
+        <strong>We may suspend or terminate your account</strong> if you violate these terms, misuse the platform, provide false information, or engage in any activity that harms other users or hospitals.
+      </p>
+      <p class="policy-text">
+        We may also suspend the platform temporarily for maintenance, upgrades, or in response to legal requirements. We will provide advance notice where possible.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 13 -->
+    <div class="policy-section" id="governing-law">
+      <div class="policy-section-num">Section 13</div>
+      <div class="policy-section-title">Governing Law</div>
+      <p class="policy-text">
+        These terms are governed by the laws of India. Any disputes arising from the use of Curaah
+        shall be subject to the jurisdiction of courts in Punjab, India.
+      </p>
+      <p class="policy-text">
+        Relevant Indian laws that apply to Curaah include:
+      </p>
+      <ul class="policy-list">
+        <li>Information Technology Act, 2000</li>
+        <li>Digital Personal Data Protection Act, 2023</li>
+        <li>Consumer Protection Act, 2019</li>
+        <li>Indian Contract Act, 1872</li>
+      </ul>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 14 -->
+    <div class="policy-section" id="changes">
+      <div class="policy-section-num">Section 14</div>
+      <div class="policy-section-title">Changes to These Terms</div>
+      <p class="policy-text">
+        We may update these terms as Curaah grows and new features are added. The date at the top of this page shows when the terms were last updated.
+      </p>
+      <p class="policy-text">
+        For significant changes that affect your rights, we will attempt to notify registered users by email at least 7 days before the changes take effect.
+      </p>
+      <p class="policy-text">
+        Continuing to use Curaah after terms are updated means you accept the new terms.
+        If you disagree with updated terms, you may request account deletion at any time.
+      </p>
+    </div>
+
+    <div class="policy-divider"></div>
+
+    <!-- Section 15 -->
+    <div class="policy-section" id="contact">
+      <div class="policy-section-num">Section 15</div>
+      <div class="policy-section-title">Contact Us</div>
+      <p class="policy-text">For questions about these terms, to report misuse, or for any other platform-related issue:</p>
+
+      <div class="contact-box">
+        <div class="contact-box-title">Get in Touch</div>
+        <p class="contact-box-desc">
+          We respond to all emails within 7 days.<br/>
+          For urgent matters or account suspension appeals, mention "URGENT" in the subject line.
+        </p>
+        <div class="contact-box-email">curaahtech@gmail.com</div>
+        <p style="font-size:12px;color:var(--text-on-dark-muted);margin-top:12px;">
+          Curaah · Nangal, Punjab 140124 · India
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+            <circle cx="18" cy="22" r="3.5" fill="white"/>
+          </svg>curaah
+        </div>
+        <p class="footer-brand-desc">Your health, your control.</p>
+        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-col-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-col-links">
+          <li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li>
+          <li><a href="#">Nangal, Punjab 140126</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-bottom-text">© 2026 Curaah. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="staff-portal.html">Staff Login</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
