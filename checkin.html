@@ -417,7 +417,7 @@
         const tokenNumber = await getNextToken(hospital.id, opd.id);
 
         /* Insert token record */
-        await supabase.from('tokens').insert({
+        const { error: insertError } = await supabase.from('tokens').insert({
           patient_id:     currentUser.id,
           hospital_id:    hospital.id,
           opd_id:         opd.id,
@@ -428,6 +428,7 @@
           is_offline:     false,
           checked_in_at:  new Date().toISOString(),
         });
+        if (insertError) throw insertError;
 
         /* Get OPD-specific queue info */
         const { current, position, waitDisplay } =
