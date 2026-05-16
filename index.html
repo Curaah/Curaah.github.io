@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Curaah — Your Health, Your Control. Book hospital appointments, track insurance claims, and get AI-powered health guidance. Built for Nangal, Punjab." />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+  <meta name="description" content="Curaah — Your Health, Your Control. Book hospital appointments, track insurance claims, and get AI-powered health guidance. Built for Punjab, India." />
   <title>Curaah — Your Health, Your Control</title>
 
   <!-- Favicon placeholder -->
@@ -587,7 +595,7 @@
       <div class="hero-left">
         <div class="hero-eyebrow">
           <span class="hero-eyebrow-dot"></span>
-          Now in Nangal, Punjab
+          Now in Punjab
         </div>
 
         <h1>
@@ -649,7 +657,7 @@
       <div class="section-header text-center reveal">
         <div class="section-label">What we do</div>
         <h2 class="section-title">Everything health, one platform</h2>
-        <p class="section-sub" style="margin: 0 auto;">Built for patients in Nangal and across Punjab — whether you are tech-savvy or not.</p>
+        <p class="section-sub" style="margin: 0 auto;">Built for patients across Punjab and India — whether you are tech-savvy or not.</p>
       </div>
 
       <div class="features-grid">
@@ -814,19 +822,19 @@
 
         <!-- Messages -->
         <div class="ai-msg ai-msg-user">
-          <div class="ai-msg-bubble">I've had chest pain and shortness of breath since yesterday. I'm in Nangal.</div>
+          <div class="ai-msg-bubble">I've had chest pain and shortness of breath since yesterday. I'm in Punjab.</div>
           <div class="ai-msg-time">10:42 AM</div>
         </div>
 
         <div class="ai-msg ai-msg-bot">
-          <div class="ai-msg-bubble">I understand. Based on your symptoms, I recommend seeing a cardiologist or general physician urgently. I've checked hospitals near Nangal that match your Ayushman Bharat eligibility:</div>
+          <div class="ai-msg-bubble">I understand. Based on your symptoms, I recommend seeing a cardiologist or general physician urgently. I've checked hospitals near you that match your Ayushman Bharat eligibility:</div>
           <div class="ai-msg-time">10:42 AM</div>
         </div>
 
         <!-- Suggestion card -->
         <div class="ai-suggestion-card">
           <div>
-            <div class="ai-suggestion-name">NFL Hospital, Nangal</div>
+            <div class="ai-suggestion-name">City Hospital, Punjab</div>
             <div class="ai-suggestion-sub">General Medicine · 2.1 km · Ayushman covered</div>
           </div>
           <button class="ai-suggestion-btn">Book Now</button>
@@ -834,7 +842,7 @@
 
         <div class="ai-suggestion-card">
           <div>
-            <div class="ai-suggestion-name">Civil Hospital, Nangal</div>
+            <div class="ai-suggestion-name">Civil Hospital, Punjab</div>
             <div class="ai-suggestion-sub">Cardiology OPD · 3.4 km · MMSBY covered</div>
           </div>
           <button class="ai-suggestion-btn">Book Now</button>
@@ -892,7 +900,7 @@
   ============================================ -->
   <section class="cta-banner reveal">
     <div class="section-label" style="margin-bottom:14px;">Join Curaah</div>
-    <h2 class="cta-banner-title">Are you a hospital, lab, or sarai in Nangal?</h2>
+    <h2 class="cta-banner-title">Are you a hospital, lab, or sarai in Punjab?</h2>
     <p class="cta-banner-sub">Get onboarded on Curaah for free. We handle the setup, train your staff, and connect you with thousands of patients in your area.</p>
     <div class="cta-banner-actions">
       <a href="onboard.html" class="btn btn-primary btn-lg">Get Onboarded Free</a>
@@ -916,7 +924,7 @@
           curaah
         </div>
         <p class="footer-brand-desc">Your health, your control. A unified platform connecting patients, hospitals, labs, and health schemes across Punjab.</p>
-        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+        <p class="footer-built">Built in <span>Punjab, India</span> 🇮🇳</p>
       </div>
 
       <!-- Platform -->
@@ -946,7 +954,7 @@
         <div class="footer-col-title">Contact</div>
         <ul class="footer-col-links">
           <li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li>
-          <li><a href="#">Nangal, Punjab 140126</a></li>
+          <li><a href="#">Punjab, India</a></li>
           <li><a href="#">WhatsApp Us</a></li>
         </ul>
       </div>
@@ -955,8 +963,8 @@
     <div class="footer-bottom">
       <p class="footer-bottom-text">© 2026 Curaah. All rights reserved. Built for the people of Punjab.</p>
       <div class="footer-bottom-links">
-        <a href="privacy.html">Privacy Policy</a>
-<a href="terms.html">Terms of Use</a>
+        <a href="#">Privacy Policy</a>
+<a href="#">Terms of Use</a>
 <a href="staff-portal.html">Staff Login</a>
       </div>
     </div>
@@ -964,6 +972,67 @@
 
   <!-- Scripts -->
   <script src="js/main.js"></script>
+
+  <!-- PWA Install Banner -->
+  <div class="pwa-install-banner" id="installBanner" style="display:none;">
+    <div class="pwa-install-icon">
+      <img src="/assets/icons/icon-192.png" alt="Curaah" />
+    </div>
+    <div class="pwa-install-text">
+      <div class="pwa-install-title">Install Curaah App</div>
+      <div class="pwa-install-sub">Add to home screen for quick access</div>
+    </div>
+    <button class="pwa-install-btn" id="installBtn">Install</button>
+    <button class="pwa-install-close" id="installClose" aria-label="Dismiss">✕</button>
+  </div>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
+
+  <!-- PWA Install Prompt Logic -->
+  <script>
+    let deferredPrompt = null;
+    const banner     = document.getElementById('installBanner');
+    const installBtn = document.getElementById('installBtn');
+    const closeBtn   = document.getElementById('installClose');
+
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const dismissed = localStorage.getItem('curaah-pwa-dismissed');
+      if (dismissed) return;
+      setTimeout(() => {
+        banner.style.display = 'flex';
+        requestAnimationFrame(() => banner.classList.add('show'));
+      }, 3000);
+    });
+
+    installBtn?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      banner.classList.remove('show');
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      banner.classList.remove('show');
+      localStorage.setItem('curaah-pwa-dismissed', '1');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      banner.style.display = 'none';
+      deferredPrompt = null;
+    });
+  </script>
 
 </body>
 </html>
