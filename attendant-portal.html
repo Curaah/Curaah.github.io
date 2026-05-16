@@ -738,133 +738,143 @@
 
     /* ── LOAD QUEUE ── */
     async function loadQueue() {
-      if (!selectedOpdId) return;
+  if (!selectedOpdId) return;
 
-      const { data: tokens } = await supabase
-        .from('tokens')
-        .select('*, patients(full_name), appointments(time_slot, doctor_name, walk_in_patient_id, walk_in_patients(full_name))')
-        .eq('hospital_id', currentHospital.id)
-        .eq('opd_id', selectedOpdId)
-        .gte('checked_in_at', TODAY + 'T00:00:00')
-        .order('token_number');
+  const { data: tokens } = await supabase
+    .from('tokens')
+    .select(`
+      *,
+      patients(full_name),
+      appointments(
+        time_slot,
+        doctor_name,
+        walk_in_patient_id,
+        walk_in_patients(full_name)
+      )
+    `)
+    .eq('hospital_id', currentHospital.id)
+    .eq('opd_id', selectedOpdId)
+    .gte('checked_in_at', TODAY + 'T00:00:00')
+    .order('token_number');
 
-      const allTokens = tokens || [];
+  const allTokens = tokens || [];
 
-      const waiting   = allTokens.filter(t => t.status === 'waiting');
-      const called    = allTokens.filter(t => t.status === 'called');
-      const completed = allTokens.filter(t => t.status === 'completed');
+  const waiting   = allTokens.filter(t => t.status === 'waiting');
+  const called    = allTokens.filter(t => t.status === 'called');
+  const completed = allTokens.filter(t => t.status === 'completed');
 
-      /* Update stats */
-      document.getElementById('statWaiting').textContent = waiting.length;
-      document.getElementById('statCalled').textContent  = called.length;
-      document.getElementById('statDone').textContent    = completed.length;
-      document.getElementById('queueWaitingCount').textContent = waiting.length;
+  document.getElementById('statWaiting').textContent = waiting.length;
+  document.getElementById('statCalled').textContent  = called.length;
+  document.getElementById('statDone').textContent    = completed.length;
+  document.getElementById('queueWaitingCount').textContent = waiting.length;
 
-      /* Update called token display */
-      const currentlyCalled = called.sort((a,b) => b.token_number - a.token_number)[0];
+  const currentlyCalled = called.sort((a,b) => b.token_number - a.token_number)[0];
 
-      if (currentlyCalled) {
-        calledToken = currentlyCalled;
-        showCalledToken(currentlyCalled);
-      } else {
-        calledToken = null;
-        showNoToken(waiting.length);
-      }
+  if (currentlyCalled) {
+    calledToken = currentlyCalled;
+    showCalledToken(currentlyCalled);
+  } else {
+    calledToken = null;
+    showNoToken(waiting.length);
+  }
 
-      /* Render queue list */
-      renderQueueList(allTokens);
-    }
+  renderQueueList(allTokens);
+}
+    function getPatientName(token) {
+  /* Priority: Curaah patient → walk-in patient via appointment → offline */
+  if (token.patients?.full_name) return token.patients.full_name;
+  if (token.appointments?.walk_in_patients?.full_name)
+    return token.appointments.walk_in_patients.full_name;
+  if (token.is_offline) return 'Walk-in Patient';
+  return 'Patient';
+}
 
-    function showCalledToken(token) {
-      document.getElementById('tokenCalledCard').style.display = 'block';
-      document.getElementById('noTokenCard').style.display     = 'none';
+function showCalledToken(token) {
+  document.getElementById('tokenCalledCard').style.display = 'block';
+  document.getElementById('noTokenCard').style.display     = 'none';
 
-      const opdName     = selectedOpd?.name || 'OPD';
-      /* Resolve patient name: Curaah patient → patients join; walk-in → appointments → walk_in_patients join */
-      const walkInName  = token.appointments?.walk_in_patients?.full_name;
-      const patientName = token.patients?.full_name || walkInName
-        || (token.is_offline ? 'Walk-in Patient' : 'Patient');
-      const doctor      = token.appointments?.doctor_name || token.opd_department || '—';
-      const slot        = token.appointments?.time_slot || '—';
+  const opdName     = selectedOpd?.name || 'OPD';
+  const patientName = getPatientName(token);
+  const doctor      = token.appointments?.doctor_name || token.opd_department || '—';
+  const slot        = token.appointments?.time_slot || '—';
 
-      document.getElementById('calledOpdName').textContent    = opdName;
-      document.getElementById('calledTokenNum').textContent   = token.token_number;
-      document.getElementById('calledPatientName').textContent= patientName;
-      document.getElementById('calledTokenMeta').textContent  = `${doctor} · ${slot}`;
-    }
+  document.getElementById('calledOpdName').textContent    = opdName;
+  document.getElementById('calledTokenNum').textContent   = token.token_number;
+  document.getElementById('calledPatientName').textContent= patientName;
+  document.getElementById('calledTokenMeta').textContent  = `${doctor} · ${slot}`;
+}
 
-    function showNoToken(waitingCount) {
-      document.getElementById('tokenCalledCard').style.display = 'none';
-      document.getElementById('noTokenCard').style.display     = 'block';
+function showNoToken(waitingCount) {
+  document.getElementById('tokenCalledCard').style.display = 'none';
+  document.getElementById('noTokenCard').style.display     = 'block';
 
-      const titleEl = document.getElementById('noTokenTitle');
-      const descEl  = document.getElementById('noTokenDesc');
-      const btnEl   = document.getElementById('callNextBtnEmpty');
+  const titleEl = document.getElementById('noTokenTitle');
+  const descEl  = document.getElementById('noTokenDesc');
+  const btnEl   = document.getElementById('callNextBtnEmpty');
 
-      if (waitingCount === 0) {
-        titleEl.textContent = 'Queue is empty';
-        descEl.textContent  = 'No patients waiting in this OPD right now. New patients will appear here automatically.';
-        if (btnEl) btnEl.disabled = true;
-      } else {
-        titleEl.textContent = 'Ready to call';
-        descEl.textContent  = `${waitingCount} patient${waitingCount > 1 ? 's' : ''} waiting. Press the button to call the next token.`;
-        if (btnEl) btnEl.disabled = false;
-      }
-    }
+  if (waitingCount === 0) {
+    titleEl.textContent = 'Queue is empty';
+    descEl.textContent  = 'No patients waiting in this OPD right now.';
+    if (btnEl) btnEl.disabled = true;
+  } else {
+    titleEl.textContent = 'Ready to call';
+    descEl.textContent  = `${waitingCount} patient${waitingCount > 1 ? 's' : ''} waiting.`;
+    if (btnEl) btnEl.disabled = false;
+  }
+}
 
-    function renderQueueList(tokens) {
-      const el = document.getElementById('queueList');
-      if (!tokens.length) {
-        el.innerHTML = `<div class="queue-empty"><div class="queue-empty-icon">📟</div>No tokens yet for this OPD today.</div>`;
-        return;
-      }
+function renderQueueList(tokens) {
+  const el = document.getElementById('queueList');
+  if (!tokens.length) {
+    el.innerHTML = `<div class="queue-empty"><div class="queue-empty-icon">📟</div>No tokens yet for this OPD today.</div>`;
+    return;
+  }
 
-      /* Sort: called first, then waiting by token number, then completed */
-      const sorted = [
-        ...tokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number),
-        ...tokens.filter(t => t.status === 'waiting').sort((a,b) => a.token_number - b.token_number),
-        ...tokens.filter(t => t.status === 'completed').sort((a,b) => b.token_number - a.token_number),
-      ];
+  const sorted = [
+    ...tokens.filter(t => t.status === 'called').sort((a,b) => b.token_number - a.token_number),
+    ...tokens.filter(t => t.status === 'waiting').sort((a,b) => a.token_number - b.token_number),
+    ...tokens.filter(t => t.status === 'completed').sort((a,b) => b.token_number - a.token_number),
+  ];
 
-      el.innerHTML = `
-        <div class="queue-list">
-          ${sorted.map(t => {
-            const isOffline  = t.is_offline;
-            /* Resolve name: Curaah patient → patients join; walk-in/proxy → appointment → walk_in_patients join */
-            const walkInName = t.appointments?.walk_in_patients?.full_name;
-            const name       = t.patients?.full_name || walkInName
-              || (isOffline ? 'Walk-in Patient' : 'Patient');
-            const doctor     = t.appointments?.doctor_name || t.opd_department || '—';
-            const slot       = t.appointments?.time_slot || '—';
+  el.innerHTML = `
+    <div class="queue-list">
+      ${sorted.map(t => {
+        const name   = getPatientName(t);
+        const doctor = t.appointments?.doctor_name || t.opd_department || '—';
+        const slot   = t.appointments?.time_slot || '—';
+        const isWalkIn = t.is_offline ||
+          !!t.appointments?.walk_in_patient_id;
 
-            let itemClass  = 'waiting';
-            let badgeClass = 'badge-waiting';
-            let badgeText  = 'Waiting';
+        let itemClass  = 'waiting';
+        let badgeClass = 'badge-waiting';
+        let badgeText  = 'Waiting';
 
-            if (t.status === 'called') {
-              itemClass  = 'current';
-              badgeClass = 'badge-calling';
-              badgeText  = '🔔 Now calling';
-            } else if (t.status === 'completed') {
-              itemClass  = 'completed';
-              badgeClass = 'badge-done';
-              badgeText  = 'Done';
-            }
+        if (t.status === 'called') {
+          itemClass  = 'current';
+          badgeClass = 'badge-calling';
+          badgeText  = '🔔 Now calling';
+        } else if (t.status === 'completed') {
+          itemClass  = 'completed';
+          badgeClass = 'badge-done';
+          badgeText  = 'Done';
+        }
 
-            return `
-              <div class="queue-item ${itemClass}">
-                <div class="queue-item-num">${t.token_number}</div>
-                <div class="queue-item-info">
-                  <div class="queue-item-patient">${name}
-                    ${isOffline ? '<span style="font-size:10px;color:var(--warning);margin-left:4px;">Walk-in</span>' : ''}
-                  </div>
-                  <div class="queue-item-meta">${doctor} · ${slot}</div>
-                </div>
-                <span class="queue-item-badge ${badgeClass}">${badgeText}</span>
-              </div>`;
-          }).join('')}
-        </div>`;
-    }
+        return `
+          <div class="queue-item ${itemClass}">
+            <div class="queue-item-num">${t.token_number}</div>
+            <div class="queue-item-info">
+              <div class="queue-item-patient">${name}
+                ${isWalkIn
+                  ? '<span style="font-size:10px;color:var(--warning);margin-left:4px;font-weight:600;">Walk-in</span>'
+                  : '<span style="font-size:10px;color:var(--success);margin-left:4px;font-weight:600;">Curaah</span>'}
+              </div>
+              <div class="queue-item-meta">${doctor} · ${slot}</div>
+            </div>
+            <span class="queue-item-badge ${badgeClass}">${badgeText}</span>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
 
     /* ── CALL NEXT TOKEN ── */
     window.callNext = async function() {
