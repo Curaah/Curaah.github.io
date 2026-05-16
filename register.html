@@ -566,10 +566,10 @@
             </div>
 
             <!-- Submit -->
-            <!-- Cloudflare Turnstile widget -->
-            <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light" data-size="flexible"
+            <!-- Cloudflare Turnstile widget (Commented out for demo, requires production sitekey) -->
+            <!-- <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light" data-size="flexible"
               id="turnstileWidget">
-            </div>
+            </div> -->
             <div class="form-error" id="captchaError" style="display:none;margin-top:-8px;">Please complete the security
               check.</div>
 
@@ -681,13 +681,15 @@
         return;
       }
 
-      /* 3. Turnstile token check */
+      /* 3. Turnstile token check (Commented out until production key is added) */
+      /*
       const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
       if (!turnstileToken) {
         document.getElementById('captchaError').style.display = 'block';
         return;
       }
       document.getElementById('captchaError').style.display = 'none';
+      */
 
       const fullName = document.getElementById('fullName').value.trim();
       const gender = document.getElementById('gender').value;
