@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
   <title>Facility Profile — Curaah</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
@@ -221,7 +229,7 @@
           </svg>curaah
         </div>
         <p class="footer-brand-desc">Your health, your control.</p>
-        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+        <p class="footer-built">Built in <span>Punjab, India</span> 🇮🇳</p>
       </div>
       <div>
         <div class="footer-col-title">Platform</div>
@@ -229,7 +237,7 @@
       </div>
       <div>
         <div class="footer-col-title">Contact</div>
-        <ul class="footer-col-links"><li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li><li><a href="#">Nangal, Punjab 140124</a></li></ul>
+        <ul class="footer-col-links"><li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li><li><a href="#">Punjab, India</a></li></ul>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1018,5 +1026,16 @@ setTimeout(() => loadSlots(), 100);
     init();
   </script>
 
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
 </body>
 </html>
