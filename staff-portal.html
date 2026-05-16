@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- PWA: App manifest and mobile config -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#060d1f" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Curaah" />
-  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+    <!-- PWA: App manifest and mobile config -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#060d1f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Curaah" />
+    <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
     <title>Staff Portal — Curaah</title>
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
     <link rel="stylesheet" href="css/style.css" />
@@ -1515,11 +1515,12 @@
 
             try {
                 const tokenNumber = await getNextToken(currentHospital.id, opdId);
-                await supabase.from('tokens').insert({
+                const { error: insertError } = await supabase.from('tokens').insert({
                     hospital_id: currentHospital.id, opd_id: opdId,
                     token_number: tokenNumber, opd_department: opd.department,
                     status: 'waiting', is_offline: true, checked_in_at: new Date().toISOString(),
                 });
+                if (insertError) throw insertError;
                 showToast(`✅ Walk-in token ${tokenNumber} assigned for ${opd.name}!`, 'success');
                 await loadOverview();
                 const tokSection = document.getElementById('section-tokens');
@@ -1821,12 +1822,13 @@
                 if (!resolvedOpdId) throw new Error('Could not determine OPD.');
                 const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
                 const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
-                await supabase.from('tokens').insert({
-                    patient_id: patId, hospital_id: currentHospital.id, appointment_id: apptId,
+                const { error: insertError } = await supabase.from('tokens').insert({
+                    patient_id: patId || null, hospital_id: currentHospital.id, appointment_id: apptId,
                     opd_id: resolvedOpdId, token_number: tokenNumber,
                     opd_department: opd?.department || doctor, status: 'waiting',
                     is_offline: false, checked_in_at: new Date().toISOString(),
                 });
+                if (insertError) throw insertError;
                 showToast(`✅ ${name} checked in. Token: ${tokenNumber} (${opd?.name || opdName})`, 'success');
                 await loadOverview(); await loadAppointments();
             } catch (err) { showToast(err.message || 'Check-in failed.', 'error'); }
@@ -1844,136 +1846,137 @@
         };
 
         /* ── MANUAL CHECK-IN ── */
-        window.findPatient = async function() {
-  const phone = document.getElementById('checkinPhone').value.trim();
-  const date  = document.getElementById('checkinDate').value || TODAY;
-  if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
+        window.findPatient = async function () {
+            const phone = document.getElementById('checkinPhone').value.trim();
+            const date = document.getElementById('checkinDate').value || TODAY;
+            if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
 
-  /* Check patients table first */
-  let patientId   = null;
-  let patientName = null;
-  let isWalkIn    = false;
+            /* Check patients table first */
+            let patientId = null;
+            let patientName = null;
+            let isWalkIn = false;
 
-  const { data: curaahPatient } = await supabase
-    .from('patients').select('id, full_name').eq('phone', phone).single();
+            const { data: curaahPatient } = await supabase
+                .from('patients').select('id, full_name').eq('phone', phone).single();
 
-  if (curaahPatient) {
-    patientId   = curaahPatient.id;
-    patientName = curaahPatient.full_name;
+            if (curaahPatient) {
+                patientId = curaahPatient.id;
+                patientName = curaahPatient.full_name;
 
-  } else {
-    /* Check walk_in_patients table */
-    const { data: walkIn } = await supabase
-      .from('walk_in_patients').select('id, full_name').eq('phone', phone).single();
+            } else {
+                /* Check walk_in_patients table */
+                const { data: walkIn } = await supabase
+                    .from('walk_in_patients').select('id, full_name').eq('phone', phone).single();
 
-    if (walkIn) {
-      patientName = walkIn.full_name;
-      isWalkIn    = true;
-    }
-  }
+                if (walkIn) {
+                    patientName = walkIn.full_name;
+                    isWalkIn = true;
+                }
+            }
 
-  if (!patientName) {
-    showToast('No patient found with this number on Curaah or walk-in records.', 'error');
-    return;
-  }
+            if (!patientName) {
+                showToast('No patient found with this number on Curaah or walk-in records.', 'error');
+                return;
+            }
 
-  /* Find appointment — search by patient_id OR walk_in_patient lookup */
-  let appt = null;
+            /* Find appointment — search by patient_id OR walk_in_patient lookup */
+            let appt = null;
 
-  if (patientId) {
-    const { data } = await supabase
-      .from('appointments').select('*')
-      .eq('patient_id', patientId)
-      .eq('hospital_id', currentHospital.id)
-      .eq('appointment_date', date)
-      .neq('status', 'cancelled')
-      .order('created_at', { ascending: false })
-      .limit(1).single();
-    appt = data;
-  }
+            if (patientId) {
+                const { data } = await supabase
+                    .from('appointments').select('*')
+                    .eq('patient_id', patientId)
+                    .eq('hospital_id', currentHospital.id)
+                    .eq('appointment_date', date)
+                    .neq('status', 'cancelled')
+                    .order('created_at', { ascending: false })
+                    .limit(1).single();
+                appt = data;
+            }
 
-  /* Also search by phone through walk_in_patients for proxy booked */
-  if (!appt) {
-    const { data: walkInRecord } = await supabase
-      .from('walk_in_patients').select('id').eq('phone', phone).single();
+            /* Also search by phone through walk_in_patients for proxy booked */
+            if (!appt) {
+                const { data: walkInRecord } = await supabase
+                    .from('walk_in_patients').select('id').eq('phone', phone).single();
 
-    if (walkInRecord) {
-      const { data } = await supabase
-        .from('appointments').select('*')
-        .eq('walk_in_patient_id', walkInRecord.id)
-        .eq('hospital_id', currentHospital.id)
-        .eq('appointment_date', date)
-        .neq('status', 'cancelled')
-        .order('created_at', { ascending: false })
-        .limit(1).single();
-      appt = data;
-    }
-  }
+                if (walkInRecord) {
+                    const { data } = await supabase
+                        .from('appointments').select('*')
+                        .eq('walk_in_patient_id', walkInRecord.id)
+                        .eq('hospital_id', currentHospital.id)
+                        .eq('appointment_date', date)
+                        .neq('status', 'cancelled')
+                        .order('created_at', { ascending: false })
+                        .limit(1).single();
+                    appt = data;
+                }
+            }
 
-  if (!appt) {
-    showToast('No appointment found for this patient today.', 'error');
-    return;
-  }
+            if (!appt) {
+                showToast('No appointment found for this patient today.', 'error');
+                return;
+            }
 
-  checkinApptId = appt.id;
-  checkinPatId  = patientId;
-  checkinOpdId  = appt.opd_id || null;
+            checkinApptId = appt.id;
+            checkinPatId = patientId;
+            checkinOpdId = appt.opd_id || null;
 
-  const opd = hospitalOpds.find(o => o.id === checkinOpdId);
+            const opd = hospitalOpds.find(o => o.id === checkinOpdId);
 
-  document.getElementById('checkinPatientName').textContent = patientName;
-  document.getElementById('checkinApptInfo').textContent    = `${appt.doctor_name} · ${appt.time_slot}`;
-  document.getElementById('checkinOpdInfo').textContent     = opd ? `OPD: ${opd.name}` : 'OPD not assigned';
-  document.getElementById('checkinStatus').textContent      = statusText(appt.status);
-  document.getElementById('checkinStatus').className        = `status-pill ${statusClass(appt.status)}`;
-  document.getElementById('checkinResult').classList.add('show');
-  document.getElementById('tokenResult').classList.remove('show');
-};
+            document.getElementById('checkinPatientName').textContent = patientName;
+            document.getElementById('checkinApptInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
+            document.getElementById('checkinOpdInfo').textContent = opd ? `OPD: ${opd.name}` : 'OPD not assigned';
+            document.getElementById('checkinStatus').textContent = statusText(appt.status);
+            document.getElementById('checkinStatus').className = `status-pill ${statusClass(appt.status)}`;
+            document.getElementById('checkinResult').classList.add('show');
+            document.getElementById('tokenResult').classList.remove('show');
+        };
 
-window.confirmCheckin = async function() {
-  if (!checkinApptId) return;
-  const btn = document.getElementById('checkinConfirmBtn');
-  btn.textContent = 'Processing...'; btn.disabled = true;
+        window.confirmCheckin = async function () {
+            if (!checkinApptId) return;
+            const btn = document.getElementById('checkinConfirmBtn');
+            btn.textContent = 'Processing...'; btn.disabled = true;
 
-  try {
-    const { data: appt } = await supabase
-      .from('appointments')
-      .update({ status:'checkedin' })
-      .eq('id', checkinApptId).select().single();
+            try {
+                const { data: appt } = await supabase
+                    .from('appointments')
+                    .update({ status: 'checkedin' })
+                    .eq('id', checkinApptId).select().single();
 
-    const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
-    if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
+                const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
+                if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
 
-    const opd         = hospitalOpds.find(o => o.id === resolvedOpdId);
-    const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
+                const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
+                const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
 
-    await supabase.from('tokens').insert({
-      patient_id:     checkinPatId || null,
-      hospital_id:    currentHospital.id,
-      appointment_id: checkinApptId,
-      opd_id:         resolvedOpdId,
-      token_number:   tokenNumber,
-      opd_department: opd?.department || appt.doctor_name,
-      status:         'waiting',
-      is_offline:     false,
-      checked_in_at:  new Date().toISOString(),
-    });
+                const { error: insertError } = await supabase.from('tokens').insert({
+                    patient_id: checkinPatId || null,
+                    hospital_id: currentHospital.id,
+                    appointment_id: checkinApptId,
+                    opd_id: resolvedOpdId,
+                    token_number: tokenNumber,
+                    opd_department: opd?.department || appt.doctor_name,
+                    status: 'waiting',
+                    is_offline: false,
+                    checked_in_at: new Date().toISOString(),
+                });
+                if (insertError) throw insertError;
 
-    btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
-    document.getElementById('checkinResult').classList.remove('show');
-    document.getElementById('tokenResult').classList.add('show');
-    document.getElementById('assignedTokenNum').textContent  = tokenNumber;
-    document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
-    document.getElementById('assignedOpdInfo').textContent   = opd ? `OPD: ${opd.name}` : '';
+                btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
+                document.getElementById('checkinResult').classList.remove('show');
+                document.getElementById('tokenResult').classList.add('show');
+                document.getElementById('assignedTokenNum').textContent = tokenNumber;
+                document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
+                document.getElementById('assignedOpdInfo').textContent = opd ? `OPD: ${opd.name}` : '';
 
-    showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
-    await loadOverview();
+                showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
+                await loadOverview();
 
-  } catch (err) {
-    btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
-    showToast(err.message || 'Failed.', 'error');
-  }
-};
+            } catch (err) {
+                btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
+                showToast(err.message || 'Failed.', 'error');
+            }
+        };
 
         window.resetCheckin = function () {
             checkinApptId = null; checkinPatId = null; checkinOpdId = null;
@@ -2279,16 +2282,16 @@ window.confirmCheckin = async function() {
         checkExistingSession();
     </script>
 
-  <!-- Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(r => console.log('[SW] Registered:', r.scope))
-          .catch(e => console.log('[SW] Error:', e));
-      });
-    }
-  </script>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(r => console.log('[SW] Registered:', r.scope))
+                    .catch(e => console.log('[SW] Error:', e));
+            });
+        }
+    </script>
 </body>
 
 </html>
