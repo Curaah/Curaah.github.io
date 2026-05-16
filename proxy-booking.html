@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,135 +16,523 @@
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    body { background: var(--off-white); min-height: 100vh; }
+    body {
+      background: var(--off-white);
+      min-height: 100vh;
+    }
 
     /* ── LOGIN ── */
-    .login-page { min-height:100vh; background:var(--navy); display:flex; align-items:center; justify-content:center; padding:40px 24px; }
-    .login-card { background:var(--white); border-radius:var(--radius-xl); padding:44px; width:100%; max-width:420px; box-shadow:var(--shadow-lg); }
-    .login-logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
-    .login-logo-name { font-size:20px; font-weight:700; color:var(--navy); }
-    .login-logo-tag  { font-size:11px; color:var(--warning); font-weight:600; letter-spacing:1px; display:block; }
-    .login-title { font-family:'Georgia',serif; font-size:24px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
-    .login-sub   { font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.6; }
-    .login-form  { display:flex; flex-direction:column; gap:14px; }
-    .login-error { background:rgba(255,71,87,0.06); border:1px solid rgba(255,71,87,0.2); border-radius:var(--radius-md); padding:12px 14px; font-size:13px; color:var(--danger); display:none; line-height:1.5; }
-    .login-error.show { display:block; }
+    .login-page {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 44px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .login-logo-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .login-logo-tag {
+      font-size: 11px;
+      color: var(--warning);
+      font-weight: 600;
+      letter-spacing: 1px;
+      display: block;
+    }
+
+    .login-title {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .login-error {
+      background: rgba(255, 71, 87, 0.06);
+      border: 1px solid rgba(255, 71, 87, 0.2);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--danger);
+      display: none;
+      line-height: 1.5;
+    }
+
+    .login-error.show {
+      display: block;
+    }
 
     /* ── PORTAL ── */
-    .portal-page { display:none; min-height:100vh; }
+    .portal-page {
+      display: none;
+      min-height: 100vh;
+    }
 
-    .portal-nav { background:var(--navy); border-bottom:1px solid var(--border-dark); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-    .portal-nav-brand { display:flex; align-items:center; gap:10px; }
-    .portal-nav-name { font-size:16px; font-weight:700; color:var(--white); }
-    .portal-nav-tag  { font-size:10px; color:var(--warning); font-weight:600; letter-spacing:1px; }
-    .portal-nav-right { display:flex; align-items:center; gap:14px; }
-    .portal-nav-agent { font-size:13px; color:var(--text-on-dark-muted); }
-    .portal-nav-agent strong { color:var(--white); }
+    .portal-nav {
+      background: var(--navy);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    .portal-content { max-width:860px; margin:0 auto; padding:32px 24px; }
+    .portal-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    .page-header { margin-bottom:28px; }
-    .page-title  { font-family:'Georgia',serif; font-size:28px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
-    .page-sub    { font-size:14px; color:var(--text-muted); line-height:1.6; }
+    .portal-nav-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .portal-nav-tag {
+      font-size: 10px;
+      color: var(--warning);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .portal-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .portal-nav-agent {
+      font-size: 13px;
+      color: var(--text-on-dark-muted);
+    }
+
+    .portal-nav-agent strong {
+      color: var(--white);
+    }
+
+    .portal-content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-title {
+      font-family: 'Georgia', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
 
     /* ── TABS ── */
-    .page-tabs { display:flex; gap:0; background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:24px; }
-    .page-tab  { flex:1; padding:12px 20px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer; transition:var(--transition); border:none; background:none; border-right:1px solid var(--border-card); }
-    .page-tab:last-child { border-right:none; }
-    .page-tab.active { background:var(--electric); color:var(--white); }
-    .page-tab:hover:not(.active) { background:var(--off-white); }
+    .page-tabs {
+      display: flex;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .page-tab {
+      flex: 1;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      background: none;
+      border-right: 1px solid var(--border-card);
+    }
+
+    .page-tab:last-child {
+      border-right: none;
+    }
+
+    .page-tab.active {
+      background: var(--electric);
+      color: var(--white);
+    }
+
+    .page-tab:hover:not(.active) {
+      background: var(--off-white);
+    }
 
     /* ── PANEL ── */
-    .panel { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:20px; }
-    .panel-header { padding:16px 20px; border-bottom:1px solid var(--border-card); display:flex; align-items:center; justify-content:space-between; }
-    .panel-title  { font-size:15px; font-weight:600; color:var(--text-primary); display:flex; align-items:center; gap:8px; }
-    .panel-body   { padding:20px; }
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-body {
+      padding: 20px;
+    }
 
     /* ── PHONE SEARCH ── */
-    .phone-search-wrap { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:20px; }
-    .phone-search-wrap .form-group { flex:1; min-width:200px; margin:0; }
+    .phone-search-wrap {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .phone-search-wrap .form-group {
+      flex: 1;
+      min-width: 200px;
+      margin: 0;
+    }
 
     /* ── PATIENT STATUS CARD ── */
     .patient-status-card {
-      border-radius:var(--radius-lg);
-      padding:18px 20px;
-      display:flex;
-      align-items:center;
-      gap:16px;
-      margin-bottom:20px;
-      border:1.5px solid;
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      border: 1.5px solid;
     }
 
     .patient-status-card.existing {
-      background:rgba(0,196,140,0.04);
-      border-color:rgba(0,196,140,0.25);
+      background: rgba(0, 196, 140, 0.04);
+      border-color: rgba(0, 196, 140, 0.25);
     }
 
     .patient-status-card.new-patient {
-      background:rgba(255,159,0,0.04);
-      border-color:rgba(255,159,0,0.25);
+      background: rgba(255, 159, 0, 0.04);
+      border-color: rgba(255, 159, 0, 0.25);
     }
 
     .patient-status-avatar {
-      width:48px; height:48px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      font-size:18px; font-weight:700; flex-shrink:0;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
     }
 
-    .patient-status-card.existing .patient-status-avatar { background:rgba(0,196,140,0.12); color:var(--success); border:2px solid rgba(0,196,140,0.2); }
-    .patient-status-card.new-patient .patient-status-avatar { background:rgba(255,159,0,0.12); color:var(--warning); border:2px solid rgba(255,159,0,0.2); font-size:22px; }
+    .patient-status-card.existing .patient-status-avatar {
+      background: rgba(0, 196, 140, 0.12);
+      color: var(--success);
+      border: 2px solid rgba(0, 196, 140, 0.2);
+    }
 
-    .patient-status-info { flex:1; }
-    .patient-status-name { font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
-    .patient-status-meta { font-size:12px; color:var(--text-muted); }
-    .patient-status-tag  { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; flex-shrink:0; }
-    .tag-existing   { background:rgba(0,196,140,0.1); color:var(--success); }
-    .tag-new-patient{ background:rgba(255,159,0,0.1); color:var(--warning); }
+    .patient-status-card.new-patient .patient-status-avatar {
+      background: rgba(255, 159, 0, 0.12);
+      color: var(--warning);
+      border: 2px solid rgba(255, 159, 0, 0.2);
+      font-size: 22px;
+    }
+
+    .patient-status-info {
+      flex: 1;
+    }
+
+    .patient-status-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .patient-status-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .patient-status-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .tag-existing {
+      background: rgba(0, 196, 140, 0.1);
+      color: var(--success);
+    }
+
+    .tag-new-patient {
+      background: rgba(255, 159, 0, 0.1);
+      color: var(--warning);
+    }
 
     /* ── MINI REGISTRATION ── */
-    .mini-reg-form { background:rgba(255,159,0,0.03); border:1px solid rgba(255,159,0,0.15); border-radius:var(--radius-lg); padding:18px 20px; margin-bottom:20px; }
-    .mini-reg-title{ font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-    .form-grid-2   { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .form-grid-3   { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+    .mini-reg-form {
+      background: rgba(255, 159, 0, 0.03);
+      border: 1px solid rgba(255, 159, 0, 0.15);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .mini-reg-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
 
     /* ── BOOKING FORM ── */
-    .booking-form-wrap { display:flex; flex-direction:column; gap:16px; }
-    .booking-section-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+    .booking-form-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .booking-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
 
     /* ── SUCCESS ── */
-    .success-wrap { text-align:center; padding:40px 24px; }
-    .success-icon  { width:80px; height:80px; border-radius:50%; background:rgba(0,196,140,0.1); border:2px solid var(--success); display:flex; align-items:center; justify-content:center; font-size:36px; margin:0 auto 20px; }
-    .success-title { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); margin-bottom:10px; }
-    .success-desc  { font-size:14px; color:var(--text-secondary); line-height:1.7; max-width:480px; margin:0 auto 24px; }
+    .success-wrap {
+      text-align: center;
+      padding: 40px 24px;
+    }
 
-    .appt-slip { background:var(--off-white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:20px; max-width:440px; margin:0 auto 24px; text-align:left; }
-    .slip-row  { display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border-card); }
-    .slip-row:last-child { border-bottom:none; }
-    .slip-label{ color:var(--text-muted); font-weight:500; }
-    .slip-value{ color:var(--text-primary); font-weight:600; text-align:right; }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 196, 140, 0.1);
+      border: 2px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+    }
+
+    .success-title {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .success-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 24px;
+    }
+
+    .appt-slip {
+      background: var(--off-white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      max-width: 440px;
+      margin: 0 auto 24px;
+      text-align: left;
+    }
+
+    .slip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .slip-row:last-child {
+      border-bottom: none;
+    }
+
+    .slip-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .slip-value {
+      color: var(--text-primary);
+      font-weight: 600;
+      text-align: right;
+    }
 
     /* ── HISTORY ── */
-    .history-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px 20px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .history-item:last-child { margin-bottom:0; }
-    .history-patient { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
-    .history-meta    { font-size:12px; color:var(--text-muted); }
+    .history-item {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .history-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .history-patient {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .history-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
 
     /* Slot */
-    .slot-passed { color:var(--text-muted) !important; }
+    .slot-passed {
+      color: var(--text-muted) !important;
+    }
 
     /* Stats strip */
-    .stats-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
-    .stats-strip-item { background:var(--white); border:1px solid var(--border-card); border-radius:var(--radius-lg); padding:16px; text-align:center; }
-    .stats-strip-num   { font-family:'Georgia',serif; font-size:26px; font-weight:700; color:var(--text-primary); line-height:1; margin-bottom:4px; }
-    .stats-strip-label { font-size:11px; color:var(--text-muted); }
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stats-strip-item {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stats-strip-num {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stats-strip-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
 
     @media (max-width:600px) {
-      .form-grid-2 { grid-template-columns:1fr; }
-      .form-grid-3 { grid-template-columns:1fr; }
-      .stats-strip { grid-template-columns:repeat(3,1fr); }
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-strip {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- LOGIN -->
@@ -151,9 +540,10 @@
     <div class="login-card">
       <div class="login-logo">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
-          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
-          <circle cx="18" cy="22" r="3.5" fill="white"/>
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff"
+            stroke-width="1.5" />
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9" />
+          <circle cx="18" cy="22" r="3.5" fill="white" />
         </svg>
         <div>
           <span class="login-logo-name">curaah</span>
@@ -173,7 +563,8 @@
         </div>
         <div class="form-group">
           <label class="form-label">Password *</label>
-          <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" />
+          <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password"
+            autocomplete="current-password" />
         </div>
         <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">
           Login to Agent Portal
@@ -191,9 +582,10 @@
     <div class="portal-nav">
       <div class="portal-nav-brand">
         <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
-          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
-          <circle cx="18" cy="22" r="3.5" fill="white"/>
+          <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff"
+            stroke-width="1.5" />
+          <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9" />
+          <circle cx="18" cy="22" r="3.5" fill="white" />
         </svg>
         <div>
           <div class="portal-nav-name">curaah</div>
@@ -202,7 +594,8 @@
       </div>
       <div class="portal-nav-right">
         <span class="portal-nav-agent">
-          <strong id="navAgentName">—</strong> · <span id="navAgentLocation" style="color:var(--text-on-dark-muted);">—</span>
+          <strong id="navAgentName">—</strong> · <span id="navAgentLocation"
+            style="color:var(--text-on-dark-muted);">—</span>
         </span>
         <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Logout</button>
       </div>
@@ -253,8 +646,7 @@
             <div class="phone-search-wrap">
               <div class="form-group">
                 <label class="form-label">Patient Mobile Number *</label>
-                <input class="form-input" type="tel" id="patientPhone"
-                  placeholder="10-digit number" maxlength="10"
+                <input class="form-input" type="tel" id="patientPhone" placeholder="10-digit number" maxlength="10"
                   style="font-size:18px;letter-spacing:2px;" />
               </div>
               <button class="btn btn-primary btn-lg" style="flex-shrink:0;" onclick="lookupPhone()">
@@ -341,10 +733,10 @@
                 <div class="booking-section-label">Select Hospital</div>
                 <div class="form-group" style="margin-bottom:8px;">
                   <input class="form-input" type="text" id="hospitalSearchInput"
-                    placeholder="Search hospital by name or city..."
-                    oninput="filterHospitals()" />
+                    placeholder="Search hospital by name or city..." oninput="filterHospitals()" />
                 </div>
-                <select class="form-input form-select" id="hospitalSelect" onchange="onHospitalChange()" style="font-size:13px;">
+                <select class="form-input form-select" id="hospitalSelect" onchange="onHospitalChange()"
+                  style="font-size:13px;">
                   <option value="">Choose a hospital</option>
                 </select>
                 <span class="form-error" id="hospitalError"></span>
@@ -395,7 +787,8 @@
                   </select>
                 </div>
                 <div class="form-group" style="margin:0;">
-                  <label class="form-label">Notes <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                  <label class="form-label">Notes <span
+                      style="font-size:11px;color:var(--text-muted);font-weight:400;">(optional)</span></label>
                   <input class="form-input" type="text" id="apptNotes" placeholder="Symptoms or reason..." />
                 </div>
               </div>
@@ -422,7 +815,8 @@
 
               <div class="appt-slip" id="apptSlip"></div>
 
-              <div style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;max-width:440px;margin:0 auto 20px;text-align:left;">
+              <div
+                style="background:rgba(61,158,255,0.05);border:1px solid rgba(61,158,255,0.15);border-radius:var(--radius-md);padding:14px;max-width:440px;margin:0 auto 20px;text-align:left;">
                 <p style="font-size:12px;color:var(--text-secondary);margin:0;line-height:1.7;">
                   📟 <strong>Token:</strong> When patient arrives at the hospital,
                   staff checks them in using their phone number.
@@ -460,26 +854,26 @@
   <script type="module">
     import { supabase } from './js/supabase.js';
 
-    let currentAgent     = null;
-    let currentUser      = null;
-    let patientMode      = null; /* 'existing' | 'new' */
-    let existingPatient  = null; /* patients table row */
-    let walkInPatient    = null; /* walk_in_patients row (after save) */
-    let allHospitals     = [];
-    let filteredHospitals= [];
+    let currentAgent = null;
+    let currentUser = null;
+    let patientMode = null; /* 'existing' | 'new' */
+    let existingPatient = null; /* patients table row */
+    let walkInPatient = null; /* walk_in_patients row (after save) */
+    let allHospitals = [];
+    let filteredHospitals = [];
     let selectedHospital = null;
-    let selectedOpd      = null;
-    let opdDoctors       = [];
+    let selectedOpd = null;
+    let opdDoctors = [];
 
     const TODAY = new Date().toISOString().split('T')[0];
-    const ALL_SLOTS = ['9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM'];
+    const ALL_SLOTS = ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM'];
 
     /* ── LOGIN ── */
-    window.handleLogin = async function() {
-      const email    = document.getElementById('loginEmail').value.trim();
+    window.handleLogin = async function () {
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
       const errorBox = document.getElementById('loginError');
-      const btn      = document.getElementById('loginBtn');
+      const btn = document.getElementById('loginBtn');
 
       if (!email || !password) {
         errorBox.textContent = 'Please enter email and password.';
@@ -507,10 +901,10 @@
           throw new Error('This account is not registered as a proxy agent. Contact your Curaah administrator.');
         }
 
-        currentUser  = authData.user;
+        currentUser = authData.user;
         currentAgent = agentRow;
         btn.textContent = 'Login to Agent Portal'; btn.disabled = false;
-        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('loginPage').style.display = 'none';
         document.getElementById('portalPage').style.display = 'block';
         initPortal();
 
@@ -521,31 +915,31 @@
     };
 
     async function checkSession() {
-      const { data:{ session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
       const { data: agentRow } = await supabase
         .from('proxy_agents')
         .select('*').eq('user_id', session.user.id).eq('is_active', true).single();
       if (agentRow) {
-        currentUser  = session.user;
+        currentUser = session.user;
         currentAgent = agentRow;
-        document.getElementById('loginPage').style.display  = 'none';
+        document.getElementById('loginPage').style.display = 'none';
         document.getElementById('portalPage').style.display = 'block';
         initPortal();
       }
     }
 
-    window.handleLogout = async function() {
+    window.handleLogout = async function () {
       await supabase.auth.signOut();
       currentAgent = null; currentUser = null;
       document.getElementById('portalPage').style.display = 'none';
-      document.getElementById('loginPage').style.display  = 'flex';
+      document.getElementById('loginPage').style.display = 'flex';
       showToast('Logged out.', 'success');
     };
 
     /* ── INIT PORTAL ── */
     async function initPortal() {
-      document.getElementById('navAgentName').textContent     = currentAgent.name || 'Agent';
+      document.getElementById('navAgentName').textContent = currentAgent.name || 'Agent';
       document.getElementById('navAgentLocation').textContent = currentAgent.location || '—';
 
       const dateEl = document.getElementById('apptDate');
@@ -559,10 +953,10 @@
       const { data: hospitals } = await supabase
         .from('hospitals').select('id, name, city, type, doctor_count, slots_per_hour, schemes_accepted')
         .eq('is_verified', true).eq('is_active', true)
-        .in('type', ['hospital','dispensary'])
+        .in('type', ['hospital', 'dispensary'])
         .order('name');
 
-      allHospitals      = hospitals || [];
+      allHospitals = hospitals || [];
       filteredHospitals = allHospitals;
       renderHospitalOptions(allHospitals);
     }
@@ -575,13 +969,13 @@
         ).join('');
     }
 
-    window.filterHospitals = function() {
+    window.filterHospitals = function () {
       const q = document.getElementById('hospitalSearchInput').value.trim().toLowerCase();
       const filtered = q
         ? allHospitals.filter(h =>
-            h.name.toLowerCase().includes(q) ||
-            (h.city && h.city.toLowerCase().includes(q))
-          )
+          h.name.toLowerCase().includes(q) ||
+          (h.city && h.city.toLowerCase().includes(q))
+        )
         : allHospitals;
       renderHospitalOptions(filtered);
     };
@@ -600,14 +994,14 @@
         ...all.map(a => a.walk_in_patient_id).filter(Boolean),
       ]);
 
-      document.getElementById('statToday').textContent   = todayBookings.length;
-      document.getElementById('statTotal').textContent   = all.length;
-      document.getElementById('statPatients').textContent= uniquePatients.size;
+      document.getElementById('statToday').textContent = todayBookings.length;
+      document.getElementById('statTotal').textContent = all.length;
+      document.getElementById('statPatients').textContent = uniquePatients.size;
     }
 
     /* ── TAB SWITCHER ── */
-    window.switchTab = function(tab, btn) {
-      ['book','history'].forEach(t => {
+    window.switchTab = function (tab, btn) {
+      ['book', 'history'].forEach(t => {
         const el = document.getElementById('tab-' + t);
         if (el) el.style.display = t === tab ? 'block' : 'none';
       });
@@ -617,7 +1011,7 @@
     };
 
     /* ── PHONE LOOKUP ── */
-    window.lookupPhone = async function() {
+    window.lookupPhone = async function () {
       const phone = document.getElementById('patientPhone').value.trim();
       if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
 
@@ -627,20 +1021,20 @@
 
       if (curaahPatient) {
         /* Existing Curaah patient */
-        patientMode     = 'existing';
+        patientMode = 'existing';
         existingPatient = curaahPatient;
-        walkInPatient   = null;
+        walkInPatient = null;
 
-        const name     = curaahPatient.full_name || 'Patient';
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+        const name = curaahPatient.full_name || 'Patient';
+        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
         document.getElementById('existingAvatar').textContent = initials;
-        document.getElementById('existingName').textContent   = name;
-        document.getElementById('existingMeta').textContent   = `📞 ${phone} · ${curaahPatient.city || '—'} · ${curaahPatient.gender || '—'}`;
+        document.getElementById('existingName').textContent = name;
+        document.getElementById('existingMeta').textContent = `📞 ${phone} · ${curaahPatient.city || '—'} · ${curaahPatient.gender || '—'}`;
 
         document.getElementById('existingPatientCard').style.display = 'flex';
-        document.getElementById('newPatientCard').style.display      = 'none';
-        document.getElementById('miniRegForm').style.display         = 'none';
+        document.getElementById('newPatientCard').style.display = 'none';
+        document.getElementById('miniRegForm').style.display = 'none';
 
         showToast(`Found: ${name} (Curaah patient)`, 'success');
 
@@ -651,20 +1045,20 @@
 
         if (walkIn) {
           /* Returning walk-in patient */
-          patientMode   = 'walkin_existing';
+          patientMode = 'walkin_existing';
           walkInPatient = walkIn;
           existingPatient = null;
 
-          const name     = walkIn.full_name || 'Patient';
-          const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+          const name = walkIn.full_name || 'Patient';
+          const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
           document.getElementById('existingAvatar').textContent = initials;
-          document.getElementById('existingName').textContent   = name;
-          document.getElementById('existingMeta').textContent   = `📞 ${phone} · Returning patient`;
+          document.getElementById('existingName').textContent = name;
+          document.getElementById('existingMeta').textContent = `📞 ${phone} · Returning patient`;
 
           document.getElementById('existingPatientCard').style.display = 'flex';
-          document.getElementById('newPatientCard').style.display      = 'none';
-          document.getElementById('miniRegForm').style.display         = 'none';
+          document.getElementById('newPatientCard').style.display = 'none';
+          document.getElementById('miniRegForm').style.display = 'none';
 
           /* Update existing card style to show it's a walk-in returning */
           document.getElementById('existingPatientCard').classList.remove('existing');
@@ -674,14 +1068,14 @@
 
         } else {
           /* Brand new patient */
-          patientMode     = 'new';
+          patientMode = 'new';
           existingPatient = null;
-          walkInPatient   = null;
+          walkInPatient = null;
 
           document.getElementById('newPatientPhone').textContent = `📞 ${phone}`;
           document.getElementById('existingPatientCard').style.display = 'none';
-          document.getElementById('newPatientCard').style.display      = 'flex';
-          document.getElementById('miniRegForm').style.display         = 'block';
+          document.getElementById('newPatientCard').style.display = 'flex';
+          document.getElementById('miniRegForm').style.display = 'block';
 
           showToast('New patient — please fill quick registration.', 'info');
         }
@@ -692,33 +1086,33 @@
     };
 
     /* ── RESET PATIENT ── */
-    window.resetPatient = function() {
+    window.resetPatient = function () {
       patientMode = null; existingPatient = null; walkInPatient = null;
       document.getElementById('patientPhone').value = '';
-      document.getElementById('patientStep').style.display   = 'none';
-      document.getElementById('phonePanel').style.opacity    = '1';
+      document.getElementById('patientStep').style.display = 'none';
+      document.getElementById('phonePanel').style.opacity = '1';
       document.getElementById('existingPatientCard').style.display = 'none';
-      document.getElementById('newPatientCard').style.display      = 'none';
-      document.getElementById('miniRegForm').style.display         = 'none';
-      document.getElementById('newName').value   = '';
+      document.getElementById('newPatientCard').style.display = 'none';
+      document.getElementById('miniRegForm').style.display = 'none';
+      document.getElementById('newName').value = '';
       document.getElementById('newGender').value = '';
-      document.getElementById('newAge').value    = '';
-      document.getElementById('newCity').value   = '';
+      document.getElementById('newAge').value = '';
+      document.getElementById('newCity').value = '';
       /* Reset hospital/opd/doctor */
       document.getElementById('hospitalSelect').value = '';
-      document.getElementById('opdSelect').innerHTML   = '<option value="">Select hospital first</option>';
-      document.getElementById('doctorSelect').innerHTML= '<option value="">Select OPD first</option>';
-      document.getElementById('slotSelect').innerHTML  = '<option value="">Select doctor & date first</option>';
+      document.getElementById('opdSelect').innerHTML = '<option value="">Select hospital first</option>';
+      document.getElementById('doctorSelect').innerHTML = '<option value="">Select OPD first</option>';
+      document.getElementById('slotSelect').innerHTML = '<option value="">Select doctor & date first</option>';
       selectedHospital = null; selectedOpd = null; opdDoctors = [];
     };
 
     /* ── HOSPITAL CHANGE ── */
-    window.onHospitalChange = async function() {
+    window.onHospitalChange = async function () {
       const hospId = document.getElementById('hospitalSelect').value;
       document.getElementById('hospitalError').textContent = '';
-      document.getElementById('opdSelect').innerHTML    = '<option value="">Loading OPDs...</option>';
+      document.getElementById('opdSelect').innerHTML = '<option value="">Loading OPDs...</option>';
       document.getElementById('doctorSelect').innerHTML = '<option value="">Select OPD first</option>';
-      document.getElementById('slotSelect').innerHTML   = '<option value="">Select doctor & date first</option>';
+      document.getElementById('slotSelect').innerHTML = '<option value="">Select doctor & date first</option>';
       if (document.getElementById('slotHint')) document.getElementById('slotHint').textContent = '';
 
       if (!hospId) { selectedHospital = null; return; }
@@ -736,29 +1130,29 @@
       document.getElementById('opdSelect').innerHTML =
         '<option value="">Select OPD</option>' +
         opds.map(o =>
-          `<option value="${o.id}" data-name="${o.name}" data-dept="${o.department}" data-fee="${o.fee||0}">
-            ${o.name}${o.fee > 0 ? ' · ₹'+o.fee : ' · Free'}
+          `<option value="${o.id}" data-name="${o.name}" data-dept="${o.department}" data-fee="${o.fee || 0}">
+            ${o.name}${o.fee > 0 ? ' · ₹' + o.fee : ' · Free'}
           </option>`
         ).join('');
     };
 
     /* ── OPD CHANGE ── */
-    window.onOpdChange = async function() {
-      const opdSel  = document.getElementById('opdSelect');
-      const opdId   = opdSel.value;
-      const opdOpt  = opdSel.options[opdSel.selectedIndex];
+    window.onOpdChange = async function () {
+      const opdSel = document.getElementById('opdSelect');
+      const opdId = opdSel.value;
+      const opdOpt = opdSel.options[opdSel.selectedIndex];
       document.getElementById('opdError').textContent = '';
       document.getElementById('doctorSelect').innerHTML = '<option value="">Loading doctors...</option>';
-      document.getElementById('slotSelect').innerHTML   = '<option value="">Select doctor & date first</option>';
+      document.getElementById('slotSelect').innerHTML = '<option value="">Select doctor & date first</option>';
       if (document.getElementById('slotHint')) document.getElementById('slotHint').textContent = '';
 
       if (!opdId) { selectedOpd = null; return; }
 
       selectedOpd = {
-        id:   opdId,
+        id: opdId,
         name: opdOpt.dataset.name,
         dept: opdOpt.dataset.dept,
-        fee:  parseInt(opdOpt.dataset.fee || 0),
+        fee: parseInt(opdOpt.dataset.fee || 0),
       };
 
       const { data: doctors } = await supabase
@@ -779,23 +1173,23 @@
       document.getElementById('doctorSelect').innerHTML =
         '<option value="">Select doctor</option>' +
         opdDoctors.map(d =>
-          `<option value="${d.id}" data-name="${d.name}">${d.name}${d.speciality ? ' — '+d.speciality : ''}</option>`
+          `<option value="${d.id}" data-name="${d.name}">${d.name}${d.speciality ? ' — ' + d.speciality : ''}</option>`
         ).join('');
     };
 
     /* ── LOAD SLOTS ── */
-    window.loadSlots = async function() {
-      const drSel   = document.getElementById('doctorSelect');
-      const drId    = drSel.value;
-      const drOpt   = drSel.options[drSel.selectedIndex];
-      const drName  = drOpt?.dataset?.name || drSel.value;
-      const date    = document.getElementById('apptDate').value;
+    window.loadSlots = async function () {
+      const drSel = document.getElementById('doctorSelect');
+      const drId = drSel.value;
+      const drOpt = drSel.options[drSel.selectedIndex];
+      const drName = drOpt?.dataset?.name || drSel.value;
+      const date = document.getElementById('apptDate').value;
       const slotSel = document.getElementById('slotSelect');
-      const hint    = document.getElementById('slotHint');
+      const hint = document.getElementById('slotHint');
 
       document.getElementById('doctorError').textContent = '';
-      document.getElementById('dateError').textContent   = '';
-      document.getElementById('slotError').textContent   = '';
+      document.getElementById('dateError').textContent = '';
+      document.getElementById('slotError').textContent = '';
 
       if (!drId || !date) {
         slotSel.innerHTML = '<option value="">Select doctor & date first</option>';
@@ -831,10 +1225,10 @@
         .eq('doctor_name', drName);
 
       const map = {};
-      (booked || []).forEach(s => { map[s.slot_time] = { booked:s.booked_count, max:s.max_count }; });
+      (booked || []).forEach(s => { map[s.slot_time] = { booked: s.booked_count, max: s.max_count }; });
 
       const isToday = date === TODAY;
-      const now     = new Date();
+      const now = new Date();
       const curMins = now.getHours() * 60 + now.getMinutes() + 30;
 
       function isPast(slotStr) {
@@ -842,7 +1236,7 @@
         const [timePart, period] = slotStr.split(' ');
         let [h, m] = timePart.split(':').map(Number);
         if (period === 'PM' && h !== 12) h += 12;
-        if (period === 'AM' && h === 12) h  = 0;
+        if (period === 'AM' && h === 12) h = 0;
         return (h * 60 + m) <= curMins;
       }
 
@@ -851,15 +1245,15 @@
 
       slotSel.innerHTML = '<option value="">Choose a time slot</option>' +
         ALL_SLOTS.map(slot => {
-          const d    = map[slot];
-          const bk   = d?.booked || 0;
-          const mx   = d?.max    || maxPerSlot;
+          const d = map[slot];
+          const bk = d?.booked || 0;
+          const mx = d?.max || maxPerSlot;
           const full = bk >= mx;
           const past = isPast(slot);
           if (full) return `<option value="${slot}" disabled>${slot} — Full (${bk}/${mx})</option>`;
           if (past) return `<option value="${slot}" disabled>${slot} — Time passed</option>`;
           available++;
-          return `<option value="${slot}">${slot} — ${mx-bk} slots left</option>`;
+          return `<option value="${slot}">${slot} — ${mx - bk} slots left</option>`;
         }).join('');
 
       if (hint) {
@@ -871,7 +1265,7 @@
     };
 
     /* ── CONFIRM BOOKING ── */
-    window.confirmBooking = async function() {
+    window.confirmBooking = async function () {
       const btn = document.getElementById('bookBtn');
 
       /* Validate */
@@ -882,22 +1276,22 @@
         if (!name) { showToast('Please enter patient name.', 'error'); valid = false; }
       }
 
-      const hospId  = document.getElementById('hospitalSelect').value;
-      const opdId   = document.getElementById('opdSelect').value;
-      const drSel   = document.getElementById('doctorSelect');
-      const drId    = drSel.value;
-      const drOpt   = drSel.options[drSel.selectedIndex];
-      const drName  = drOpt?.dataset?.name || '';
-      const date    = document.getElementById('apptDate').value;
-      const slot    = document.getElementById('slotSelect').value;
-      const scheme  = document.getElementById('schemeSelect').value;
-      const notes   = document.getElementById('apptNotes').value.trim();
+      const hospId = document.getElementById('hospitalSelect').value;
+      const opdId = document.getElementById('opdSelect').value;
+      const drSel = document.getElementById('doctorSelect');
+      const drId = drSel.value;
+      const drOpt = drSel.options[drSel.selectedIndex];
+      const drName = drOpt?.dataset?.name || '';
+      const date = document.getElementById('apptDate').value;
+      const slot = document.getElementById('slotSelect').value;
+      const scheme = document.getElementById('schemeSelect').value;
+      const notes = document.getElementById('apptNotes').value.trim();
 
       if (!hospId) { document.getElementById('hospitalError').textContent = 'Select a hospital.'; valid = false; }
-      if (!opdId)  { document.getElementById('opdError').textContent      = 'Select an OPD.'; valid = false; }
-      if (!drId)   { document.getElementById('doctorError').textContent   = 'Select a doctor.'; valid = false; }
-      if (!date)   { document.getElementById('dateError').textContent     = 'Select a date.'; valid = false; }
-      if (!slot)   { document.getElementById('slotError').textContent     = 'Select a time slot.'; valid = false; }
+      if (!opdId) { document.getElementById('opdError').textContent = 'Select an OPD.'; valid = false; }
+      if (!drId) { document.getElementById('doctorError').textContent = 'Select a doctor.'; valid = false; }
+      if (!date) { document.getElementById('dateError').textContent = 'Select a date.'; valid = false; }
+      if (!slot) { document.getElementById('slotError').textContent = 'Select a time slot.'; valid = false; }
 
       if (!valid) return;
 
@@ -905,8 +1299,8 @@
 
       try {
         /* Step 1 — Ensure patient record exists */
-        let curaahPatientId  = null;
-        let walkInPatientId  = null;
+        let curaahPatientId = null;
+        let walkInPatientId = null;
 
         if (patientMode === 'existing') {
           curaahPatientId = existingPatient.id;
@@ -916,11 +1310,11 @@
 
         } else if (patientMode === 'new') {
           /* Create walk-in patient record */
-          const phone  = document.getElementById('patientPhone').value.trim();
-          const name   = document.getElementById('newName').value.trim();
+          const phone = document.getElementById('patientPhone').value.trim();
+          const name = document.getElementById('newName').value.trim();
           const gender = document.getElementById('newGender').value;
-          const age    = parseInt(document.getElementById('newAge').value) || null;
-          const city   = document.getElementById('newCity').value.trim() || null;
+          const age = parseInt(document.getElementById('newAge').value) || null;
+          const city = document.getElementById('newCity').value.trim() || null;
 
           const { data: newWalkIn, error: wiErr } = await supabase
             .from('walk_in_patients').insert({
@@ -928,32 +1322,32 @@
             }).select().single();
 
           if (wiErr) throw new Error('Failed to register patient: ' + wiErr.message);
-          walkInPatient   = newWalkIn;
+          walkInPatient = newWalkIn;
           walkInPatientId = newWalkIn.id;
         }
 
         /* Step 2 — Book appointment */
-        const opdSel  = document.getElementById('opdSelect');
-        const opdOpt  = opdSel.options[opdSel.selectedIndex];
+        const opdSel = document.getElementById('opdSelect');
+        const opdOpt = opdSel.options[opdSel.selectedIndex];
         const opdName = opdOpt?.dataset?.name || '';
-        const fee     = parseInt(opdOpt?.dataset?.fee || 0);
+        const fee = parseInt(opdOpt?.dataset?.fee || 0);
 
         const { data: appt, error: apptErr } = await supabase
           .from('appointments').insert({
-            patient_id:          curaahPatientId,
-            walk_in_patient_id:  walkInPatientId,
-            hospital_id:         hospId,
-            opd_id:              opdId,
-            opd_name:            opdName,
-            doctor_name:         drName,
-            appointment_date:    date,
-            time_slot:           slot,
-            status:              'confirmed',
-            scheme_used:         scheme || null,
-            notes:               notes  || null,
-            fee_amount:          fee,
-            booked_by:           'proxy',
-            proxy_agent_id:      currentAgent.id,
+            patient_id: curaahPatientId,
+            walk_in_patient_id: walkInPatientId,
+            hospital_id: hospId,
+            opd_id: opdId,
+            opd_name: opdName,
+            doctor_name: drName,
+            appointment_date: date,
+            time_slot: slot,
+            status: 'confirmed',
+            scheme_used: scheme || null,
+            notes: notes || null,
+            fee_amount: fee,
+            booked_by: 'proxy',
+            proxy_agent_id: currentAgent.id,
           }).select().single();
 
         if (apptErr) throw new Error(apptErr.message);
@@ -990,15 +1384,15 @@
           <div class="slip-row"><span class="slip-label">Hospital</span><span class="slip-value">${hospName}</span></div>
           <div class="slip-row"><span class="slip-label">OPD</span><span class="slip-value">${opdName}</span></div>
           <div class="slip-row"><span class="slip-label">Doctor</span><span class="slip-value">${drName}</span></div>
-          <div class="slip-row"><span class="slip-label">Date</span><span class="slip-value">${new Date(date).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</span></div>
+          <div class="slip-row"><span class="slip-label">Date</span><span class="slip-value">${new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
           <div class="slip-row"><span class="slip-label">Time</span><span class="slip-value">${slot}</span></div>
-          <div class="slip-row"><span class="slip-label">Fee</span><span class="slip-value">${fee > 0 ? '₹'+fee+' at hospital' : 'Free'}</span></div>
+          <div class="slip-row"><span class="slip-label">Fee</span><span class="slip-value">${fee > 0 ? '₹' + fee + ' at hospital' : 'Free'}</span></div>
           <div class="slip-row"><span class="slip-label">Booked by</span><span class="slip-value" style="color:var(--warning);">⚡ ${currentAgent.name}</span></div>
           <div class="slip-row"><span class="slip-label">Status</span><span class="slip-value" style="color:var(--success);">Confirmed ✓</span></div>`;
 
-        document.getElementById('patientStep').style.display   = 'none';
-        document.getElementById('phonePanel').style.display    = 'none';
-        document.getElementById('successSection').style.display= 'block';
+        document.getElementById('patientStep').style.display = 'none';
+        document.getElementById('phonePanel').style.display = 'none';
+        document.getElementById('successSection').style.display = 'block';
 
         await loadAgentStats();
         showToast('Appointment booked!', 'success');
@@ -1010,11 +1404,11 @@
     };
 
     /* ── BOOK ANOTHER ── */
-    window.bookAnother = function() {
+    window.bookAnother = function () {
       resetPatient();
       document.getElementById('successSection').style.display = 'none';
-      document.getElementById('phonePanel').style.display     = 'block';
-      document.getElementById('hospitalSearchInput').value    = '';
+      document.getElementById('phonePanel').style.display = 'block';
+      document.getElementById('hospitalSearchInput').value = '';
       renderHospitalOptions(allHospitals);
     };
 
@@ -1024,16 +1418,16 @@
       el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Loading...</div>';
 
       const { data: appts } = await supabase
-  .from('appointments')
-  .select(`
+        .from('appointments')
+        .select(`
     *,
     hospitals!hospital_id(name),
     walk_in_patients(full_name, phone),
     patients(full_name, phone)
   `)
-  .eq('proxy_agent_id', currentAgent.id)
-  .eq('appointment_date', TODAY)
-  .order('created_at', { ascending: false });
+        .eq('proxy_agent_id', currentAgent.id)
+        .eq('appointment_date', TODAY)
+        .order('created_at', { ascending: false });
 
       if (!appts || !appts.length) {
         el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No bookings made today yet.</div>`;
@@ -1042,8 +1436,8 @@
 
       el.innerHTML = appts.map(a => {
         const pName = a.patients?.full_name || a.walk_in_patients?.full_name || '—';
-        const pPhone= a.patients?.phone     || a.walk_in_patients?.phone     || '—';
-        const sColor= a.status === 'confirmed' ? 'var(--success)' : a.status === 'cancelled' ? 'var(--danger)' : 'var(--text-muted)';
+        const pPhone = a.patients?.phone || a.walk_in_patients?.phone || '—';
+        const sColor = a.status === 'confirmed' ? 'var(--success)' : a.status === 'cancelled' ? 'var(--danger)' : 'var(--text-muted)';
         return `
           <div class="history-item">
             <div>
@@ -1078,4 +1472,5 @@
     }
   </script>
 </body>
+
 </html>
