@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
   <title>Attendant Portal — Curaah</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
@@ -734,7 +742,7 @@
 
       const { data: tokens } = await supabase
         .from('tokens')
-        .select('*, patients(full_name), appointments(time_slot, doctor_name)')
+        .select('*, patients(full_name), appointments(time_slot, doctor_name, walk_in_patient_id, walk_in_patients(full_name))')
         .eq('hospital_id', currentHospital.id)
         .eq('opd_id', selectedOpdId)
         .gte('checked_in_at', TODAY + 'T00:00:00')
@@ -772,7 +780,10 @@
       document.getElementById('noTokenCard').style.display     = 'none';
 
       const opdName     = selectedOpd?.name || 'OPD';
-      const patientName = token.is_offline ? 'Walk-in Patient' : (token.patients?.full_name || 'Patient');
+      /* Resolve patient name: Curaah patient → patients join; walk-in → appointments → walk_in_patients join */
+      const walkInName  = token.appointments?.walk_in_patients?.full_name;
+      const patientName = token.patients?.full_name || walkInName
+        || (token.is_offline ? 'Walk-in Patient' : 'Patient');
       const doctor      = token.appointments?.doctor_name || token.opd_department || '—';
       const slot        = token.appointments?.time_slot || '—';
 
@@ -818,10 +829,13 @@
       el.innerHTML = `
         <div class="queue-list">
           ${sorted.map(t => {
-            const isOffline = t.is_offline;
-            const name      = isOffline ? 'Walk-in Patient' : (t.patients?.full_name || 'Patient');
-            const doctor    = t.appointments?.doctor_name || t.opd_department || '—';
-            const slot      = t.appointments?.time_slot || '—';
+            const isOffline  = t.is_offline;
+            /* Resolve name: Curaah patient → patients join; walk-in/proxy → appointment → walk_in_patients join */
+            const walkInName = t.appointments?.walk_in_patients?.full_name;
+            const name       = t.patients?.full_name || walkInName
+              || (isOffline ? 'Walk-in Patient' : 'Patient');
+            const doctor     = t.appointments?.doctor_name || t.opd_department || '—';
+            const slot       = t.appointments?.time_slot || '—';
 
             let itemClass  = 'waiting';
             let badgeClass = 'badge-waiting';
@@ -946,5 +960,16 @@
     checkSession();
   </script>
 
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
 </body>
 </html>
