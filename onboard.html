@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Register your hospital, lab, or clinic on Curaah — free onboarding for facilities in Nangal, Punjab." />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+  <meta name="description" content="Register your hospital, lab, or clinic on Curaah — free onboarding for facilities in Punjab." />
   <title>Register Your Facility — Curaah</title>
 
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
@@ -583,7 +591,7 @@
         <h1>
           Join Curaah.<br/>
           Reach every patient in<br/>
-          <span>Nangal for free.</span>
+          <span>Punjab for free.</span>
         </h1>
         <p class="onboard-hero-desc">
           Register your hospital, lab, medical store, sarai, or dispensary on Curaah at zero cost. We set up your profile, train your staff, and connect you with thousands of patients in your area.
@@ -714,7 +722,7 @@
             <div class="form-group">
               <label class="form-label" for="facilityName">Facility Name *</label>
               <input class="form-input" type="text" id="facilityName"
-                placeholder="e.g. NFL Hospital, Nangal City Clinic"
+                placeholder="e.g. City Hospital, Punjab Clinic"
                 required />
               <span class="form-error" id="facilityNameError"></span>
             </div>
@@ -773,7 +781,7 @@
               <div class="form-group">
                 <label class="form-label" for="city">City / Area *</label>
                 <input class="form-input" type="text" id="city"
-                  placeholder="e.g. Nangal" required />
+                  placeholder="e.g. Punjab" required />
                 <span class="form-error" id="cityError"></span>
               </div>
               <div class="form-group">
@@ -960,7 +968,7 @@
             </div>
             <div class="success-step">
               <div class="success-step-num">4</div>
-              Patients in Nangal can find and book you
+              Patients in Punjab can find and book you
             </div>
           </div>
           <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;">
@@ -990,7 +998,7 @@
             Is Curaah really free for hospitals? <span class="faq-arrow">▼</span>
           </button>
           <div class="faq-answer">
-            Yes — completely free for all early partner facilities in Nangal. There is no subscription fee, no commission on appointments, and no hidden charges. Our goal right now is to build the network and prove value. Revenue model will be discussed transparently with all partners before anything changes.
+            Yes — completely free for all early partner facilities in Punjab. There is no subscription fee, no commission on appointments, and no hidden charges. Our goal right now is to build the network and prove value. Revenue model will be discussed transparently with all partners before anything changes.
           </div>
         </div>
 
@@ -1067,7 +1075,7 @@
           curaah
         </div>
         <p class="footer-brand-desc">Your health, your control. A unified platform connecting patients, hospitals, labs, and health schemes across Punjab.</p>
-        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+        <p class="footer-built">Built in <span>Punjab, India</span> 🇮🇳</p>
       </div>
       <div>
         <div class="footer-col-title">Platform</div>
@@ -1091,7 +1099,7 @@
         <div class="footer-col-title">Contact</div>
         <ul class="footer-col-links">
           <li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li>
-          <li><a href="#">Nangal, Punjab 140126</a></li>
+          <li><a href="#">Punjab, India</a></li>
           <li><a href="#">WhatsApp Us</a></li>
         </ul>
       </div>
@@ -1227,5 +1235,16 @@
 
   </script>
 
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
 </body>
 </html>
