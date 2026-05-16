@@ -1844,64 +1844,136 @@
         };
 
         /* ── MANUAL CHECK-IN ── */
-        window.findPatient = async function () {
-            const phone = document.getElementById('checkinPhone').value.trim();
-            const date = document.getElementById('checkinDate').value || TODAY;
-            if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
+        window.findPatient = async function() {
+  const phone = document.getElementById('checkinPhone').value.trim();
+  const date  = document.getElementById('checkinDate').value || TODAY;
+  if (!isValidPhone(phone)) { showToast('Enter a valid 10-digit number.', 'error'); return; }
 
-            const { data: patient } = await supabase.from('patients').select('id, full_name').eq('phone', phone).single();
-            if (!patient) { showToast('No Curaah patient found with this number.', 'error'); return; }
+  /* Check patients table first */
+  let patientId   = null;
+  let patientName = null;
+  let isWalkIn    = false;
 
-            const { data: appt } = await supabase.from('appointments').select('*')
-                .eq('patient_id', patient.id).eq('hospital_id', currentHospital.id)
-                .eq('appointment_date', date).neq('status', 'cancelled')
-                .order('created_at', { ascending: false }).limit(1).single();
+  const { data: curaahPatient } = await supabase
+    .from('patients').select('id, full_name').eq('phone', phone).single();
 
-            if (!appt) { showToast('No appointment found for this patient today.', 'error'); return; }
+  if (curaahPatient) {
+    patientId   = curaahPatient.id;
+    patientName = curaahPatient.full_name;
 
-            checkinApptId = appt.id; checkinPatId = patient.id; checkinOpdId = appt.opd_id || null;
-            const opd = hospitalOpds.find(o => o.id === checkinOpdId);
+  } else {
+    /* Check walk_in_patients table */
+    const { data: walkIn } = await supabase
+      .from('walk_in_patients').select('id, full_name').eq('phone', phone).single();
 
-            document.getElementById('checkinPatientName').textContent = patient.full_name;
-            document.getElementById('checkinApptInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
-            document.getElementById('checkinOpdInfo').textContent = opd ? `OPD: ${opd.name}` : 'OPD not assigned';
-            document.getElementById('checkinStatus').textContent = statusText(appt.status);
-            document.getElementById('checkinStatus').className = `status-pill ${statusClass(appt.status)}`;
-            document.getElementById('checkinResult').classList.add('show');
-            document.getElementById('tokenResult').classList.remove('show');
-        };
+    if (walkIn) {
+      patientName = walkIn.full_name;
+      isWalkIn    = true;
+    }
+  }
 
-        window.confirmCheckin = async function () {
-            if (!checkinApptId) return;
-            const btn = document.getElementById('checkinConfirmBtn');
-            btn.textContent = 'Processing...'; btn.disabled = true;
+  if (!patientName) {
+    showToast('No patient found with this number on Curaah or walk-in records.', 'error');
+    return;
+  }
 
-            try {
-                const { data: appt } = await supabase.from('appointments')
-                    .update({ status: 'checkedin' }).eq('id', checkinApptId).select().single();
-                const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
-                if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
-                const opd = hospitalOpds.find(o => o.id === resolvedOpdId);
-                const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
-                await supabase.from('tokens').insert({
-                    patient_id: checkinPatId, hospital_id: currentHospital.id,
-                    appointment_id: checkinApptId, opd_id: resolvedOpdId,
-                    token_number: tokenNumber, opd_department: opd?.department || appt.doctor_name,
-                    status: 'waiting', is_offline: false, checked_in_at: new Date().toISOString(),
-                });
-                btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
-                document.getElementById('checkinResult').classList.remove('show');
-                document.getElementById('tokenResult').classList.add('show');
-                document.getElementById('assignedTokenNum').textContent = tokenNumber;
-                document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
-                document.getElementById('assignedOpdInfo').textContent = opd ? `OPD: ${opd.name}` : '';
-                showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
-                await loadOverview();
-            } catch (err) {
-                btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
-                showToast(err.message || 'Failed.', 'error');
-            }
-        };
+  /* Find appointment — search by patient_id OR walk_in_patient lookup */
+  let appt = null;
+
+  if (patientId) {
+    const { data } = await supabase
+      .from('appointments').select('*')
+      .eq('patient_id', patientId)
+      .eq('hospital_id', currentHospital.id)
+      .eq('appointment_date', date)
+      .neq('status', 'cancelled')
+      .order('created_at', { ascending: false })
+      .limit(1).single();
+    appt = data;
+  }
+
+  /* Also search by phone through walk_in_patients for proxy booked */
+  if (!appt) {
+    const { data: walkInRecord } = await supabase
+      .from('walk_in_patients').select('id').eq('phone', phone).single();
+
+    if (walkInRecord) {
+      const { data } = await supabase
+        .from('appointments').select('*')
+        .eq('walk_in_patient_id', walkInRecord.id)
+        .eq('hospital_id', currentHospital.id)
+        .eq('appointment_date', date)
+        .neq('status', 'cancelled')
+        .order('created_at', { ascending: false })
+        .limit(1).single();
+      appt = data;
+    }
+  }
+
+  if (!appt) {
+    showToast('No appointment found for this patient today.', 'error');
+    return;
+  }
+
+  checkinApptId = appt.id;
+  checkinPatId  = patientId;
+  checkinOpdId  = appt.opd_id || null;
+
+  const opd = hospitalOpds.find(o => o.id === checkinOpdId);
+
+  document.getElementById('checkinPatientName').textContent = patientName;
+  document.getElementById('checkinApptInfo').textContent    = `${appt.doctor_name} · ${appt.time_slot}`;
+  document.getElementById('checkinOpdInfo').textContent     = opd ? `OPD: ${opd.name}` : 'OPD not assigned';
+  document.getElementById('checkinStatus').textContent      = statusText(appt.status);
+  document.getElementById('checkinStatus').className        = `status-pill ${statusClass(appt.status)}`;
+  document.getElementById('checkinResult').classList.add('show');
+  document.getElementById('tokenResult').classList.remove('show');
+};
+
+window.confirmCheckin = async function() {
+  if (!checkinApptId) return;
+  const btn = document.getElementById('checkinConfirmBtn');
+  btn.textContent = 'Processing...'; btn.disabled = true;
+
+  try {
+    const { data: appt } = await supabase
+      .from('appointments')
+      .update({ status:'checkedin' })
+      .eq('id', checkinApptId).select().single();
+
+    const resolvedOpdId = checkinOpdId || hospitalOpds[0]?.id;
+    if (!resolvedOpdId) throw new Error('No OPD found. Please add OPDs first.');
+
+    const opd         = hospitalOpds.find(o => o.id === resolvedOpdId);
+    const tokenNumber = await getNextToken(currentHospital.id, resolvedOpdId);
+
+    await supabase.from('tokens').insert({
+      patient_id:     checkinPatId || null,
+      hospital_id:    currentHospital.id,
+      appointment_id: checkinApptId,
+      opd_id:         resolvedOpdId,
+      token_number:   tokenNumber,
+      opd_department: opd?.department || appt.doctor_name,
+      status:         'waiting',
+      is_offline:     false,
+      checked_in_at:  new Date().toISOString(),
+    });
+
+    btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
+    document.getElementById('checkinResult').classList.remove('show');
+    document.getElementById('tokenResult').classList.add('show');
+    document.getElementById('assignedTokenNum').textContent  = tokenNumber;
+    document.getElementById('assignedTokenInfo').textContent = `${appt.doctor_name} · ${appt.time_slot}`;
+    document.getElementById('assignedOpdInfo').textContent   = opd ? `OPD: ${opd.name}` : '';
+
+    showToast(`Token ${tokenNumber} assigned for ${opd?.name || 'OPD'}!`, 'success');
+    await loadOverview();
+
+  } catch (err) {
+    btn.textContent = '✅ Confirm Check-in & Assign Token'; btn.disabled = false;
+    showToast(err.message || 'Failed.', 'error');
+  }
+};
 
         window.resetCheckin = function () {
             checkinApptId = null; checkinPatId = null; checkinOpdId = null;
