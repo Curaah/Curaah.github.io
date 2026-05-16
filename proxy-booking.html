@@ -1024,11 +1024,16 @@
       el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Loading...</div>';
 
       const { data: appts } = await supabase
-        .from('appointments')
-        .select('*, hospitals(name), walk_in_patients(full_name, phone), patients(full_name, phone)')
-        .eq('proxy_agent_id', currentAgent.id)
-        .eq('appointment_date', TODAY)
-        .order('created_at', { ascending: false });
+  .from('appointments')
+  .select(`
+    *,
+    hospitals!hospital_id(name),
+    walk_in_patients(full_name, phone),
+    patients(full_name, phone)
+  `)
+  .eq('proxy_agent_id', currentAgent.id)
+  .eq('appointment_date', TODAY)
+  .order('created_at', { ascending: false });
 
       if (!appts || !appts.length) {
         el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--text-muted);font-size:14px;">No bookings made today yet.</div>`;
