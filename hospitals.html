@@ -3,7 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Find hospitals, labs, medical stores, sarais and dispensaries in Nangal, Punjab on Curaah." />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+  <meta name="description" content="Find hospitals, labs, medical stores, sarais and dispensaries in Punjab on Curaah." />
   <title>Find Hospitals — Curaah</title>
 
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
@@ -449,7 +457,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="hospitals.html">Hospitals</a></li>
-      <li><a href="onboard.html">For Facilities</a></li>
+      <li><a href="onboard.html">For Partners</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -465,7 +473,7 @@
   <div class="nav-mobile" id="mobileMenu">
     <a href="index.html">Home</a>
     <a href="hospitals.html">Hospitals</a>
-    <a href="onboard.html">For Hospitals & Labs</a>
+    <a href="onboard.html">For Partners</a>
     <a href="login.html">Login</a>
     <a href="register.html">Register Free →</a>
   </div>
@@ -495,7 +503,7 @@
       <!-- City filter -->
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
         <button class="city-btn active" onclick="setCity(this, 'all')">All Cities</button>
-        <button class="city-btn" onclick="setCity(this, 'nangal')">Nangal</button>
+        <button class="city-btn" onclick="setCity(this, 'punjab')">Punjab</button>
         <button class="city-btn" onclick="setCity(this, 'anandpur')">Anandpur Sahib</button>
         <button class="city-btn" onclick="setCity(this, 'ropar')">Ropar</button>
         <button class="city-btn" onclick="setCity(this, 'morinda')">Morinda</button>
@@ -546,11 +554,13 @@
         <p class="results-count" id="resultsCount">
   Showing <strong>0 facilities</strong> in all areas
 </p>
-        <select class="sort-select">
-          <option>Sort: Nearest first</option>
-          <option>Sort: A to Z</option>
-          <option>Sort: Recently added</option>
-        </select>
+        <!-- Sort select (now functional) -->
+      <select class="sort-select" id="sortSelect" onchange="handleSort(this.value)">
+        <option value="name">Sort: A to Z</option>
+        <option value="beds">Sort: Beds available</option>
+        <option value="doctors">Sort: Most doctors</option>
+        <option value="newest">Sort: Recently added</option>
+      </select>
       </div>
 
       <!-- Hospitals Grid -->
@@ -562,7 +572,7 @@
           No hospitals onboarded yet
         </div>
         <p class="empty-state-desc" id="emptyDesc">
-          We are actively reaching out to hospitals, labs, and clinics in Nangal. Once they join Curaah, their full profile — doctors, timings, bed availability, and insurance support — will appear right here.
+          We are actively reaching out to hospitals, labs, and clinics in Punjab. Once they join Curaah, their full profile — doctors, timings, bed availability, and insurance support — will appear right here.
         </p>
         <div class="empty-state-actions">
           <a href="onboard.html" class="btn btn-primary">Register Your Facility</a>
@@ -573,36 +583,36 @@
       <!-- Category Overview Cards -->
       <div style="margin-top: 40px;">
         <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:14px;letter-spacing:0.5px;">BROWSE BY CATEGORY</p>
-        <div class="categories-grid">
+        <div class="categories-grid" id="categoriesGrid">
           <div class="category-card" onclick="setFilterFromCard('hospital')">
             <div class="category-card-icon">🏥</div>
             <div class="category-card-name">Hospitals</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-hospital">Loading...</div>
           </div>
           <div class="category-card" onclick="setFilterFromCard('laboratory')">
             <div class="category-card-icon">🔬</div>
             <div class="category-card-name">Laboratories</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-laboratory">Loading...</div>
           </div>
           <div class="category-card" onclick="setFilterFromCard('medical-store')">
             <div class="category-card-icon">💊</div>
             <div class="category-card-name">Medical Stores</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-medical-store">Loading...</div>
           </div>
           <div class="category-card" onclick="setFilterFromCard('sarai')">
             <div class="category-card-icon">🏨</div>
             <div class="category-card-name">Sarais</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-sarai">Loading...</div>
           </div>
           <div class="category-card" onclick="setFilterFromCard('dispensary')">
             <div class="category-card-icon">🩺</div>
             <div class="category-card-name">Dispensary / PHC</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-dispensary">Loading...</div>
           </div>
           <div class="category-card" onclick="setFilterFromCard('diagnostic')">
             <div class="category-card-icon">📡</div>
             <div class="category-card-name">Diagnostic Centres</div>
-            <div class="category-card-count">0 onboarded</div>
+            <div class="category-card-count" id="catCount-diagnostic">Loading...</div>
           </div>
         </div>
       </div>
@@ -636,21 +646,21 @@
 </div>
       </div>
 
-      <!-- Notify me banner -->
+      <!-- Partner with Curaah banner (replaces stale "notify me" since hospitals are live) -->
       <div class="notify-banner">
         <div class="notify-banner-text">
-          <h3>Get notified when hospitals join</h3>
-          <p>Enter your phone number and we will WhatsApp you when the first hospital in Nangal goes live on Curaah.</p>
+          <h3>🏥 Is your facility not listed?</h3>
+          <p>Register your hospital, lab, dispensary, or diagnostic centre on Curaah — free setup, free for life. We’ll visit within 24 hours.</p>
         </div>
-        <div class="notify-form">
-          <input
-            type="tel"
-            class="notify-input"
-            id="notifyPhone"
-            placeholder="Your WhatsApp number"
-            maxlength="10"
-          />
-          <button class="btn btn-primary" onclick="handleNotify()">Notify Me</button>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+          <a href="onboard.html" class="btn btn-primary">Register Your Facility →</a>
+          <!-- Quick notify for patients -->
+          <div class="notify-form" id="notifyFormWrap">
+            <!-- Honeypot -->
+            <input type="text" id="hp_notify" name="website" style="display:none;position:absolute;left:-9999px;" autocomplete="off" tabindex="-1" aria-hidden="true" />
+            <input type="tel" class="notify-input" id="notifyPhone" placeholder="Your WhatsApp number" maxlength="10" />
+            <button class="btn btn-primary" onclick="handleNotify()">Get Updates</button>
+          </div>
         </div>
       </div>
 
@@ -672,7 +682,7 @@
           curaah
         </div>
         <p class="footer-brand-desc">Your health, your control. A unified platform connecting patients, hospitals, labs, and health schemes across Punjab.</p>
-        <p class="footer-built">Built in <span>Nangal, Punjab</span> 🇮🇳</p>
+        <p class="footer-built">Built in <span>Punjab, India</span> 🇮🇳</p>
       </div>
       <div>
         <div class="footer-col-title">Platform</div>
@@ -696,7 +706,7 @@
         <div class="footer-col-title">Contact</div>
         <ul class="footer-col-links">
           <li><a href="mailto:curaahtech@gmail.com">curaahtech@gmail.com</a></li>
-          <li><a href="#">Nangal, Punjab 140126</a></li>
+          <li><a href="#">Punjab, India</a></li>
           <li><a href="#">WhatsApp Us</a></li>
         </ul>
       </div>
@@ -812,94 +822,52 @@
     emptyState.style.display = 'none';
     container.style.display  = 'grid';
 
-    container.innerHTML = filtered.map(h => {
-      const typeLabel = {
-        hospital:        'Hospital',
-        laboratory:      'Laboratory',
-        'medical-store': 'Medical Store',
-        sarai:           'Sarai / Lodge',
-        dispensary:      'Dispensary / PHC',
-        diagnostic:      'Diagnostic Centre',
-      }[h.type] || h.type;
+    container.innerHTML = applySort(filtered).map(h => buildCard(h)).join('');
+  }
 
-      const typeIcon = {
-        hospital:        '🏥',
-        laboratory:      '🔬',
-        'medical-store': '💊',
-        sarai:           '🏨',
-        dispensary:      '🩺',
-        diagnostic:      '📡',
-      }[h.type] || '🏥';
-
-      const badgeColor = {
-        hospital:        'badge-blue',
-        laboratory:      'badge-green',
-        'medical-store': 'badge-orange',
-        sarai:           'badge-navy',
-        dispensary:      'badge-green',
-        diagnostic:      'badge-blue',
-      }[h.type] || 'badge-blue';
-
-      const schemes = Array.isArray(h.schemes_accepted)
-        ? h.schemes_accepted.join(', ').toUpperCase()
-        : '—';
-
-      const specialities = Array.isArray(h.specialities)
-        ? h.specialities.slice(0, 3).join(' · ')
-        : '—';
-
-      const opdTime = h.opd_start && h.opd_end
-        ? `${h.opd_start} – ${h.opd_end}`
-        : 'Timings not set';
-
-      return `
-        <div class="hospital-card" onclick="window.location.href='hospital-profile.html?id=${h.id}'">
-          <div class="hcard-top">
-            <div class="hcard-icon">${typeIcon}</div>
-            <div class="hcard-meta">
-              <div class="hcard-name">${h.name}</div>
-              <div class="hcard-type">${h.address || ''} · ${h.city || ''}</div>
-            </div>
-            <span class="badge ${badgeColor}">${typeLabel}</span>
+  /* ── Shared card builder (used by both renderHospitals and handleSearch) ── */
+  function buildCard(h) {
+    const typeLabel = {
+      hospital:'Hospital', laboratory:'Laboratory', 'medical-store':'Medical Store',
+      sarai:'Sarai / Lodge', dispensary:'Dispensary / PHC', diagnostic:'Diagnostic Centre',
+    }[h.type] || h.type;
+    const typeIcon = {
+      hospital:'🏥', laboratory:'🔬', 'medical-store':'💊',
+      sarai:'🏨', dispensary:'🩺', diagnostic:'📡',
+    }[h.type] || '🏥';
+    const badgeColor = {
+      hospital:'badge-blue', laboratory:'badge-green', 'medical-store':'badge-orange',
+      sarai:'badge-navy', dispensary:'badge-green', diagnostic:'badge-blue',
+    }[h.type] || 'badge-blue';
+    const specialities = Array.isArray(h.specialities) ? h.specialities.slice(0,3).join(' · ') : '—';
+    const opdTime = h.opd_start && h.opd_end ? `${h.opd_start} – ${h.opd_end}` : 'Timings not set';
+    return `
+      <div class="hospital-card" onclick="window.location.href='hospital-profile.html?id=${h.id}'">
+        <div class="hcard-top">
+          <div class="hcard-icon">${typeIcon}</div>
+          <div class="hcard-meta">
+            <div class="hcard-name">${h.name}</div>
+            <div class="hcard-type">${h.address || ''} · ${h.city || ''}</div>
           </div>
-          <div class="hcard-stats">
-            <div class="hcard-stat">
-              <div class="hcard-stat-num">${h.doctor_count || 0}</div>
-              <div class="hcard-stat-label">Doctors</div>
-            </div>
-            <div class="hcard-stat">
-              <div class="hcard-stat-num">${h.beds_available ?? h.bed_count ?? 0}</div>
-              <div class="hcard-stat-label">Beds free</div>
-            </div>
-            <div class="hcard-stat">
-              <div class="hcard-stat-num">${h.opd_days || '—'}</div>
-              <div class="hcard-stat-label">OPD days</div>
-            </div>
-          </div>
-          <div style="padding:10px 20px;font-size:11px;color:var(--text-muted);
-            border-bottom:1px solid var(--border-card);">
-            ${specialities}
-          </div>
-          <div class="hcard-footer">
-            <span class="hcard-time">OPD · ${opdTime}</span>
-            <button class="btn-sm"
-              onclick="event.stopPropagation();
-              window.location.href='hospital-profile.html?id=${h.id}'">
-              View & Book
-            </button>
-          </div>
+          <span class="badge ${badgeColor}">${typeLabel}</span>
         </div>
-      `;
-    }).join('');
+        <div class="hcard-stats">
+          <div class="hcard-stat"><div class="hcard-stat-num">${h.doctor_count || 0}</div><div class="hcard-stat-label">Doctors</div></div>
+          <div class="hcard-stat"><div class="hcard-stat-num">${h.beds_available ?? h.bed_count ?? 0}</div><div class="hcard-stat-label">Beds free</div></div>
+          <div class="hcard-stat"><div class="hcard-stat-num">${h.opd_days || '—'}</div><div class="hcard-stat-label">OPD days</div></div>
+        </div>
+        <div style="padding:10px 20px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border-card);">${specialities}</div>
+        <div class="hcard-footer">
+          <span class="hcard-time">OPD · ${opdTime}</span>
+          <button class="btn-sm" onclick="event.stopPropagation();window.location.href='hospital-profile.html?id=${h.id}'">View &amp; Book</button>
+        </div>
+      </div>`;
   }
 
   /* ── Search ── */
   window.handleSearch = function() {
     const val = document.getElementById('searchInput').value.trim().toLowerCase();
-    if (!val) {
-      renderHospitals();
-      return;
-    }
+    if (!val) { renderHospitals(); return; }
     const filtered = allHospitals.filter(h =>
       h.name.toLowerCase().includes(val) ||
       (h.city && h.city.toLowerCase().includes(val)) ||
@@ -919,50 +887,80 @@
     }
     emptyState.style.display = 'none';
     container.style.display  = 'grid';
-    container.innerHTML = filtered.map(h => `
-      <div class="hospital-card" onclick="window.location.href='hospital-profile.html?id=${h.id}'">
-        <div class="hcard-top">
-          <div class="hcard-icon">🏥</div>
-          <div class="hcard-meta">
-            <div class="hcard-name">${h.name}</div>
-            <div class="hcard-type">${h.city || ''}</div>
-          </div>
-        </div>
-        <div class="hcard-footer">
-          <span class="hcard-time">OPD · ${h.opd_start || '—'} – ${h.opd_end || '—'}</span>
-          <button class="btn-sm">View & Book</button>
-        </div>
-      </div>
-    `).join('');
+    container.innerHTML = applySort(filtered).map(h => buildCard(h)).join('');
   };
 
   document.getElementById('searchInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') window.handleSearch();
   });
 
-  /* ── Notify me ── */
+  /* ── Update category counts dynamically ── */
+  function updateCategoryCounts(hospitals) {
+    const types = ['hospital', 'laboratory', 'medical-store', 'sarai', 'dispensary', 'diagnostic'];
+    types.forEach(type => {
+      const count = hospitals.filter(h => h.type === type).length;
+      const el = document.getElementById(`catCount-${type}`);
+      if (el) el.textContent = count === 0 ? 'None yet' : `${count} listed`;
+    });
+  }
+
+  /* ── Sort handler ── */
+  let currentSort = 'name';
+  window.handleSort = function(val) {
+    currentSort = val;
+    renderHospitals();
+  };
+
+  /* ── Apply sort to filtered list ── */
+  function applySort(list) {
+    return [...list].sort((a, b) => {
+      if (currentSort === 'name')    return a.name.localeCompare(b.name);
+      if (currentSort === 'beds')    return (b.beds_available ?? b.bed_count ?? 0) - (a.beds_available ?? a.bed_count ?? 0);
+      if (currentSort === 'doctors') return (b.doctor_count ?? 0) - (a.doctor_count ?? 0);
+      if (currentSort === 'newest')  return new Date(b.created_at) - new Date(a.created_at);
+      return 0;
+    });
+  }
+
+  /* ── Notify me (updated with bot protection) ── */
+  const NOTIFY_OPEN_TIME = Date.now();
   window.handleNotify = async function() {
+    /* Honeypot */
+    if (document.getElementById('hp_notify')?.value !== '') return;
+    /* Time gate */
+    if (Date.now() - NOTIFY_OPEN_TIME < 2000) return;
+
     const phone = document.getElementById('notifyPhone').value.trim();
     if (!phone || phone.length < 10) {
       showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
       return;
     }
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymgoEUeT_ZT-IXbCM_BVsWLJeXmfI6bxHDo5pvY3NjNjbwtClaFytcU4Q4Ue1Vdqz1ca/exec';
-    await sendToSheet(APPS_SCRIPT_URL, {
-      type: 'notify', phone, source: 'hospitals-page'
-    });
-    showToast('You will be notified on WhatsApp when hospitals go live!', 'success');
+    await sendToSheet(APPS_SCRIPT_URL, { type: 'notify', phone, source: 'hospitals-page' });
+    showToast('Got it! We’ll WhatsApp you with Curaah updates.', 'success');
     document.getElementById('notifyPhone').value = '';
   };
 
   /* ── Init ── */
   async function init() {
     allHospitals = await fetchHospitals();
+    updateCategoryCounts(allHospitals);
     renderHospitals();
   }
 
   init();
 
 </script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
 </body>
 </html>
