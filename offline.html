@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Connection — Curaah</title>
+  <link rel="icon" type="image/png" href="/assets/icons/icon-192.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #060d1f;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      padding-bottom: env(safe-area-inset-bottom, 24px);
+    }
+
+    .wrap {
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+    }
+
+    /* Animated shield */
+    .shield-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shield-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(61,158,255,0.15);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .shield-ring:nth-child(1) { width: 120px; height: 120px; animation-delay: 0s; }
+    .shield-ring:nth-child(2) { width: 90px;  height: 90px;  animation-delay: 0.6s; }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.3; transform: scale(1); }
+      50%      { opacity: 0.8; transform: scale(1.04); }
+    }
+
+    .shield-icon {
+      position: relative;
+      z-index: 2;
+      opacity: 0.5;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    .logo-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: #3d9eff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .offline-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-family: 'Georgia', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .desc {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    .tip-box {
+      background: rgba(61,158,255,0.07);
+      border: 1px solid rgba(61,158,255,0.15);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .tip-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #3d9eff;
+      margin-bottom: 10px;
+    }
+
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .tip-item:last-child { margin-bottom: 0; }
+
+    .tip-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #3d9eff;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #3d9eff;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-retry:hover  { background: #2d8df0; }
+    .btn-retry:active { transform: scale(0.98); }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff4757;
+      display: inline-block;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- Logo -->
+    <div class="shield-wrap">
+      <div class="shield-ring"></div>
+      <div class="shield-ring"></div>
+      <svg class="shield-icon" width="52" height="60" viewBox="0 0 140 160" fill="none">
+        <path d="M70 8 L18 30 L18 90 Q18 135 70 154 Q122 135 122 90 L122 30 Z"
+              fill="#0f1f3d" stroke="#3d9eff" stroke-width="2"/>
+        <path d="M70 38 Q50 58 50 78 Q50 100 70 112 Q90 100 90 78 Q90 58 70 38Z"
+              fill="#3d9eff" opacity="0.6"/>
+        <circle cx="70" cy="88" r="14" fill="white" opacity="0.5"/>
+        <circle cx="70" cy="88" r="7"  fill="#3d9eff" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="logo-name">curaah</div>
+    <div class="logo-tag">Your Health · Your Control</div>
+
+    <div class="offline-icon">📡</div>
+
+    <div class="title">No internet connection</div>
+    <p class="desc">
+      Curaah needs internet to load hospital data and your appointments.
+      Check your connection and try again.
+    </p>
+
+    <div class="tip-box">
+      <div class="tip-title">While you wait</div>
+      <div class="tip-item">
+        <span class="tip-dot"></span>
+        Previously visited pages may still be accessible — press back
+      </div>
+      <div class="tip-item">
+        <span class="tip-dot"></span>
+        Your appointments are saved in your Curaah account and will sync when reconnected
+      </div>
+      <div class="tip-item">
+        <span class="tip-dot"></span>
+        For urgent medical help, call 112 (Emergency) or 104 (Health Helpline)
+      </div>
+    </div>
+
+    <button class="btn-retry" onclick="retryConnection()">
+      🔄 Try Again
+    </button>
+
+    <div class="status-bar">
+      <span class="status-dot"></span>
+      <span id="statusText">Offline</span>
+    </div>
+
+  </div>
+
+  <script>
+    function retryConnection() {
+      const btn = document.querySelector('.btn-retry');
+      btn.textContent = 'Checking connection...';
+      btn.disabled = true;
+
+      /* Try to fetch a tiny resource to check connectivity */
+      fetch('/manifest.json', { cache: 'no-store' })
+        .then(() => {
+          /* Connection restored — go back or reload */
+          if (history.length > 1) {
+            history.back();
+          } else {
+            window.location.href = '/index.html';
+          }
+        })
+        .catch(() => {
+          btn.innerHTML = '🔄 Try Again';
+          btn.disabled = false;
+          document.getElementById('statusText').textContent = 'Still offline — try again shortly';
+        });
+    }
+
+    /* Auto-retry when connection is restored */
+    window.addEventListener('online', () => {
+      document.getElementById('statusText').textContent = 'Connection restored — reloading...';
+      setTimeout(() => {
+        if (history.length > 1) {
+          history.back();
+        } else {
+          window.location.href = '/index.html';
+        }
+      }, 800);
+    });
+
+    /* Show if connection comes back while page is open */
+    window.addEventListener('offline', () => {
+      document.getElementById('statusText').textContent = 'Offline';
+    });
+  </script>
+
+</body>
+</html>
