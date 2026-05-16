@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA: App manifest and mobile config -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Curaah" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
   <title>My Dashboard — Curaah</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
@@ -660,7 +668,7 @@ document.getElementById('statVisits').textContent = uniqueHospitals.length;
 
       const { data: queueTokens } = await supabase
         .from('tokens')
-        .select('token_number, status, is_offline, patients(full_name)')
+        .select('token_number, status, is_offline, patients(full_name), appointments(walk_in_patient_id, walk_in_patients(full_name))')
         .eq('hospital_id', hospitalId)
         .eq('opd_id', opdId)
         .in('status', ['waiting','called'])
@@ -693,7 +701,10 @@ document.getElementById('statVisits').textContent = uniqueHospitals.length;
             ${queueTokens.map(t => {
               const isMe      = t.token_number === myToken.token_number;
               const isOffline = t.is_offline;
-              const name      = isOffline ? 'Walk-in Patient' : (t.patients?.full_name || 'Patient');
+              /* Resolve name: Curaah patient → patients join; walk-in/proxy → appointments → walk_in_patients join */
+              const walkInName = t.appointments?.walk_in_patients?.full_name;
+              const name      = t.patients?.full_name || walkInName
+                || (isOffline ? 'Walk-in Patient' : 'Patient');
               const bgColor   = isMe ? 'rgba(61,158,255,0.1)' : 'var(--off-white)';
               const border    = isMe ? '2px solid var(--electric)' : '1px solid var(--border-card)';
               const dotColor  = t.status === 'called' ? 'var(--success)' : 'var(--border-card)';
@@ -839,5 +850,16 @@ document.getElementById('statVisits').textContent = uniqueHospitals.length;
     initDashboard();
   </script>
 
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
 </body>
 </html>
