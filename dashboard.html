@@ -122,6 +122,43 @@
     .referral-item-card { background: var(--white); border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 12px; }
     .referral-item-card:last-child { margin-bottom: 0; }
 
+    /* --- MASTERPIECE AI CHAT UI --- */
+    #aiChatWindow {
+      scroll-behavior: smooth;
+      background: linear-gradient(180deg, #fafcff 0%, #ffffff 100%);
+    }
+    #aiChatWindow::-webkit-scrollbar { width: 6px; }
+    #aiChatWindow::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+
+    .ai-msg { display: flex; gap: 14px; margin-bottom: 16px; max-width: 88%; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(10px); }
+    .ai-msg.user { margin-left: auto; flex-direction: row-reverse; }
+
+    .ai-msg-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .ai-msg:not(.user) .ai-msg-avatar { background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 100%); color: white; border: 2px solid rgba(61,158,255,0.2); position: relative; }
+    .ai-msg:not(.user) .ai-msg-avatar::after { content:''; position:absolute; top:-2px; left:-2px; right:-2px; bottom:-2px; border-radius:50%; background: linear-gradient(135deg, var(--electric), var(--success)); z-index:-1; filter:blur(8px); opacity:0.4; animation: pulseGlow 3s infinite alternate; }
+    .ai-msg.user .ai-msg-avatar { background: linear-gradient(135deg, #3d9eff 0%, #6366f1 100%); color: white; border: 2px solid rgba(255,255,255,0.5); }
+
+    .ai-msg-bubble { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.05); padding: 16px 20px; border-radius: 20px; font-size: 14.5px; color: var(--text-primary); line-height: 1.6; border-top-left-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+    .ai-msg.user .ai-msg-bubble { background: linear-gradient(135deg, #3d9eff 0%, #2563eb 100%); color: white; border: none; border-top-left-radius: 20px; border-top-right-radius: 4px; box-shadow: 0 8px 24px rgba(61,158,255,0.2); text-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+
+    .ai-doc-card { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid var(--border-card); padding: 14px 16px; border-radius: var(--radius-lg); margin-top: 14px; text-decoration: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); color: inherit; position: relative; overflow: hidden; }
+    .ai-doc-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--electric); transition: width 0.3s ease; }
+    .ai-doc-card:hover { border-color: transparent; box-shadow: 0 10px 30px rgba(61,158,255,0.15); transform: translateY(-2px); }
+    .ai-doc-card:hover::before { width: 100%; opacity: 0.05; }
+
+    .ai-typing-dots { display: flex; gap: 5px; align-items: center; padding: 6px 4px; height: 24px; }
+    .ai-typing-dot { width: 8px; height: 8px; background: linear-gradient(135deg, #3d9eff, #6366f1); border-radius: 50%; animation: masterpieceTyping 1.4s infinite cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; }
+    .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+    .ai-typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .ai-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    .ai-mic-pulse { animation: masterpieceMicPulse 1.5s infinite; }
+    
+    @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseGlow { from { opacity: 0.2; transform: scale(1); } to { opacity: 0.5; transform: scale(1.1); } }
+    @keyframes masterpieceTyping { 0%, 100% { transform: translateY(0) scale(1); opacity:0.5; } 50% { transform: translateY(-4px) scale(1.1); opacity:1; box-shadow: 0 2px 8px rgba(61,158,255,0.4); } }
+    @keyframes masterpieceMicPulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); } 70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
+
     @media (max-width:1024px) { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} }
     @media (max-width:860px)  { .sidebar{transform:translateX(-260px);transition:transform 0.3s;} .sidebar.open{transform:translateX(0);} .dashboard-main{margin-left:0;padding:20px;} .content-grid{grid-template-columns:1fr;} }
     @media (max-width:600px)  { .stats-row{grid-template-columns:repeat(2,1fr);} .quick-actions{grid-template-columns:repeat(2,1fr);} .profile-grid{grid-template-columns:1fr;} .token-queue-info{grid-template-columns:repeat(3,1fr);} }
@@ -164,7 +201,7 @@
         <button class="sidebar-item" onclick="showSection('claims',this)"><span class="sidebar-item-icon">🛡️</span> Insurance Claims</button>
         <button class="sidebar-item" onclick="showSection('records',this)"><span class="sidebar-item-icon">📋</span> Health Records</button>
         <button class="sidebar-item" onclick="showSection('referrals',this)"><span class="sidebar-item-icon">🔗</span> My Referrals</button>
-        <button class="sidebar-item" onclick="showSection('ai',this)"><span class="sidebar-item-icon">🤖</span> AI Assistant<span class="sidebar-item-badge" style="background:var(--warning);">Soon</span></button>
+        <button class="sidebar-item" onclick="showSection('ai',this)"><span class="sidebar-item-icon">🤖</span> AI Assistant<span class="sidebar-item-badge" style="background:var(--electric);">New</span></button>
         <div class="sidebar-section-label">More</div>
         <a class="sidebar-item" href="hospitals.html"><span class="sidebar-item-icon">🏥</span> Find Hospitals</a>
         <button class="sidebar-item" onclick="showSection('profile',this)"><span class="sidebar-item-icon">👤</span> My Profile</button>
@@ -411,13 +448,53 @@
       </div>
 
       <!-- AI -->
-      <div id="section-ai" style="display:none;">
-        <div class="dash-page-header"><div><div class="dash-greeting">Powered by Gemini AI</div><div class="dash-title">AI Health Assistant</div></div><span class="badge badge-blue" style="padding:8px 14px;">Coming Soon</span></div>
-        <div class="panel">
-          <div class="panel-body" style="padding:48px 32px;text-align:center;">
-            <div style="font-size:56px;margin-bottom:20px;">🤖</div>
-            <div style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">AI Assistant is almost here</div>
-            <p style="font-size:15px;color:var(--text-secondary);line-height:1.75;max-width:480px;margin:0 auto;">Describe symptoms by text or voice, upload a report — AI suggests the right OPD and hospital with a direct booking link.</p>
+      <div id="section-ai" style="display:none; height: calc(100vh - var(--nav-height) - 64px); display: flex; flex-direction: column;">
+        <div class="dash-page-header" style="margin-bottom: 16px;">
+          <div><div class="dash-greeting">AI-assisted healthcare guidance</div><div class="dash-title">AI Health Assistant</div></div>
+          <span class="badge badge-blue" style="padding:8px 14px; background: rgba(61,158,255,0.1); color: var(--electric);">Beta</span>
+        </div>
+        
+        <div class="panel" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; margin-bottom: 0;">
+          <div class="panel-header" style="background: var(--off-white);">
+            <div class="panel-title">🤖 Describe your symptoms</div>
+            <span style="font-size:12px; color:var(--text-muted);">Voice supports Hindi & Punjabi</span>
+          </div>
+          
+          <div id="aiChatWindow" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: #fff;">
+            <!-- Welcome message -->
+            <div class="ai-msg">
+              <div class="ai-msg-avatar">🤖</div>
+              <div class="ai-msg-bubble">
+                <p style="margin:0 0 8px;"><strong>Sat Sri Akal! Hello!</strong> I am your Curaah AI Health Guide.</p>
+                <p style="margin:0;">Please describe your symptoms, how long you've had them, and where you are located. You can type below or tap the microphone icon to speak in Hindi, Punjabi, or English.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div style="padding: 16px 20px; background: var(--off-white); border-top: 1px solid var(--border-card);">
+            <div id="aiRecordingIndicator" style="display:none; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; color:var(--danger); font-size:13px; font-weight:600;">
+              <span class="live-dot" style="background:var(--danger);"></span> Powered by Sarvam AI - Recording voice... Click mic to stop.
+            </div>
+            
+            <div id="aiImagePreviewContainer" style="display:none; margin-bottom:12px; position:relative; width:max-content;">
+              <img id="aiImagePreview" src="" style="height:60px; border-radius:8px; border:1px solid var(--border-card);">
+              <button onclick="removeAiImage()" style="position:absolute; top:-8px; right:-8px; background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">✕</button>
+            </div>
+
+            <form id="aiChatForm" onsubmit="handleAiSubmit(event)" style="display: flex; gap: 10px; align-items: flex-end;">
+              <div style="flex: 1; position: relative;">
+                <textarea id="aiInput" placeholder="E.g. Mera kaafi dino se sir dard ho raha hai..." rows="2" style="width:100%; resize:none; padding:12px 16px; border:1px solid var(--border-dark); border-radius:var(--radius-md); font-family:inherit; font-size:14px; outline:none; transition:var(--transition);"></textarea>
+              </div>
+              
+              <input type="file" id="aiImageInput" accept="image/*" style="display:none;" onchange="handleAiImageSelect()">
+              <button type="button" onclick="document.getElementById('aiImageInput').click()" style="width: 44px; height: 44px; border-radius: 50%; background: var(--off-white); border: 1px solid var(--border-dark); color: var(--text-primary); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: var(--transition);" title="Upload Report">📎</button>
+              
+              <button type="button" id="aiMicBtn" onclick="toggleAiRecording()" style="width: 44px; height: 44px; border-radius: 50%; background: var(--white); border: 1px solid var(--border-dark); color: var(--text-primary); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: var(--transition);" title="Voice (Sarvam AI)">🎙️</button>
+              <button type="submit" id="aiSendBtn" style="height: 44px; padding: 0 20px; border-radius: var(--radius-md); background: var(--electric); color: white; border: none; font-weight: 600; cursor: pointer; transition: var(--transition);">Send</button>
+            </form>
+            <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:12px;">
+              This is a general suggestion only. Please consult a doctor for proper diagnosis. In emergencies, call 112.
+            </div>
           </div>
         </div>
       </div>
@@ -450,6 +527,7 @@
   <script src="js/main.js"></script>
   <script type="module">
     import { supabase } from './js/supabase.js';
+    import { AIService } from './js/ai-service.js';
 
     let patientData     = null;
     let tokenChannel    = null;
@@ -845,6 +923,278 @@ document.getElementById('statVisits').textContent = uniqueHospitals.length;
         loadAllAppointments(),
         loadMyToken(),
       ]);
+    }
+
+    /* ── AI ASSISTANT LOGIC (PHASE 1) ── */
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+
+    window.toggleAiRecording = async function() {
+      const micBtn = document.getElementById('aiMicBtn');
+      const ind    = document.getElementById('aiRecordingIndicator');
+
+      if (isRecording) {
+        // Stop recording
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+        }
+        isRecording = false;
+        micBtn.style.color = 'var(--text-primary)';
+        micBtn.style.borderColor = 'var(--border-dark)';
+        micBtn.style.background = 'var(--white)';
+        micBtn.classList.remove('ai-mic-pulse');
+        ind.style.display = 'none';
+      } else {
+        // Start recording
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            stream.getTracks().forEach(t => t.stop());
+            
+            const typingId = 'typing-' + Date.now();
+            appendAiTyping(typingId);
+            
+            try {
+              const transcribedText = await AIService.processAudioToText(audioBlob);
+              removeAiTyping(typingId);
+              if (transcribedText) {
+                document.getElementById('aiInput').value = transcribedText;
+                // Auto submit the transcribed text
+                document.getElementById('aiChatForm').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+              }
+            } catch (err) {
+              removeAiTyping(typingId);
+              showToast('Could not process voice. Please try typing.', 'error');
+            }
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          micBtn.style.color = 'white';
+          micBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+          micBtn.style.borderColor = 'transparent';
+          micBtn.classList.add('ai-mic-pulse');
+          ind.style.display = 'flex';
+        } catch (err) {
+          showToast('Microphone access denied or unavailable.', 'error');
+        }
+      }
+    };
+
+    let aiChatHistory = [];
+    let currentAiImage = null;
+
+    window.handleAiImageSelect = function() {
+      const file = document.getElementById('aiImageInput').files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentAiImage = {
+          mimeType: file.type,
+          base64: e.target.result.split(',')[1],
+          dataUrl: e.target.result
+        };
+        document.getElementById('aiImagePreview').src = e.target.result;
+        document.getElementById('aiImagePreviewContainer').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.removeAiImage = function() {
+      currentAiImage = null;
+      document.getElementById('aiImageInput').value = "";
+      document.getElementById('aiImagePreviewContainer').style.display = 'none';
+    };
+
+    window.handleAiSubmit = async function(e) {
+      e.preventDefault();
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      
+      if (!text && !currentAiImage) return;
+
+      // Render user message visually
+      let userMsgHtml = text;
+      if (currentAiImage) {
+        userMsgHtml += `<br><img src="${currentAiImage.dataUrl}" style="max-width:200px; border-radius:8px; margin-top:8px;">`;
+      }
+      appendAiMessage('user', userMsgHtml, true);
+      
+      const imagePayload = currentAiImage ? { mimeType: currentAiImage.mimeType, base64: currentAiImage.base64 } : null;
+      
+      input.value = '';
+      removeAiImage();
+      
+      // Show typing indicator
+      const typingId = 'typing-' + Date.now();
+      appendAiTyping(typingId);
+      
+      try {
+        const response = await AIService.analyzeSymptoms(text, patientData?.city || 'Punjab', aiChatHistory, imagePayload);
+        removeAiTyping(typingId);
+        
+        // Save user message to history now (after successful send, but we pass it anyway. 
+        // We will just let backend keep context, but actually backend doesn't save it, so we must build it.)
+        aiChatHistory.push({ role: 'user', text: text, image: imagePayload });
+
+        if (response.type === 'question') {
+           // It's a follow-up question
+           appendAiMessage('bot', response.text);
+           aiChatHistory.push({ role: 'bot', text: response.text });
+           return;
+        }
+
+        // Otherwise it's a final triage
+        if (response.isEmergency) {
+          appendAiMessage('bot', `<strong>⚠️ EMERGENCY DETECTED</strong><br/>${response.emergencyMessage}`, true);
+          aiChatHistory.push({ role: 'bot', text: "Emergency detected." });
+          return;
+        }
+
+        const hospHtml = (response.matchedHospitals || []).map(h => `
+          <a href="hospitals.html" class="ai-doc-card">
+            <div>
+              <div style="font-weight:600; color:var(--text-primary); font-size:14px; margin-bottom:2px;">${h.doctor}</div>
+              <div style="font-size:12px; color:var(--electric); font-weight:600;">${h.name}</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${h.availableSlots} slots left</div>
+            </div>
+            <div style="background:var(--off-white); border-radius:var(--radius-md); padding:8px 12px; color:var(--electric); font-weight:600; font-size:12px;">Book</div>
+          </a>
+        `).join('');
+        
+        const tagsHtml = (response.symptomsBreakdown || []).map(t => `<span style="display:inline-block; background:rgba(61,158,255,0.1); color:var(--electric); font-size:11px; padding:2px 8px; border-radius:12px; margin-right:4px;">${t}</span>`).join('');
+        
+        const checklistHtml = (response.patientChecklist || []).map(c => `<li style="margin-bottom:4px; display:flex; gap:6px;"><span style="color:var(--success);">✓</span> <span>${c}</span></li>`).join('');
+
+        const urgencyColor = response.urgencyLevel === 'Urgent' ? 'var(--warning)' : 'var(--success)';
+
+        const responseHtml = `
+          <p style="margin:0 0 16px;">${response.explanation}</p>
+          
+          <div style="background:linear-gradient(145deg, #ffffff, #f8fafc); border:1px solid var(--border-card); border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.03); margin-bottom:16px;">
+            <div style="background:linear-gradient(90deg, #1e293b, #0f1f3d); padding:12px 16px; color:white; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:0.9;">Curaah Smart Triage</span>
+              <span style="font-size:11px; background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:10px;">${response.urgencyLevel || 'Routine'}</span>
+            </div>
+            <div style="padding:16px;">
+              <div style="margin-bottom:12px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Recommended Department</div>
+                <div style="font-size:16px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:6px;"><span style="width:8px; height:8px; border-radius:50%; background:${urgencyColor}; display:inline-block;"></span> ${response.suggestedOpd}</div>
+              </div>
+              
+              <div style="margin-bottom:12px;">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Detected Symptoms</div>
+                <div>${tagsHtml}</div>
+              </div>
+
+              <div style="margin-bottom:12px; padding:10px; background:var(--off-white); border-radius:var(--radius-md); border-left:3px solid var(--electric);">
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:2px;">Doctor Summary</div>
+                <div style="font-size:12px; color:var(--text-primary); line-height:1.5;">"${response.clinicalSummary}"</div>
+              </div>
+
+              <div>
+                <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Visit Checklist</div>
+                <ul style="margin:0; padding:0; list-style:none; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                  ${checklistHtml}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin:0 0 8px; font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Available near you</p>
+          ${hospHtml}
+        `;
+
+        appendAiMessage('bot', responseHtml, true);
+        aiChatHistory.push({ role: 'bot', text: response.explanation });
+      } catch (err) {
+        removeAiTyping(typingId);
+        appendAiMessage('bot', `Sorry, I am having trouble connecting right now. Error: ${err.message}`);
+      }
+    };
+
+    function appendAiMessage(role, text, isHtml = false) {
+      const win = document.getElementById('aiChatWindow');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = role === 'user' ? 'ai-msg user' : 'ai-msg';
+      
+      const avatarStr = role === 'user' ? '👤' : '🤖';
+      const bubbleContent = isHtml ? text : `<p style="margin:0;">${text}</p>`;
+
+      msgDiv.innerHTML = `
+        <div class="ai-msg-avatar">${avatarStr}</div>
+        <div class="ai-msg-bubble">${bubbleContent}</div>
+      `;
+      win.appendChild(msgDiv);
+      win.scrollTop = win.scrollHeight;
+    }
+
+    function appendAiTyping(id) {
+      const win = document.getElementById('aiChatWindow');
+      const msgDiv = document.createElement('div');
+      msgDiv.id = id;
+      msgDiv.className = 'ai-msg';
+      msgDiv.innerHTML = `
+        <div class="ai-msg-avatar">🤖</div>
+        <div class="ai-msg-bubble" style="padding: 10px 14px;">
+          <div class="ai-typing-dots">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+          </div>
+        </div>
+      `;
+      win.appendChild(msgDiv);
+      win.scrollTop = win.scrollHeight;
+    }
+
+    function removeAiTyping(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    // Mock logic layer for Phase 1
+    function simulateAiProcessing(symptomText) {
+      // Very basic keyword mock mapping
+      let opd = 'General Medicine';
+      let doc = 'Dr. Gurpreet Singh';
+      let slots = '5 slots left today';
+
+      const text = symptomText.toLowerCase();
+      if (text.includes('ankh') || text.includes('eye') || text.includes('vision') || text.includes('andhera')) {
+        opd = 'Eye (Ophthalmology)'; doc = 'Dr. Amanpreet Kaur';
+      } else if (text.includes('bone') || text.includes('haddi') || text.includes('pain') || text.includes('dard')) {
+        opd = 'Orthopaedics'; doc = 'Dr. Ramesh Sharma';
+      } else if (text.includes('chest') || text.includes('heart') || text.includes('breathe') || text.includes('saans')) {
+        // Emergency Mock
+        appendAiMessage('bot', `<strong>⚠️ EMERGENCY DETECTED</strong><br/>These symptoms may require urgent medical attention. Please call emergency services (112) or visit the nearest hospital immediately.`, true);
+        return;
+      }
+
+      const responseHtml = `
+        <p style="margin:0 0 10px;">Based on your symptoms, this may require consultation with the <strong>${opd} OPD</strong>.</p>
+        <p style="margin:0 0 8px; font-size:12px; color:var(--text-muted);">Available doctors near your area:</p>
+        <a href="hospitals.html" class="ai-doc-card">
+          <div>
+            <div style="font-weight:600; color:var(--text-primary); font-size:14px; margin-bottom:2px;">${doc}</div>
+            <div style="font-size:12px; color:var(--electric); font-weight:600;">${opd}</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${slots}</div>
+          </div>
+          <div style="background:var(--off-white); border-radius:var(--radius-md); padding:8px 12px; color:var(--electric); font-weight:600; font-size:12px;">Book</div>
+        </a>
+      `;
+
+      appendAiMessage('bot', responseHtml, true);
     }
 
     initDashboard();
