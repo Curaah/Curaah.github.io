@@ -50,9 +50,10 @@ export const AIService = {
    * @param {string} symptomText - The transcribed or typed symptom description
    * @param {string} userCity - (Optional) Patient's city to filter nearby hospitals
    * @param {Array} chatHistory - (Optional) The conversation history array
+   * @param {Object} imagePayload - (Optional) Image attachment {base64, mimeType}
    * @returns {Promise<Object>} - Structured JSON containing guidance or question
    */
-  async analyzeSymptoms(symptomText, userCity = null, chatHistory = []) {
+  async analyzeSymptoms(symptomText, userCity = null, chatHistory = [], imagePayload = null) {
     console.log('[AI Service] Analyzing symptoms:', symptomText);
 
     try {
@@ -60,7 +61,8 @@ export const AIService = {
         body: {
           symptoms: symptomText,
           location: userCity,
-          chatHistory: chatHistory
+          chatHistory: chatHistory,
+          imagePayload: imagePayload
         }
       });
 
