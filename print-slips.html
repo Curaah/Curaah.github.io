@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Print Slip — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      margin: 0; padding: 0; 
+      background: #f0f4f8; 
+      color: #060d1f; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      min-height: 100vh;
+    }
+    
+    /* UI Controls (Hidden during print) */
+    .controls {
+      background: white;
+      width: 100%;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: #3d9eff; color: white; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-secondary { background: #e2e8f0; color: #475569; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    
+    /* Paper Formats */
+    .paper-container {
+      margin: 32px 0;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Format: A4 */
+    .format-a4 {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 20mm;
+      font-size: 14px;
+    }
+    
+    /* Format: Thermal 80mm */
+    .format-thermal {
+      width: 80mm;
+      padding: 6mm;
+      font-size: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    /* Header Styles */
+    .header-a4 {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid #0f1f3d;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .header-thermal {
+      text-align: center;
+      border-bottom: 1px dashed #94a3b8;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .h-name { font-family: 'Georgia', serif; font-weight: 700; color: #060d1f; }
+    .header-a4 .h-name { font-size: 24px; }
+    .header-thermal .h-name { font-size: 16px; }
+    
+    .h-sub { color: #64748b; margin-top: 4px; }
+    .header-a4 .h-sub { font-size: 12px; }
+    .header-thermal .h-sub { font-size: 10px; }
+    
+    /* Content Elements */
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .grid-info {
+      display: grid;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .grid-info.a4 { grid-template-columns: 1fr 1fr; }
+    .grid-info.thermal { grid-template-columns: 1fr; padding: 10px; font-size: 11px; }
+    
+    .info-item label { display: block; font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
+    .info-item span { display: block; font-weight: 600; color: #1e293b; margin-top: 2px; }
+    
+    /* Big Token Number */
+    .big-token-wrap {
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+    }
+    .thermal .big-token-wrap { padding: 10px; border-width: 1px; margin: 10px 0; }
+    .token-label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
+    .token-number { font-size: 56px; font-weight: 700; color: #2563eb; line-height: 1; margin: 10px 0; }
+    .thermal .token-number { font-size: 42px; }
+    
+    /* Prescription / Referral specific */
+    .content-block { margin-bottom: 20px; }
+    .thermal .content-block { margin-bottom: 12px; }
+    .content-text { line-height: 1.6; color: #334155; }
+    .thermal .content-text { line-height: 1.4; }
+    
+    table.med-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .thermal table.med-table { font-size: 10px; }
+    table.med-table th { text-align: left; padding: 8px; border-bottom: 2px solid #e2e8f0; color: #64748b; }
+    table.med-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; }
+    .thermal table.med-table th, .thermal table.med-table td { padding: 4px; }
+    
+    .qr-container { display: flex; justify-content: center; margin: 20px 0; }
+    
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 10px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 10px;
+    }
+    .thermal .footer { margin-top: 20px; border-top: 1px dashed #e2e8f0; }
+
+    /* Print CSS */
+    @media print {
+      body { background: white; margin: 0; padding: 0; display: block; }
+      .controls { display: none !important; }
+      .paper-container { margin: 0; box-shadow: none; }
+      .format-a4 { width: 100%; min-height: auto; padding: 0; }
+      .format-thermal { width: 80mm; padding: 0; border: none; }
+      @page { margin: 10mm; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls (Hide on print) -->
+  <div class="controls">
+    <button class="btn btn-secondary" onclick="window.close()">✕ Close</button>
+    <button class="btn btn-secondary" onclick="toggleFormat()" id="formatBtn">📄 Switch to Thermal Format</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Print Slip</button>
+  </div>
+
+  <!-- Printable Area -->
+  <div class="paper-container format-a4" id="printArea">
+    <!-- Header -->
+    <div class="header-a4" id="headerEl">
+      <div>
+        <div class="h-name" id="hospName">Curaah Health</div>
+        <div class="h-sub" id="hospSub">Digital Health System</div>
+      </div>
+      <div style="text-align: right;" id="docHeaderInfo">
+        <div class="h-sub"><strong id="hospPhone">—</strong></div>
+        <div class="h-sub" id="hospAddress">—</div>
+      </div>
+    </div>
+
+    <!-- Dynamic Content injected here -->
+    <div id="slipContent"></div>
+
+    <!-- Footer -->
+    <div class="footer" id="footerText">
+      Digitally generated by Curaah.
+    </div>
+  </div>
+
+  <script>
+    // Config & State
+    let isThermal = false;
+    let slipType = '';
+    let printData = null;
+
+    // Initialize
+    window.onload = () => {
+      // Get params
+      const urlParams = new URLSearchParams(window.location.search);
+      slipType = urlParams.get('type') || 'token';
+      
+      // Auto-switch to thermal for token slips by default
+      if (slipType === 'token') {
+        toggleFormat();
+      }
+      
+      // Read data from localStorage
+      const dataStr = localStorage.getItem('curaah_print_data');
+      if (dataStr) {
+        try {
+          printData = JSON.parse(dataStr);
+        } catch(e) {
+          console.error("Invalid print data", e);
+        }
+      }
+      
+      if (!printData) {
+        document.getElementById('slipContent').innerHTML = '<div style="padding:40px;text-align:center;color:red;">Error: No print data found. Please try generating the slip again.</div>';
+        return;
+      }
+      
+      renderSlip();
+    };
+
+    function toggleFormat() {
+      isThermal = !isThermal;
+      const area = document.getElementById('printArea');
+      const header = document.getElementById('headerEl');
+      const btn = document.getElementById('formatBtn');
+      
+      if (isThermal) {
+        area.className = 'paper-container format-thermal';
+        header.className = 'header-thermal';
+        btn.innerHTML = '📄 Switch to A4 Format';
+      } else {
+        area.className = 'paper-container format-a4';
+        header.className = 'header-a4';
+        btn.innerHTML = '🧾 Switch to Thermal Format';
+      }
+      
+      if(printData) renderSlip(); // re-render to apply class changes to grid
+    }
+
+    function renderSlip() {
+      // Header Info
+      document.getElementById('hospName').innerText = printData.hospitalName || 'Curaah Health';
+      document.getElementById('hospPhone').innerText = printData.hospitalPhone ? `Ph: ${printData.hospitalPhone}` : '';
+      document.getElementById('hospAddress').innerText = printData.hospitalAddress || '';
+      
+      const content = document.getElementById('slipContent');
+      let html = '';
+      const gridClass = isThermal ? 'grid-info thermal' : 'grid-info a4';
+
+      if (slipType === 'token') {
+        html = `
+          <div class="big-token-wrap">
+            <div class="token-label">Token Number</div>
+            <div class="token-number">${printData.tokenNumber || '—'}</div>
+            <div class="h-sub" style="font-weight:600;color:#060d1f;">${printData.opdName || 'OPD'}</div>
+          </div>
+          <div class="${gridClass}">
+            <div class="info-item"><label>Patient</label><span>${printData.patientName || 'Walk-in Patient'}</span></div>
+            <div class="info-item"><label>Date & Time</label><span>${printData.dateTime || new Date().toLocaleString()}</span></div>
+            <div class="info-item"><label>Doctor</label><span>${printData.doctorName || 'Available Doctor'}</span></div>
+            <div class="info-item"><label>Est. Wait Time</label><span>${printData.waitTime || 'Calculate at counter'}</span></div>
+          </div>
+          <div style="text-align:center;font-size:11px;color:#475569;margin-top:20px;padding:10px;background:#fffbeb;border-radius:8px;">
+            Please wait in the waiting area. Watch the display screen for your token number.
+          </div>
+        `;
+        document.getElementById('footerText').innerText = "Generated by Curaah queue system.";
+      } 
+      else if (slipType === 'appointment') {
+        html = `
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:18px;font-weight:700;margin-bottom:5px;">Appointment Confirmed</div>
+            <div style="color:#64748b;font-size:12px;">Please show this slip at the reception</div>
+          </div>
+          <div class="${gridClass}">
+            <div class="info-item"><label>Patient</label><span>${printData.patientName}</span></div>
+            <div class="info-item"><label>Mobile</label><span>${printData.patientPhone || '—'}</span></div>
+            <div class="info-item"><label>Date</label><span>${printData.date}</span></div>
+            <div class="info-item"><label>Time Slot</label><span>${printData.time}</span></div>
+            <div class="info-item"><label>Department</label><span>${printData.opdName}</span></div>
+            <div class="info-item"><label>Doctor</label><span>${printData.doctorName}</span></div>
+            <div class="info-item"><label>Fee</label><span>${printData.fee ? '₹'+printData.fee : 'Free'}</span></div>
+            <div class="info-item"><label>Status</label><span style="color:#059669;">Confirmed</span></div>
+          </div>
+          <div class="qr-container" id="qrcode"></div>
+        `;
+        document.getElementById('footerText').innerText = "Generated by Curaah appointment system. Scan QR to self check-in.";
+      }
+      else if (slipType === 'prescription') {
+        html = `
+          <div class="${gridClass}" style="margin-bottom:24px;">
+            <div class="info-item"><label>Patient</label><span>${printData.patientName}</span></div>
+            <div class="info-item"><label>Mobile</label><span>${printData.patientPhone}</span></div>
+            <div class="info-item"><label>Date</label><span>${printData.date}</span></div>
+            <div class="info-item"><label>Doctor</label><span>${printData.doctorName}</span></div>
+          </div>
+          
+          <div class="content-block">
+            <div class="section-title">Chief Complaint</div>
+            <div class="content-text">${printData.chiefComplaint || '—'}</div>
+          </div>
+          <div class="content-block">
+            <div class="section-title">Clinical Observations</div>
+            <div class="content-text">${printData.observations || '—'}</div>
+          </div>
+          <div class="content-block">
+            <div class="section-title">Provisional Diagnosis</div>
+            <div class="content-text" style="font-weight:700;color:#2563eb;">${printData.provisionalDiagnosis || '—'}</div>
+          </div>
+          <div class="content-block">
+            <div class="section-title">Prescribed Medications</div>
+            <table class="med-table">
+              <thead><tr><th>Medicine</th><th>Dosage</th><th>Duration</th><th>Instructions</th></tr></thead>
+              <tbody>
+                ${(printData.medications && printData.medications.length) ? 
+                  printData.medications.map(m => `<tr><td><strong>${m.name}</strong></td><td>${m.dosage}</td><td>${m.duration}</td><td>${m.instructions}</td></tr>`).join('') :
+                  `<tr><td colspan="4" style="text-align:center;color:#94a3b8;">No medications</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="content-block" style="margin-top:20px;border-top:1px dashed #e2e8f0;padding-top:16px;">
+            <div class="section-title">Advice</div>
+            <div class="content-text">${printData.advice || '—'}</div>
+          </div>
+          <div class="content-block">
+            <div class="section-title">Follow Up</div>
+            <div class="content-text" style="font-weight:600;">${printData.followUp || '—'}</div>
+          </div>
+          <div style="margin-top:40px;text-align:right;">
+            <div style="font-size:12px;font-weight:700;color:#060d1f;border-top:1px solid #060d1f;display:inline-block;padding-top:5px;">
+              Signature: ${printData.doctorName}
+            </div>
+          </div>
+        `;
+        document.getElementById('footerText').innerHTML = "Digitally generated clinical notes.<br>*This is a clinical suggestion only. Please consult a doctor for proper diagnosis.*";
+      }
+      else if (slipType === 'referral') {
+        html = `
+          <div style="text-align:center;margin-bottom:20px;padding:10px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;color:#1e3a8a;font-weight:700;">
+            MEDICAL REFERRAL LETTER
+          </div>
+          <div class="${gridClass}" style="margin-bottom:20px;">
+            <div class="info-item"><label>Patient Name</label><span>${printData.patientName}</span></div>
+            <div class="info-item"><label>Mobile</label><span>${printData.patientPhone}</span></div>
+            <div class="info-item"><label>Date of Referral</label><span>${printData.date}</span></div>
+            <div class="info-item"><label>Urgency</label><span style="color:${printData.urgency==='Emergency'?'#dc2626':(printData.urgency==='Urgent'?'#d97706':'#059669')}">${printData.urgency || 'Routine'}</span></div>
+          </div>
+          
+          <div class="content-block" style="padding:16px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:20px;">
+            <div class="section-title">Referred To</div>
+            <div style="font-size:16px;font-weight:700;color:#060d1f;margin-bottom:4px;">${printData.referredHospital}</div>
+            <div style="font-size:14px;color:#334155;margin-bottom:2px;">Department: <strong>${printData.referredOpd}</strong></div>
+            <div style="font-size:14px;color:#334155;">Consultant: <strong>${printData.referredDoctor || 'Any Available'}</strong></div>
+            ${printData.appointmentTime ? `<div style="margin-top:10px;padding:8px;background:#f8fafc;border-radius:6px;font-size:13px;"><strong>Appointment Scheduled:</strong> ${printData.appointmentTime}</div>` : ''}
+          </div>
+
+          <div class="content-block">
+            <div class="section-title">Clinical Notes / Reason for Referral</div>
+            <div class="content-text" style="padding:12px;background:#f8fafc;border-left:3px solid #3d9eff;">${printData.notes || '—'}</div>
+          </div>
+          
+          <div class="content-block" style="margin-top:20px;">
+            <div class="section-title">Referred By</div>
+            <div class="content-text"><strong>${printData.referringDoctor}</strong><br>${printData.hospitalName}</div>
+          </div>
+        `;
+        document.getElementById('footerText').innerText = "Generated by Curaah Referral System.";
+      }
+
+      content.innerHTML = html;
+
+      // Render QR if needed
+      if (slipType === 'appointment' && printData.qrData) {
+        setTimeout(() => {
+          document.getElementById('qrcode').innerHTML = '';
+          new QRCode(document.getElementById('qrcode'), {
+            text: printData.qrData,
+            width: isThermal ? 100 : 128,
+            height: isThermal ? 100 : 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+          });
+        }, 100);
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(r => console.log('[SW] Registered:', r.scope))
+          .catch(e => console.log('[SW] Error:', e));
+      });
+    }
+  </script>
+</body>
+</html>
