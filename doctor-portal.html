@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#060d1f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+    <link rel="manifest" href="/manifest.json" />
     <title>Doctor AI Assistant — Curaah</title>
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
     <link rel="stylesheet" href="css/style.css" />
@@ -477,10 +483,10 @@
 
         <!-- Doctor Info -->
         <div class="topbar-right">
-            <div class="doctor-avatar">Dr</div>
+            <div class="doctor-avatar">AI</div>
             <div class="doctor-info">
                 <div class="doctor-name">Dr. AI</div>
-                <div class="doctor-spec">Summarize Notes</div>
+                <div class="doctor-spec">AI Summerize</div>
             </div>
         </div>
 
@@ -607,9 +613,17 @@
             ⚠️ <strong>Review before saving:</strong> AI-generated content may contain inaccuracies. Verify all symptoms and medication dosages.
         </div>
 
-        <button class="btn-save-emr" id="saveBtn" style="display:none;" onclick="saveToEMR()">
-            💾 Save to Patient EMR
-        </button>
+        <div style="display:flex; gap:12px;">
+            <button class="btn-save-emr" id="saveBtn" style="display:none; flex:1;" onclick="saveToEMR()">
+                💾 Save to Patient EMR
+            </button>
+            <button class="btn-save-emr" id="printPrescriptionBtn" style="display:none; background:#3d9eff; flex:1;" onclick="printPrescription()">
+                🖨️ Print Slip
+            </button>
+            <button class="btn-save-emr" id="waPrescriptionBtn" style="display:none; background:#25D366; flex:1;" onclick="waPrescription()">
+                💬 WhatsApp
+            </button>
+        </div>
     </div>
 
 </div>
@@ -698,7 +712,7 @@
             <div style="font-size:11px; color:#4a5568; margin-top:3px;">OPD Digital Health System &amp; Care</div>
         </div>
         <div style="text-align:right; font-size:11px; color:#4a5568; line-height:1.5;">
-            <strong>Dr. AI</strong><br>Summerized Record<br>Curaah HealthTech, Punjab
+            <strong>Dr. AI</strong><br>AI OPD<br>Curaah Demo Hospital, Punjab
         </div>
     </div>
     <div style="background:#f8fafc; border:1px solid #dde6f5; padding:10px 16px; border-radius:6px; margin-bottom:20px; font-size:12px; display:flex; gap:24px; flex-wrap:wrap;">
@@ -717,7 +731,7 @@
         </table>
     </div>
     <div style="margin-bottom:14px;border-top:1px dashed #dde6f5;padding-top:12px;"><div style="font-size:10px;color:#8a9bb0;text-transform:uppercase;font-weight:700;margin-bottom:6px;">Advice &amp; Follow-up</div><div id="pdfAdvice" style="font-size:13px;line-height:1.6;margin-bottom:6px;">—</div><div style="font-size:12px;font-weight:700;">Follow-up: <span id="pdfFollowup" style="font-weight:normal;">—</span></div></div>
-    <div style="margin-top:40px;border-top:1px solid #dde6f5;padding-top:8px;text-align:center;font-size:9px;color:#8a9bb0;line-height:1.5;">Digitally generated prescription by Curaah Health. Always get Verified by Doctor <br>*This is a clinical suggestion only. Please consult a qualified doctor for proper diagnosis.*</div>
+    <div style="margin-top:40px;border-top:1px solid #dde6f5;padding-top:8px;text-align:center;font-size:9px;color:#8a9bb0;line-height:1.5;">Digitally generated prescription by Curaah Health. Verified by Dr. Sharma.<br>*This is a clinical suggestion only. Please consult a qualified doctor for proper diagnosis.*</div>
 </div>
 
 
@@ -844,7 +858,7 @@ window.processNotes = async function () {
     const raw = document.getElementById('rawNotes').value.trim();
     if (!raw && !currentAiImage) { alert('Please dictate notes or upload a report first.'); return; }
 
-    hide('emptyState'); hide('outputContent'); hide('saveBtn'); hide('aiDisclaimer');
+    hide('emptyState'); hide('outputContent'); hide('saveBtn'); hide('printPrescriptionBtn'); hide('waPrescriptionBtn'); hide('aiDisclaimer');
     document.getElementById('aiLoader').style.display = 'flex';
     document.getElementById('analyzeBtn').disabled = true;
 
@@ -865,7 +879,7 @@ window.processNotes = async function () {
         document.getElementById('outFollowup').innerText = result.followUp || 'Not specified';
 
         document.getElementById('aiLoader').style.display = 'none';
-        show('outputContent'); show('saveBtn'); show('aiDisclaimer');
+        show('outputContent'); show('saveBtn'); hide('printPrescriptionBtn'); hide('waPrescriptionBtn'); show('aiDisclaimer');
     } catch (err) {
         console.error('[processNotes]', err);
         alert('Failed to process clinical notes. Check the backend server.');
@@ -931,6 +945,9 @@ window.saveToEMR = async function () {
             if (result.fileUrl) alert(`✅ EMR Saved!\n\nPrescription PDF: ${result.fileUrl}`);
             else if (!pdfToSend) alert('✅ EMR saved to Google Sheets!\n\nPDF was too large — downloaded locally to your device.');
             else alert('✅ EMR saved to Google Sheets!');
+            
+            show('printPrescriptionBtn'); show('waPrescriptionBtn');
+            
             setTimeout(() => { btn.innerHTML = '💾 Save to Patient EMR'; btn.style.background = ''; btn.disabled = false; }, 3500);
         } else {
             throw new Error(result.error || 'Server failure');
@@ -942,6 +959,30 @@ window.saveToEMR = async function () {
         btn.style.background = 'linear-gradient(135deg,#dc2626,#b91c1c)';
         setTimeout(() => { btn.innerHTML = '💾 Save to Patient EMR'; btn.style.background = ''; btn.disabled = false; }, 4000);
     }
+};
+
+window.printPrescription = function() {
+    if (!activePatient || !currentRecord) return;
+    const printData = {
+        patientName: activePatient.name,
+        patientPhone: activePatient.phone,
+        date: new Date().toLocaleString(),
+        doctorName: document.getElementById('doctorName').innerText || 'Doctor',
+        chiefComplaint: currentRecord.chiefComplaint || '',
+        observations: (currentRecord.observations || []).join('; '),
+        provisionalDiagnosis: currentRecord.provisionalDiagnosis || '',
+        medications: currentRecord.medications || [],
+        advice: (currentRecord.advice || []).join('; '),
+        followUp: currentRecord.followUp || ''
+    };
+    localStorage.setItem('curaah_print_data', JSON.stringify(printData));
+    window.open('print-slips.html?type=prescription', '_blank');
+};
+
+window.waPrescription = function() {
+    if (!activePatient) return;
+    const msg = encodeURIComponent(`Hello ${activePatient.name}, your prescription is ready from Curaah Health. View it at curaah.dev`);
+    window.open(`https://wa.me/91${activePatient.phone}?text=${msg}`, '_blank');
 };
 
 // ── Fetch Patient History ─────────────────────────────────────
@@ -1057,6 +1098,14 @@ window.toggleRecord = function (idx) {
     header.classList.toggle('open', !open);
     chevron.classList.toggle('open', !open);
 };
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(r => console.log('[SW] Registered:', r.scope))
+            .catch(e => console.log('[SW] Error:', e));
+    });
+}
 </script>
 
 </body>
