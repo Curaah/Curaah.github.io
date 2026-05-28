@@ -4,7 +4,7 @@
    serves an offline page when disconnected.
    ============================================ */
 
-const CACHE_NAME    = 'curaah-v1';
+const CACHE_NAME    = 'curaah-v2';
 const OFFLINE_URL   = '/offline.html';
 
 /* Static assets to pre-cache on install */
