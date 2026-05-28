@@ -995,6 +995,9 @@
                     <button class="sidebar-item" onclick="window.location.href='proxy-booking.html'">
                         <span class="sidebar-item-icon">⚡</span> Proxy Booking
                     </button>
+                    <button class="sidebar-item" onclick="window.location.href='import.html'">
+                        <span class="sidebar-item-icon">📊</span> Bulk Import
+                    </button>
                 </nav>
                 <div class="sidebar-bottom">
                     <button class="sidebar-item" onclick="handleStaffLogout()" style="color:var(--danger);"><span
@@ -1707,7 +1710,6 @@
 
             const listEl = document.getElementById('tokenQueueList');
             if (!allTokens.length) { listEl.innerHTML = `<div class="table-empty"><div class="table-empty-icon">📟</div>No tokens yet today.</div>`; return; }
-
             listEl.innerHTML = `
         <div style="overflow-x:auto;">
           <table class="appt-table">
@@ -1722,6 +1724,13 @@
                 const sText = { waiting: 'Waiting', called: 'Called', completed: 'Done' }[t.status] || t.status;
                 const walkInName = t.appointments?.walk_in_patients?.full_name;
                 const patientName = t.patients?.full_name || walkInName || (isOffline ? 'Walk-in Patient' : 'Patient');
+                const patientPhone = t.patients?.phone || t.appointments?.walk_in_patients?.phone || '';
+                
+                // Escape single quotes for inline JS
+                const safeName = patientName.replace(/'/g, "\\'");
+                const opdName = (t.opds?.name || t.opd_department || 'OPD').replace(/'/g, "\\'");
+                const doctorName = (t.appointments?.doctor_name || 'Available Doctor').replace(/'/g, "\\'");
+
                 return `
                   <tr>
                     <td><span class="token-num-big">${t.token_number}</span></td>
@@ -1734,6 +1743,8 @@
                     <td>
                       ${t.status === 'waiting' ? `<button class="action-btn" onclick="callToken('${t.id}',${t.token_number})">Call</button>` : ''}
                       ${t.status === 'called' ? `<button class="action-btn" onclick="doneToken('${t.id}')">Done</button>` : ''}
+                      <button class="action-btn" onclick="printTokenSlip('${safeName}', '${t.token_number}', '${opdName}', '${doctorName}')" title="Print Slip">🖨️</button>
+                      ${patientPhone ? `<button class="action-btn" onclick="sendWhatsApp('${patientPhone}', '${t.token_number}', '${opdName}')" title="WhatsApp Message">💬</button>` : ''}
                     </td>
                   </tr>`;
             }).join('')}
@@ -1741,6 +1752,27 @@
           </table>
         </div>`;
         }
+
+        window.printTokenSlip = function (patientName, tokenNumber, opdName, doctorName) {
+            const printData = {
+                hospitalName: currentHospital?.name || 'Curaah Health',
+                hospitalPhone: currentHospital?.phone || '',
+                hospitalAddress: currentHospital?.city || '',
+                tokenNumber: tokenNumber,
+                patientName: patientName,
+                opdName: opdName,
+                doctorName: doctorName,
+                dateTime: new Date().toLocaleString(),
+                waitTime: 'Calculate at counter'
+            };
+            localStorage.setItem('curaah_print_data', JSON.stringify(printData));
+            window.open('print-slips.html?type=token', '_blank');
+        };
+
+        window.sendWhatsApp = function (phone, tokenNum, opdName) {
+            const msg = encodeURIComponent(`Hello, your token #${tokenNum} is ready at ${opdName}, ${currentHospital?.name || 'our hospital'}. Track your queue live at curaah.dev`);
+            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
+        };
 
         window.callToken = async function (id, num) {
             await supabase.from('tokens').update({ status: 'called', called_at: new Date().toISOString() }).eq('id', id);
