@@ -1187,7 +1187,8 @@
                         </div>
 
                         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Referral</button>
+                            <button class="btn btn-primary" onclick="printReferralSlip()">🖨️ Print Referral</button>
+                            <button class="btn btn-primary" style="background:#25D366; border-color:#25D366;" onclick="waReferralSlip()">💬 WhatsApp</button>
                             <button class="btn btn-secondary" onclick="newReferral()">+ New Referral</button>
                             <a href="staff-portal.html" class="btn btn-secondary">← Staff Portal</a>
                         </div>
@@ -1718,6 +1719,42 @@
                 btn.textContent = 'Submit Referral & Book Appointment →'; btn.disabled = false;
                 showToast(err.message || 'Submission failed. Try again.', 'error');
             }
+        };
+
+        window.printReferralSlip = function() {
+            if (!submittedReferral || !selectedPatient) return;
+            const hospName = document.getElementById('referredHospital').options[document.getElementById('referredHospital').selectedIndex].text;
+            const opdName = document.getElementById('referredOpd').options[document.getElementById('referredOpd').selectedIndex].text;
+            const drText = document.getElementById('referringDoctor').options[document.getElementById('referringDoctor').selectedIndex].text;
+            const diagnosis = document.getElementById('diagnosisNotes').value.trim();
+            const date = document.getElementById('refApptDate').value;
+            const slot = document.getElementById('refApptSlot').value;
+            const u = { routine: 'Routine', urgent: 'Urgent', emergency: 'Emergency' }[selectedUrgency];
+
+            const printData = {
+                hospitalName: currentHospital.name,
+                hospitalPhone: currentHospital.phone || '',
+                patientName: selectedPatient.full_name,
+                patientPhone: selectedPatient.phone,
+                referralId: submittedReferral.id.split('-')[0].toUpperCase(),
+                referredHospital: hospName.split('—')[0].trim(),
+                referredOpd: opdName,
+                referringDoctor: drText.split('—')[0].trim(),
+                diagnosis: diagnosis,
+                urgency: u,
+                date: new Date().toLocaleDateString(),
+                appointmentDate: date ? new Date(date).toLocaleDateString() : '—',
+                timeSlot: slot || '—'
+            };
+            localStorage.setItem('curaah_print_data', JSON.stringify(printData));
+            window.open('print-slips.html?type=referral', '_blank');
+        };
+
+        window.waReferralSlip = function() {
+            if (!selectedPatient) return;
+            const hospName = document.getElementById('referredHospital').options[document.getElementById('referredHospital').selectedIndex].text.split('—')[0].trim();
+            const msg = encodeURIComponent(`Hello ${selectedPatient.full_name}, your referral to ${hospName} is ready. Track your referral at curaah.dev`);
+            window.open(`https://wa.me/91${selectedPatient.phone}?text=${msg}`, '_blank');
         };
 
         /* ── NEW REFERRAL ── */
