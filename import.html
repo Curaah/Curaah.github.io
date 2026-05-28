@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#060d1f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Curaah — Bulk Data Import</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- SheetJS for Excel/CSV parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f8faff;
+            --white: #ffffff;
+            --navy: #0f1f3d;
+            --electric: #3d9eff;
+            --electric-hover: #2986e6;
+            --accent: #ff4757;
+            --success: #00c48c;
+            --warning: #ff9f00;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── BUTTONS & INPUTS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--electric);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(61, 158, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--electric-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(61, 158, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--navy);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--navy);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: var(--white);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-brand svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-subtitle {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--electric);
+            text-transform: uppercase;
+        }
+
+        /* ── LOGIN SECTION ── */
+        .login-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .login-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .form-input:focus {
+            border-color: var(--electric);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(61, 158, 255, 0.1);
+        }
+
+        .login-error {
+            color: var(--accent);
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* ── PORTAL MAIN ── */
+        .portal-page {
+            display: none;
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .page-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            max-width: 600px;
+        }
+
+        /* ── IMPORT WRAPPER ── */
+        .import-container {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .import-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfc;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .import-type-select {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ── DRAG & DROP ZONE ── */
+        .dropzone {
+            padding: 60px 40px;
+            text-align: center;
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-lg);
+            margin: 32px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dropzone:hover,
+        .dropzone.dragover {
+            border-color: var(--electric);
+            background: rgba(61, 158, 255, 0.05);
+        }
+
+        .dropzone-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .dropzone-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .dropzone-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* ── PREVIEW TABLE ── */
+        .preview-section {
+            display: none;
+            padding: 0 32px 32px 32px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .table-wrapper {
+            max-height: 400px;
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-valid {
+            background: rgba(0, 196, 140, 0.1);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--accent);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            bottom: 30px;
+        }
+
+        .toast.success {
+            background: #00c48c;
+        }
+
+        .toast.error {
+            background: #ff4757;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <svg viewBox="0 0 36 36" fill="none">
+                <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff"
+                    stroke-width="1.5" />
+                <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9" />
+                <circle cx="18" cy="22" r="3.5" fill="white" />
+            </svg>
+            <div>
+                <div class="nav-title">curaah</div>
+                <div class="nav-subtitle">Data Import</div>
+            </div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+            <a href="staff-portal.html" class="btn btn-ghost" id="navBackBtn" style="display:none;">← Staff Portal</a>
+            <span id="navHospital" style="font-weight:600; color:var(--text-secondary); display:none;"></span>
+            <button class="btn btn-ghost" id="logoutBtn" style="display:none;" onclick="handleLogout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- LOGIN -->
+    <div class="login-page" id="loginPage">
+        <div class="login-card">
+            <h2>Staff Login</h2>
+            <p>Login to access bulk import tools</p>
+            <div id="loginError" class="login-error"></div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="loginEmail" class="form-input" placeholder="admin@hospital.com" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" />
+            </div>
+            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="handleLogin()">Login to
+                System</button>
+        </div>
+    </div>
+
+    <!-- PORTAL -->
+    <div class="portal-page" id="portalPage">
+        <div class="page-header">
+            <h1 class="page-title">Bulk Data Import Wizard</h1>
+            <p class="page-desc">Easily migrate your existing hospital records to Curaah by uploading Excel (.xlsx) or
+                CSV files. Download a template below to ensure proper formatting.</p>
+        </div>
+
+        <div class="import-container">
+            <div class="import-header">
+                <div class="import-type-select">
+                    <label style="font-weight:600; color:var(--navy);">Import Type:</label>
+                    <select id="importType" class="form-input" style="width:250px;" onchange="resetImport()">
+                        <option value="doctors">Doctors / Specialists</option>
+                        <option value="staff">Hospital Staff / Nurses</option>
+                        <option value="opds">OPDs & Departments</option>
+                        <option value="patients">Legacy Patient Records</option>
+                    </select>
+                </div>
+                <button class="btn btn-secondary" onclick="downloadTemplate()">📥 Download Template</button>
+            </div>
+
+            <!-- Drop Zone -->
+            <div id="dropZone" class="dropzone" onclick="document.getElementById('fileInput').click()">
+                <div class="dropzone-icon">📊</div>
+                <div class="dropzone-text">Drag & Drop your Excel/CSV file here</div>
+                <div class="dropzone-sub">or click to browse from your computer</div>
+            </div>
+            <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" style="display:none;" onchange="handleFileSelect(event)" />
+
+            <!-- Preview Section -->
+            <div id="previewSection" class="preview-section">
+                <div class="preview-header">
+                    <div>
+                        <h3 style="color:var(--navy);">Data Preview</h3>
+                        <p style="font-size:13px; color:var(--text-muted);" id="previewStats">Found 0 records.</p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <button class="btn btn-ghost" onclick="resetImport()">Cancel</button>
+                        <button class="btn btn-primary" id="startImportBtn" onclick="processImport()">🚀 Start Import</button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="importProgress" style="display:none; margin-bottom:16px;">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+                        <span style="font-weight:600; color:var(--electric);" id="progressText">Importing...</span>
+                        <span id="progressPct">0%</span>
+                    </div>
+                    <div style="height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden;">
+                        <div id="progressBar" style="height:100%; width:0%; background:var(--electric); transition:width 0.2s;"></div>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table id="previewTable">
+                        <thead>
+                            <tr id="tableHead"></tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+
+        let currentHospital = null;
+        let currentStaff = null;
+        let parsedData = [];
+        let importCols = [];
+        let isValid = false;
+
+        /* ── TOAST ── */
+        function showToast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast show ${type}`;
+            setTimeout(() => { t.classList.remove('show'); }, 3000);
+        }
+
+        /* ── LOGIN ── */
+        window.handleLogin = async function () {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const err = document.getElementById('loginError');
+
+            if (!email || !password) { err.textContent = 'Enter email and password'; err.style.display = 'block'; return; }
+
+            err.style.display = 'none';
+            try {
+                const { data: auth, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw new Error('Incorrect credentials');
+
+                const { data: staffRow } = await supabase
+                    .from('hospital_staff')
+                    .select('*, hospitals(*)')
+                    .eq('user_id', auth.user.id)
+                    .eq('is_active', true)
+                    .single();
+
+                if (!staffRow) {
+                    await supabase.auth.signOut();
+                    throw new Error('Not registered as hospital staff');
+                }
+
+                currentStaff = staffRow;
+                currentHospital = staffRow.hospitals;
+
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('portalPage').style.display = 'block';
+                document.getElementById('navBackBtn').style.display = 'inline-flex';
+                document.getElementById('logoutBtn').style.display = 'inline-flex';
+                document.getElementById('navHospital').style.display = 'inline-block';
+                document.getElementById('navHospital').textContent = currentHospital.name;
+
+            } catch (e) {
+                err.textContent = e.message;
+                err.style.display = 'block';
+            }
+        };
+
+        window.handleLogout = async function () {
+            await supabase.auth.signOut();
+            location.reload();
+        };
+
+        /* ── TEMPLATES ── */
+        const TEMPLATES = {
+            doctors: [
+                { 'Name': 'Dr. Ramesh Sharma', 'Speciality': 'Cardiology', 'Phone': '9876543210', 'Experience Years': 15, 'Qualification': 'MBBS, MD' }
+            ],
+            staff: [
+                { 'Name': 'Sunita Devi', 'Role': 'Nurse', 'Phone': '9876543211', 'Email': 'sunita@hospital.com' }
+            ],
+            opds: [
+                { 'OPD Name': 'General Medicine OPD', 'Department': 'Internal Medicine', 'Fee': 200 }
+            ],
+            patients: [
+                { 'Full Name': 'Amit Kumar', 'Phone': '9988776655', 'Gender': 'Male', 'Age': 40, 'City': 'Delhi' }
+            ]
+        };
+
+        const COL_MAPPINGS = {
+            doctors: { name: 'Name', speciality: 'Speciality', phone: 'Phone', experience_years: 'Experience Years', qualification: 'Qualification' },
+            staff: { name: 'Name', role: 'Role', phone: 'Phone', email: 'Email' },
+            opds: { name: 'OPD Name', department: 'Department', fee: 'Fee' },
+            patients: { full_name: 'Full Name', phone: 'Phone', gender: 'Gender', age: 'Age', city: 'City' }
+        };
+
+        window.downloadTemplate = function () {
+            const type = document.getElementById('importType').value;
+            const data = TEMPLATES[type];
+            if (!data) return;
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Template");
+            XLSX.writeFile(wb, `Curaah_Template_${type}.xlsx`);
+        };
+
+        /* ── DRAG & DROP ── */
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                parseFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        window.handleFileSelect = function (e) {
+            if (e.target.files && e.target.files.length > 0) {
+                parseFile(e.target.files[0]);
+            }
+        };
+
+        /* ── PARSER ── */
+        function parseFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                    
+                    if (json.length === 0) throw new Error("File is empty");
+                    
+                    parsedData = json;
+                    validateAndPreview();
+                } catch(err) {
+                    showToast('Failed to parse file: ' + err.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        window.resetImport = function () {
+            parsedData = [];
+            document.getElementById('fileInput').value = '';
+            document.getElementById('previewSection').style.display = 'none';
+            document.getElementById('dropZone').style.display = 'block';
+            document.getElementById('importProgress').style.display = 'none';
+            document.getElementById('startImportBtn').disabled = false;
+        };
+
+        function validateAndPreview() {
+            const type = document.getElementById('importType').value;
+            const map = COL_MAPPINGS[type];
+            
+            // Expected columns
+            const expectedCols = Object.values(map);
+            const actualCols = Object.keys(parsedData[0]);
+            
+            // Generate Table Header
+            let thHTML = '<th>Status</th>';
+            expectedCols.forEach(col => { thHTML += `<th>${col}</th>`; });
+            document.getElementById('tableHead').innerHTML = thHTML;
+
+            // Generate Rows and validate
+            let trHTML = '';
+            let validCount = 0;
+
+            parsedData.forEach((row, i) => {
+                // Check if row has required fields (e.g. Name/Phone)
+                let rowValid = true;
+                let errorMsg = [];
+                
+                // Example simple validation based on type
+                if (type === 'doctors' && !row['Name']) { rowValid = false; errorMsg.push("Missing Name"); }
+                if (type === 'patients' && (!row['Full Name'] || !row['Phone'])) { rowValid = false; errorMsg.push("Missing Name or Phone"); }
+                if (type === 'opds' && !row['OPD Name']) { rowValid = false; errorMsg.push("Missing OPD Name"); }
+
+                if (rowValid) validCount++;
+
+                let tds = `<td><span class="status-badge ${rowValid ? 'status-valid' : 'status-error'}">${rowValid ? '✓ Valid' : '✗ ' + errorMsg.join(', ')}</span></td>`;
+                expectedCols.forEach(col => {
+                    tds += `<td>${row[col] || '—'}</td>`;
+                });
+                
+                // only show first 100 in preview
+                if (i < 100) {
+                    trHTML += `<tr>${tds}</tr>`;
+                }
+            });
+
+            document.getElementById('tableBody').innerHTML = trHTML;
+            document.getElementById('previewStats').textContent = `Found ${parsedData.length} records. ${validCount} valid ready to import.`;
+            
+            if (parsedData.length > 100) {
+                document.getElementById('previewStats').textContent += ` (Showing first 100)`;
+            }
+
+            isValid = validCount > 0;
+            document.getElementById('startImportBtn').disabled = !isValid;
+
+            document.getElementById('dropZone').style.display = 'none';
+            document.getElementById('previewSection').style.display = 'block';
+        }
+
+        /* ── IMPORT PROCESS ── */
+        window.processImport = async function() {
+            if (!isValid || !currentHospital) return;
+            
+            const btn = document.getElementById('startImportBtn');
+            btn.disabled = true;
+            btn.textContent = 'Importing...';
+            
+            document.getElementById('importProgress').style.display = 'block';
+            
+            const type = document.getElementById('importType').value;
+            const map = COL_MAPPINGS[type];
+            
+            // Map data to DB schema
+            let recordsToInsert = [];
+            
+            parsedData.forEach(row => {
+                let rec = { hospital_id: currentHospital.id };
+                let skip = false;
+                
+                for (const [dbKey, excelCol] of Object.entries(map)) {
+                    const val = row[excelCol];
+                    if (val !== undefined && val !== "") {
+                        rec[dbKey] = val;
+                    }
+                }
+                
+                // required fields check
+                if (type === 'doctors' && !rec.name) skip = true;
+                if (type === 'patients' && (!rec.full_name || !rec.phone)) skip = true;
+                if (type === 'opds' && !rec.name) skip = true;
+                
+                if (!skip) recordsToInsert.push(rec);
+            });
+            
+            // Process in batches of 50
+            const batchSize = 50;
+            let successCount = 0;
+            
+            for (let i = 0; i < recordsToInsert.length; i += batchSize) {
+                const batch = recordsToInsert.slice(i, i + batchSize);
+                
+                const { error } = await supabase.from(type).insert(batch);
+                
+                if (error) {
+                    console.error('Batch error:', error);
+                    showToast('Error inserting some records. Check console.', 'error');
+                } else {
+                    successCount += batch.length;
+                }
+                
+                const pct = Math.round(((i + batch.length) / recordsToInsert.length) * 100);
+                document.getElementById('progressBar').style.width = pct + '%';
+                document.getElementById('progressPct').textContent = pct + '%';
+            }
+            
+            document.getElementById('progressText').textContent = 'Complete!';
+            document.getElementById('progressText').style.color = 'var(--success)';
+            document.getElementById('progressBar').style.background = 'var(--success)';
+            btn.textContent = `✓ Imported ${successCount} records`;
+            
+            showToast(`Successfully imported ${successCount} ${type}`, 'success');
+        };
+
+        // Initialize
+        checkSession();
+
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                const { data: staffRow } = await supabase
+                    .from('hospital_staff')
+                    .select('*, hospitals(*)')
+                    .eq('user_id', session.user.id)
+                    .eq('is_active', true)
+                    .single();
+
+                if (staffRow) {
+                    currentStaff = staffRow;
+                    currentHospital = staffRow.hospitals;
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('portalPage').style.display = 'block';
+                    document.getElementById('navBackBtn').style.display = 'inline-flex';
+                    document.getElementById('logoutBtn').style.display = 'inline-flex';
+                    document.getElementById('navHospital').style.display = 'inline-block';
+                    document.getElementById('navHospital').textContent = currentHospital.name;
+                }
+            }
+        }
+
+        /* ── Register Service Worker ── */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(r => console.log('[SW] Registered:', r.scope))
+                    .catch(e => console.log('[SW] Error:', e));
+            });
+        }
+    </script>
+</body>
+
+</html>
