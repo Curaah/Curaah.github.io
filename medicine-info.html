@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Medicine Info Assistant — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: var(--off-white);
+    }
+    
+    .explainer-header {
+      background: var(--navy);
+      padding: 80px 6% 40px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .explainer-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 12px;
+    }
+
+    .explainer-header p {
+      color: var(--text-on-dark-muted);
+      font-size: 16px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .explainer-container {
+      max-width: 600px;
+      margin: -20px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .upload-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      text-align: center;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--off-white);
+      border: 1.5px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 16px 44px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--electric);
+      background: var(--white);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+    }
+
+    .or-divider {
+      margin: 20px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-card);
+    }
+    
+    .or-divider::before { margin-right: 10px; }
+    .or-divider::after { margin-left: 10px; }
+
+    .upload-area {
+      border: 2px dashed var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 30px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 20px;
+      background: rgba(61,158,255,0.02);
+    }
+
+    .upload-area:hover {
+      border-color: var(--electric);
+      background: rgba(61,158,255,0.05);
+    }
+
+    .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .upload-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .lang-select-wrap {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .lang-select-wrap label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .lang-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+    }
+
+    /* Loading State */
+    .loading-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(61,158,255,0.2);
+      border-top-color: var(--electric);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Results */
+    .result-card {
+      display: none;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .brand-title {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .salt-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .result-section {
+      margin-bottom: 20px;
+    }
+
+    .result-section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .result-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .generic-box {
+      background: rgba(46, 204, 113, 0.08);
+      border: 1px solid rgba(46, 204, 113, 0.3);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+
+    .generic-box h3 {
+      color: #1e824c;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .disclaimer {
+      background: #fff4e5;
+      border-left: 4px solid #ff9800;
+      padding: 16px;
+      font-size: 13px;
+      color: #663c00;
+      line-height: 1.5;
+      margin-top: 24px;
+    }
+
+    .limit-warning {
+      color: #de350b;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <div class="explainer-header">
+    <h1>Medicine Info Assistant</h1>
+    <p>Understand your medicine's purpose, side effects, and generic availability.</p>
+  </div>
+
+  <div class="explainer-container">
+    
+    <div class="upload-card" id="inputCard">
+      <div class="lang-select-wrap">
+        <label>Select Language:</label>
+        <select id="languageSelect" class="lang-select">
+          <option value="English">English</option>
+          <option value="Hindi">हिंदी (Hindi)</option>
+          <option value="Punjabi">ਪੰਜਾਬੀ (Punjabi)</option>
+        </select>
+      </div>
+
+      <div class="search-input-wrap">
+        <span class="search-icon">💊</span>
+        <input type="text" id="medicineInput" class="search-input" placeholder="Enter medicine name (e.g., Dolo 650)" />
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;" onclick="searchMedicineText()">Get Information</button>
+
+      <div class="or-divider">OR</div>
+
+      <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+      <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Upload a photo of the medicine strip</div>
+      </div>
+      
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+        * Free to use (<span id="remCount">5</span> remaining).
+      </p>
+
+      <div style="background: rgba(255, 152, 0, 0.08); border: 1px solid rgba(255, 152, 0, 0.3); padding: 12px; border-radius: 8px; font-size: 11px; color: #663c00; text-align: left; line-height: 1.5;">
+        <strong>⚠️ MEDICAL WARNING:</strong> This tool provides educational information only. Formulations differ even if salts are the same. Never substitute medicines without asking your doctor.
+      </div>
+
+      <div id="limitWarning" class="limit-warning">You have reached the free limit.</div>
+    </div>
+
+    <div class="upload-card loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <div style="font-weight:600;color:var(--navy);">Analyzing medicine data...</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-top:6px;">Please wait a few seconds.</div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="brand-title" id="resBrand"></div>
+      <div class="salt-title" id="resSalt"></div>
+
+      <div class="result-section">
+        <h3>Primary Purpose</h3>
+        <div class="result-text" id="resPurpose"></div>
+      </div>
+
+      <div class="result-section">
+        <h3>Common Side Effects</h3>
+        <div class="result-text" id="resSideEffects"></div>
+      </div>
+
+      <div class="generic-box">
+        <h3>🌱 Generic (Jan Aushadhi) Availability</h3>
+        <div class="result-text" style="color: #1e824c;" id="resGeneric"></div>
+      </div>
+
+      <div class="disclaimer" id="resDisclaimer"></div>
+
+      <button class="btn" style="width:100%;margin-top:20px;background:#25D366;color:white;border:none;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="shareOnWhatsApp()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+        </svg>
+        Share on WhatsApp
+      </button>
+
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px;" onclick="resetForm()">Search Another Medicine</button>
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    const MAX_FREE_SEARCHES = 5;
+    let searchesUsed = parseInt(localStorage.getItem('curaah_medinfo_used') || '0');
+    
+    document.getElementById('remCount').innerText = Math.max(0, MAX_FREE_SEARCHES - searchesUsed);
+
+    if (searchesUsed >= MAX_FREE_SEARCHES) {
+      lockUI();
+    }
+
+    function lockUI() {
+      document.querySelector('.search-input-wrap').style.opacity = '0.5';
+      document.querySelector('button[onclick="searchMedicineText()"]').disabled = true;
+      document.getElementById('uploadArea').style.opacity = '0.5';
+      document.getElementById('uploadArea').onclick = null;
+      document.getElementById('limitWarning').style.display = 'block';
+    }
+
+    async function searchMedicineText() {
+      const medName = document.getElementById('medicineInput').value.trim();
+      if (!medName) return;
+      if (searchesUsed >= MAX_FREE_SEARCHES) return;
+      
+      await executeSearch({ medicine_name: medName });
+    }
+
+    document.getElementById('fileInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (searchesUsed >= MAX_FREE_SEARCHES) return;
+
+      try {
+        const base64String = await fileToBase64(file);
+        const base64Data = base64String.split(',')[1];
+        await executeSearch({
+          image: {
+            mimeType: file.type || 'image/jpeg',
+            base64: base64Data
+          }
+        });
+      } catch (err) {
+        alert("Failed to process image.");
+      }
+    });
+
+    async function executeSearch(payload) {
+      document.getElementById('inputCard').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'flex';
+
+      try {
+        const language = document.getElementById('languageSelect').value;
+        payload.language = language;
+
+        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/medicine-info', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error('Failed to analyze medicine.');
+
+        const data = await response.json();
+        
+        searchesUsed++;
+        localStorage.setItem('curaah_medinfo_used', searchesUsed);
+
+        document.getElementById('resBrand').innerText = data.brand_name;
+        document.getElementById('resSalt').innerText = "Salt: " + data.salt_composition;
+        document.getElementById('resPurpose').innerText = data.purpose;
+        document.getElementById('resSideEffects').innerText = data.common_side_effects;
+        document.getElementById('resGeneric').innerText = data.generic_availability_note;
+        
+        document.getElementById('resDisclaimer').innerHTML = `<strong>⚠️ Medical Warning:</strong><br/>${data.disclaimer}`;
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultCard').style.display = 'block';
+
+      } catch (err) {
+        alert(err.message || 'Something went wrong. Please try again.');
+        resetForm();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('medicineInput').value = '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('remCount').innerText = Math.max(0, MAX_FREE_SEARCHES - searchesUsed);
+      
+      if (searchesUsed >= MAX_FREE_SEARCHES) {
+        lockUI();
+      }
+
+      document.getElementById('resultCard').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('inputCard').style.display = 'block';
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    function shareOnWhatsApp() {
+      const brand = document.getElementById('resBrand').innerText;
+      const text = encodeURIComponent(`I just checked the generic availability and side effects of ${brand} for FREE on Curaah AI. Always verify with your doctor, but it's great to be informed! Check your medicines here: https://curaah.dev/medicine-info.html`);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+  </script>
+</body>
+</html>
