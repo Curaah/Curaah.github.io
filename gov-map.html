@@ -8,6 +8,10 @@
   <title>Government Healthcare Directory — Curaah</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="stylesheet" href="css/style.css" />
+  
+  <!-- Leaflet Map CSS and JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     body {
@@ -453,12 +457,11 @@
         <div class="m-header-top">
           <div>
             <div class="f-title" id="modalFTitle">Facility Name</div>
-            <div style="font-size:13px;color:var(--text-muted);">📍 <span id="modalFDist">2.1 km</span></div>
+            <div style="font-size:13px;color:var(--text-muted);" id="modalFDistWrapper">📍 <span id="modalFDist">2.1 km</span></div>
           </div>
           <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
         </div>
         <div class="m-actions">
-          <a href="https://maps.google.com" target="_blank" class="m-action-btn">📍 Get Directions</a>
           <button class="m-action-btn whatsapp" onclick="shareFacilityOnWhatsApp()">💬 Share Status</button>
         </div>
       </div>
@@ -550,9 +553,14 @@
             </select>
           </div>
           <div>
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Location</label>
-            <button class="btn btn-outline" style="width:100%; justify-content:center; background:white;" onclick="getLocation()">📍 Use My Current Location</button>
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Location on Map (Tap to place pin)</label>
+            <div id="mapPicker" style="height: 180px; width: 100%; border-radius: 8px; border: 1px solid var(--border-dark); margin-bottom: 8px; z-index: 1;"></div>
+            <button class="btn btn-outline" style="width:100%; justify-content:center; background:white;" onclick="getLocation()">📍 Snap to My Current Location</button>
             <div id="locStatus" style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
+            
+            <label style="font-size:13px; font-weight:600; display:block; margin-top:12px; margin-bottom:6px;">Or enter full address / Google Maps Link</label>
+            <input type="text" id="newFacAddress" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px;" placeholder="Enter address here...">
+            
             <input type="hidden" id="newFacLat"><input type="hidden" id="newFacLng">
           </div>
           <button class="btn btn-primary" onclick="submitFacility(event)" style="width:100%; justify-content:center; margin-top:8px;">Submit for Verification</button>
@@ -570,6 +578,11 @@
     let currentFacilityId = null;
     let selectedStars = 0;
     
+    let userLat = null;
+    let userLng = null;
+    let pickerMap = null;
+    let pickerMarker = null;
+
     // Expose to window for HTML event handlers
     window.filterData = filterData;
     window.openModal = openModal;
@@ -581,11 +594,35 @@
     window.postReply = postReply;
     window.postReview = postReview;
     window.shareFacilityOnWhatsApp = shareFacilityOnWhatsApp;
-    window.openAddFacilityModal = () => document.getElementById('addFacilityModal').style.display='flex';
+    window.openAddFacilityModal = openAddFacilityModal;
     window.getLocation = getLocation;
     window.submitFacility = submitFacility;
 
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+      const R = 6371; 
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return (R * c).toFixed(1);
+    }
+
     async function loadData() {
+      // Prompt for geolocation silently for distance calc
+      if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => { 
+            userLat = pos.coords.latitude; 
+            userLng = pos.coords.longitude; 
+            renderList(); // Re-render once location is acquired to show distances
+          },
+          (err) => { console.log('Geolocation denied/failed. Distance will not be shown.'); }
+        );
+      }
+
       const list = document.getElementById('facilityList');
       list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">Loading live data...</div>';
       
@@ -625,9 +662,12 @@
           statusClass = "status-crowded"; statusText = "🟡 Doctors on Lunch";
         }
 
+        const dist = calculateDistance(userLat, userLng, f.lat, f.lng);
+        let distHtml = dist ? `📍 ${dist} km away` : (f.address ? `📍 ${f.address}` : `📍 Location Available`);
+
         const card = document.createElement('div');
         card.className = 'f-card';
-        card.onclick = () => openModal(f.id, f.name);
+        card.onclick = () => openModal(f.id, f.name, distHtml);
         card.innerHTML = `
           <div class="f-header">
             <div>
@@ -638,7 +678,7 @@
               <div class="f-status-badge ${statusClass}">${statusText}</div>
             </div>
           </div>
-          <div class="f-distance">📍 Lat: ${f.lat ? f.lat.toFixed(3) : 'N/A'}, Lng: ${f.lng ? f.lng.toFixed(3) : 'N/A'} • 🕒 Open 24/7</div>
+          <div class="f-distance">${distHtml} • 🕒 Open 24/7</div>
         `;
         list.appendChild(card);
       });
@@ -651,9 +691,10 @@
       renderList();
     }
 
-    async function openModal(id, name) {
+    async function openModal(id, name, distHtml) {
       currentFacilityId = id;
       document.getElementById('modalFTitle').innerText = name;
+      document.getElementById('modalFDistWrapper').innerHTML = distHtml || '📍 Location Available';
       document.getElementById('modalFStar').innerText = '...';
       
       switchTab('live');
@@ -832,6 +873,37 @@
       window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
+    // Leaflet Map Picker initialization
+    function initMapPicker() {
+      if (pickerMap) return; // already initialized
+      // Default center around Punjab/Ropar
+      const defaultLat = 30.9664;
+      const defaultLng = 76.5331;
+      
+      pickerMap = L.map('mapPicker').setView([defaultLat, defaultLng], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(pickerMap);
+
+      pickerMap.on('click', function(e) {
+        if (pickerMarker) pickerMap.removeLayer(pickerMarker);
+        pickerMarker = L.marker(e.latlng).addTo(pickerMap);
+        document.getElementById('newFacLat').value = e.latlng.lat;
+        document.getElementById('newFacLng').value = e.latlng.lng;
+        document.getElementById('locStatus').innerText = 'Location pinned on map!';
+        document.getElementById('locStatus').style.color = 'var(--success)';
+      });
+    }
+
+    function openAddFacilityModal() {
+      document.getElementById('addFacilityModal').style.display = 'flex';
+      // Leaflet needs time to render when its container becomes visible
+      setTimeout(() => {
+        initMapPicker();
+        if(pickerMap) pickerMap.invalidateSize();
+      }, 100);
+    }
+
     // Geolocation and Add Facility Logic
     function getLocation() {
       const stat = document.getElementById('locStatus');
@@ -839,16 +911,22 @@
       if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (pos) => {
-            document.getElementById('newFacLat').value = pos.coords.latitude;
-            document.getElementById('newFacLng').value = pos.coords.longitude;
-            stat.innerText = `Location verified! (${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            document.getElementById('newFacLat').value = lat;
+            document.getElementById('newFacLng').value = lng;
+            stat.innerText = `Location verified!`;
             stat.style.color = 'var(--success)';
+            
+            if (pickerMap) {
+              pickerMap.setView([lat, lng], 15);
+              if (pickerMarker) pickerMap.removeLayer(pickerMarker);
+              pickerMarker = L.marker([lat, lng]).addTo(pickerMap);
+            }
           },
           (err) => {
-            stat.innerText = 'GPS blocked. We will use a default central location.';
+            stat.innerText = 'GPS blocked. Please drop a pin on the map instead.';
             stat.style.color = 'var(--danger)';
-            document.getElementById('newFacLat').value = 30.9664;
-            document.getElementById('newFacLng').value = 76.5331;
           },
           { timeout: 5000 }
         );
@@ -860,13 +938,20 @@
     async function submitFacility(event) {
       const name = document.getElementById('newFacName').value.trim();
       const type = document.getElementById('newFacType').value;
+      const address = document.getElementById('newFacAddress').value.trim();
       let lat = document.getElementById('newFacLat').value;
       let lng = document.getElementById('newFacLng').value;
 
       if(!name) return alert("Please enter a facility name.");
       if(!lat || !lng) {
-        alert("Please click 'Use My Current Location' to pin the facility.");
-        return;
+        if(!address) {
+          alert("Please either drop a pin on the map, use your current location, or type the address.");
+          return;
+        } else {
+          // Allow submission with just address, dummy coords
+          lat = 0;
+          lng = 0;
+        }
       }
 
       const btn = event.target;
@@ -877,7 +962,8 @@
         name, 
         type, 
         lat: parseFloat(lat), 
-        lng: parseFloat(lng), 
+        lng: parseFloat(lng),
+        address: address,
         status: 'pending'
       });
 
@@ -887,7 +973,9 @@
         alert("Facility submitted successfully! Our team will verify it and it will appear on the map shortly.");
         document.getElementById('addFacilityModal').style.display = 'none';
         document.getElementById('newFacName').value = '';
+        document.getElementById('newFacAddress').value = '';
         document.getElementById('locStatus').innerText = '';
+        if(pickerMarker) pickerMap.removeLayer(pickerMarker);
       }
       
       btn.innerText = 'Submit for Verification';
