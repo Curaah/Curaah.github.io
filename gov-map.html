@@ -15,14 +15,18 @@
 
   <style>
     body {
-      background: var(--off-white);
+      background: #f8fafc; /* Softer modern background */
+      font-family: 'Inter', sans-serif;
     }
     
     .dir-header {
-      background: var(--navy);
+      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 100%);
       padding: 80px 6% 40px;
       text-align: center;
       color: var(--white);
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
 
     .dir-header h1 {
@@ -32,10 +36,11 @@
     }
 
     .dir-header p {
-      color: var(--text-on-dark-muted);
+      color: #94a3b8;
       font-size: 16px;
       max-width: 550px;
       margin: 0 auto;
+      line-height: 1.5;
     }
 
     .dir-container {
@@ -46,35 +51,38 @@
       z-index: 10;
     }
 
-    /* Filters */
+    /* Filters - Swiggy/Zomato Style */
     .filter-scroll {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
+      padding: 4px 4px 16px 4px;
+      margin-bottom: 8px;
       scrollbar-width: none;
     }
     .filter-scroll::-webkit-scrollbar { display: none; }
 
     .filter-chip {
-      background: var(--white);
-      border: 1px solid var(--border-card);
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 14px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: #475569;
       white-space: nowrap;
       cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
+    .filter-chip:active { transform: scale(0.96); }
+
     .filter-chip.active {
-      background: var(--navy);
-      color: var(--white);
-      border-color: var(--navy);
+      background: var(--electric);
+      color: white;
+      border-color: var(--electric);
+      box-shadow: 0 4px 12px rgba(61,158,255,0.3);
     }
 
     /* Facility Cards */
@@ -82,25 +90,39 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      padding-bottom: 80px; /* Space for FAB */
     }
 
     .f-card {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-card);
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid #f1f5f9;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      transition: var(--transition);
+      transition: all 0.2s ease-in-out;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--electric);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
 
     .f-card:hover {
-      border-color: var(--electric);
+      border-color: #e2e8f0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       transform: translateY(-2px);
     }
+    .f-card:hover::before { opacity: 1; }
 
     .f-header {
       display: flex;
@@ -109,68 +131,61 @@
     }
 
     .f-title {
-      font-family: 'Georgia', serif;
-      font-size: 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
       font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 4px;
+      color: #0f172a;
+      margin-bottom: 6px;
+      line-height: 1.3;
     }
 
     .f-type {
       font-size: 11px;
       font-weight: 800;
-      color: var(--navy);
+      color: #0284c7;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      background: rgba(61,158,255,0.15);
+      background: #e0f2fe;
       padding: 4px 8px;
-      border-radius: 4px;
+      border-radius: 6px;
       display: inline-block;
     }
 
     .f-distance {
       font-size: 13px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .f-rating {
+      color: #64748b;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #f39c12;
+      font-weight: 500;
     }
     
     .f-status-badge {
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 12px;
+      padding: 6px 10px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       gap: 4px;
       margin-top: 4px;
     }
 
-    .status-normal { background: #e3fcef; color: #006644; }
-    .status-crowded { background: #fff0b3; color: #ff8b00; }
-    .status-severe { background: #ffebe6; color: #bf2600; animation: pulseAlert 2s infinite;}
+    .status-normal { background: #dcfce7; color: #166534; }
+    .status-crowded { background: #fef08a; color: #854d0e; }
+    .status-severe { background: #fee2e2; color: #991b1b; animation: pulseAlert 2s infinite;}
 
     @keyframes pulseAlert {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { opacity: 1; }
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
-    /* Unified Modal */
+    /* Unified Modal (Bottom Sheet for Mobile) */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(4px);
       z-index: 100;
       display: none;
@@ -182,18 +197,18 @@
     }
 
     .modal-card {
-      background: var(--off-white);
+      background: #f8fafc;
       border-radius: 24px 24px 0 0;
       width: 100%;
       max-width: 600px;
       height: 90vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
-      animation: slideUp 0.3s ease-out;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @media (min-width: 768px) {
-      .modal-card { border-radius: var(--radius-xl); height: 85vh; }
+      .modal-card { border-radius: 24px; height: 85vh; }
     }
 
     @keyframes slideUp {
@@ -201,57 +216,73 @@
       to { transform: translateY(0); }
     }
 
+    .modal-handle {
+      width: 48px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 4px;
+      margin: 12px auto;
+    }
+    @media (min-width: 768px) {
+      .modal-handle { display: none; }
+    }
+
     .m-header {
-      padding: 20px 24px;
-      background: var(--white);
-      border-bottom: 1px solid var(--border-card);
+      padding: 0 24px 20px 24px;
+      background: white;
+      border-bottom: 1px solid #f1f5f9;
       border-radius: 24px 24px 0 0;
     }
     @media (min-width: 768px) {
-      .m-header { border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
+      .m-header { padding-top: 24px; border-radius: 24px 24px 0 0; }
     }
 
     .m-header-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .m-actions {
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
 
     .m-action-btn {
-      background: var(--off-white);
-      border: 1px solid var(--border-card);
-      padding: 8px 12px;
-      border-radius: 8px;
+      flex: 1;
+      justify-content: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
-      color: var(--navy);
+      color: #334155;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: var(--transition);
+      transition: all 0.2s;
       text-decoration: none;
     }
     .m-action-btn:hover {
-      background: rgba(61,158,255,0.1);
-      border-color: var(--electric);
-      color: var(--electric);
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
     .m-action-btn.whatsapp {
-      color: #25D366;
-      border-color: rgba(37, 211, 102, 0.3);
+      color: #15803d;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+    .m-action-btn.whatsapp:hover {
+      background: #dcfce7;
     }
 
     .m-tabs {
       display: flex;
-      background: var(--white);
-      border-bottom: 1px solid var(--border-card);
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
     }
     .m-tab {
       flex: 1;
@@ -259,10 +290,10 @@
       padding: 16px;
       font-size: 14px;
       font-weight: 700;
-      color: var(--text-muted);
+      color: #64748b;
       cursor: pointer;
       border-bottom: 3px solid transparent;
-      transition: var(--transition);
+      transition: all 0.2s;
     }
     .m-tab.active {
       color: var(--electric);
@@ -275,45 +306,48 @@
       padding: 20px;
     }
 
-    /* AI Insight Box */
+    /* Upgraded AI Insight Box */
     .ai-insight {
-      background: linear-gradient(135deg, rgba(61,158,255,0.1) 0%, rgba(15,31,61,0.05) 100%);
-      border: 1px solid rgba(61,158,255,0.3);
-      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #f0f7ff 0%, #ffffff 100%);
+      border: 1px solid #bae6fd;
+      border-radius: 16px;
       padding: 20px;
       margin-bottom: 24px;
+      box-shadow: inset 0 2px 10px rgba(255,255,255,1), 0 4px 12px rgba(56,189,248,0.15);
+      position: relative;
     }
     .ai-insight-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
-      color: var(--navy);
+      color: #0369a1;
       margin-bottom: 10px;
     }
     .ai-insight-text {
       font-size: 14px;
       line-height: 1.6;
-      color: var(--text-secondary);
+      color: #334155;
     }
     .ai-badge {
       background: linear-gradient(135deg, #3d9eff, #6b3dff);
       color: white;
       font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(107, 61, 255, 0.3);
     }
 
     /* Live Q&A */
     .ask-box {
-      background: var(--white);
-      border-radius: var(--radius-lg);
+      background: white;
+      border-radius: 16px;
       padding: 16px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-card);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #f1f5f9;
       margin-bottom: 16px;
     }
     .ask-input {
@@ -325,26 +359,33 @@
       resize: none;
       height: 60px;
       margin-bottom: 12px;
+      background: transparent;
     }
+    .ask-input::placeholder { color: #94a3b8; }
 
     .quick-alerts {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       margin-bottom: 24px;
       overflow-x: auto;
       scrollbar-width: none;
+      padding-bottom: 4px;
     }
     .quick-alerts::-webkit-scrollbar { display: none; }
     .alert-chip {
-      background: #ffebe6;
-      color: #bf2600;
-      border: 1px solid rgba(222, 53, 11, 0.3);
-      padding: 6px 12px;
-      border-radius: 16px;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 8px 14px;
+      border-radius: 20px;
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+    .alert-chip:hover {
+      background: #fee2e2;
     }
     
     .qa-feed {
@@ -353,35 +394,35 @@
       gap: 16px;
     }
     .qa-item {
-      background: var(--white);
-      border-radius: var(--radius-lg);
+      background: white;
+      border-radius: 16px;
       padding: 16px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-card);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #f1f5f9;
     }
     .qa-item.alert-type {
-      border-left: 4px solid #de350b;
+      border-left: 4px solid #ef4444;
     }
     .qa-q {
       font-size: 15px;
       font-weight: 600;
-      color: var(--text-primary);
+      color: #0f172a;
       margin-bottom: 8px;
     }
     .qa-meta {
       font-size: 12px;
-      color: var(--text-muted);
+      color: #64748b;
       margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
     }
     .qa-reply {
-      background: var(--off-white);
+      background: #f8fafc;
       border-left: 3px solid var(--electric);
       padding: 12px;
       border-radius: 0 8px 8px 0;
       font-size: 14px;
-      color: var(--text-secondary);
+      color: #475569;
       margin-bottom: 8px;
     }
     .qa-action {
@@ -390,26 +431,58 @@
       color: var(--electric);
       cursor: pointer;
       display: inline-block;
+      margin-top: 4px;
     }
 
     /* Review Tab */
     .star-rating {
       display: flex;
       gap: 8px;
-      font-size: 28px;
-      color: #ddd;
+      font-size: 32px;
+      color: #e2e8f0;
       cursor: pointer;
       margin-bottom: 16px;
     }
-    .star-rating .star:hover, .star-rating .star.active { color: #f39c12; }
+    .star-rating .star { transition: color 0.2s; }
+    .star-rating .star:hover, .star-rating .star.active { color: #f59e0b; }
     
     .review-item {
-      background: var(--white);
+      background: white;
       padding: 16px;
-      border-radius: var(--radius-lg);
+      border-radius: 16px;
       margin-bottom: 12px;
-      border: 1px solid var(--border-card);
+      border: 1px solid #f1f5f9;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
+
+    /* Floating Action Button (FAB) */
+    .fab-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--electric);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 8px 20px rgba(61,158,255,0.4);
+      cursor: pointer;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .fab-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(61,158,255,0.5);
+    }
+    .fab-btn:active { transform: scale(0.95); }
+    .fab-btn svg { width: 20px; height: 20px; stroke-width: 2.5; }
+
   </style>
 </head>
 <body>
@@ -436,32 +509,38 @@
   </div>
 
   <div class="dir-container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <div class="filter-scroll" style="margin-bottom:0; flex:1;">
-        <div class="filter-chip active" onclick="filterData('All', this)">All Facilities</div>
-        <div class="filter-chip" onclick="filterData('Civil Hospital', this)">Civil Hospitals</div>
-        <div class="filter-chip" onclick="filterData('CHC', this)">CHC</div>
-        <div class="filter-chip" onclick="filterData('PHC', this)">PHC</div>
-        <div class="filter-chip" onclick="filterData('Jan Aushadhi', this)">Jan Aushadhi</div>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="openAddFacilityModal()" style="white-space:nowrap; margin-left:12px; height: 36px; padding: 0 16px;">+ Add Facility</button>
+    <div class="filter-scroll">
+      <div class="filter-chip active" onclick="filterData('All', this)">All Facilities</div>
+      <div class="filter-chip" onclick="filterData('Civil Hospital', this)">Civil Hospitals</div>
+      <div class="filter-chip" onclick="filterData('CHC', this)">CHC</div>
+      <div class="filter-chip" onclick="filterData('PHC', this)">PHC</div>
+      <div class="filter-chip" onclick="filterData('Jan Aushadhi', this)">Jan Aushadhi</div>
     </div>
 
     <div class="facility-list" id="facilityList"></div>
   </div>
 
+  <button class="fab-btn" onclick="openAddFacilityModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Add Facility</span>
+  </button>
+
   <!-- Unified Modal -->
   <div class="modal-overlay" id="unifiedModal" onclick="closeModalOnBg(event)">
     <div class="modal-card">
       <div class="m-header">
+        <div class="modal-handle"></div>
         <div class="m-header-top">
           <div>
-            <div class="f-title" id="modalFTitle">Facility Name</div>
-            <div style="font-size:13px;color:var(--text-muted);" id="modalFDistWrapper">📍 <span id="modalFDist">2.1 km</span></div>
+            <div class="f-title" id="modalFTitle" style="font-size:22px;">Facility Name</div>
+            <div style="font-size:14px;color:#64748b; margin-top:4px;" id="modalFDistWrapper">📍 <span id="modalFDist">2.1 km</span></div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
+          <button class="btn btn-ghost btn-sm" onclick="closeModal()" style="background:#f1f5f9; border-radius:50%; width:36px; height:36px; padding:0; display:flex; align-items:center; justify-content:center;">✕</button>
         </div>
-        <div class="m-actions">
+        <div class="m-actions" id="modalActions">
           <button class="m-action-btn whatsapp" onclick="shareFacilityOnWhatsApp()">💬 Share Status</button>
         </div>
       </div>
@@ -477,7 +556,7 @@
         <div class="ai-insight">
           <div class="ai-insight-header">
             <span class="ai-badge">AI Insight</span>
-            Community Status Summary
+            Live Community Summary
           </div>
           <div class="ai-insight-text" id="aiInsightText">
             <!-- Dynamically injected -->
@@ -487,14 +566,14 @@
         <div class="ask-box">
           <textarea class="ask-input" id="qaInput" placeholder="Ask the community for live updates (e.g., Is Dr. Sharma in the OPD today?)"></textarea>
           <div style="display:flex;justify-content:flex-end;">
-            <button class="btn btn-primary btn-sm" onclick="postQuestion(false)">Ask Question</button>
+            <button class="btn btn-primary btn-sm" style="border-radius:20px;" onclick="postQuestion(false)">Post Question</button>
           </div>
         </div>
 
         <div class="quick-alerts">
-          <div class="alert-chip" onclick="postAlert('🚨 Doctor is Absent')">Report: Doctor Absent</div>
-          <div class="alert-chip" onclick="postAlert('🚨 Medicines Out of Stock')">Report: No Medicines</div>
-          <div class="alert-chip" onclick="postAlert('🚨 Long Queue at Pharmacy')">Report: Long Queue</div>
+          <div class="alert-chip" onclick="postAlert('🚨 Doctor is Absent')">Doctor Absent</div>
+          <div class="alert-chip" onclick="postAlert('🚨 Medicines Out of Stock')">No Medicines</div>
+          <div class="alert-chip" onclick="postAlert('🚨 Long Queue at Pharmacy')">Long Queue</div>
         </div>
 
         <div class="qa-feed" id="qaFeed">
@@ -505,7 +584,7 @@
       <!-- Tab Content: Reviews -->
       <div class="m-content" id="contentReviews" style="display:none;">
         <div class="ask-box">
-          <div style="font-weight:600;margin-bottom:12px;font-size:15px;">Rate your experience</div>
+          <div style="font-weight:700;margin-bottom:12px;font-size:16px;color:#0f172a;">Rate your experience</div>
           <div class="star-rating" id="starContainer">
             <span class="star" data-val="1">★</span>
             <span class="star" data-val="2">★</span>
@@ -515,7 +594,7 @@
           </div>
           <textarea class="ask-input" id="reviewInput" placeholder="How was the cleanliness, medicine availability, and doctor attendance?"></textarea>
           <div style="display:flex;justify-content:flex-end;">
-            <button class="btn btn-primary btn-sm" onclick="postReview()">Submit Review</button>
+            <button class="btn btn-primary btn-sm" style="border-radius:20px;" onclick="postReview()">Submit Review</button>
           </div>
         </div>
 
@@ -529,41 +608,42 @@
 
   <!-- Add Facility Modal -->
   <div class="modal-overlay" id="addFacilityModal" onclick="if(event.target.id==='addFacilityModal') document.getElementById('addFacilityModal').style.display='none'">
-    <div class="modal-card" style="height:auto; max-height:80vh;">
-      <div class="m-header" style="border-radius: 24px 24px 0 0;">
-        <div class="m-header-top">
-          <div class="f-title">Add Missing Facility</div>
-          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('addFacilityModal').style.display='none'">✕</button>
+    <div class="modal-card" style="height:auto; max-height:85vh;">
+      <div class="m-header" style="border-radius: 24px 24px 0 0; padding-bottom:16px;">
+        <div class="modal-handle"></div>
+        <div class="m-header-top" style="margin-bottom:0;">
+          <div class="f-title" style="font-size:20px;">Add Missing Facility</div>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('addFacilityModal').style.display='none'" style="background:#f1f5f9; border-radius:50%; width:36px; height:36px; padding:0; display:flex; align-items:center; justify-content:center;">✕</button>
         </div>
       </div>
       <div class="m-content">
-        <p style="font-size:14px; color:var(--text-secondary); margin-bottom:20px;">Help us map every government healthcare facility in Punjab. Your submission will be verified before it goes live.</p>
+        <p style="font-size:14px; color:#64748b; margin-bottom:20px; line-height:1.5;">Help us map every government healthcare facility in Punjab. Your submission will be verified before it goes live.</p>
         <div style="display:flex; flex-direction:column; gap:16px;">
           <div>
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Facility Name</label>
-            <input type="text" id="newFacName" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px;" placeholder="e.g., PHC Chamkaur Sahib">
+            <label style="font-size:13px; font-weight:700; color:#334155; display:block; margin-bottom:8px;">Facility Name</label>
+            <input type="text" id="newFacName" class="ask-input" style="height:48px; padding:12px; border:1px solid #cbd5e1; border-radius:12px; background:white;" placeholder="e.g., PHC Chamkaur Sahib">
           </div>
           <div>
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Type</label>
-            <select id="newFacType" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px; background:white;">
-              <option value="Civil Hospital">Civil Hospital</option>
+            <label style="font-size:13px; font-weight:700; color:#334155; display:block; margin-bottom:8px;">Type</label>
+            <select id="newFacType" class="ask-input" style="height:48px; padding:12px; border:1px solid #cbd5e1; border-radius:12px; background:white; color:#0f172a;">
+              <option value="Civil Hospital">Civil Hospital (Zila Aspatal)</option>
               <option value="CHC">CHC (Community Health Centre)</option>
               <option value="PHC">PHC (Primary Health Centre)</option>
               <option value="Jan Aushadhi">Jan Aushadhi Kendra</option>
             </select>
           </div>
           <div>
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Location on Map (Tap to place pin)</label>
-            <div id="mapPicker" style="height: 180px; width: 100%; border-radius: 8px; border: 1px solid var(--border-dark); margin-bottom: 8px; z-index: 1;"></div>
-            <button class="btn btn-outline" style="width:100%; justify-content:center; background:white;" onclick="getLocation()">📍 Snap to My Current Location</button>
-            <div id="locStatus" style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
+            <label style="font-size:13px; font-weight:700; color:#334155; display:block; margin-bottom:8px;">Location on Map (Drag to pin)</label>
+            <div id="mapPicker" style="height: 160px; width: 100%; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 12px; z-index: 1;"></div>
+            <button class="btn btn-outline" style="width:100%; justify-content:center; background:white; border-radius:12px; border-color:#cbd5e1; color:#334155;" onclick="getLocation()">📍 Snap to My Current Location</button>
+            <div id="locStatus" style="font-size:12px; color:#64748b; margin-top:8px; text-align:center;"></div>
             
-            <label style="font-size:13px; font-weight:600; display:block; margin-top:12px; margin-bottom:6px;">Or enter full address / Google Maps Link</label>
-            <input type="text" id="newFacAddress" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px;" placeholder="Enter address here...">
+            <label style="font-size:13px; font-weight:700; color:#334155; display:block; margin-top:20px; margin-bottom:8px;">Or enter full address / Maps Link</label>
+            <input type="text" id="newFacAddress" class="ask-input" style="height:48px; padding:12px; border:1px solid #cbd5e1; border-radius:12px; background:white;" placeholder="Paste address here...">
             
             <input type="hidden" id="newFacLat"><input type="hidden" id="newFacLng">
           </div>
-          <button class="btn btn-primary" onclick="submitFacility(event)" style="width:100%; justify-content:center; margin-top:8px;">Submit for Verification</button>
+          <button class="btn btn-primary" onclick="submitFacility(event)" style="width:100%; justify-content:center; margin-top:12px; height:48px; border-radius:12px; font-size:16px;">Submit for Verification</button>
         </div>
       </div>
     </div>
@@ -611,20 +691,19 @@
     }
 
     async function loadData() {
-      // Prompt for geolocation silently for distance calc
       if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (pos) => { 
             userLat = pos.coords.latitude; 
             userLng = pos.coords.longitude; 
-            renderList(); // Re-render once location is acquired to show distances
+            renderList();
           },
-          (err) => { console.log('Geolocation denied/failed. Distance will not be shown.'); }
+          (err) => { console.log('Geolocation denied/failed.'); }
         );
       }
 
       const list = document.getElementById('facilityList');
-      list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">Loading live data...</div>';
+      list.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">Loading live directory...</div>';
       
       const { data, error } = await supabase
         .from('gov_facilities')
@@ -634,7 +713,7 @@
         
       if(error) {
         console.error(error);
-        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--danger);">Failed to load facilities. Ensure you ran the SQL script in Supabase!</div>';
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:#ef4444;">Connection failed.</div>';
         return;
       }
       
@@ -649,7 +728,7 @@
       const currentHour = new Date().getHours();
 
       if(filtered.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">No facilities found. Click "+ Add Facility" to crowdsource one!</div>';
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">No facilities found. Tap the Add Facility button to crowdsource one!</div>';
         return;
       }
 
@@ -667,7 +746,7 @@
 
         const card = document.createElement('div');
         card.className = 'f-card';
-        card.onclick = () => openModal(f.id, f.name, distHtml);
+        card.onclick = () => openModal(f.id, f.name, distHtml, f.lat, f.lng);
         card.innerHTML = `
           <div class="f-header">
             <div>
@@ -678,7 +757,7 @@
               <div class="f-status-badge ${statusClass}">${statusText}</div>
             </div>
           </div>
-          <div class="f-distance">${distHtml} • 🕒 Open 24/7</div>
+          <div class="f-distance">${distHtml}</div>
         `;
         list.appendChild(card);
       });
@@ -691,19 +770,26 @@
       renderList();
     }
 
-    async function openModal(id, name, distHtml) {
+    async function openModal(id, name, distHtml, lat, lng) {
       currentFacilityId = id;
       document.getElementById('modalFTitle').innerText = name;
-      document.getElementById('modalFDistWrapper').innerHTML = distHtml || '📍 Location Available';
+      
+      const mapLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+      document.getElementById('modalFDistWrapper').innerHTML = `<a href="${mapLink}" target="_blank" style="text-decoration:none; color:inherit;">${distHtml || '📍 Location Available'}</a>`;
       document.getElementById('modalFStar').innerText = '...';
+      
+      document.getElementById('modalActions').innerHTML = `
+        <a href="${mapLink}" target="_blank" class="m-action-btn">📍 Get Directions</a>
+        <button class="m-action-btn whatsapp" onclick="shareFacilityOnWhatsApp()">💬 Share Status</button>
+      `;
       
       switchTab('live');
       document.getElementById('unifiedModal').style.display = 'flex';
       
       generateAIInsight(name);
       
-      document.getElementById('qaFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:var(--text-muted);">Loading live Q&A...</div>';
-      document.getElementById('reviewsFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:var(--text-muted);">Loading reviews...</div>';
+      document.getElementById('qaFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:#64748b;">Loading live Q&A...</div>';
+      document.getElementById('reviewsFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:#64748b;">Loading reviews...</div>';
       
       await loadReviews();
       await loadQA();
@@ -732,8 +818,8 @@
       if (hour >= 13 && hour <= 14) insight = `Based on historical community reports, OPD doctors at <strong>${name}</strong> are usually on lunch break right now.`;
       else if (hour >= 9 && hour <= 12) insight = `Morning hours are peak time here. Expect a 45-60 minute wait.`;
       else if (hour >= 18) insight = `Routine OPDs are closed. Emergency department is active.`;
-      else insight = `General availability is normal.`;
-      document.getElementById('aiInsightText').innerHTML = insight + " <br/><br/><em>Ask the community below to confirm live status.</em>";
+      else insight = `General availability is normal. Recent queries indicate basic generic medicines are available.`;
+      document.getElementById('aiInsightText').innerHTML = insight + " <br/><br/><span style='color:#64748b; font-size:13px;'>Ask the community below to confirm live status.</span>";
     }
 
     async function loadQA() {
@@ -745,7 +831,7 @@
         
       const feed = document.getElementById('qaFeed');
       if(error || !data || data.length === 0) {
-        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No live questions or alerts yet. Be the first to report!</div>';
+        feed.innerHTML = '<div style="color:#64748b;font-size:14px;text-align:center;">No live questions or alerts yet. Be the first to report!</div>';
         return;
       }
 
@@ -762,7 +848,7 @@
           <div class="qa-item ${alertClass}">
             <div class="qa-q">${item.question}</div>
             <div class="qa-meta">
-              <span>${item.is_alert ? 'Community Alert' : 'Question'}</span>
+              <span style="font-weight:600; color:${item.is_alert ? '#ef4444' : '#64748b'};">${item.is_alert ? 'Community Alert' : 'Question'}</span>
             </div>
             ${repliesHtml}
             <div class="qa-action" onclick="postReply('${item.id}')">↳ Reply to this</div>
@@ -812,7 +898,7 @@
       const feed = document.getElementById('reviewsFeed');
       if(error || !data || data.length === 0) {
         document.getElementById('modalFStar').innerText = 'New';
-        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No reviews yet.</div>';
+        feed.innerHTML = '<div style="color:#64748b;font-size:14px;text-align:center;">No reviews yet. Be the first to share your experience.</div>';
         return;
       }
 
@@ -822,11 +908,11 @@
         sum += r.rating;
         feed.innerHTML += `
           <div class="review-item">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-weight:600;font-size:12px;">
-              <span style="color:#f39c12;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
-              <span style="color:var(--text-muted);">Community Member</span>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-weight:700;font-size:12px;">
+              <span style="color:#f59e0b; font-size:14px;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+              <span style="color:#94a3b8;">Community Member</span>
             </div>
-            <div style="font-size:14px;color:var(--text-secondary);">${r.review_text}</div>
+            <div style="font-size:14px;color:#334155;line-height:1.5;">${r.review_text}</div>
           </div>
         `;
       });
@@ -875,9 +961,8 @@
 
     // Leaflet Map Picker initialization
     function initMapPicker() {
-      if (pickerMap) return; // already initialized
-      // Default center around Punjab/Ropar
-      const defaultLat = 30.9664;
+      if (pickerMap) return; 
+      const defaultLat = 30.9664; // Punjab Center
       const defaultLng = 76.5331;
       
       pickerMap = L.map('mapPicker').setView([defaultLat, defaultLng], 10);
@@ -890,21 +975,19 @@
         pickerMarker = L.marker(e.latlng).addTo(pickerMap);
         document.getElementById('newFacLat').value = e.latlng.lat;
         document.getElementById('newFacLng').value = e.latlng.lng;
-        document.getElementById('locStatus').innerText = 'Location pinned on map!';
-        document.getElementById('locStatus').style.color = 'var(--success)';
+        document.getElementById('locStatus').innerText = '📍 Location pinned exactly on map!';
+        document.getElementById('locStatus').style.color = '#15803d'; // Tailwind green
       });
     }
 
     function openAddFacilityModal() {
       document.getElementById('addFacilityModal').style.display = 'flex';
-      // Leaflet needs time to render when its container becomes visible
       setTimeout(() => {
         initMapPicker();
         if(pickerMap) pickerMap.invalidateSize();
       }, 100);
     }
 
-    // Geolocation and Add Facility Logic
     function getLocation() {
       const stat = document.getElementById('locStatus');
       stat.innerText = 'Requesting GPS location...';
@@ -915,8 +998,8 @@
             const lng = pos.coords.longitude;
             document.getElementById('newFacLat').value = lat;
             document.getElementById('newFacLng').value = lng;
-            stat.innerText = `Location verified!`;
-            stat.style.color = 'var(--success)';
+            stat.innerText = `Location verified from your device!`;
+            stat.style.color = '#15803d';
             
             if (pickerMap) {
               pickerMap.setView([lat, lng], 15);
@@ -926,7 +1009,7 @@
           },
           (err) => {
             stat.innerText = 'GPS blocked. Please drop a pin on the map instead.';
-            stat.style.color = 'var(--danger)';
+            stat.style.color = '#ef4444';
           },
           { timeout: 5000 }
         );
@@ -948,9 +1031,7 @@
           alert("Please either drop a pin on the map, use your current location, or type the address.");
           return;
         } else {
-          // Allow submission with just address, dummy coords
-          lat = 0;
-          lng = 0;
+          lat = 0; lng = 0;
         }
       }
 
