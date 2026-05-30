@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Government Healthcare Directory — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: var(--off-white);
+    }
+    
+    .dir-header {
+      background: var(--navy);
+      padding: 80px 6% 40px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .dir-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 12px;
+    }
+
+    .dir-header p {
+      color: var(--text-on-dark-muted);
+      font-size: 16px;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .dir-container {
+      max-width: 800px;
+      margin: -20px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Filters */
+    .filter-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      background: var(--white);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-chip.active {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+
+    /* Facility Cards */
+    .facility-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .f-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .f-card:hover {
+      border-color: var(--electric);
+      transform: translateY(-2px);
+    }
+
+    .f-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .f-title {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .f-type {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(61,158,255,0.15);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .f-distance {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .f-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f39c12;
+    }
+    
+    .f-status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .status-normal { background: #e3fcef; color: #006644; }
+    .status-crowded { background: #fff0b3; color: #ff8b00; }
+    .status-severe { background: #ffebe6; color: #bf2600; animation: pulseAlert 2s infinite;}
+
+    @keyframes pulseAlert {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    /* Unified Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    @media (min-width: 768px) {
+      .modal-overlay { align-items: center; padding: 20px; }
+    }
+
+    .modal-card {
+      background: var(--off-white);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 600px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s ease-out;
+    }
+    @media (min-width: 768px) {
+      .modal-card { border-radius: var(--radius-xl); height: 85vh; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .m-header {
+      padding: 20px 24px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border-card);
+      border-radius: 24px 24px 0 0;
+    }
+    @media (min-width: 768px) {
+      .m-header { border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
+    }
+
+    .m-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .m-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .m-action-btn {
+      background: var(--off-white);
+      border: 1px solid var(--border-card);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .m-action-btn:hover {
+      background: rgba(61,158,255,0.1);
+      border-color: var(--electric);
+      color: var(--electric);
+    }
+    .m-action-btn.whatsapp {
+      color: #25D366;
+      border-color: rgba(37, 211, 102, 0.3);
+    }
+
+    .m-tabs {
+      display: flex;
+      background: var(--white);
+      border-bottom: 1px solid var(--border-card);
+    }
+    .m-tab {
+      flex: 1;
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+    .m-tab.active {
+      color: var(--electric);
+      border-bottom-color: var(--electric);
+    }
+
+    .m-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* AI Insight Box */
+    .ai-insight {
+      background: linear-gradient(135deg, rgba(61,158,255,0.1) 0%, rgba(15,31,61,0.05) 100%);
+      border: 1px solid rgba(61,158,255,0.3);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .ai-insight-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .ai-insight-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .ai-badge {
+      background: linear-gradient(135deg, #3d9eff, #6b3dff);
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Live Q&A */
+    .ask-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      margin-bottom: 16px;
+    }
+    .ask-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      resize: none;
+      height: 60px;
+      margin-bottom: 12px;
+    }
+
+    .quick-alerts {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .quick-alerts::-webkit-scrollbar { display: none; }
+    .alert-chip {
+      background: #ffebe6;
+      color: #bf2600;
+      border: 1px solid rgba(222, 53, 11, 0.3);
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    
+    .qa-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .qa-item {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+    }
+    .qa-item.alert-type {
+      border-left: 4px solid #de350b;
+    }
+    .qa-q {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .qa-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .qa-reply {
+      background: var(--off-white);
+      border-left: 3px solid var(--electric);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .qa-action {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--electric);
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* Review Tab */
+    .star-rating {
+      display: flex;
+      gap: 8px;
+      font-size: 28px;
+      color: #ddd;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .star-rating .star:hover, .star-rating .star.active { color: #f39c12; }
+    
+    .review-item {
+      background: var(--white);
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 12px;
+      border: 1px solid var(--border-card);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <div class="dir-header">
+    <h1>Government Healthcare Directory</h1>
+    <p>Find nearby facilities, read AI-summarized insights, and ask the community for live status updates.</p>
+  </div>
+
+  <div class="dir-container">
+    <div class="filter-scroll">
+      <div class="filter-chip active" onclick="filterData('All', this)">All Facilities</div>
+      <div class="filter-chip" onclick="filterData('Civil Hospital', this)">Civil Hospitals</div>
+      <div class="filter-chip" onclick="filterData('CHC', this)">CHC</div>
+      <div class="filter-chip" onclick="filterData('PHC', this)">PHC</div>
+      <div class="filter-chip" onclick="filterData('Jan Aushadhi', this)">Jan Aushadhi</div>
+    </div>
+
+    <div class="facility-list" id="facilityList"></div>
+  </div>
+
+  <!-- Unified Modal -->
+  <div class="modal-overlay" id="unifiedModal" onclick="closeModalOnBg(event)">
+    <div class="modal-card">
+      <div class="m-header">
+        <div class="m-header-top">
+          <div>
+            <div class="f-title" id="modalFTitle">Facility Name</div>
+            <div style="font-size:13px;color:var(--text-muted);">📍 <span id="modalFDist">2.1 km</span></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="closeModal()">✕</button>
+        </div>
+        <div class="m-actions">
+          <a href="https://maps.google.com" target="_blank" class="m-action-btn">📍 Get Directions</a>
+          <button class="m-action-btn whatsapp" onclick="shareFacilityOnWhatsApp()">💬 Share Status</button>
+        </div>
+      </div>
+
+      <div class="m-tabs">
+        <div class="m-tab active" id="tabLive" onclick="switchTab('live')">Live Q&A & Insights</div>
+        <div class="m-tab" id="tabReviews" onclick="switchTab('reviews')">Overall Reviews (<span id="modalFStar">0</span>★)</div>
+      </div>
+
+      <!-- Tab Content: Live Q&A -->
+      <div class="m-content" id="contentLive">
+        
+        <div class="ai-insight">
+          <div class="ai-insight-header">
+            <span class="ai-badge">AI Insight</span>
+            Community Status Summary
+          </div>
+          <div class="ai-insight-text" id="aiInsightText">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+
+        <div class="ask-box">
+          <textarea class="ask-input" id="qaInput" placeholder="Ask the community for live updates (e.g., Is Dr. Sharma in the OPD today?)"></textarea>
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm" onclick="postQuestion(false)">Ask Question</button>
+          </div>
+        </div>
+
+        <div class="quick-alerts">
+          <div class="alert-chip" onclick="postAlert('🚨 Doctor is Absent')">Report: Doctor Absent</div>
+          <div class="alert-chip" onclick="postAlert('🚨 Medicines Out of Stock')">Report: No Medicines</div>
+          <div class="alert-chip" onclick="postAlert('🚨 Long Queue at Pharmacy')">Report: Long Queue</div>
+        </div>
+
+        <div class="qa-feed" id="qaFeed">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Reviews -->
+      <div class="m-content" id="contentReviews" style="display:none;">
+        <div class="ask-box">
+          <div style="font-weight:600;margin-bottom:12px;font-size:15px;">Rate your experience</div>
+          <div class="star-rating" id="starContainer">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+            <span class="star" data-val="4">★</span>
+            <span class="star" data-val="5">★</span>
+          </div>
+          <textarea class="ask-input" id="reviewInput" placeholder="How was the cleanliness, medicine availability, and doctor attendance?"></textarea>
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary btn-sm" onclick="postReview()">Submit Review</button>
+          </div>
+        </div>
+
+        <div id="reviewsFeed">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Dummy Data
+    const facilities = [
+      { id: 1, name: "Civil Hospital, Ropar", type: "Civil Hospital", distance: "2.1 km", rating: 3.8, reviews: [], qa: [] },
+      { id: 2, name: "CHC Anandpur Sahib", type: "CHC", distance: "4.5 km", rating: 4.2, reviews: [], qa: [] },
+      { id: 3, name: "PHC Chamkaur Sahib", type: "PHC", distance: "6.0 km", rating: 3.5, reviews: [], qa: [] },
+      { id: 4, name: "Jan Aushadhi Kendra, Ropar City", type: "Jan Aushadhi", distance: "1.8 km", rating: 4.8, reviews: [], qa: [] }
+    ];
+
+    // Dummy Q&A seeding
+    const defaultQA = [
+      { q: "Is the X-Ray machine working today?", time: "1 hour ago", isAlert: false, replies: [{ text: "Yes, I just got mine done. Queue is small.", time: "45 mins ago" }] },
+      { q: "🚨 Blood test lab is closed till 2 PM.", time: "2 hours ago", isAlert: true, replies: [] }
+    ];
+
+    // Load saved data from localStorage
+    const savedReviews = JSON.parse(localStorage.getItem('curaah_reviews') || '{}');
+    const savedQA = JSON.parse(localStorage.getItem('curaah_qa') || '{}');
+
+    facilities.forEach(f => {
+      // Reviews
+      if(savedReviews[f.id]) {
+        f.reviews = savedReviews[f.id];
+        const sum = f.reviews.reduce((acc, r) => acc + r.stars, 0);
+        f.rating = f.reviews.length ? (sum / f.reviews.length).toFixed(1) : f.rating;
+      } else {
+        f.reviews = [{ stars: Math.round(f.rating), text: "Decent facility. Doctor was helpful but queues are long." }];
+      }
+
+      // Q&A
+      if(savedQA[f.id]) {
+        f.qa = savedQA[f.id];
+      } else {
+        f.qa = JSON.parse(JSON.stringify(defaultQA));
+      }
+    });
+
+    let currentFilter = 'All';
+    let currentFacilityId = null;
+    let selectedStars = 0;
+
+    function renderList() {
+      const list = document.getElementById('facilityList');
+      list.innerHTML = '';
+
+      const filtered = currentFilter === 'All' ? facilities : facilities.filter(f => f.type === currentFilter);
+
+      const currentHour = new Date().getHours();
+
+      filtered.forEach(f => {
+        const revCount = f.reviews.length;
+        
+        // Dynamic crowd status generator for the Masterpiece feature
+        let statusClass = "status-normal";
+        let statusText = "🟢 Normal Crowd";
+        
+        if (currentHour >= 9 && currentHour <= 12) {
+          statusClass = "status-severe";
+          statusText = "🔴 Highly Crowded";
+        } else if (currentHour >= 13 && currentHour <= 14) {
+          statusClass = "status-crowded";
+          statusText = "🟡 Doctors on Lunch";
+        }
+
+        const card = document.createElement('div');
+        card.className = 'f-card';
+        card.onclick = () => openModal(f.id);
+        card.innerHTML = `
+          <div class="f-header">
+            <div>
+              <div class="f-title">${f.name}</div>
+              <div class="f-type">${f.type}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;">
+              <div class="f-rating">★ ${f.rating} <span class="f-rating-count">(${revCount})</span></div>
+              <div class="f-status-badge ${statusClass}">${statusText}</div>
+            </div>
+          </div>
+          <div class="f-distance">📍 ${f.distance} away • 🕒 Open 24/7</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function filterData(type, el) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderList();
+    }
+
+    // Modal Logic
+    function openModal(id) {
+      currentFacilityId = id;
+      const f = facilities.find(x => x.id === id);
+      
+      document.getElementById('modalFTitle').innerText = f.name;
+      document.getElementById('modalFDist').innerText = f.distance;
+      document.getElementById('modalFStar').innerText = f.rating;
+      
+      switchTab('live');
+      generateAIInsight(f);
+      renderQA();
+      renderReviews();
+
+      document.getElementById('unifiedModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('unifiedModal').style.display = 'none';
+    }
+
+    function closeModalOnBg(e) {
+      if (e.target.id === 'unifiedModal') closeModal();
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tabLive').classList.remove('active');
+      document.getElementById('tabReviews').classList.remove('active');
+      document.getElementById('contentLive').style.display = 'none';
+      document.getElementById('contentReviews').style.display = 'none';
+
+      if (tab === 'live') {
+        document.getElementById('tabLive').classList.add('active');
+        document.getElementById('contentLive').style.display = 'block';
+      } else {
+        document.getElementById('tabReviews').classList.add('active');
+        document.getElementById('contentReviews').style.display = 'block';
+      }
+    }
+
+    // Fake RAG Insight Generator based on time
+    function generateAIInsight(f) {
+      const hour = new Date().getHours();
+      let insight = "";
+      
+      if (hour >= 13 && hour <= 14) {
+        insight = `Based on historical community reports, OPD doctors at <strong>${f.name}</strong> are usually on lunch break right now. The pharmacy might still be dispensing.`;
+      } else if (hour >= 9 && hour <= 12) {
+        insight = `Morning hours are peak time here. Expect a 45-60 minute wait for registration. Over 80% of recent reviews mention the pediatric department is fully staffed today.`;
+      } else if (hour >= 18) {
+        insight = `Routine OPDs are closed. Only the emergency department is active right now. Please head to emergency if urgent.`;
+      } else {
+        insight = `General availability is normal. Recent community answers indicate the pharmacy has stock for common BP and Diabetes medications.`;
+      }
+
+      insight += " <br/><br/><em>Ask the community below to confirm live status.</em>";
+      document.getElementById('aiInsightText').innerHTML = insight;
+    }
+
+    // Q&A Logic
+    function renderQA() {
+      const f = facilities.find(x => x.id === currentFacilityId);
+      const feed = document.getElementById('qaFeed');
+      feed.innerHTML = '';
+      
+      if(f.qa.length === 0) {
+        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No live questions or alerts yet.</div>';
+        return;
+      }
+
+      f.qa.forEach((item, index) => {
+        let repliesHtml = '';
+        item.replies.forEach(r => {
+          repliesHtml += `
+            <div class="qa-reply">
+              <strong>Anonymous:</strong> ${r.text}
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${r.time}</div>
+            </div>
+          `;
+        });
+
+        const alertClass = item.isAlert ? 'alert-type' : '';
+        feed.innerHTML += `
+          <div class="qa-item ${alertClass}">
+            <div class="qa-q">${item.q}</div>
+            <div class="qa-meta">
+              <span>${item.isAlert ? 'Community Alert' : 'Question'}</span>
+              <span>${item.time}</span>
+            </div>
+            ${repliesHtml}
+            <div class="qa-action" onclick="postReply(${index})">↳ Reply to this</div>
+          </div>
+        `;
+      });
+    }
+
+    function postQuestion() {
+      const input = document.getElementById('qaInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const f = facilities.find(x => x.id === currentFacilityId);
+      f.qa.unshift({ q: text, time: "Just now", isAlert: false, replies: [] });
+      
+      saveQA();
+      input.value = '';
+      renderQA();
+    }
+
+    function postAlert(alertText) {
+      const f = facilities.find(x => x.id === currentFacilityId);
+      f.qa.unshift({ q: alertText, time: "Just now", isAlert: true, replies: [] });
+      saveQA();
+      renderQA();
+    }
+
+    function postReply(qIndex) {
+      const replyText = prompt("Type your answer:");
+      if (!replyText || !replyText.trim()) return;
+
+      const f = facilities.find(x => x.id === currentFacilityId);
+      f.qa[qIndex].replies.push({ text: replyText.trim(), time: "Just now" });
+      
+      saveQA();
+      renderQA();
+    }
+
+    function saveQA() {
+      const allSaved = JSON.parse(localStorage.getItem('curaah_qa') || '{}');
+      allSaved[currentFacilityId] = facilities.find(x => x.id === currentFacilityId).qa;
+      localStorage.setItem('curaah_qa', JSON.stringify(allSaved));
+    }
+
+    // Reviews Logic
+    document.querySelectorAll('.star').forEach(s => {
+      s.addEventListener('click', (e) => {
+        selectedStars = parseInt(e.target.getAttribute('data-val'));
+        document.querySelectorAll('.star').forEach(star => {
+          const val = parseInt(star.getAttribute('data-val'));
+          if (val <= selectedStars) star.classList.add('active');
+          else star.classList.remove('active');
+        });
+      });
+    });
+
+    function postReview() {
+      if (selectedStars === 0) return alert("Please select a star rating.");
+      const text = document.getElementById('reviewInput').value.trim();
+      if (!text) return alert("Please write a review.");
+
+      const f = facilities.find(x => x.id === currentFacilityId);
+      f.reviews.unshift({ stars: selectedStars, text: text });
+      
+      const sum = f.reviews.reduce((acc, r) => acc + r.stars, 0);
+      f.rating = (sum / f.reviews.length).toFixed(1);
+      
+      document.getElementById('modalFStar').innerText = f.rating;
+
+      const allSaved = JSON.parse(localStorage.getItem('curaah_reviews') || '{}');
+      allSaved[f.id] = f.reviews;
+      localStorage.setItem('curaah_reviews', JSON.stringify(allSaved));
+
+      selectedStars = 0;
+      document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+      document.getElementById('reviewInput').value = '';
+      
+      renderReviews();
+      renderList();
+    }
+
+    function renderReviews() {
+      const f = facilities.find(x => x.id === currentFacilityId);
+      const feed = document.getElementById('reviewsFeed');
+      feed.innerHTML = '';
+      
+      if(f.reviews.length === 0) {
+        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No reviews yet.</div>';
+        return;
+      }
+
+      f.reviews.forEach(r => {
+        feed.innerHTML += `
+          <div class="review-item">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-weight:600;font-size:12px;">
+              <span style="color:#f39c12;">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span>
+              <span style="color:var(--text-muted);">Community Member</span>
+            </div>
+            <div style="font-size:14px;color:var(--text-secondary);">${r.text}</div>
+          </div>
+        `;
+      });
+    }
+
+    function shareFacilityOnWhatsApp() {
+      const f = facilities.find(x => x.id === currentFacilityId);
+      const text = encodeURIComponent(`I'm checking the live status of ${f.name} on Curaah. See community reviews and live crowd updates here: https://curaah.dev/gov-map.html`);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
+    // Init
+    renderList();
+  </script>
+</body>
+</html>
