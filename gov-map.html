@@ -432,12 +432,15 @@
   </div>
 
   <div class="dir-container">
-    <div class="filter-scroll">
-      <div class="filter-chip active" onclick="filterData('All', this)">All Facilities</div>
-      <div class="filter-chip" onclick="filterData('Civil Hospital', this)">Civil Hospitals</div>
-      <div class="filter-chip" onclick="filterData('CHC', this)">CHC</div>
-      <div class="filter-chip" onclick="filterData('PHC', this)">PHC</div>
-      <div class="filter-chip" onclick="filterData('Jan Aushadhi', this)">Jan Aushadhi</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div class="filter-scroll" style="margin-bottom:0; flex:1;">
+        <div class="filter-chip active" onclick="filterData('All', this)">All Facilities</div>
+        <div class="filter-chip" onclick="filterData('Civil Hospital', this)">Civil Hospitals</div>
+        <div class="filter-chip" onclick="filterData('CHC', this)">CHC</div>
+        <div class="filter-chip" onclick="filterData('PHC', this)">PHC</div>
+        <div class="filter-chip" onclick="filterData('Jan Aushadhi', this)">Jan Aushadhi</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openAddFacilityModal()" style="white-space:nowrap; margin-left:12px; height: 36px; padding: 0 16px;">+ Add Facility</button>
     </div>
 
     <div class="facility-list" id="facilityList"></div>
@@ -521,74 +524,110 @@
     </div>
   </div>
 
+  <!-- Add Facility Modal -->
+  <div class="modal-overlay" id="addFacilityModal" onclick="if(event.target.id==='addFacilityModal') document.getElementById('addFacilityModal').style.display='none'">
+    <div class="modal-card" style="height:auto; max-height:80vh;">
+      <div class="m-header" style="border-radius: 24px 24px 0 0;">
+        <div class="m-header-top">
+          <div class="f-title">Add Missing Facility</div>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('addFacilityModal').style.display='none'">✕</button>
+        </div>
+      </div>
+      <div class="m-content">
+        <p style="font-size:14px; color:var(--text-secondary); margin-bottom:20px;">Help us map every government healthcare facility in Punjab. Your submission will be verified before it goes live.</p>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div>
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Facility Name</label>
+            <input type="text" id="newFacName" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px;" placeholder="e.g., PHC Chamkaur Sahib">
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Type</label>
+            <select id="newFacType" class="ask-input" style="height:44px; padding:10px; border:1px solid var(--border-dark); border-radius:8px; background:white;">
+              <option value="Civil Hospital">Civil Hospital</option>
+              <option value="CHC">CHC (Community Health Centre)</option>
+              <option value="PHC">PHC (Primary Health Centre)</option>
+              <option value="Jan Aushadhi">Jan Aushadhi Kendra</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Location</label>
+            <button class="btn btn-outline" style="width:100%; justify-content:center; background:white;" onclick="getLocation()">📍 Use My Current Location</button>
+            <div id="locStatus" style="font-size:12px; color:var(--text-muted); margin-top:6px; text-align:center;"></div>
+            <input type="hidden" id="newFacLat"><input type="hidden" id="newFacLng">
+          </div>
+          <button class="btn btn-primary" onclick="submitFacility(event)" style="width:100%; justify-content:center; margin-top:8px;">Submit for Verification</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
-  <script>
-    // Dummy Data
-    const facilities = [
-      { id: 1, name: "Civil Hospital, Ropar", type: "Civil Hospital", distance: "2.1 km", rating: 3.8, reviews: [], qa: [] },
-      { id: 2, name: "CHC Anandpur Sahib", type: "CHC", distance: "4.5 km", rating: 4.2, reviews: [], qa: [] },
-      { id: 3, name: "PHC Chamkaur Sahib", type: "PHC", distance: "6.0 km", rating: 3.5, reviews: [], qa: [] },
-      { id: 4, name: "Jan Aushadhi Kendra, Ropar City", type: "Jan Aushadhi", distance: "1.8 km", rating: 4.8, reviews: [], qa: [] }
-    ];
+  <script type="module">
+    import { supabase } from './js/supabase.js';
 
-    // Dummy Q&A seeding
-    const defaultQA = [
-      { q: "Is the X-Ray machine working today?", time: "1 hour ago", isAlert: false, replies: [{ text: "Yes, I just got mine done. Queue is small.", time: "45 mins ago" }] },
-      { q: "🚨 Blood test lab is closed till 2 PM.", time: "2 hours ago", isAlert: true, replies: [] }
-    ];
-
-    // Load saved data from localStorage
-    const savedReviews = JSON.parse(localStorage.getItem('curaah_reviews') || '{}');
-    const savedQA = JSON.parse(localStorage.getItem('curaah_qa') || '{}');
-
-    facilities.forEach(f => {
-      // Reviews
-      if(savedReviews[f.id]) {
-        f.reviews = savedReviews[f.id];
-        const sum = f.reviews.reduce((acc, r) => acc + r.stars, 0);
-        f.rating = f.reviews.length ? (sum / f.reviews.length).toFixed(1) : f.rating;
-      } else {
-        f.reviews = [{ stars: Math.round(f.rating), text: "Decent facility. Doctor was helpful but queues are long." }];
-      }
-
-      // Q&A
-      if(savedQA[f.id]) {
-        f.qa = savedQA[f.id];
-      } else {
-        f.qa = JSON.parse(JSON.stringify(defaultQA));
-      }
-    });
-
+    let facilities = [];
     let currentFilter = 'All';
     let currentFacilityId = null;
     let selectedStars = 0;
+    
+    // Expose to window for HTML event handlers
+    window.filterData = filterData;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.closeModalOnBg = closeModalOnBg;
+    window.switchTab = switchTab;
+    window.postQuestion = postQuestion;
+    window.postAlert = postAlert;
+    window.postReply = postReply;
+    window.postReview = postReview;
+    window.shareFacilityOnWhatsApp = shareFacilityOnWhatsApp;
+    window.openAddFacilityModal = () => document.getElementById('addFacilityModal').style.display='flex';
+    window.getLocation = getLocation;
+    window.submitFacility = submitFacility;
+
+    async function loadData() {
+      const list = document.getElementById('facilityList');
+      list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">Loading live data...</div>';
+      
+      const { data, error } = await supabase
+        .from('gov_facilities')
+        .select('*')
+        .eq('status', 'approved')
+        .order('name');
+        
+      if(error) {
+        console.error(error);
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--danger);">Failed to load facilities. Ensure you ran the SQL script in Supabase!</div>';
+        return;
+      }
+      
+      facilities = data || [];
+      renderList();
+    }
 
     function renderList() {
       const list = document.getElementById('facilityList');
       list.innerHTML = '';
-
       const filtered = currentFilter === 'All' ? facilities : facilities.filter(f => f.type === currentFilter);
-
       const currentHour = new Date().getHours();
 
+      if(filtered.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">No facilities found. Click "+ Add Facility" to crowdsource one!</div>';
+        return;
+      }
+
       filtered.forEach(f => {
-        const revCount = f.reviews.length;
-        
-        // Dynamic crowd status generator for the Masterpiece feature
         let statusClass = "status-normal";
         let statusText = "🟢 Normal Crowd";
-        
         if (currentHour >= 9 && currentHour <= 12) {
-          statusClass = "status-severe";
-          statusText = "🔴 Highly Crowded";
+          statusClass = "status-severe"; statusText = "🔴 Highly Crowded";
         } else if (currentHour >= 13 && currentHour <= 14) {
-          statusClass = "status-crowded";
-          statusText = "🟡 Doctors on Lunch";
+          statusClass = "status-crowded"; statusText = "🟡 Doctors on Lunch";
         }
 
         const card = document.createElement('div');
         card.className = 'f-card';
-        card.onclick = () => openModal(f.id);
+        card.onclick = () => openModal(f.id, f.name);
         card.innerHTML = `
           <div class="f-header">
             <div>
@@ -596,11 +635,10 @@
               <div class="f-type">${f.type}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;">
-              <div class="f-rating">★ ${f.rating} <span class="f-rating-count">(${revCount})</span></div>
               <div class="f-status-badge ${statusClass}">${statusText}</div>
             </div>
           </div>
-          <div class="f-distance">📍 ${f.distance} away • 🕒 Open 24/7</div>
+          <div class="f-distance">📍 Lat: ${f.lat ? f.lat.toFixed(3) : 'N/A'}, Lng: ${f.lng ? f.lng.toFixed(3) : 'N/A'} • 🕒 Open 24/7</div>
         `;
         list.appendChild(card);
       });
@@ -613,37 +651,31 @@
       renderList();
     }
 
-    // Modal Logic
-    function openModal(id) {
+    async function openModal(id, name) {
       currentFacilityId = id;
-      const f = facilities.find(x => x.id === id);
-      
-      document.getElementById('modalFTitle').innerText = f.name;
-      document.getElementById('modalFDist').innerText = f.distance;
-      document.getElementById('modalFStar').innerText = f.rating;
+      document.getElementById('modalFTitle').innerText = name;
+      document.getElementById('modalFStar').innerText = '...';
       
       switchTab('live');
-      generateAIInsight(f);
-      renderQA();
-      renderReviews();
-
       document.getElementById('unifiedModal').style.display = 'flex';
+      
+      generateAIInsight(name);
+      
+      document.getElementById('qaFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:var(--text-muted);">Loading live Q&A...</div>';
+      document.getElementById('reviewsFeed').innerHTML = '<div style="text-align:center; padding:20px; font-size:14px; color:var(--text-muted);">Loading reviews...</div>';
+      
+      await loadReviews();
+      await loadQA();
     }
 
-    function closeModal() {
-      document.getElementById('unifiedModal').style.display = 'none';
-    }
-
-    function closeModalOnBg(e) {
-      if (e.target.id === 'unifiedModal') closeModal();
-    }
-
+    function closeModal() { document.getElementById('unifiedModal').style.display = 'none'; }
+    function closeModalOnBg(e) { if (e.target.id === 'unifiedModal') closeModal(); }
+    
     function switchTab(tab) {
       document.getElementById('tabLive').classList.remove('active');
       document.getElementById('tabReviews').classList.remove('active');
       document.getElementById('contentLive').style.display = 'none';
       document.getElementById('contentReviews').style.display = 'none';
-
       if (tab === 'live') {
         document.getElementById('tabLive').classList.add('active');
         document.getElementById('contentLive').style.display = 'block';
@@ -653,100 +685,114 @@
       }
     }
 
-    // Fake RAG Insight Generator based on time
-    function generateAIInsight(f) {
+    function generateAIInsight(name) {
       const hour = new Date().getHours();
       let insight = "";
-      
-      if (hour >= 13 && hour <= 14) {
-        insight = `Based on historical community reports, OPD doctors at <strong>${f.name}</strong> are usually on lunch break right now. The pharmacy might still be dispensing.`;
-      } else if (hour >= 9 && hour <= 12) {
-        insight = `Morning hours are peak time here. Expect a 45-60 minute wait for registration. Over 80% of recent reviews mention the pediatric department is fully staffed today.`;
-      } else if (hour >= 18) {
-        insight = `Routine OPDs are closed. Only the emergency department is active right now. Please head to emergency if urgent.`;
-      } else {
-        insight = `General availability is normal. Recent community answers indicate the pharmacy has stock for common BP and Diabetes medications.`;
-      }
-
-      insight += " <br/><br/><em>Ask the community below to confirm live status.</em>";
-      document.getElementById('aiInsightText').innerHTML = insight;
+      if (hour >= 13 && hour <= 14) insight = `Based on historical community reports, OPD doctors at <strong>${name}</strong> are usually on lunch break right now.`;
+      else if (hour >= 9 && hour <= 12) insight = `Morning hours are peak time here. Expect a 45-60 minute wait.`;
+      else if (hour >= 18) insight = `Routine OPDs are closed. Emergency department is active.`;
+      else insight = `General availability is normal.`;
+      document.getElementById('aiInsightText').innerHTML = insight + " <br/><br/><em>Ask the community below to confirm live status.</em>";
     }
 
-    // Q&A Logic
-    function renderQA() {
-      const f = facilities.find(x => x.id === currentFacilityId);
+    async function loadQA() {
+      const { data, error } = await supabase
+        .from('gov_qa')
+        .select('*, gov_qa_replies(*)')
+        .eq('facility_id', currentFacilityId)
+        .order('created_at', { ascending: false });
+        
       const feed = document.getElementById('qaFeed');
-      feed.innerHTML = '';
-      
-      if(f.qa.length === 0) {
-        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No live questions or alerts yet.</div>';
+      if(error || !data || data.length === 0) {
+        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No live questions or alerts yet. Be the first to report!</div>';
         return;
       }
 
-      f.qa.forEach((item, index) => {
+      feed.innerHTML = '';
+      data.forEach(item => {
         let repliesHtml = '';
-        item.replies.forEach(r => {
-          repliesHtml += `
-            <div class="qa-reply">
-              <strong>Anonymous:</strong> ${r.text}
-              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${r.time}</div>
-            </div>
-          `;
-        });
-
-        const alertClass = item.isAlert ? 'alert-type' : '';
+        if(item.gov_qa_replies && item.gov_qa_replies.length > 0) {
+          item.gov_qa_replies.forEach(r => {
+            repliesHtml += `<div class="qa-reply"><strong>Anonymous:</strong> ${r.reply_text}</div>`;
+          });
+        }
+        const alertClass = item.is_alert ? 'alert-type' : '';
         feed.innerHTML += `
           <div class="qa-item ${alertClass}">
-            <div class="qa-q">${item.q}</div>
+            <div class="qa-q">${item.question}</div>
             <div class="qa-meta">
-              <span>${item.isAlert ? 'Community Alert' : 'Question'}</span>
-              <span>${item.time}</span>
+              <span>${item.is_alert ? 'Community Alert' : 'Question'}</span>
             </div>
             ${repliesHtml}
-            <div class="qa-action" onclick="postReply(${index})">↳ Reply to this</div>
+            <div class="qa-action" onclick="postReply('${item.id}')">↳ Reply to this</div>
           </div>
         `;
       });
     }
 
-    function postQuestion() {
-      const input = document.getElementById('qaInput');
-      const text = input.value.trim();
+    async function postQuestion(isAlert=false, textOverride=null) {
+      const text = textOverride || document.getElementById('qaInput').value.trim();
       if (!text) return;
-
-      const f = facilities.find(x => x.id === currentFacilityId);
-      f.qa.unshift({ q: text, time: "Just now", isAlert: false, replies: [] });
       
-      saveQA();
-      input.value = '';
-      renderQA();
+      document.getElementById('qaInput').value = '';
+      
+      const { error } = await supabase.from('gov_qa').insert({
+        facility_id: currentFacilityId,
+        question: text,
+        is_alert: isAlert
+      });
+      
+      if(error) alert('Error posting question: ' + error.message);
+      else await loadQA();
     }
+    
+    function postAlert(alertText) { postQuestion(true, alertText); }
 
-    function postAlert(alertText) {
-      const f = facilities.find(x => x.id === currentFacilityId);
-      f.qa.unshift({ q: alertText, time: "Just now", isAlert: true, replies: [] });
-      saveQA();
-      renderQA();
-    }
-
-    function postReply(qIndex) {
+    async function postReply(qaId) {
       const replyText = prompt("Type your answer:");
       if (!replyText || !replyText.trim()) return;
-
-      const f = facilities.find(x => x.id === currentFacilityId);
-      f.qa[qIndex].replies.push({ text: replyText.trim(), time: "Just now" });
       
-      saveQA();
-      renderQA();
+      const { error } = await supabase.from('gov_qa_replies').insert({
+        qa_id: qaId,
+        reply_text: replyText.trim()
+      });
+      
+      if(error) alert('Error posting reply: ' + error.message);
+      else await loadQA();
     }
 
-    function saveQA() {
-      const allSaved = JSON.parse(localStorage.getItem('curaah_qa') || '{}');
-      allSaved[currentFacilityId] = facilities.find(x => x.id === currentFacilityId).qa;
-      localStorage.setItem('curaah_qa', JSON.stringify(allSaved));
+    async function loadReviews() {
+      const { data, error } = await supabase
+        .from('gov_reviews')
+        .select('*')
+        .eq('facility_id', currentFacilityId)
+        .order('created_at', { ascending: false });
+        
+      const feed = document.getElementById('reviewsFeed');
+      if(error || !data || data.length === 0) {
+        document.getElementById('modalFStar').innerText = 'New';
+        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No reviews yet.</div>';
+        return;
+      }
+
+      let sum = 0;
+      feed.innerHTML = '';
+      data.forEach(r => {
+        sum += r.rating;
+        feed.innerHTML += `
+          <div class="review-item">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-weight:600;font-size:12px;">
+              <span style="color:#f39c12;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+              <span style="color:var(--text-muted);">Community Member</span>
+            </div>
+            <div style="font-size:14px;color:var(--text-secondary);">${r.review_text}</div>
+          </div>
+        `;
+      });
+      const avg = (sum / data.length).toFixed(1);
+      document.getElementById('modalFStar').innerText = avg;
     }
 
-    // Reviews Logic
     document.querySelectorAll('.star').forEach(s => {
       s.addEventListener('click', (e) => {
         selectedStars = parseInt(e.target.getAttribute('data-val'));
@@ -758,62 +804,98 @@
       });
     });
 
-    function postReview() {
+    async function postReview() {
       if (selectedStars === 0) return alert("Please select a star rating.");
       const text = document.getElementById('reviewInput').value.trim();
       if (!text) return alert("Please write a review.");
 
-      const f = facilities.find(x => x.id === currentFacilityId);
-      f.reviews.unshift({ stars: selectedStars, text: text });
+      const { error } = await supabase.from('gov_reviews').insert({
+        facility_id: currentFacilityId,
+        rating: selectedStars,
+        review_text: text
+      });
       
-      const sum = f.reviews.reduce((acc, r) => acc + r.stars, 0);
-      f.rating = (sum / f.reviews.length).toFixed(1);
-      
-      document.getElementById('modalFStar').innerText = f.rating;
-
-      const allSaved = JSON.parse(localStorage.getItem('curaah_reviews') || '{}');
-      allSaved[f.id] = f.reviews;
-      localStorage.setItem('curaah_reviews', JSON.stringify(allSaved));
+      if(error) {
+        alert("Error posting review: " + error.message);
+        return;
+      }
 
       selectedStars = 0;
       document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
       document.getElementById('reviewInput').value = '';
-      
-      renderReviews();
-      renderList();
-    }
-
-    function renderReviews() {
-      const f = facilities.find(x => x.id === currentFacilityId);
-      const feed = document.getElementById('reviewsFeed');
-      feed.innerHTML = '';
-      
-      if(f.reviews.length === 0) {
-        feed.innerHTML = '<div style="color:var(--text-muted);font-size:14px;text-align:center;">No reviews yet.</div>';
-        return;
-      }
-
-      f.reviews.forEach(r => {
-        feed.innerHTML += `
-          <div class="review-item">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-weight:600;font-size:12px;">
-              <span style="color:#f39c12;">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span>
-              <span style="color:var(--text-muted);">Community Member</span>
-            </div>
-            <div style="font-size:14px;color:var(--text-secondary);">${r.text}</div>
-          </div>
-        `;
-      });
+      await loadReviews();
     }
 
     function shareFacilityOnWhatsApp() {
-      const f = facilities.find(x => x.id === currentFacilityId);
-      const text = encodeURIComponent(`I'm checking the live status of ${f.name} on Curaah. See community reviews and live crowd updates here: https://curaah.dev/gov-map.html`);
+      const name = document.getElementById('modalFTitle').innerText;
+      const text = encodeURIComponent(`I'm checking the live status of ${name} on Curaah. See community reviews and live crowd updates here: https://curaah.dev/gov-map.html`);
       window.open(`https://wa.me/?text=${text}`, '_blank');
     }
 
-    // Init
-    renderList();
+    // Geolocation and Add Facility Logic
+    function getLocation() {
+      const stat = document.getElementById('locStatus');
+      stat.innerText = 'Requesting GPS location...';
+      if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            document.getElementById('newFacLat').value = pos.coords.latitude;
+            document.getElementById('newFacLng').value = pos.coords.longitude;
+            stat.innerText = `Location verified! (${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+            stat.style.color = 'var(--success)';
+          },
+          (err) => {
+            stat.innerText = 'GPS blocked. We will use a default central location.';
+            stat.style.color = 'var(--danger)';
+            document.getElementById('newFacLat').value = 30.9664;
+            document.getElementById('newFacLng').value = 76.5331;
+          },
+          { timeout: 5000 }
+        );
+      } else {
+        stat.innerText = 'Geolocation not supported by your browser.';
+      }
+    }
+
+    async function submitFacility(event) {
+      const name = document.getElementById('newFacName').value.trim();
+      const type = document.getElementById('newFacType').value;
+      let lat = document.getElementById('newFacLat').value;
+      let lng = document.getElementById('newFacLng').value;
+
+      if(!name) return alert("Please enter a facility name.");
+      if(!lat || !lng) {
+        alert("Please click 'Use My Current Location' to pin the facility.");
+        return;
+      }
+
+      const btn = event.target;
+      btn.innerText = 'Submitting...';
+      btn.disabled = true;
+
+      const { error } = await supabase.from('gov_facilities').insert({
+        name, 
+        type, 
+        lat: parseFloat(lat), 
+        lng: parseFloat(lng), 
+        status: 'pending'
+      });
+
+      if(error) {
+        alert("Error submitting facility: " + error.message);
+      } else {
+        alert("Facility submitted successfully! Our team will verify it and it will appear on the map shortly.");
+        document.getElementById('addFacilityModal').style.display = 'none';
+        document.getElementById('newFacName').value = '';
+        document.getElementById('locStatus').innerText = '';
+      }
+      
+      btn.innerText = 'Submit for Verification';
+      btn.disabled = false;
+    }
+
+    // Init App
+    loadData();
   </script>
 </body>
 </html>
