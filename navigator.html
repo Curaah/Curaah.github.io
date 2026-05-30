@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Care Navigator — Curaah</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body {
+      background: var(--off-white);
+    }
+    
+    .navigator-header {
+      background: var(--navy);
+      padding: 80px 6% 40px;
+      text-align: center;
+      color: var(--white);
+    }
+
+    .navigator-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 12px;
+    }
+
+    .navigator-header p {
+      color: var(--text-on-dark-muted);
+      font-size: 16px;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .navigator-container {
+      max-width: 700px;
+      margin: -20px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .input-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+    }
+
+    .query-box {
+      width: 100%;
+      height: 120px;
+      background: var(--off-white);
+      border: 1.5px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+      resize: none;
+      margin-bottom: 20px;
+    }
+
+    .query-box:focus {
+      border-color: var(--electric);
+      background: var(--white);
+    }
+
+    /* Loading State */
+    .loading-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(61,158,255,0.2);
+      border-top-color: var(--electric);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Results */
+    .result-container {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .emergency-card {
+      background: #ffebe6;
+      border: 2px solid #de350b;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      display: none;
+      animation: pulseAlert 2s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0% { box-shadow: 0 0 0 0 rgba(222, 53, 11, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(222, 53, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(222, 53, 11, 0); }
+    }
+
+    .emergency-card h3 {
+      color: #de350b;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .emergency-card p {
+      color: #bf2600;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .info-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      margin-bottom: 20px;
+    }
+
+    .info-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .info-list {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .info-list li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .disclaimer {
+      background: rgba(255, 152, 0, 0.08);
+      border: 1px solid rgba(255, 152, 0, 0.3);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #663c00;
+      line-height: 1.5;
+      margin-top: 24px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <div class="navigator-header">
+    <h1>Curaah Care Navigator</h1>
+    <p>Tell us your problem in English, Hindi, or Punjabi. We will guide you on where to go and what government schemes apply to you.</p>
+  </div>
+
+  <div class="navigator-container">
+    
+    <div class="input-card" id="inputCard">
+      <textarea id="searchQuery" class="query-box" placeholder="Example: My father is 55, has TB, and we live in Ropar. Where should we go for free treatment?"></textarea>
+      
+      <button class="btn btn-primary" style="width:100%;font-size:16px;padding:16px;" onclick="getNavigation()">Get Guidance</button>
+
+      <div class="disclaimer" style="margin-top: 20px;">
+        <strong>⚠️ MEDICAL WARNING:</strong> Curaah is a navigation tool, not a doctor. We do not provide medical diagnosis or treatment advice. In an emergency, call 108 immediately.
+      </div>
+    </div>
+
+    <div class="input-card loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <div style="font-weight:600;color:var(--navy);font-size:18px;">Finding the best path...</div>
+      <div style="font-size:14px;color:var(--text-muted);margin-top:8px;">Analyzing hospitals and government schemes.</div>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+      
+      <div class="emergency-card" id="resEmergency">
+        <h3>🚨 MEDICAL EMERGENCY WARNING</h3>
+        <p id="resEmergencyMsg"></p>
+      </div>
+
+      <div class="info-card">
+        <h3>🏥 Recommended Facility Type</h3>
+        <div class="info-text" id="resFacility"></div>
+      </div>
+
+      <div class="info-card">
+        <h3>📜 Government Schemes & Documents</h3>
+        <ul class="info-list" id="resSchemes"></ul>
+      </div>
+
+      <div class="info-card">
+        <h3>📍 Your Treatment Journey (Next Steps)</h3>
+        <ol class="info-list" id="resNextSteps" style="padding-left: 24px;"></ol>
+      </div>
+
+      <button class="btn btn-ghost" style="width:100%;margin-top:20px;background:var(--white);" onclick="resetForm()">Start New Search</button>
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    async function getNavigation() {
+      const query = document.getElementById('searchQuery').value.trim();
+      if (!query) return;
+
+      document.getElementById('inputCard').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'flex';
+      document.getElementById('resultContainer').style.display = 'none';
+
+      try {
+        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/health-navigator', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query })
+        });
+
+        if (!response.ok) throw new Error('Failed to get guidance.');
+
+        const data = await response.json();
+        
+        // Handle Emergency
+        const emCard = document.getElementById('resEmergency');
+        if (data.emergency_warning) {
+          emCard.style.display = 'block';
+          document.getElementById('resEmergencyMsg').innerText = data.urgency_message;
+        } else {
+          emCard.style.display = 'none';
+        }
+
+        document.getElementById('resFacility').innerText = data.facility_type;
+
+        const schemesList = document.getElementById('resSchemes');
+        schemesList.innerHTML = '';
+        data.schemes.forEach(s => {
+          const li = document.createElement('li');
+          li.innerText = s;
+          schemesList.appendChild(li);
+        });
+
+        const stepsList = document.getElementById('resNextSteps');
+        stepsList.innerHTML = '';
+        data.next_steps.forEach(s => {
+          const li = document.createElement('li');
+          li.innerText = s;
+          stepsList.appendChild(li);
+        });
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+
+      } catch (err) {
+        alert(err.message || 'Something went wrong. Please try again.');
+        resetForm();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('searchQuery').value = '';
+      document.getElementById('resultContainer').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('inputCard').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
