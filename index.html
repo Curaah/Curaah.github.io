@@ -523,6 +523,36 @@
       flex-wrap: wrap;
     }
 
+    /* ── DROPDOWN NAVBAR ── */
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 240px;
+      box-shadow: 0px 12px 24px 0px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      padding: 8px 0;
+      z-index: 1000;
+      top: 100%;
+      left: 0;
+      border: 1px solid var(--border-card);
+    }
+    .dropdown-content a {
+      color: var(--text-primary) !important;
+      padding: 12px 20px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: var(--off-white);
+      color: var(--electric) !important;
+    }
+    .dropdown:hover .dropdown-content { display: block; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .hero-inner  { grid-template-columns: 1fr; gap: 48px; }
@@ -560,12 +590,17 @@
 
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="gov-map.html">Govt Health Map 🏥</a></li>
-      <li><a href="report-explainer.html">Free Report Reader ✨</a></li>
-      <li><a href="medicine-info.html">Medicine Info 💊</a></li>
-      <li><a href="navigator.html">Care Navigator 🧭</a></li>
+      <li class="dropdown">
+        <a href="dashboard.html" style="cursor: pointer;">Free Tools ▾</a>
+        <div class="dropdown-content">
+          <a href="gov-map.html">Govt Health Map 🏥</a>
+          <a href="report-explainer.html">Free Report Reader ✨</a>
+          <a href="medicine-info.html">Medicine Info 💊</a>
+          <a href="navigator.html">Care Navigator 🧭</a>
+        </div>
+      </li>
       <li><a href="onboard.html">For Partners</a></li>
-      <li><a href="hospitals.html">B2B Hospitals Demo</a></li>
+      <li><a href="hospitals.html">B2B Demo</a></li>
     </ul>
 
     <div class="nav-actions">
