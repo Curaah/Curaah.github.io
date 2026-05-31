@@ -698,6 +698,14 @@
     window.getLocation = getLocation;
     window.submitFacility = submitFacility;
 
+    
+    function isAppropriate(text) {
+      if (!text) return true;
+      const lower = text.toLowerCase();
+      const badWords = ['fuck','shit','bitch','asshole','dick','pussy','porn','sex','nude','slut','whore','chutiya','madarchod','bhenchod','gandu','bhosadike','loda','lund','randi','sala','kutta','harami','kaminey','chinal','mutth','chod'];
+      return !badWords.some(word => lower.includes(word));
+    }
+
     function calculateDistance(lat1, lon1, lat2, lon2) {
       if (!lat1 || !lon1 || !lat2 || !lon2) return null;
       const R = 6371; 
@@ -897,6 +905,7 @@
     async function postQuestion(isAlert=false, textOverride=null) {
       const text = textOverride || document.getElementById('qaInput').value.trim();
       if (!text) return;
+      if (!isAppropriate(text)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
       
       document.getElementById('qaInput').value = '';
       
@@ -915,6 +924,7 @@
     async function postReply(qaId) {
       const replyText = prompt("Type your answer:");
       if (!replyText || !replyText.trim()) return;
+      if (!isAppropriate(replyText)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
       
       const { error } = await supabase.from('gov_qa_replies').insert({
         qa_id: qaId,
@@ -972,6 +982,7 @@
       if (selectedStars === 0) return alert("Please select a star rating.");
       const text = document.getElementById('reviewInput').value.trim();
       if (!text) return alert("Please write a review.");
+      if (!isAppropriate(text)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
 
       const { error } = await supabase.from('gov_reviews').insert({
         facility_id: currentFacilityId,
@@ -1063,6 +1074,7 @@
       let lng = document.getElementById('newFacLng').value;
 
       if(!name) return alert("Please enter a facility name.");
+      if (!isAppropriate(name) || !isAppropriate(address)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
       if(!lat || !lng) {
         if(!address) {
           alert("Please either drop a pin on the map, use your current location, or type the address.");
@@ -1128,6 +1140,10 @@
           opacity = 0.6;
         }
 
+        const hasVoted = localStorage.getItem('voted_service_' + s.id);
+        const upBtnStyle = hasVoted ? "opacity:0.5; cursor:not-allowed;" : "cursor:pointer;";
+        const downBtnStyle = hasVoted ? "opacity:0.5; cursor:not-allowed;" : "cursor:pointer;";
+
         feed.innerHTML += `
           <div style="background:white; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; opacity:${opacity}; margin-bottom: 8px;">
             <div>
@@ -1135,8 +1151,8 @@
               <div style="font-size:12px; color:#64748b; margin-top:2px;">Added by community</div>
             </div>
             <div style="display:flex; gap:8px;">
-              <button onclick="voteService('${s.id}', 'up')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; color:#15803d;">👍 ${s.upvotes}</button>
-              <button onclick="voteService('${s.id}', 'down')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; color:#b91c1c;">👎 ${s.downvotes}</button>
+              <button onclick="voteService('${s.id}', 'up')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; color:#15803d; ${upBtnStyle}">👍 ${s.upvotes}</button>
+              <button onclick="voteService('${s.id}', 'down')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; color:#b91c1c; ${downBtnStyle}">👎 ${s.downvotes}</button>
             </div>
           </div>
         `;
@@ -1146,6 +1162,7 @@
     async function postService() {
       const name = document.getElementById('serviceInput').value.trim();
       if (!name) return;
+      if (!isAppropriate(name)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
       document.getElementById('serviceInput').value = '';
       const { error } = await supabase.from('gov_facility_services').insert({
         facility_id: currentFacilityId,
@@ -1156,6 +1173,10 @@
     }
 
     async function voteService(serviceId, type) {
+      if (localStorage.getItem('voted_service_' + serviceId)) {
+        return alert("You have already voted on this service.");
+      }
+
       const { data, error } = await supabase.from('gov_facility_services').select('upvotes, downvotes').eq('id', serviceId).single();
       if(error) return alert("Vote failed");
 
@@ -1164,6 +1185,8 @@
       else updates.downvotes = data.downvotes + 1;
 
       await supabase.from('gov_facility_services').update(updates).eq('id', serviceId);
+      
+      localStorage.setItem('voted_service_' + serviceId, 'true');
       await loadServices();
     }
 
