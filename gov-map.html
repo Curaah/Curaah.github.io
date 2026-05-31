@@ -206,6 +206,7 @@
       flex-direction: column;
       box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
       animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
     }
     @media (min-width: 768px) {
       .modal-card { border-radius: 24px; height: 85vh; }
@@ -546,8 +547,9 @@
       </div>
 
       <div class="m-tabs">
-        <div class="m-tab active" id="tabLive" onclick="switchTab('live')">Live Q&A & Insights</div>
-        <div class="m-tab" id="tabReviews" onclick="switchTab('reviews')">Overall Reviews (<span id="modalFStar">0</span>★)</div>
+        <div class="m-tab active" id="tabLive" onclick="switchTab('live')">Live Q&A</div>
+        <div class="m-tab" id="tabServices" onclick="switchTab('services')">Services</div>
+        <div class="m-tab" id="tabReviews" onclick="switchTab('reviews')">Reviews (<span id="modalFStar">0</span>★)</div>
       </div>
 
       <!-- Tab Content: Live Q&A -->
@@ -577,6 +579,21 @@
         </div>
 
         <div class="qa-feed" id="qaFeed">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Services -->
+      <div class="m-content" id="contentServices" style="display:none;">
+        <div class="ask-box">
+          <div style="font-weight:700;margin-bottom:8px;font-size:15px;color:#0f172a;">Verify Available Services</div>
+          <p style="font-size:13px; color:#64748b; margin-bottom:12px; line-height:1.4;">Add a service (e.g. ENT, X-Ray) or vote on existing ones. Services with majority downvotes are flagged as Fake.</p>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="serviceInput" class="ask-input" style="height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 12px; margin-bottom:0;" placeholder="e.g. Pediatrician">
+            <button class="btn btn-primary btn-sm" style="border-radius:8px; white-space:nowrap; padding:0 16px;" onclick="postService()">Add Service</button>
+          </div>
+        </div>
+        <div id="servicesFeed" style="display:flex; flex-direction:column; gap:12px;">
           <!-- Injected via JS -->
         </div>
       </div>
@@ -673,6 +690,8 @@
     window.postAlert = postAlert;
     window.postReply = postReply;
     window.postReview = postReview;
+    window.postService = postService;
+    window.voteService = voteService;
     window.shareFacilityOnWhatsApp = shareFacilityOnWhatsApp;
     window.openAddFacilityModal = openAddFacilityModal;
     window.getLocation = getLocation;
@@ -724,13 +743,24 @@
     function renderList() {
       const list = document.getElementById('facilityList');
       list.innerHTML = '';
-      const filtered = currentFilter === 'All' ? facilities : facilities.filter(f => f.type === currentFilter);
+      let filtered = currentFilter === 'All' ? [...facilities] : facilities.filter(f => f.type === currentFilter);
       const currentHour = new Date().getHours();
 
       if(filtered.length === 0) {
         list.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">No facilities found. Tap the Add Facility button to crowdsource one!</div>';
         return;
       }
+
+      filtered.forEach(f => {
+        f.calcDist = calculateDistance(userLat, userLng, f.lat, f.lng);
+      });
+      
+      filtered.sort((a, b) => {
+        if (a.calcDist && b.calcDist) return a.calcDist - b.calcDist;
+        if (a.calcDist) return -1;
+        if (b.calcDist) return 1;
+        return a.name.localeCompare(b.name);
+      });
 
       filtered.forEach(f => {
         let statusClass = "status-normal";
@@ -793,6 +823,7 @@
       
       await loadReviews();
       await loadQA();
+      await loadServices();
     }
 
     function closeModal() { document.getElementById('unifiedModal').style.display = 'none'; }
@@ -800,12 +831,17 @@
     
     function switchTab(tab) {
       document.getElementById('tabLive').classList.remove('active');
+      document.getElementById('tabServices').classList.remove('active');
       document.getElementById('tabReviews').classList.remove('active');
       document.getElementById('contentLive').style.display = 'none';
+      document.getElementById('contentServices').style.display = 'none';
       document.getElementById('contentReviews').style.display = 'none';
       if (tab === 'live') {
         document.getElementById('tabLive').classList.add('active');
         document.getElementById('contentLive').style.display = 'block';
+      } else if (tab === 'services') {
+        document.getElementById('tabServices').classList.add('active');
+        document.getElementById('contentServices').style.display = 'block';
       } else {
         document.getElementById('tabReviews').classList.add('active');
         document.getElementById('contentReviews').style.display = 'block';
@@ -1061,6 +1097,73 @@
       
       btn.innerText = 'Submit for Verification';
       btn.disabled = false;
+    }
+
+    async function loadServices() {
+      const feed = document.getElementById('servicesFeed');
+      feed.innerHTML = '<div style="color:#64748b;font-size:14px;text-align:center;">Loading services...</div>';
+      
+      const { data, error } = await supabase
+        .from('gov_facility_services')
+        .select('*')
+        .eq('facility_id', currentFacilityId)
+        .order('upvotes', { ascending: false });
+
+      if (error || !data || data.length === 0) {
+        feed.innerHTML = '<div style="color:#64748b;font-size:14px;text-align:center;">No services listed yet. Be the first to add one!</div>';
+        return;
+      }
+
+      feed.innerHTML = '';
+      data.forEach(s => {
+        const netVotes = s.upvotes - s.downvotes;
+        let badgeHtml = '';
+        let opacity = 1;
+
+        if (netVotes >= 5) {
+          badgeHtml = '<span style="font-size:11px; background:#dcfce7; color:#166534; padding:2px 6px; border-radius:4px; font-weight:700; margin-left:8px;">Verified ✅</span>';
+        } else if (netVotes < 0) {
+          badgeHtml = '<span style="font-size:11px; background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-weight:700; margin-left:8px;">Likely Fake ❌</span>';
+          opacity = 0.6;
+        }
+
+        feed.innerHTML += `
+          <div style="background:white; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; opacity:${opacity}; margin-bottom: 8px;">
+            <div>
+              <div style="font-weight:600; font-size:15px; color:#0f172a;">${s.service_name} ${badgeHtml}</div>
+              <div style="font-size:12px; color:#64748b; margin-top:2px;">Added by community</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button onclick="voteService('${s.id}', 'up')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; color:#15803d;">👍 ${s.upvotes}</button>
+              <button onclick="voteService('${s.id}', 'down')" style="background:#f1f5f9; border:1px solid #e2e8f0; padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; color:#b91c1c;">👎 ${s.downvotes}</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function postService() {
+      const name = document.getElementById('serviceInput').value.trim();
+      if (!name) return;
+      document.getElementById('serviceInput').value = '';
+      const { error } = await supabase.from('gov_facility_services').insert({
+        facility_id: currentFacilityId,
+        service_name: name
+      });
+      if(error) alert('Error adding service: ' + error.message);
+      else await loadServices();
+    }
+
+    async function voteService(serviceId, type) {
+      const { data, error } = await supabase.from('gov_facility_services').select('upvotes, downvotes').eq('id', serviceId).single();
+      if(error) return alert("Vote failed");
+
+      const updates = {};
+      if(type === 'up') updates.upvotes = data.upvotes + 1;
+      else updates.downvotes = data.downvotes + 1;
+
+      await supabase.from('gov_facility_services').update(updates).eq('id', serviceId);
+      await loadServices();
     }
 
     // Init App
