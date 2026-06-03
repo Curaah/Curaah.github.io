@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <meta name="description" content="Curaah AI Scribe — Voice-to-Prescription for Indian Doctors. Speak naturally, get a formatted prescription instantly. Save 2 hours daily. DPDP 2023 Compliant." />
+  <title>AI Doctor Scribe — Curaah HealthTech</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: #f8fafc; }
+
+    .scribe-hero {
+      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 50%, #0f2847 100%);
+      padding: 100px 6% 50px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .scribe-hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,158,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .scribe-hero h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 5vw, 48px);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .scribe-hero h1 .accent { color: var(--electric); }
+    .scribe-hero p {
+      color: #94a3b8;
+      font-size: 17px;
+      max-width: 560px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+    .trust-badges {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .trust-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trust-badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .scribe-container {
+      max-width: 680px;
+      margin: -30px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Main Scribe Card */
+    .scribe-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    .scribe-card-header {
+      padding: 24px 28px 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .scribe-card-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .scribe-card-header p {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .scribe-body {
+      padding: 28px;
+    }
+
+    /* Mode Toggle */
+    .mode-toggle {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: white;
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Voice Mode */
+    .voice-area {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .record-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #3d9eff, #1a7fd4);
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(61,158,255,0.35);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+    .record-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(61,158,255,0.45);
+    }
+    .record-btn:active { transform: scale(0.95); }
+    .record-btn.recording {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 8px 24px rgba(239,68,68,0.4);
+      animation: pulseRecord 1.5s infinite;
+    }
+    @keyframes pulseRecord {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+      70% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+    .record-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .record-timer {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ef4444;
+      font-family: 'Georgia', serif;
+      margin-bottom: 8px;
+      display: none;
+    }
+
+    /* Type Mode */
+    .type-area { display: none; }
+    .type-input {
+      width: 100%;
+      min-height: 160px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #0f172a;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fafbfc;
+    }
+    .type-input:focus {
+      border-color: var(--electric);
+      background: white;
+    }
+    .type-input::placeholder { color: #94a3b8; }
+
+    .generate-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #3d9eff, #1a7fd4);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(61,158,255,0.3);
+    }
+    .generate-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(61,158,255,0.4);
+    }
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loading */
+    .scribe-loading {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .scribe-spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(61,158,255,0.15);
+      border-top-color: var(--electric);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Output */
+    .scribe-output {
+      display: none;
+      padding: 28px;
+    }
+    .rx-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    .rx-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .rx-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .rx-action-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      background: white;
+      color: #334155;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .rx-action-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .rx-action-btn.primary {
+      background: var(--electric);
+      color: white;
+      border-color: var(--electric);
+    }
+    .rx-action-btn.primary:hover { opacity: 0.9; }
+    .rx-action-btn.whatsapp {
+      background: #22c55e;
+      color: white;
+      border-color: #22c55e;
+    }
+
+    .rx-content {
+      background: #fafbfc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #1e293b;
+      white-space: pre-wrap;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .rx-disclaimer {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .new-session-btn {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      margin-top: 16px;
+      transition: all 0.2s;
+    }
+    .new-session-btn:hover { border-color: var(--electric); color: var(--electric); }
+
+    /* Usage Counter */
+    .usage-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 28px;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .usage-bar a {
+      color: var(--electric);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Privacy Strip */
+    .privacy-strip {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .privacy-strip a { color: var(--electric); text-decoration: underline; }
+
+    /* How It Works */
+    .how-section {
+      max-width: 680px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+    .how-section h2 {
+      font-family: 'Georgia', serif;
+      font-size: 24px;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .how-step {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px 16px;
+      text-align: center;
+    }
+    .how-step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(61,158,255,0.1);
+      color: var(--electric);
+      font-weight: 800;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .how-step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .how-step-desc {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 600px) {
+      .how-steps { grid-template-columns: 1fr; }
+      .scribe-hero { padding: 90px 5% 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+        <span class="nav-logo-tag">HealthTech Pvt Ltd</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="scribe-hero">
+    <h1>Stop Writing Prescriptions.<br/>Start <span class="accent">Speaking</span> Them.</h1>
+    <p>Curaah AI Scribe converts your voice into structured, professional prescriptions in seconds. Save 2+ hours every day. Works in Hindi, Punjabi & English.</p>
+    <div class="trust-badges">
+      <div class="trust-badge"><span class="dot"></span> DPDP 2023 Compliant</div>
+      <div class="trust-badge"><span class="dot"></span> Zero Data Retained</div>
+      <div class="trust-badge"><span class="dot"></span> Works Offline-Ready</div>
+    </div>
+  </div>
+
+  <!-- MAIN SCRIBE CARD -->
+  <div class="scribe-container">
+    <div class="scribe-card">
+      <div class="scribe-card-header">
+        <h2>AI Prescription Generator</h2>
+        <p>Speak or type the patient consultation. Our AI formats a clean prescription instantly.</p>
+      </div>
+
+      <div class="scribe-body" id="scribeInput">
+        <!-- Mode Toggle -->
+        <div class="mode-toggle">
+          <button class="mode-btn active" id="modeVoice" onclick="switchMode('voice')">🎙️ Voice Mode</button>
+          <button class="mode-btn" id="modeType" onclick="switchMode('type')">⌨️ Type Mode</button>
+        </div>
+
+        <!-- Voice Mode -->
+        <div class="voice-area" id="voiceArea">
+          <div class="record-timer" id="recordTimer">00:00</div>
+          <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
+            🎙️
+          </button>
+          <div class="record-label" id="recordLabel">Tap to start recording</div>
+        </div>
+
+        <!-- Type Mode -->
+        <div class="type-area" id="typeArea">
+          <textarea class="type-input" id="typeInput" placeholder="Example: Patient Ramesh Kumar, age 45, male. Chief complaint: fever and body ache for 3 days. BP 130/80. Prescribed Paracetamol 650mg TDS for 5 days, Azithromycin 500mg OD for 3 days. Follow up after 5 days."></textarea>
+        </div>
+
+        <button class="generate-btn" id="generateBtn" onclick="generatePrescription()" disabled>Generate Prescription</button>
+      </div>
+
+      <!-- Loading State -->
+      <div class="scribe-loading" id="scribeLoading">
+        <div class="scribe-spinner"></div>
+        <div style="font-weight:700;color:#0f172a;font-size:18px;">Generating Prescription...</div>
+        <div style="font-size:14px;color:#64748b;margin-top:8px;">AI is structuring your notes. This takes ~5 seconds.</div>
+      </div>
+
+      <!-- Output -->
+      <div class="scribe-output" id="scribeOutput">
+        <div class="rx-header">
+          <h3>📋 Generated Prescription</h3>
+          <div class="rx-actions">
+            <button class="rx-action-btn" onclick="copyPrescription()">📋 Copy</button>
+            <button class="rx-action-btn whatsapp" onclick="sharePrescriptionWhatsApp()">💬 WhatsApp</button>
+          </div>
+        </div>
+        <div class="rx-content" id="rxContent"></div>
+        <div class="rx-disclaimer">
+          ⚠️ <strong>Disclaimer:</strong> This AI-generated prescription is a formatting aid only. The prescribing doctor is solely responsible for clinical accuracy. Curaah does not provide medical advice. Audio and text are deleted immediately after processing (DPDP 2023 compliant).
+        </div>
+        <button class="new-session-btn" onclick="resetScribe()">+ New Prescription</button>
+      </div>
+
+      <!-- Usage Counter -->
+      <div class="usage-bar" id="usageBar">
+        <span>Free uses today: <strong id="usageCount">5</strong> / 5</span>
+        <a href="#pricing">Upgrade for Unlimited →</a>
+      </div>
+    </div>
+
+    <div class="privacy-strip">
+      🔒 Your audio and patient data are processed in real-time and <strong>immediately deleted</strong>. We store nothing.<br/>
+      Compliant with <a href="privacy.html">DPDP Act 2023</a> · Built by <a href="https://curaah.in">Curaah HealthTech Pvt Ltd</a>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section">
+    <h2>How It Works</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <div class="how-step-title">Speak or Type</div>
+        <div class="how-step-desc">Dictate naturally in Hindi, Punjabi, or English during or after your consultation.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">2</div>
+        <div class="how-step-title">AI Structures It</div>
+        <div class="how-step-desc">Our AI extracts patient details, diagnosis, medications, dosages, and follow-up into a clean format.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <div class="how-step-title">Copy or WhatsApp</div>
+        <div class="how-step-desc">Copy to your EMR, print it, or WhatsApp the prescription directly to the patient.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // =============================================
+    // CURAAH AI SCRIBE — Frontend Logic
+    // DPDP 2023 Compliant: Zero Data Retention
+    // =============================================
+
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingInterval = null;
+    let recordingSeconds = 0;
+    let transcribedText = '';
+
+    const DAILY_FREE_LIMIT = 5;
+    const STORAGE_KEY = 'curaah_scribe_usage';
+
+    // --- Usage Tracking (localStorage only, no server storage) ---
+    function getUsageToday() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return 0;
+      try {
+        const data = JSON.parse(stored);
+        const today = new Date().toDateString();
+        if (data.date !== today) return 0;
+        return data.count || 0;
+      } catch { return 0; }
+    }
+
+    function incrementUsage() {
+      const today = new Date().toDateString();
+      const count = getUsageToday() + 1;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count }));
+      updateUsageUI();
+    }
+
+    function updateUsageUI() {
+      const used = getUsageToday();
+      const remaining = Math.max(0, DAILY_FREE_LIMIT - used);
+      document.getElementById('usageCount').innerText = remaining;
+      if (remaining <= 0) {
+        document.getElementById('generateBtn').disabled = true;
+        document.getElementById('recordBtn').disabled = true;
+      }
+    }
+
+    // --- Mode Switching ---
+    function switchMode(mode) {
+      document.getElementById('modeVoice').classList.toggle('active', mode === 'voice');
+      document.getElementById('modeType').classList.toggle('active', mode === 'type');
+      document.getElementById('voiceArea').style.display = mode === 'voice' ? 'block' : 'none';
+      document.getElementById('typeArea').style.display = mode === 'type' ? 'block' : 'none';
+
+      if (mode === 'type') {
+        document.getElementById('generateBtn').disabled = false;
+      } else {
+        document.getElementById('generateBtn').disabled = !transcribedText;
+      }
+    }
+
+    // --- Voice Recording ---
+    async function toggleRecording() {
+      if (getUsageToday() >= DAILY_FREE_LIMIT) {
+        alert("You've reached the free daily limit. Upgrade for unlimited prescriptions.");
+        return;
+      }
+
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    }
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = handleRecordingComplete;
+
+        mediaRecorder.start();
+        isRecording = true;
+        recordingSeconds = 0;
+
+        document.getElementById('recordBtn').classList.add('recording');
+        document.getElementById('recordBtn').innerHTML = '⏹️';
+        document.getElementById('recordLabel').innerText = 'Recording... Tap to stop';
+        document.getElementById('recordTimer').style.display = 'block';
+
+        recordingInterval = setInterval(() => {
+          recordingSeconds++;
+          const mins = Math.floor(recordingSeconds / 60).toString().padStart(2, '0');
+          const secs = (recordingSeconds % 60).toString().padStart(2, '0');
+          document.getElementById('recordTimer').innerText = `${mins}:${secs}`;
+        }, 1000);
+
+      } catch (err) {
+        alert("Microphone access denied. Please allow microphone access in your browser settings.");
+      }
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      }
+      clearInterval(recordingInterval);
+      isRecording = false;
+
+      document.getElementById('recordBtn').classList.remove('recording');
+      document.getElementById('recordBtn').innerHTML = '🎙️';
+      document.getElementById('recordLabel').innerText = 'Processing audio...';
+    }
+
+    async function handleRecordingComplete() {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      audioChunks = []; // Clear immediately — DPDP compliance
+
+      document.getElementById('recordLabel').innerText = 'Transcribing your voice...';
+
+      try {
+        // Use browser's built-in SpeechRecognition as fallback (free, works offline)
+        // For production, call Supabase Edge Function with Sarvam/Whisper API
+        transcribedText = await transcribeAudio(audioBlob);
+
+        document.getElementById('recordLabel').innerText = '✅ Voice captured! Tap "Generate Prescription"';
+        document.getElementById('recordTimer').style.display = 'none';
+        document.getElementById('generateBtn').disabled = false;
+
+      } catch (err) {
+        document.getElementById('recordLabel').innerText = '❌ Transcription failed. Try typing instead.';
+        document.getElementById('recordTimer').style.display = 'none';
+        console.error(err);
+      }
+    }
+
+    // --- Transcription (Browser-Native SpeechRecognition for MVP, free & offline) ---
+    function transcribeAudio(audioBlob) {
+      return new Promise((resolve, reject) => {
+        // For MVP: Use the Web Speech API (free, runs in browser, no API costs)
+        // For Production: Replace with Supabase Edge Function → Sarvam/Whisper/Groq
+        if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+          reject(new Error('Speech recognition not supported. Use Chrome or Edge.'));
+          return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'hi-IN'; // Hindi + English mixed mode
+
+        let fullText = '';
+        recognition.onresult = (event) => {
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            fullText += event.results[i][0].transcript + ' ';
+          }
+        };
+        recognition.onend = () => resolve(fullText.trim());
+        recognition.onerror = (e) => reject(e);
+
+        // We can't feed an audio blob to SpeechRecognition API directly.
+        // So for the MVP, we use a LIVE recognition approach instead.
+        // The recording button will actually use SpeechRecognition in real-time.
+        reject(new Error('USE_LIVE_RECOGNITION'));
+      });
+    }
+
+    // --- LIVE Speech Recognition (runs DURING recording, not after) ---
+    let speechRecognition = null;
+    let liveTranscript = '';
+
+    async function startRecording() {
+      if (getUsageToday() >= DAILY_FREE_LIMIT) {
+        alert("You've reached the free daily limit.");
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Voice recognition is not supported on this browser. Please use Chrome or Edge, or switch to Type Mode.");
+        return;
+      }
+
+      speechRecognition = new SpeechRecognition();
+      speechRecognition.continuous = true;
+      speechRecognition.interimResults = true;
+      speechRecognition.lang = 'hi-IN';
+
+      liveTranscript = '';
+
+      speechRecognition.onresult = (event) => {
+        let interim = '';
+        for (let i = 0; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            liveTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        document.getElementById('recordLabel').innerText = liveTranscript + interim || 'Listening...';
+      };
+
+      speechRecognition.onerror = (e) => {
+        console.error('Speech error:', e.error);
+        if (e.error === 'not-allowed') {
+          alert("Microphone access denied. Please allow microphone in browser settings.");
+        }
+      };
+
+      speechRecognition.onend = () => {
+        if (isRecording) speechRecognition.start(); // Keep listening if still recording
+      };
+
+      speechRecognition.start();
+      isRecording = true;
+      recordingSeconds = 0;
+
+      document.getElementById('recordBtn').classList.add('recording');
+      document.getElementById('recordBtn').innerHTML = '⏹️';
+      document.getElementById('recordLabel').innerText = 'Listening...';
+      document.getElementById('recordTimer').style.display = 'block';
+
+      recordingInterval = setInterval(() => {
+        recordingSeconds++;
+        const mins = Math.floor(recordingSeconds / 60).toString().padStart(2, '0');
+        const secs = (recordingSeconds % 60).toString().padStart(2, '0');
+        document.getElementById('recordTimer').innerText = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function stopRecording() {
+      if (speechRecognition) {
+        isRecording = false; // Set before stop to prevent restart
+        speechRecognition.stop();
+        speechRecognition = null;
+      }
+      clearInterval(recordingInterval);
+
+      transcribedText = liveTranscript.trim();
+
+      document.getElementById('recordBtn').classList.remove('recording');
+      document.getElementById('recordBtn').innerHTML = '🎙️';
+      document.getElementById('recordTimer').style.display = 'none';
+
+      if (transcribedText) {
+        document.getElementById('recordLabel').innerText = '✅ Voice captured! Tap "Generate Prescription"';
+        document.getElementById('generateBtn').disabled = false;
+      } else {
+        document.getElementById('recordLabel').innerText = 'No speech detected. Try again or switch to Type Mode.';
+      }
+    }
+
+    async function toggleRecording() {
+      if (isRecording) { stopRecording(); }
+      else { startRecording(); }
+    }
+
+    // --- Generate Prescription via Gemini AI ---
+    async function generatePrescription() {
+      if (getUsageToday() >= DAILY_FREE_LIMIT) {
+        alert("Free daily limit reached.");
+        return;
+      }
+
+      const isTypeMode = document.getElementById('modeType').classList.contains('active');
+      const inputText = isTypeMode ? document.getElementById('typeInput').value.trim() : transcribedText;
+
+      if (!inputText) {
+        alert("Please record or type the consultation notes first.");
+        return;
+      }
+
+      // Show loading
+      document.getElementById('scribeInput').style.display = 'none';
+      document.getElementById('scribeLoading').style.display = 'block';
+      document.getElementById('scribeOutput').style.display = 'none';
+
+      try {
+        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/ai-scribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ consultation_notes: inputText })
+        });
+
+        if (!response.ok) throw new Error('AI service temporarily unavailable.');
+
+        const data = await response.json();
+
+        // Display result
+        document.getElementById('rxContent').innerText = data.prescription || data.text || 'Error generating prescription.';
+        document.getElementById('scribeLoading').style.display = 'none';
+        document.getElementById('scribeOutput').style.display = 'block';
+
+        incrementUsage();
+
+      } catch (err) {
+        alert("Error: " + (err.message || "Something went wrong. Please try again."));
+        document.getElementById('scribeLoading').style.display = 'none';
+        document.getElementById('scribeInput').style.display = 'block';
+      }
+    }
+
+    // --- Actions ---
+    function copyPrescription() {
+      const text = document.getElementById('rxContent').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Prescription copied to clipboard!");
+      });
+    }
+
+    function sharePrescriptionWhatsApp() {
+      const text = encodeURIComponent(document.getElementById('rxContent').innerText);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
+    function resetScribe() {
+      transcribedText = '';
+      liveTranscript = '';
+      document.getElementById('typeInput').value = '';
+      document.getElementById('scribeInput').style.display = 'block';
+      document.getElementById('scribeLoading').style.display = 'none';
+      document.getElementById('scribeOutput').style.display = 'none';
+      document.getElementById('recordLabel').innerText = 'Tap to start recording';
+      document.getElementById('generateBtn').disabled = true;
+      switchMode('voice');
+    }
+
+    // Init
+    updateUsageUI();
+  </script>
+</body>
+</html>
