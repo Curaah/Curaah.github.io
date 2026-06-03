@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Drug Recovery Support Punjab — Curaah</title>
+  <meta name="description" content="Free support for families affected by drug addiction in Punjab. Find Govt de-addiction centers, OAAT clinics, and helplines." />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--off-white); }
+    
+    .recovery-hero {
+      background: linear-gradient(135deg, #0f1f3d 0%, #311025 100%);
+      padding: 80px 6% 60px;
+      text-align: center;
+      color: var(--white);
+    }
+    .recovery-hero h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 16px;
+    }
+    .recovery-hero p {
+      color: #cbd5e1;
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .recovery-container {
+      max-width: 800px;
+      margin: -30px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .helpline-card {
+      background: #fff1f2;
+      border: 2px solid #e11d48;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(225, 29, 72, 0.15);
+    }
+    .helpline-card h2 {
+      color: #e11d48;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .helpline-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #9f1239;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .helpline-desc {
+      font-size: 14px;
+      color: #be123c;
+    }
+
+    .directory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 600px) { .directory-grid { grid-template-columns: 1fr; } }
+    
+    .center-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .center-card:hover { border-color: var(--electric); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .center-card h3 { font-size: 16px; color: #0f172a; margin-bottom: 6px; }
+    .center-card p { font-size: 13px; color: #64748b; margin-bottom: 12px; line-height: 1.5; }
+    
+    .btn-call {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #f1f5f9; color: #334155; padding: 6px 12px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; text-decoration: none;
+    }
+    .btn-call:hover { background: #e2e8f0; }
+
+    .ai-support-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+    }
+    .ai-support-card h2 { font-size: 20px; color: #0f172a; margin-bottom: 12px; }
+    .ai-support-card p { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 20px; }
+
+    .disclaimer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <div class="recovery-hero">
+    <h1>You are not alone. Help is here.</h1>
+    <p>A free, confidential resource for families in Punjab seeking help with drug de-addiction and recovery support.</p>
+  </div>
+
+  <div class="recovery-container">
+    
+    <div class="helpline-card">
+      <h2>🚨 Punjab Govt. Drug De-Addiction Helpline</h2>
+      <div class="helpline-number">104</div>
+      <div class="helpline-desc">Toll-Free • 24/7 • Completely Confidential</div>
+      <a href="tel:104" class="btn btn-primary" style="margin-top: 16px; background: #be123c; border:none; padding: 10px 24px;">Call Now</a>
+    </div>
+
+    <h2 style="font-size: 20px; margin-bottom: 16px; color: #0f172a;">Find Nearest Govt Rehab Centers</h2>
+    <div class="directory-grid" id="rehabDirectory">
+      <!-- Injected via JS -->
+    </div>
+    
+    <!-- AdSense Placeholder -->
+    <div style="background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; color: #94a3b8; font-size: 13px; font-weight: 600; margin-bottom: 24px;">
+      Google AdSense Placeholder<br><span style="font-size:11px; font-weight:400;">Advertisements help keep this directory free</span>
+    </div>
+
+    <div class="ai-support-card">
+      <div style="font-size: 40px; margin-bottom: 16px;">💬</div>
+      <h2>AI Recovery Guide</h2>
+      <p>Have questions about withdrawal symptoms, how to talk to a family member, or what to expect in rehab? Our AI guide can provide private, compassionate answers based on medical guidelines.</p>
+      <button class="btn btn-outline" style="width: 100%;" onclick="alert('Chatbot coming soon. Please call 104 for immediate help.')">Start Private Chat</button>
+    </div>
+
+    <div class="disclaimer">
+      <strong>Important:</strong> Curaah is a technology platform, not a medical provider. This directory lists publicly available government resources. We do not provide medical treatment. In case of a medical emergency, overdose, or self-harm risk, immediately call 108 or visit the nearest hospital emergency room.
+    </div>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    function renderRehabs(data) {
+      const container = document.getElementById('rehabDirectory');
+      container.innerHTML = '';
+      
+      const rehabs = data.filter(f => f.type === 'De-Addiction Center');
+      
+      if (rehabs.length === 0) {
+        container.innerHTML = '<div style="color:#64748b; font-size:14px; text-align:center; grid-column: 1 / -1;">No rehab centers found in your area yet.</div>';
+        return;
+      }
+
+      rehabs.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'center-card';
+        const mapLink = `https://www.google.com/maps/search/?api=1&query=${f.lat},${f.lng}`;
+        card.innerHTML = `
+          <h3>${f.name}</h3>
+          <p>${f.address}</p>
+          <a href="${mapLink}" target="_blank" class="btn-call">📍 Get Directions</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function loadRehabs() {
+      // Offline-First "Where is my train" caching
+      const cached = localStorage.getItem('curaah_gov_facilities');
+      if (cached) {
+        renderRehabs(JSON.parse(cached));
+      } else {
+        document.getElementById('rehabDirectory').innerHTML = '<div style="color:#64748b; font-size:14px; text-align:center; grid-column: 1 / -1;">Loading live directory...</div>';
+      }
+
+      // Background sync with Supabase for crowdsourced additions
+      const { data, error } = await supabase
+        .from('gov_facilities')
+        .select('*')
+        .eq('status', 'approved');
+        
+      if(!error && data) {
+        localStorage.setItem('curaah_gov_facilities', JSON.stringify(data));
+        renderRehabs(data);
+      }
+    }
+
+    loadRehabs();
+  </script>
+</body>
+</html>
