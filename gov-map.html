@@ -678,8 +678,26 @@
     
     let userLat = null;
     let userLng = null;
+    let targetLat = null; // Used for location-gating
+    let targetLng = null;
     let pickerMap = null;
     let pickerMarker = null;
+
+    // Location-Gated Anti-Spam (Where is my train trust model)
+    function checkLocationTrust() {
+      if (!userLat || !userLng) {
+        alert("📍 Location Required: You must enable GPS to post live updates. This prevents spam and fake alerts.");
+        return false;
+      }
+      if (!targetLat || !targetLng) return true; // Fallback
+      
+      const dist = parseFloat(calculateDistance(userLat, userLng, targetLat, targetLng));
+      if (dist > 1.0) { // If further than 1 km
+        alert(`🚨 Anti-Spam Protected: You are ${dist} km away. You must be physically at the hospital to post a live update or review.`);
+        return false;
+      }
+      return true;
+    }
 
     // Expose to window for HTML event handlers
     window.filterData = filterData;
@@ -730,23 +748,29 @@
         );
       }
 
-      const list = document.getElementById('facilityList');
-      list.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">Loading live directory...</div>';
-      
+      // Offline-First "Where is my train" caching
+      const cached = localStorage.getItem('curaah_gov_facilities');
+      if (cached) {
+        facilities = JSON.parse(cached);
+        renderList();
+      } else {
+        document.getElementById('facilityList').innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">Loading live directory...</div>';
+      }
+
+      // Background sync with Supabase for crowdsourced additions
       const { data, error } = await supabase
         .from('gov_facilities')
         .select('*')
         .eq('status', 'approved')
         .order('name');
         
-      if(error) {
-        console.error(error);
-        list.innerHTML = '<div style="text-align:center; padding:40px; color:#ef4444;">Connection failed.</div>';
-        return;
+      if(!error && data) {
+        facilities = data;
+        localStorage.setItem('curaah_gov_facilities', JSON.stringify(data));
+        renderList();
+      } else if (!cached) {
+        document.getElementById('facilityList').innerHTML = '<div style="text-align:center; padding:40px; color:#ef4444;">Offline Mode. Please connect to internet to sync facilities.</div>';
       }
-      
-      facilities = data || [];
-      renderList();
     }
 
     function renderList() {
@@ -800,6 +824,15 @@
         `;
         list.appendChild(card);
       });
+
+      // Inject AdSense Placeholder for Monetization
+      if (filtered.length > 2) {
+        const adCard = document.createElement('div');
+        adCard.style.cssText = "background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; color: #94a3b8; font-size: 13px; font-weight: 600; margin: 8px 0;";
+        adCard.innerHTML = "Google AdSense Placeholder<br><span style='font-size:11px; font-weight:400;'>Advertisements help keep this directory free</span>";
+        // Insert after the second facility
+        list.insertBefore(adCard, list.children[2]);
+      }
     }
 
     function filterData(type, el) {
@@ -811,6 +844,8 @@
 
     async function openModal(id, name, distHtml, lat, lng) {
       currentFacilityId = id;
+      targetLat = lat;
+      targetLng = lng;
       document.getElementById('modalFTitle').innerText = name;
       
       const mapLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -902,7 +937,9 @@
       });
     }
 
-    async function postQuestion(isAlert=false, textOverride=null) {
+    async function postQuestion(isAlert = false, textOverride = null) {
+      if (!checkLocationTrust()) return;
+      
       const text = textOverride || document.getElementById('qaInput').value.trim();
       if (!text) return;
       if (!isAppropriate(text)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
@@ -979,6 +1016,7 @@
     });
 
     async function postReview() {
+      if (!checkLocationTrust()) return;
       if (selectedStars === 0) return alert("Please select a star rating.");
       const text = document.getElementById('reviewInput').value.trim();
       if (!text) return alert("Please write a review.");
@@ -1160,6 +1198,7 @@
     }
 
     async function postService() {
+      if (!checkLocationTrust()) return;
       const name = document.getElementById('serviceInput').value.trim();
       if (!name) return;
       if (!isAppropriate(name)) return alert("Please use appropriate language. Your account may be banned for hate speech.");
@@ -1173,6 +1212,7 @@
     }
 
     async function voteService(serviceId, type) {
+      if (!checkLocationTrust()) return;
       if (localStorage.getItem('voted_service_' + serviceId)) {
         return alert("You have already voted on this service.");
       }
