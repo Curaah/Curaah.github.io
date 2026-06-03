@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#060d1f" />
+  <title>Curaah Companion — Your AI Healthcare Partner</title>
+  <meta name="description" content="Upload your prescription. Get daily medicine reminders. Track your treatment journey. Keep your family informed. India's AI healthcare companion on WhatsApp." />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body { background: #f0f4f8; }
+
+    /* Header */
+    .comp-header {
+      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 60%, #0d4a2e 100%);
+      padding: 80px 6% 50px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .comp-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 70%, rgba(0,196,140,0.08) 0%, transparent 60%);
+      animation: pulseGlow 8s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    .comp-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(28px, 4.5vw, 44px);
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .comp-header h1 span { color: #00c48c; }
+    .comp-header p {
+      color: rgba(255,255,255,0.65);
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .comp-tagline {
+      display: inline-block;
+      background: rgba(0,196,140,0.15);
+      color: #00c48c;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* Main Container */
+    .comp-container {
+      max-width: 480px;
+      margin: -24px auto 40px;
+      padding: 0 16px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Tab Navigation */
+    .comp-tabs {
+      display: flex;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-card);
+      border-bottom: none;
+    }
+    .comp-tab {
+      flex: 1;
+      padding: 14px 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 3px solid transparent;
+      background: white;
+    }
+    .comp-tab.active {
+      color: #00c48c;
+      border-bottom-color: #00c48c;
+      background: rgba(0,196,140,0.04);
+    }
+    .comp-tab-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    /* Panel */
+    .comp-panel {
+      display: none;
+      background: white;
+      border-radius: 0 0 16px 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-card);
+      border-top: none;
+    }
+    .comp-panel.active { display: block; }
+
+    /* Upload Card */
+    .rx-upload-area {
+      border: 2px dashed var(--border-card);
+      border-radius: 16px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: rgba(0,196,140,0.02);
+      margin-bottom: 16px;
+    }
+    .rx-upload-area:hover {
+      border-color: #00c48c;
+      background: rgba(0,196,140,0.06);
+    }
+    .rx-upload-icon { font-size: 40px; margin-bottom: 8px; }
+    .rx-upload-text { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .rx-upload-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Medicine Card */
+    .med-card {
+      background: #f8faf9;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: var(--transition);
+      position: relative;
+    }
+    .med-card:hover { box-shadow: var(--shadow-sm); }
+    .med-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .med-dosage {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .med-purpose {
+      font-size: 12px;
+      color: #00856a;
+      background: rgba(0,196,140,0.08);
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .med-schedule {
+      display: flex;
+      gap: 6px;
+    }
+    .med-time-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #eef3fc;
+      color: var(--electric);
+    }
+    .med-time-chip.active-dose {
+      background: #00c48c;
+      color: white;
+    }
+
+    /* Adherence Row */
+    .adh-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .adh-row:last-child { border-bottom: none; }
+    .adh-med-info {
+      flex: 1;
+    }
+    .adh-med-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    .adh-med-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .adh-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .adh-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      background: white;
+    }
+    .adh-btn:hover { transform: scale(1.1); }
+    .adh-btn.taken {
+      background: #dcfce7;
+      border-color: #00c48c;
+    }
+    .adh-btn.missed {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #f8faf9;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .stat-value.good { color: #00c48c; }
+    .stat-value.warn { color: #f59e0b; }
+    .stat-value.bad { color: #ef4444; }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Timeline */
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .timeline-dot.green { background: #00c48c; }
+    .timeline-dot.red { background: #ef4444; }
+    .timeline-dot.yellow { background: #f59e0b; }
+    .timeline-dot.blue { background: var(--electric); }
+    .timeline-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .timeline-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Family Share Section */
+    .share-code-box {
+      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+      border: 2px dashed #86efac;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .share-code {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 8px;
+      color: #166534;
+      margin: 12px 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Side Effect Button */
+    .side-effect-btn {
+      width: 100%;
+      padding: 14px;
+      border: 1.5px solid #fecaca;
+      background: #fff5f5;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dc2626;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 12px;
+    }
+    .side-effect-btn:hover {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+
+    /* Loading Spinner */
+    .comp-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(0,196,140,0.2);
+      border-top-color: #00c48c;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 30px auto;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* WhatsApp CTA Banner */
+    .wa-cta-banner {
+      background: linear-gradient(135deg, #075e54, #128c7e);
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .wa-cta-banner h3 { font-size: 16px; margin-bottom: 6px; }
+    .wa-cta-banner p { font-size: 13px; opacity: 0.8; margin-bottom: 14px; }
+    .wa-cta-btn {
+      display: inline-block;
+      background: #25d366;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .wa-cta-btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(37,211,102,0.4); }
+
+    /* Disclaimer */
+    .comp-disclaimer {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 14px;
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.5;
+      margin-top: 16px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Modal */
+    .comp-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .comp-modal-overlay.open { display: flex; }
+    .comp-modal {
+      background: white;
+      border-radius: 20px 20px 0 0;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .comp-modal h3 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .comp-modal textarea {
+      width: 100%;
+      min-height: 100px;
+      border: 1.5px solid var(--border-card);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .comp-modal textarea:focus { border-color: #00c48c; }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state-text { font-size: 15px; font-weight: 600; color: var(--text-secondary); }
+    .empty-state-sub { font-size: 13px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">curaah</span>
+      </div>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="comp-header">
+    <div class="comp-tagline">YOUR AI HEALTHCARE COMPANION</div>
+    <h1>Curaah <span>Companion</span></h1>
+    <p>Upload your prescription. We'll remind you, track your medicines, and keep your family informed — every single day.</p>
+  </div>
+
+  <!-- Main Container -->
+  <div class="comp-container">
+
+    <!-- Tab Navigation -->
+    <div class="comp-tabs">
+      <div class="comp-tab active" onclick="switchCompTab('plan')">
+        <span class="comp-tab-icon">📋</span>
+        My Plan
+      </div>
+      <div class="comp-tab" onclick="switchCompTab('today')">
+        <span class="comp-tab-icon">💊</span>
+        Today
+      </div>
+      <div class="comp-tab" onclick="switchCompTab('journey')">
+        <span class="comp-tab-icon">📊</span>
+        Journey
+      </div>
+      <div class="comp-tab" onclick="switchCompTab('family')">
+        <span class="comp-tab-icon">👨‍👩‍👧</span>
+        Family
+      </div>
+    </div>
+
+    <!-- PANEL: My Plan -->
+    <div class="comp-panel active" id="panelPlan">
+
+      <!-- Upload Prescription -->
+      <input type="file" id="rxFileInput" accept="image/*" style="display:none;" />
+      <div class="rx-upload-area" id="rxUploadArea" onclick="document.getElementById('rxFileInput').click()">
+        <div class="rx-upload-icon">📸</div>
+        <div class="rx-upload-text">Upload Your Prescription</div>
+        <div class="rx-upload-sub">Take a photo or upload an image. Our AI will read it instantly.</div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="rxLoading" style="display:none;">
+        <div class="comp-spinner"></div>
+        <div style="text-align:center; font-size:14px; color:var(--text-secondary); font-weight:600;">AI is reading your prescription...</div>
+      </div>
+
+      <!-- Medicine List (populated by JS) -->
+      <div id="medicineList"></div>
+
+      <!-- Empty State -->
+      <div id="planEmpty">
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-text">No active treatment plan</div>
+          <div class="empty-state-sub">Upload a prescription to get started with your AI healthcare companion.</div>
+        </div>
+      </div>
+
+      <div class="comp-disclaimer">
+        <strong>⚠️ Medical Disclaimer:</strong> Curaah is an AI-powered tracking tool, NOT a medical provider. It does not diagnose, prescribe, or replace your doctor. Always follow your doctor's instructions.
+      </div>
+    </div>
+
+    <!-- PANEL: Today's Doses -->
+    <div class="comp-panel" id="panelToday">
+
+      <h3 style="font-size: 16px; margin-bottom: 4px; color: var(--text-primary);">Today's Medicines</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="todayDate"></p>
+
+      <div id="todayDoses">
+        <div class="empty-state">
+          <div class="empty-state-icon">💊</div>
+          <div class="empty-state-text">No medicines scheduled</div>
+          <div class="empty-state-sub">Upload a prescription in "My Plan" to start tracking.</div>
+        </div>
+      </div>
+
+      <button class="side-effect-btn" onclick="openSideEffectModal()">
+        ⚠️ Report a Side Effect
+      </button>
+
+      <!-- WhatsApp CTA -->
+      <div class="wa-cta-banner">
+        <h3>💬 Get Reminders on WhatsApp</h3>
+        <p>Never miss a dose. Get daily reminders directly on WhatsApp — no app needed.</p>
+        <a class="wa-cta-btn" href="https://wa.me/919999999999?text=Hi%20Curaah%2C%20I%20want%20to%20start%20tracking%20my%20medicines" target="_blank">Start on WhatsApp →</a>
+      </div>
+    </div>
+
+    <!-- PANEL: Journey -->
+    <div class="comp-panel" id="panelJourney">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value good" id="statAdherence">—</div>
+          <div class="stat-label">Adherence</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statTaken">0</div>
+          <div class="stat-label">Doses Taken</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value warn" id="statMissed">0</div>
+          <div class="stat-label">Missed</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-primary);">Treatment Timeline</h3>
+
+      <div id="journeyTimeline">
+        <div class="empty-state">
+          <div class="empty-state-icon">📊</div>
+          <div class="empty-state-text">Your journey starts here</div>
+          <div class="empty-state-sub">As you track your medicines, your complete health timeline will appear here.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: Family -->
+    <div class="comp-panel" id="panelFamily">
+
+      <div style="text-align:center; margin-bottom: 20px;">
+        <div style="font-size: 48px; margin-bottom: 8px;">👨‍👩‍👧</div>
+        <h3 style="font-size: 18px; color: var(--text-primary); margin-bottom: 4px;">Family Caregiver</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Share this code with a family member so they can see your weekly medicine adherence summary.</p>
+      </div>
+
+      <div class="share-code-box">
+        <div style="font-size: 12px; color: #166534; font-weight: 600;">YOUR FAMILY SHARE CODE</div>
+        <div class="share-code" id="familyCode">------</div>
+        <button class="btn btn-primary" style="background: #16a34a; border: none; font-size: 13px; padding: 10px 20px;" onclick="copyShareCode()">📋 Copy Code</button>
+      </div>
+
+      <div style="background: #f0fdf4; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <h4 style="font-size: 14px; color: #166534; margin-bottom: 8px;">What your family member will see:</h4>
+        <ul style="font-size: 13px; color: #15803d; line-height: 1.8; padding-left: 20px;">
+          <li>Weekly adherence summary (e.g., "Papa took 6/7 doses")</li>
+          <li>Missed medicine alerts</li>
+          <li>Side-effect reports</li>
+          <li>Follow-up reminders</li>
+        </ul>
+      </div>
+
+      <div style="background: #f0fdf4; border-radius: 12px; padding: 16px;">
+        <h4 style="font-size: 14px; color: #166534; margin-bottom: 8px;">What they will NOT see:</h4>
+        <ul style="font-size: 13px; color: #15803d; line-height: 1.8; padding-left: 20px;">
+          <li>Your prescription images</li>
+          <li>Your doctor's name</li>
+          <li>Your specific health conditions</li>
+        </ul>
+      </div>
+
+      <div class="comp-disclaimer">
+        <strong>Privacy:</strong> Family sharing requires your explicit consent. You can revoke access anytime by generating a new code.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Side Effect Modal -->
+  <div class="comp-modal-overlay" id="sideEffectModal" onclick="if(event.target===this)closeSideEffectModal()">
+    <div class="comp-modal">
+      <h3>⚠️ Report a Side Effect</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Describe what you're feeling. You can type or use voice. Our AI will assess severity and guide your next step.</p>
+
+      <select id="seSelectMedicine" style="width:100%; padding:12px; border:1.5px solid var(--border-card); border-radius:12px; font-family:'Inter',sans-serif; font-size:14px; margin-bottom:12px; outline:none;">
+        <option value="">Select the medicine (optional)</option>
+      </select>
+
+      <textarea id="seDescription" placeholder="Describe what you're feeling... (e.g., 'I feel dizzy after taking the morning tablet')"></textarea>
+
+      <button class="btn btn-primary" style="width:100%; background:#dc2626; border:none;" onclick="submitSideEffect()">Submit Report</button>
+
+      <div id="seResult" style="display:none; margin-top:16px;"></div>
+
+      <div class="comp-disclaimer" style="margin-top:12px;">
+        This is NOT medical advice. If you are experiencing a medical emergency, call <strong>108</strong> immediately.
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase.js';
+
+    // ====== STATE ======
+    let deviceId = localStorage.getItem('curaah_companion_device_id');
+    if (!deviceId) {
+      deviceId = 'dev_' + crypto.randomUUID();
+      localStorage.setItem('curaah_companion_device_id', deviceId);
+    }
+
+    let treatmentPlan = JSON.parse(localStorage.getItem('curaah_treatment_plan') || 'null');
+    let medicines = JSON.parse(localStorage.getItem('curaah_medicines') || '[]');
+    let adherenceLogs = JSON.parse(localStorage.getItem('curaah_adherence') || '[]');
+    let timeline = JSON.parse(localStorage.getItem('curaah_timeline') || '[]');
+    let familyCode = localStorage.getItem('curaah_family_code');
+
+    if (!familyCode) {
+      familyCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      localStorage.setItem('curaah_family_code', familyCode);
+    }
+
+    // ====== INIT ======
+    document.getElementById('familyCode').innerText = familyCode;
+    document.getElementById('todayDate').innerText = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    if (medicines.length > 0) {
+      renderMedicines();
+      renderTodayDoses();
+      renderJourney();
+      document.getElementById('planEmpty').style.display = 'none';
+    }
+
+    // ====== TAB SWITCHING ======
+    window.switchCompTab = function(tab) {
+      document.querySelectorAll('.comp-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.comp-panel').forEach(p => p.classList.remove('active'));
+
+      const tabs = ['plan', 'today', 'journey', 'family'];
+      const idx = tabs.indexOf(tab);
+      document.querySelectorAll('.comp-tab')[idx].classList.add('active');
+      document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    };
+
+    // ====== PRESCRIPTION UPLOAD ======
+    document.getElementById('rxFileInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      document.getElementById('rxUploadArea').style.display = 'none';
+      document.getElementById('planEmpty').style.display = 'none';
+      document.getElementById('rxLoading').style.display = 'block';
+
+      try {
+        const base64 = await fileToBase64(file);
+        const base64Data = base64.split(',')[1];
+
+        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/prescription-extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            image: { mimeType: file.type || 'image/jpeg', base64: base64Data }
+          })
+        });
+
+        if (!response.ok) throw new Error('Failed to analyze prescription');
+        const data = await response.json();
+
+        // Build treatment plan
+        treatmentPlan = {
+          created_at: new Date().toISOString(),
+          doctor_name: data.doctor_name || 'Unknown',
+          follow_up_date: data.follow_up_date || null,
+          tests_recommended: data.tests_recommended || [],
+          special_instructions: data.special_instructions || ''
+        };
+        localStorage.setItem('curaah_treatment_plan', JSON.stringify(treatmentPlan));
+
+        // Build medicines
+        medicines = (data.medicines || []).map((m, i) => ({
+          id: 'med_' + Date.now() + '_' + i,
+          name: m.name,
+          dosage: m.dosage || '',
+          frequency: m.frequency || '',
+          duration_days: m.duration_days || null,
+          purpose: m.purpose || '',
+          start_date: new Date().toISOString().split('T')[0],
+          is_active: true
+        }));
+        localStorage.setItem('curaah_medicines', JSON.stringify(medicines));
+
+        // Add to timeline
+        addTimelineEvent('blue', `Treatment plan created with ${medicines.length} medicines.`);
+        if (data.follow_up_date) {
+          addTimelineEvent('blue', `Follow-up scheduled: ${data.follow_up_date}`);
+        }
+
+        renderMedicines();
+        renderTodayDoses();
+        renderJourney();
+
+        document.getElementById('rxLoading').style.display = 'none';
+
+      } catch (err) {
+        alert('Error reading prescription: ' + err.message);
+        document.getElementById('rxUploadArea').style.display = 'block';
+        document.getElementById('rxLoading').style.display = 'none';
+      }
+    });
+
+    // ====== RENDER MEDICINES ======
+    function renderMedicines() {
+      const list = document.getElementById('medicineList');
+      list.innerHTML = '';
+
+      if (treatmentPlan && treatmentPlan.doctor_name && treatmentPlan.doctor_name !== 'Unknown') {
+        list.innerHTML += `<div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">👨‍⚕️ Prescribed by: <strong style="color:var(--text-primary);">${treatmentPlan.doctor_name}</strong></div>`;
+      }
+
+      medicines.forEach(m => {
+        const timeParts = parseFrequency(m.frequency);
+        const currentHour = new Date().getHours();
+        let activePeriod = '';
+        if (currentHour >= 6 && currentHour < 12) activePeriod = 'Morning';
+        else if (currentHour >= 12 && currentHour < 17) activePeriod = 'Afternoon';
+        else activePeriod = 'Night';
+
+        let scheduleHtml = timeParts.map(t => 
+          `<span class="med-time-chip ${t === activePeriod ? 'active-dose' : ''}">${t}</span>`
+        ).join('');
+
+        list.innerHTML += `
+          <div class="med-card">
+            <div class="med-name">${m.name}</div>
+            <div class="med-dosage">${m.dosage} · ${m.frequency}${m.duration_days ? ' · ' + m.duration_days + ' days' : ''}</div>
+            ${m.purpose ? `<div class="med-purpose">💡 ${m.purpose}</div>` : ''}
+            <div class="med-schedule">${scheduleHtml}</div>
+          </div>
+        `;
+      });
+
+      document.getElementById('rxUploadArea').style.display = medicines.length > 0 ? 'none' : 'block';
+
+      // Populate side-effect medicine dropdown
+      const sel = document.getElementById('seSelectMedicine');
+      sel.innerHTML = '<option value="">Select the medicine (optional)</option>';
+      medicines.forEach(m => {
+        sel.innerHTML += `<option value="${m.id}">${m.name} ${m.dosage}</option>`;
+      });
+    }
+
+    // ====== RENDER TODAY'S DOSES ======
+    function renderTodayDoses() {
+      const container = document.getElementById('todayDoses');
+      if (medicines.length === 0) return;
+
+      const today = new Date().toISOString().split('T')[0];
+      let html = '';
+
+      medicines.forEach(m => {
+        const timeParts = parseFrequency(m.frequency);
+        timeParts.forEach(period => {
+          const logKey = `${m.id}_${today}_${period}`;
+          const existing = adherenceLogs.find(l => l.key === logKey);
+          let status = existing ? existing.status : 'pending';
+
+          let btnHtml = '';
+          if (status === 'taken') {
+            btnHtml = `<div class="adh-btn taken">✅</div>`;
+          } else if (status === 'missed') {
+            btnHtml = `<div class="adh-btn missed">❌</div>`;
+          } else {
+            btnHtml = `
+              <div class="adh-btn" onclick="logDose('${m.id}', '${period}', 'taken')" title="Taken">✅</div>
+              <div class="adh-btn" onclick="logDose('${m.id}', '${period}', 'missed')" title="Missed">❌</div>
+            `;
+          }
+
+          html += `
+            <div class="adh-row">
+              <div class="adh-med-info">
+                <div class="adh-med-name">${m.name}</div>
+                <div class="adh-med-time">${period} · ${m.dosage}</div>
+              </div>
+              <div class="adh-actions">${btnHtml}</div>
+            </div>
+          `;
+        });
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ====== LOG DOSE ======
+    window.logDose = function(medId, period, status) {
+      const today = new Date().toISOString().split('T')[0];
+      const logKey = `${medId}_${today}_${period}`;
+      const med = medicines.find(m => m.id === medId);
+
+      // Remove existing log for this slot
+      adherenceLogs = adherenceLogs.filter(l => l.key !== logKey);
+      adherenceLogs.push({
+        key: logKey,
+        medicine_id: medId,
+        medicine_name: med ? med.name : '',
+        date: today,
+        period: period,
+        status: status,
+        logged_at: new Date().toISOString()
+      });
+      localStorage.setItem('curaah_adherence', JSON.stringify(adherenceLogs));
+
+      if (status === 'taken') {
+        addTimelineEvent('green', `Took ${med ? med.name : 'medicine'} (${period})`);
+      } else {
+        addTimelineEvent('red', `Missed ${med ? med.name : 'medicine'} (${period})`);
+      }
+
+      renderTodayDoses();
+      renderJourney();
+    };
+
+    // ====== TIMELINE ======
+    function addTimelineEvent(color, text) {
+      timeline.unshift({
+        color: color,
+        text: text,
+        date: new Date().toLocaleString('en-IN')
+      });
+      if (timeline.length > 100) timeline = timeline.slice(0, 100);
+      localStorage.setItem('curaah_timeline', JSON.stringify(timeline));
+    }
+
+    // ====== RENDER JOURNEY ======
+    function renderJourney() {
+      // Stats
+      const taken = adherenceLogs.filter(l => l.status === 'taken').length;
+      const missed = adherenceLogs.filter(l => l.status === 'missed').length;
+      const total = taken + missed;
+      const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
+
+      document.getElementById('statTaken').innerText = taken;
+      document.getElementById('statMissed').innerText = missed;
+      const adhEl = document.getElementById('statAdherence');
+      adhEl.innerText = total > 0 ? pct + '%' : '—';
+      adhEl.className = 'stat-value ' + (pct >= 80 ? 'good' : pct >= 50 ? 'warn' : 'bad');
+
+      // Timeline
+      const container = document.getElementById('journeyTimeline');
+      if (timeline.length === 0) return;
+
+      container.innerHTML = timeline.slice(0, 20).map(t => `
+        <div class="timeline-item">
+          <div class="timeline-dot ${t.color}"></div>
+          <div>
+            <div class="timeline-text">${t.text}</div>
+            <div class="timeline-date">${t.date}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ====== SIDE EFFECT ======
+    window.openSideEffectModal = function() {
+      document.getElementById('sideEffectModal').classList.add('open');
+      document.getElementById('seResult').style.display = 'none';
+    };
+    window.closeSideEffectModal = function() {
+      document.getElementById('sideEffectModal').classList.remove('open');
+    };
+    window.submitSideEffect = async function() {
+      const desc = document.getElementById('seDescription').value.trim();
+      if (!desc) return alert('Please describe what you are feeling.');
+
+      const medId = document.getElementById('seSelectMedicine').value;
+      const med = medicines.find(m => m.id === medId);
+      const resultDiv = document.getElementById('seResult');
+
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = '<div class="comp-spinner"></div>';
+
+      try {
+        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/side-effect-analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            description: desc,
+            medicine_name: med ? med.name : 'Unknown',
+            patient_context: `Currently taking: ${medicines.map(m => m.name).join(', ')}`
+          })
+        });
+
+        const data = await response.json();
+        const colors = { green: '#16a34a', yellow: '#d97706', red: '#dc2626' };
+        const icons = { green: '🟢', yellow: '🟡', red: '🔴' };
+
+        addTimelineEvent(data.severity || 'yellow', `Reported side effect: "${desc.substring(0, 50)}..."`);
+
+        resultDiv.innerHTML = `
+          <div style="background:${data.severity === 'red' ? '#fee2e2' : data.severity === 'yellow' ? '#fffbeb' : '#f0fdf4'}; border-radius:12px; padding:16px; border-left:4px solid ${colors[data.severity] || '#d97706'};">
+            <div style="font-size:14px; font-weight:700; color:${colors[data.severity]}; margin-bottom:8px;">${icons[data.severity] || '🟡'} ${data.severity === 'green' ? 'Low Concern' : data.severity === 'yellow' ? 'Moderate Concern' : 'High Concern — Seek Help'}</div>
+            <div style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:8px;">${data.assessment || data.recommendation || 'Please consult your doctor.'}</div>
+            <div style="font-size:11px; color:#92400e; font-style:italic;">${data.disclaimer || 'This is not medical advice. Always consult your doctor.'}</div>
+          </div>
+        `;
+      } catch (err) {
+        resultDiv.innerHTML = `<div style="color:#dc2626; font-size:14px;">Error analyzing. Please call your doctor directly or dial 108 for emergencies.</div>`;
+      }
+    };
+
+    // ====== FAMILY CODE ======
+    window.copyShareCode = function() {
+      navigator.clipboard.writeText(familyCode).then(() => {
+        const btn = document.querySelector('.share-code-box button');
+        btn.innerText = '✅ Copied!';
+        setTimeout(() => btn.innerText = '📋 Copy Code', 2000);
+      });
+    };
+
+    // ====== HELPERS ======
+    function parseFrequency(freq) {
+      if (!freq) return ['Morning'];
+      const f = freq.toLowerCase();
+      if (f.includes('1-1-1') || f.includes('three') || f.includes('thrice') || f.includes('tid'))
+        return ['Morning', 'Afternoon', 'Night'];
+      if (f.includes('1-0-1') || f.includes('twice') || f.includes('bid') || f.includes('two'))
+        return ['Morning', 'Night'];
+      if (f.includes('0-0-1') || f.includes('night') || f.includes('bedtime') || f.includes('hs'))
+        return ['Night'];
+      if (f.includes('1-0-0') || f.includes('morning') || f.includes('od'))
+        return ['Morning'];
+      return ['Morning'];
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+  </script>
+</body>
+</html>
