@@ -674,23 +674,59 @@ if (new URLSearchParams(window.location.search).get('supa_key')) {
 }
 
 // ====== STATE ======
-let profile=JSON.parse(localStorage.getItem('curaah_profile')||'null');
-let medicines=JSON.parse(localStorage.getItem('curaah_medicines')||'[]');
-let adherence=JSON.parse(localStorage.getItem('curaah_adherence')||'[]');
-let vitals=JSON.parse(localStorage.getItem('curaah_vitals')||'[]');
-let labReports=JSON.parse(localStorage.getItem('curaah_labs')||'[]');
-let sideEffects=JSON.parse(localStorage.getItem('curaah_side_effects')||'[]');
-let timeline=JSON.parse(localStorage.getItem('curaah_timeline')||'[]');
-let logsCount=parseInt(localStorage.getItem('curaah_logs_count')||'0');
-let familyCode=localStorage.getItem('curaah_family_code');
-let patientId=localStorage.getItem('curaah_patient_id');
 let deviceId=localStorage.getItem('curaah_device_id');
-
 if(!deviceId){deviceId='dev_'+Math.random().toString(36).substring(2,15);localStorage.setItem('curaah_device_id',deviceId);}
+
+let familyCode=localStorage.getItem('curaah_family_code');
 if(!familyCode){familyCode=Math.random().toString(36).substring(2,8).toUpperCase();localStorage.setItem('curaah_family_code',familyCode);}
 
+// Simple synchronous encryption/decryption helper using deviceId as the key
+function xorEncryptDecrypt(str, key) {
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  }
+  return result;
+}
+
+const encrypt = (val) => {
+  if (val === undefined || val === null) return '';
+  const str = typeof val === 'object' ? JSON.stringify(val) : String(val);
+  try {
+    return btoa(unescape(encodeURIComponent(xorEncryptDecrypt(str, deviceId))));
+  } catch(e) {
+    return '';
+  }
+};
+
+const decrypt = (encryptedStr) => {
+  if (!encryptedStr) return null;
+  try {
+    const raw = xorEncryptDecrypt(decodeURIComponent(escape(atob(encryptedStr))), deviceId);
+    try {
+      return JSON.parse(raw);
+    } catch(e) {
+      return raw;
+    }
+  } catch(e) {
+    return null;
+  }
+};
+
+const save=(k,v)=>localStorage.setItem(k,encrypt(v));
+const load=(k)=>decrypt(localStorage.getItem(k));
+
+let profile=load('curaah_profile');
+let medicines=load('curaah_medicines')||[];
+let adherence=load('curaah_adherence')||[];
+let vitals=load('curaah_vitals')||[];
+let labReports=load('curaah_labs')||[];
+let sideEffects=load('curaah_side_effects')||[];
+let timeline=load('curaah_timeline')||[];
+let logsCount=parseInt(load('curaah_logs_count')||'0');
+let patientId=localStorage.getItem('curaah_patient_id');
+
 const today=()=>new Date().toISOString().split('T')[0];
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 // ====== API HELPER ======
@@ -952,21 +988,21 @@ function validateStep4() {
     const gender = document.getElementById('obGender').value;
     const district = document.getElementById('obDistrict').value.trim();
     
-    const condition = selCond === 'Other' ? document.getElementById('obConditionOther').value.trim() : selCond;
-    const medsText = document.getElementById('obMedsText').value.trim();
-    const allergies = document.getElementById('obAllergies').value.trim();
+    const condition = (selCond === 'Other' ? document.getElementById('obConditionOther').value.trim() : selCond) || 'Healthy';
+    const medsText = document.getElementById('obMedsText').value.trim() || 'None';
+    const allergies = document.getElementById('obAllergies').value.trim() || 'None';
     
-    const height = document.getElementById('obHeight').value.trim();
-    const weight = document.getElementById('obWeight').value.trim();
-    const specificProblems = document.getElementById('obSpecificProblems').value.trim();
-    const labsText = document.getElementById('obLabsText').value.trim();
+    const height = document.getElementById('obHeight').value.trim() || 'None';
+    const weight = document.getElementById('obWeight').value.trim() || 'None';
+    const specificProblems = document.getElementById('obSpecificProblems').value.trim() || 'None';
+    const labsText = document.getElementById('obLabsText').value.trim() || 'None';
 
     const dailyRoutine = {
-      wake: document.getElementById('obWakeTime').value,
-      breakfast: document.getElementById('obBreakfastTime').value,
-      lunch: document.getElementById('obLunchTime').value,
-      dinner: document.getElementById('obDinnerTime').value,
-      sleep: document.getElementById('obSleepTime').value
+      wake: document.getElementById('obWakeTime').value || 'None',
+      breakfast: document.getElementById('obBreakfastTime').value || 'None',
+      lunch: document.getElementById('obLunchTime').value || 'None',
+      dinner: document.getElementById('obDinnerTime').value || 'None',
+      sleep: document.getElementById('obSleepTime').value || 'None'
     };
 
     profile = {
@@ -1310,7 +1346,7 @@ function renderWellness(){
   const wch=document.getElementById('wellChecklist');if(wch)wch.innerHTML=items.map(it=>`<label style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border-subtle);cursor:pointer;font-size:14px;font-weight:500"><input type="checkbox" ${wData[it.k]?'checked':''} onchange="toggleWell('${it.k}',this.checked)" style="width:20px;height:20px;accent-color:var(--electric)"> ${it.label}</label>`).join('');
   const done=items.filter(i=>wData[i.k]).length;const wp=document.getElementById('wellPct');if(wp)wp.textContent=Math.round(done/items.length*100)+'%';
 }
-window.toggleWell=function(key,val){const wKey='curaah_wellness_'+today();let wData=JSON.parse(localStorage.getItem(wKey)||'{}');wData[key]=val;localStorage.setItem(wKey,JSON.stringify(wData));if(val)incrementLogCounter();renderWellness();updateScore();};
+window.toggleWell=function(key,val){const wKey='curaah_wellness_'+today();let wData=load(wKey)||{};wData[key]=val;save(wKey,wData);if(val)incrementLogCounter();renderWellness();updateScore();};
 window.showWellTip=function(t){alert(`💡 ${t}\n\nFor personalized advice based on your ${profile?.condition||'condition'}, tap "Ask AI" and ask me directly!`);};
 window.joinEquipWaitlist=function(item){addTL('blue',`🔔 Joined equipment waitlist: ${item}`);alert(`You have joined the waitlist for ${item}! We will connect you with verified peers in your area.`);};
 window.joinCircle=function(c){addTL('blue',`🤝 Joined ${c} support circle`);alert(`Welcome to the ${c} Support Circle! Stay motivated with others on the same journey.`);};
@@ -1409,7 +1445,7 @@ function updateScore(){
   document.getElementById('sbAdh').textContent=Math.round(adhP)+'%';document.getElementById('sbWell').textContent=Math.round(wellP)+'%';document.getElementById('sbVitals').textContent=vCount;
 }
 function getStreak(){let s=0;const d=new Date();for(let i=0;i<365;i++){const ds=d.toISOString().split('T')[0];if(adherence.filter(a=>a.date===ds&&a.status==='taken').length>0)s++;else break;d.setDate(d.getDate()-1);}return s;}
-function incrementLogCounter(){logsCount++;localStorage.setItem('curaah_logs_count',logsCount);renderWellness();}
+function incrementLogCounter(){logsCount++;save('curaah_logs_count',logsCount);renderWellness();}
 
 // ====== SIDE EFFECT ======
 window.submitSideEffect=async function(){
