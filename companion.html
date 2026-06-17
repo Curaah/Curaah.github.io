@@ -661,8 +661,17 @@
 
 <script>
 // ====== CONFIG ======
-const SUPA_URL='https://lospowxozjnoiawxbojg.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxvc3Bvd3hvempub2lhd3hib2pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTIzMjksImV4cCI6MjA5MjMyODMyOX0.KBfNiJIKweEAqVJ8q_G8ZkbU5qi4vfglRhazKIH32ic';
+let SUPA_URL = localStorage.getItem('curaah_supa_url') || new URLSearchParams(window.location.search).get('supa_url') || 'https://lospowxozjnoiawxbojg.supabase.co';
+let SUPA_KEY = localStorage.getItem('curaah_supa_key') || new URLSearchParams(window.location.search).get('supa_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxvc3Bvd3hvempub2lhd3hib2pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTIzMjksImV4cCI6MjA5MjMyODMyOX0.KBfNiJIKweEAqVJ8q_G8ZkbU5qi4vfglRhazKIH32ic';
+
+if (new URLSearchParams(window.location.search).get('supa_url')) {
+  SUPA_URL = new URLSearchParams(window.location.search).get('supa_url');
+  localStorage.setItem('curaah_supa_url', SUPA_URL);
+}
+if (new URLSearchParams(window.location.search).get('supa_key')) {
+  SUPA_KEY = new URLSearchParams(window.location.search).get('supa_key');
+  localStorage.setItem('curaah_supa_key', SUPA_KEY);
+}
 
 // ====== STATE ======
 let profile=JSON.parse(localStorage.getItem('curaah_profile')||'null');
@@ -1632,6 +1641,14 @@ window.sendUserChatMessage=async function(preset){
 };
 function localAIReply(q,ctx){
   const cond=ctx.condition||'your condition';const meds=ctx.medicines||'your medicines';const name=ctx.name||'there';const ql=q.toLowerCase();
+  
+  if(/code|python|java|html|javascript|c\+\+|css|programming|capital of|math|history|geography|trivia/i.test(ql)){
+    return `I am your Curaah AI Health Companion. I can only assist you with health, medication, and wellness related questions. How is your <strong>${cond}</strong> feeling today?`;
+  }
+  
+  if(/^(hi|hello|namaste|heyy|hey|sat sri akal|greetings|howdy|yo)$/i.test(ql.trim())){
+    return `Hello ${name}! 👋 I am your Curaah AI Health Companion. I'm here to support you with your health focus on <strong>${cond}</strong> and keep track of your medicines: ${meds.substring(0, 100)}${meds.length > 100 ? '...' : ''}. How can I assist you with your health or medication schedule today?`;
+  }
   if(/chinese|fast food|pizza|burger|noodle|fried/i.test(ql))return`${name}, for <strong>${cond}</strong>, fast food is not recommended. It's high in sodium, refined carbs, and unhealthy fats that interfere with your medication. Home-cooked dal-sabzi-roti is much better for your health!`;
   if(/vitamin|supplement|d3|calcium|iron/i.test(ql))return`Supplements like Vitamin D3 are generally safe with most medicines. Before starting any new supplement, inform your doctor. Take fat-soluble vitamins (D, A, E, K) with a meal for best absorption.`;
   if(/exercise|walk|yoga|gym|run/i.test(ql))return`For <strong>${cond}</strong>: 🚶 20-30 min brisk walk daily, 🧘 gentle yoga (Pranayama, Shavasana), 🏊 swimming if available. Avoid strenuous exercise right after meals. Log your vitals before and after exercise!`;
