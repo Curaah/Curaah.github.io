@@ -1,629 +1,919 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- PWA: App manifest and mobile config -->
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#060d1f" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Curaah" />
-  <link rel="apple-touch-icon" href="/assets/icons/icon-180.png" />
-  
-  <title>Curaah HealthTech — AI for Doctors & Families</title>
-  <meta name="description" content="AI tools for doctors, clinics, and families in India. Try our AI Doctor Scribe, free Lab Report Explainer, and custom healthcare AI agency services." />
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
-  <link rel="stylesheet" href="css/style.css" />
-
-  <!-- Google AdSense Placeholder (Play 3: Passive Income) -->
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#060d1f"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <title>Curaah — Healthcare Doesn't End at the Clinic Door</title>
+  <meta name="description" content="Curaah is India's AI Health & Adherence Companion. We ensure treatment continues after every doctor visit — medicine reminders, lab report explainer, family monitoring. Works via App, WhatsApp or Voice Call."/>
+  <link rel="icon" href="assets/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    html { scroll-behavior: smooth; }
+:root{
+  --bg:#060d1f;--surface:#0d1b35;--card:rgba(255,255,255,.035);--card-h:rgba(255,255,255,.06);
+  --blue:#3d9eff;--bd:rgba(61,158,255,.12);--bb:rgba(61,158,255,.2);
+  --green:#00c48c;--gd:rgba(0,196,140,.1);
+  --red:#ff4757;--amber:#ff9f00;--purple:#a78bfa;
+  --ink:#fff;--muted:rgba(255,255,255,.55);--dim:rgba(255,255,255,.28);
+  --line:rgba(255,255,255,.07);--lineb:rgba(61,158,255,.15);
+  --r:16px;--rsm:10px;--rxl:24px;
+  --sh:0 4px 24px rgba(0,0,0,.45);--shxl:0 16px 60px rgba(0,0,0,.5);
+  --glow:0 0 40px rgba(61,158,255,.2);--t:.22s ease;--max:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:'Outfit',sans-serif;}
+a{text-decoration:none;color:inherit;transition:var(--t);}
+button{font-family:'Inter',sans-serif;cursor:pointer;}
+/* Logo */
+.lsvg{width:34px;height:34px;flex-shrink:0;}
+/* Inline SVG logo shorthand */
+.curaah-logo{display:flex;align-items:center;gap:10px;}
+.cn{font-size:20px;font-weight:900;font-family:'Outfit',sans-serif;letter-spacing:-.4px;}
+.ct{font-size:9px;color:var(--blue);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-top:1px;}
 
-    /* ── MASTERPIECE HERO: THE FORK IN THE ROAD ── */
-    .hero-split {
-      min-height: 100vh;
-      background: var(--navy);
-      padding: 140px 6% 80px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;
+  background:rgba(6,13,31,.88);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;
+  padding:0 5%;gap:32px;transition:var(--t);}
+.nav.solid{background:rgba(6,13,31,.98);box-shadow:0 4px 24px rgba(0,0,0,.3);}
+.nav-links{display:flex;gap:24px;align-items:center;flex:1;}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--muted);}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex;gap:10px;align-items:center;margin-left:auto;}
+.btn{display:inline-flex;align-items:center;gap:6px;font-weight:700;border-radius:10px;transition:var(--t);white-space:nowrap;border:none;}
+.btn-sm{padding:9px 18px;font-size:13px;}
+.btn-md{padding:13px 26px;font-size:14px;}
+.btn-lg{padding:16px 32px;font-size:16px;}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:var(--glow);}
+.btn-blue:hover{background:#2b8ae8;transform:translateY(-2px);}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--blue);color:var(--ink);}
+.ham{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;}
+.ham span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;}
+@media(max-width:900px){.nav-links{display:none;}.btn-ghost{display:none;}.ham{display:flex;}}
+.mob{display:none;position:fixed;top:68px;left:0;right:0;z-index:199;
+  background:rgba(6,13,31,.99);border-bottom:1px solid var(--line);
+  flex-direction:column;padding:20px 5%;}
+.mob.open{display:flex;}
+.mob a{font-size:16px;font-weight:600;color:var(--muted);padding:12px 0;border-bottom:1px solid var(--line);}
+.mob a:last-child{border:none;color:var(--blue);font-weight:800;}
 
-    /* Cinematic background glows */
-    .hero-split::before {
-      content: '';
-      position: absolute;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(61,158,255,0.12) 0%, transparent 60%);
-      pointer-events: none;
-    }
+/* ── LAYOUT ── */
+.sec{padding:96px 5%;}
+.wrap{max-width:var(--max);margin:0 auto;}
+.tag{display:inline-block;background:var(--bd);border:1px solid var(--bb);
+  color:var(--blue);font-size:11.5px;font-weight:700;padding:5px 14px;border-radius:20px;
+  letter-spacing:.4px;margin-bottom:16px;}
+.sh{font-size:clamp(28px,4vw,46px);font-weight:900;line-height:1.08;letter-spacing:-1.2px;margin-bottom:16px;}
+.ss{font-size:16px;color:var(--muted);line-height:1.8;max-width:600px;}
+.ctr{text-align:center;}.ctr .ss{margin:0 auto;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
 
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(61,158,255,0.1);
-      border: 1px solid rgba(61,158,255,0.25);
-      color: var(--electric);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 8px 18px;
-      border-radius: 30px;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(10px);
-    }
+/* ── HERO ── */
+.hero{min-height:100svh;display:flex;align-items:center;
+  padding:120px 5% 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-150px;right:-150px;width:600px;height:600px;
+  border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.07),transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-80px;width:440px;height:440px;
+  border-radius:50%;background:radial-gradient(circle,rgba(0,196,140,.04),transparent 65%);pointer-events:none;}
+.hero-inner{max-width:var(--max);margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;position:relative;z-index:1;}
+@media(max-width:960px){.hero-inner{grid-template-columns:1fr;}.hr{display:none;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(61,158,255,.1);border:1px solid var(--bb);color:var(--blue);
+  font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:24px;letter-spacing:.4px;}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);
+  animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,196,140,.5);}70%{box-shadow:0 0 0 8px rgba(0,196,140,0);}}
+.hero h1{font-size:clamp(36px,5.5vw,66px);font-weight:900;line-height:1.06;
+  letter-spacing:-2px;margin-bottom:22px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue),#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.8;max-width:500px;margin-bottom:36px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px;}
+.access-row{display:flex;gap:20px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--line);}
+.ai{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:500;}
+.aid{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-    .hero-split h1 {
-      font-family: 'Georgia', serif;
-      font-size: clamp(42px, 6vw, 72px);
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.1;
-      letter-spacing: -1px;
-      margin-bottom: 20px;
-      max-width: 900px;
-    }
+/* Phone mock */
+.phone{width:242px;background:rgba(255,255,255,.04);border:1.5px solid var(--lineb);
+  border-radius:36px;padding:20px 18px;box-shadow:var(--shxl),0 0 60px rgba(61,158,255,.08);
+  animation:lev 5s ease-in-out infinite;position:relative;}
+@keyframes lev{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.pbar{width:52px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 18px;}
+.phdr{background:linear-gradient(135deg,#0d1b35,#0a2744);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--lineb);}
+.pgreet{font-size:10px;color:var(--dim);margin-bottom:2px;}
+.pname{font-size:15px;font-weight:800;font-family:'Outfit',sans-serif;}
+.pscore{display:flex;align-items:center;gap:10px;margin-top:10px;background:rgba(255,255,255,.04);border-radius:9px;padding:9px;}
+.pring{width:34px;height:34px;border-radius:50%;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--green);}
+.pchip{font-size:10px;font-weight:700;background:rgba(0,196,140,.15);color:var(--green);padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
+.plbl{font-size:9px;font-weight:800;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.pmed{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:9px;margin-bottom:6px;}
+.pbub{background:var(--bd);border:1px solid var(--bb);border-radius:10px;padding:9px;margin-top:8px;}
+.pbubl{font-size:9px;font-weight:800;color:var(--blue);margin-bottom:3px;}
+.pbubt{font-size:10.5px;color:var(--muted);line-height:1.5;}
+.badge-f{position:absolute;background:rgba(13,27,53,.96);border:1px solid var(--lineb);border-radius:12px;padding:8px 13px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:var(--sh);animation:lev 4s ease-in-out infinite;z-index:10;}
+.bf1{top:4%;right:15px;animation-delay:0s;color:var(--green);}
+.bf2{bottom:22%;right:20px;animation-delay:1.2s;color:var(--amber);}
+.bf3{top:42%;left:10px;animation-delay:.6s;color:var(--blue);}
 
-    /* ── DROPDOWN NAVBAR ── */
-    .dropdown { position: relative; display: inline-block; }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: white;
-      min-width: 240px;
-      box-shadow: 0px 12px 24px 0px rgba(0,0,0,0.15);
-      border-radius: 12px;
-      padding: 8px 0;
-      z-index: 1000;
-      top: 100%;
-      left: 0;
-      border: 1px solid var(--border-card);
-    }
-    .dropdown-content a {
-      color: var(--text-primary) !important;
-      padding: 12px 20px;
-      text-decoration: none;
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .dropdown-content a:hover {
-      background-color: var(--off-white);
-      color: var(--electric) !important;
-    }
-    .dropdown:hover .dropdown-content { display: block; }
+/* ── PROBLEM STRIP ── */
+.ps{background:rgba(255,71,87,.03);border-top:1px solid rgba(255,71,87,.1);border-bottom:1px solid rgba(255,71,87,.1);}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,71,87,.08);gap:1px;max-width:var(--max);margin:0 auto;}
+@media(max-width:700px){.pg{grid-template-columns:1fr;}}
+.pi{background:var(--bg);padding:36px 28px;transition:var(--t);}
+.pi:hover{background:rgba(255,71,87,.04);}
+.pstat{font-size:40px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--red);line-height:1;margin-bottom:8px;}
+.ptitle{font-size:15px;font-weight:800;margin-bottom:8px;}
+.pdesc{font-size:13.5px;color:var(--muted);line-height:1.7;}
 
-    .hero-split p {
-      font-size: 18px;
-      color: var(--text-on-dark-muted);
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto 60px;
-    }
+/* ── SOLUTION CARD ── */
+.sol-card{background:linear-gradient(160deg,rgba(61,158,255,.06),rgba(0,196,140,.03));border:1px solid var(--lineb);border-radius:var(--rxl);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-top:48px;position:relative;overflow:hidden;}
+.sol-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.06),transparent);pointer-events:none;}
+@media(max-width:760px){.sol-card{grid-template-columns:1fr;gap:32px;padding:28px;}}
+.sf{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.sfi{width:40px;height:40px;border-radius:10px;background:var(--bd);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sft{font-size:15px;font-weight:700;margin-bottom:3px;}
+.sfd{font-size:13px;color:var(--muted);line-height:1.65;}
 
-    /* The Pathway Cards */
-    .pathway-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      max-width: 900px;
-      width: 100%;
-      position: relative;
-      z-index: 10;
-    }
+/* ── HOW ── */
+.how-bg{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;}
+@media(max-width:900px){.how-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.how-grid{grid-template-columns:1fr;}}
+.hi{padding:32px 24px;border-right:1px solid var(--line);transition:var(--t);position:relative;}
+.hi:last-child{border-right:none;}
+.hi:hover{background:var(--card-h);}
+@media(max-width:900px){.hi:nth-child(2){border-right:none;}.hi:nth-child(3){border-top:1px solid var(--line);}}
+@media(max-width:500px){.hi{border-right:none;border-bottom:1px solid var(--line);}.hi:last-child{border-bottom:none;}}
+.hn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#6366f1);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;margin-bottom:16px;box-shadow:var(--glow);}
+.ht{font-size:15px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
+.hd{font-size:13px;color:var(--muted);line-height:1.7;}
 
-    .path-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 40px;
-      text-align: left;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(20px);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
+/* ── BENTO ── */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+@media(max-width:1024px){.bento{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.bento{grid-template-columns:1fr;}}
+.bc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--t);position:relative;overflow:hidden;}
+.bc:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-4px);box-shadow:var(--sh);}
+.bc.w2{grid-column:span 2;}
+@media(max-width:500px){.bc.w2{grid-column:span 1;}}
+.bc::before{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,var(--amb,rgba(61,158,255,.08)),transparent);pointer-events:none;}
+.bico{font-size:32px;margin-bottom:14px;}
+.bti{font-size:17px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
+.bde{font-size:13.5px;color:var(--muted);line-height:1.7;}
+.btag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:12px;}
+.tl{background:rgba(0,196,140,.15);color:var(--green);}
+.ta{background:rgba(167,139,250,.12);color:var(--purple);}
+.tf{background:var(--bd);color:var(--blue);}
 
-    .path-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
+/* ── MODES ── */
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;}
+@media(max-width:700px){.modes{grid-template-columns:1fr;}}
+.mc{border-radius:var(--r);padding:36px 28px;text-align:center;transition:var(--t);position:relative;}
+.mc:hover{transform:translateY(-6px);box-shadow:var(--sh);}
+.mc1{background:rgba(61,158,255,.06);border:1px solid rgba(61,158,255,.2);}
+.mc2{background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);}
+.mc3{background:rgba(255,159,0,.06);border:1px solid rgba(255,159,0,.2);}
+.mico{font-size:52px;margin-bottom:18px;display:block;}
+.mti{font-size:20px;font-weight:800;margin-bottom:10px;font-family:'Outfit',sans-serif;}
+.mde{font-size:14px;color:var(--muted);line-height:1.75;}
+.mwho{font-size:12px;font-weight:700;margin-top:16px;padding:6px 14px;border-radius:20px;display:inline-block;}
+.mw1{background:rgba(61,158,255,.15);color:var(--blue);}
+.mw2{background:rgba(37,211,102,.15);color:#25d366;}
+.mw3{background:rgba(255,159,0,.15);color:var(--amber);}
 
-    .path-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(61,158,255,0.4);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 40px rgba(61,158,255,0.1);
-    }
-    .path-card:hover::before { opacity: 1; }
+/* ── FAMILY ── */
+.fam-bg{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.fam-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;max-width:var(--max);margin:0 auto;}
+@media(max-width:880px){.fam-grid{grid-template-columns:1fr;gap:32px;}}
+.ff{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
+.ffi{width:42px;height:42px;border-radius:11px;background:var(--bd);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.fft{font-size:15px;font-weight:700;margin-bottom:3px;}
+.ffd{font-size:13.5px;color:var(--muted);line-height:1.6;}
+.fmock{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh);}
+.fpill{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;}
+.fpg{background:rgba(0,196,140,.15);color:var(--green);}
+.fpy{background:rgba(255,159,0,.12);color:var(--amber);}
+.frow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);}
+.frow:last-of-type{border-bottom:none;}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
+.fstat{background:rgba(255,255,255,.04);border-radius:10px;padding:10px;text-align:center;}
+.fsn{font-size:20px;font-weight:900;font-family:'Outfit',sans-serif;}
 
-    .path-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin-bottom: 24px;
-    }
+/* ── WHAT'S BUILT ── */
+.built-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:48px;}
+@media(max-width:768px){.built-grid{grid-template-columns:1fr;}}
+.bitem{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;transition:var(--t);}
+.bitem:hover{background:var(--card-h);border-color:var(--lineb);}
+.bitem-ico{font-size:22px;flex-shrink:0;margin-top:2px;}
+.bitem-t{font-size:14px;font-weight:700;margin-bottom:3px;}
+.bitem-d{font-size:13px;color:var(--muted);line-height:1.6;}
+.done-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:6px;}
+.db-done{background:rgba(0,196,140,.15);color:var(--green);}
+.db-prog{background:rgba(255,159,0,.12);color:var(--amber);}
 
-    .path-business .path-icon { background: rgba(61,158,255,0.15); color: var(--electric); border: 1px solid rgba(61,158,255,0.3); }
-    .path-personal .path-icon { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+/* ── MARKET ── */
+.mkt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px;}
+@media(max-width:700px){.mkt-grid{grid-template-columns:1fr;}}
+.mkt-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--t);}
+.mkt-card:hover{background:var(--card-h);transform:translateY(-3px);}
+.mkt-num{font-size:42px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;margin-bottom:8px;}
+.mkt-lbl{font-size:15px;font-weight:700;margin-bottom:4px;}
+.mkt-sub{font-size:13px;color:var(--muted);}
 
-    .path-title { font-family: 'Georgia', serif; font-size: 28px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
-    .path-desc { font-size: 15px; color: var(--text-on-dark-muted); line-height: 1.6; margin-bottom: 32px; flex: 1; }
-    
-    .path-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
+/* ── REVENUE ── */
+.rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px;}
+@media(max-width:1024px){.rev-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.rev-grid{grid-template-columns:1fr;}}
+.rcard{background:var(--card);border-radius:var(--r);padding:24px;transition:var(--t);}
+.rcard:hover{transform:translateY(-4px);box-shadow:var(--sh);}
+.rname{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.rprice{font-size:28px;font-weight:900;font-family:'Outfit',sans-serif;margin-bottom:12px;}
+.rdiv{height:1px;background:var(--line);margin-bottom:12px;}
+.rfeature{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
 
-    .path-business .path-btn { background: var(--electric); color: white; border: none; }
-    .path-business:hover .path-btn { background: #5cb0ff; }
-    
-    .path-personal .path-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
-    .path-personal:hover .path-btn { background: rgba(255,255,255,0.2); }
+/* ── VISION ROADMAP ── */
+.roadmap{display:flex;flex-direction:column;max-width:720px;margin:48px auto 0;}
+.rm{display:flex;gap:24px;padding-bottom:28px;position:relative;}
+.rm:not(:last-child)::before{content:'';position:absolute;left:19px;top:42px;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--line));}
+.rmdot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;font-family:'Outfit',sans-serif;flex-shrink:0;}
+.rd-live{background:var(--blue);box-shadow:var(--glow);}
+.rd-soon{background:rgba(255,159,0,.2);border:1px solid rgba(255,159,0,.4);color:var(--amber);}
+.rd-plan{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--dim);}
+.rmc{flex:1;padding-top:6px;}
+.rmph{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.rmti{font-size:17px;font-weight:800;margin-bottom:6px;font-family:'Outfit',sans-serif;}
+.rmde{font-size:14px;color:var(--muted);line-height:1.65;}
+.rmbadge{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.rb-live{background:rgba(0,196,140,.15);color:var(--green);}
+.rb-soon{background:rgba(255,159,0,.12);color:var(--amber);}
+.rb-plan{background:rgba(255,255,255,.07);color:var(--dim);}
 
-    /* ── SECTION: BUSINESS (DARK MODE) ── */
-    .b2b-section { background: var(--navy); padding: 120px 6%; border-top: 1px solid rgba(255,255,255,0.05); }
-    .b2b-header { text-align: center; margin-bottom: 60px; }
-    .b2b-header .label { color: var(--electric); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
-    .b2b-header h2 { font-family: 'Georgia', serif; font-size: 42px; color: white; margin-bottom: 16px; }
-    
-    .b2b-card {
-      background: var(--navy-mid);
-      border: 1px solid var(--border-dark);
-      border-radius: 20px;
-      padding: 40px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      margin-bottom: 24px;
-      transition: all 0.3s;
-    }
-    .b2b-card:hover { border-color: rgba(61,158,255,0.3); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
-    .b2b-card h3 { font-size: 28px; color: white; margin-bottom: 16px; }
-    .b2b-card p { font-size: 16px; color: var(--text-on-dark-muted); line-height: 1.7; margin-bottom: 24px; }
-    .b2b-list li { color: rgba(255,255,255,0.8); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-    .b2b-list li span { color: var(--electric); }
+/* ── ECOSYSTEM ── */
+.eco-grid {display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px;}
+@media(max-width:900px){.eco-grid{grid-template-columns:1fr;}}
+.eco-box {background:var(--surface);border:1px solid var(--line);border-radius:var(--rxl);padding:40px;position:relative;overflow:hidden;}
+.eco-box::before {content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border-radius:50%;pointer-events:none;}
+.eco-box.b2b::before {background:radial-gradient(circle,rgba(61,158,255,.06),transparent 70%);}
+.eco-box.b2c::before {background:radial-gradient(circle,rgba(0,196,140,.04),transparent 70%);}
+.eco-title {font-size:24px;font-weight:800;margin-bottom:12px;font-family:'Outfit',sans-serif;}
+.eco-subtitle {font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+.eco-item {display:flex;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--line);text-align:left;}
+.eco-item:last-child {margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.eco-ico {font-size:24px;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.eco-item-title {font-size:16px;font-weight:700;margin-bottom:4px;color:#fff;}
+.eco-item-desc {font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.eco-links {display:flex;gap:16px;flex-wrap:wrap;}
+.eco-lnk {font-size:12.5px;font-weight:700;color:var(--blue);display:inline-flex;align-items:center;gap:4px;}
+.eco-lnk:hover {color:#fff;}
 
-    /* ── SECTION: PERSONAL (LIGHT MODE) ── */
-    .b2c-section { background: var(--off-white); padding: 120px 6%; }
-    .b2c-header { text-align: center; margin-bottom: 60px; }
-    .b2c-header .label { color: #10b981; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
-    .b2c-header h2 { font-family: 'Georgia', serif; font-size: 42px; color: var(--navy); margin-bottom: 16px; }
-    
-    .b2c-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-    .b2c-card {
-      background: white;
-      border: 1px solid var(--border-card);
-      border-radius: 20px;
-      padding: 32px;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s;
-    }
-    .b2c-card:hover { transform: translateY(-6px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); border-color: #cbd5e1; }
-    .b2c-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
-    .b2c-card h3 { font-size: 20px; color: #0f172a; margin-bottom: 12px; }
-    .b2c-card p { font-size: 15px; color: #64748b; line-height: 1.6; flex: 1; margin-bottom: 24px; }
-    
-    @media (max-width: 900px) {
-      .pathway-grid { grid-template-columns: 1fr; }
-      .b2b-card { grid-template-columns: 1fr; }
-    }
+/* ── TRUST ── */
+.trust-bar{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 5%;}
+.trust-inner{max-width:var(--max);margin:0 auto;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+.ti{display:flex;align-items:center;gap:10px;}
+.tilo{font-size:24px;}
+.tilb{font-size:13px;font-weight:700;color:var(--muted);}
+.tilsub{font-size:11px;color:var(--dim);}
+
+/* ── CTA ── */
+.cta-bg{background:linear-gradient(160deg,#0d1b35,#0a2744);border-top:1px solid var(--lineb);}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
+.cta-h{font-size:clamp(28px,4vw,50px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;}
+.cta-sub{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:36px;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-trust{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px;}
+.ctitem{font-size:12px;color:var(--dim);}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32px;}
+.fg{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+@media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:28px;}}
+@media(max-width:500px){.fg{grid-template-columns:1fr;}}
+.fbrand{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ftagline{font-size:13.5px;color:var(--muted);line-height:1.7;max-width:260px;}
+.fch{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;}
+.fc a{display:block;font-size:14px;color:var(--muted);margin-bottom:10px;transition:var(--t);}
+.fc a:hover{color:var(--blue);}
+.fbot{max-width:var(--max);margin:0 auto;border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.fbot p{font-size:12px;color:var(--dim);}
+.disc{font-size:11.5px;color:rgba(255,71,87,.6);}
+
+/* Scroll top */
+.st{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:var(--blue);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:90;box-shadow:var(--glow);}
+.st.vis{display:flex;}
+.st:hover{transform:translateY(-3px);}
   </style>
 </head>
-<body style="background: var(--navy);">
+<body>
 
-  <!-- ============================================
-       NAVIGATION
-  ============================================ -->
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo">
-      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
-        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
-        <circle cx="18" cy="22" r="3.5" fill="white"/>
-      </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">curaah</span>
-        <span class="nav-logo-tag">AI for Doctors & Families</span>
-      </div>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#business">For Clinics</a></li>
-      <li class="dropdown">
-        <a href="#personal" style="cursor: pointer;">Free Tools ▾</a>
-        <div class="dropdown-content">
-          <a href="gov-map.html">Govt Health Map 🏥</a>
-          <a href="report-explainer.html">Report Explainer ✨</a>
-          <a href="navigator.html">Care Navigator 🧭</a>
-          <a href="drug-recovery.html">Recovery Support 🤝</a>
-        </div>
-      </li>
-      <li><a href="vision.html">Our Vision</a></li>
-      <li><a href="privacy.html">Privacy</a></li>
-    </ul>
-
-    <div class="nav-actions">
-      <a href="mailto:curaahtech@gmail.com" class="btn btn-ghost btn-sm">Contact Us</a>
-      <a href="scribe.html" class="btn btn-primary btn-sm">Try AI Scribe Free</a>
-    </div>
-
-    <!-- Hamburger for mobile -->
-    <div class="nav-hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu -->
-  <div class="nav-mobile" id="mobileMenu">
-    <a href="#business">For Clinics</a>
-    <a href="gov-map.html">Govt Health Map 🏥</a>
-    <a href="report-explainer.html">Report Explainer ✨</a>
-    <a href="navigator.html">Care Navigator 🧭</a>
-    <a href="drug-recovery.html">Recovery Support 🤝</a>
-    <a href="vision.html">Our Vision</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="scribe.html" style="color:var(--electric); font-weight:bold;">Try AI Scribe Free →</a>
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="curaah-logo" href="#">
+    <svg class="lsvg" viewBox="0 0 36 36" fill="none"><path d="M18 3L5 9L5 21Q5 30 18 34Q31 30 31 21L31 9Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10Q13 15 13 20Q13 25 18 28Q23 25 23 20Q23 15 18 10Z" fill="#3d9eff" opacity=".9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
+    <div><div class="cn">curaah</div><span class="ct">AI Health Companion</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#family">For Families</a>
+    <a href="#ecosystem">Ecosystem Suite</a>
+    <a href="#vision">Roadmap</a>
   </div>
-
-  <!-- ============================================
-       HERO: THE FORK IN THE ROAD
-  ============================================ -->
-  <section class="hero-split">
-    <div class="hero-eyebrow">
-      Incubated at IIT Ropar
-    </div>
-    
-    <h1>The AI Operating System for Indian Healthcare.</h1>
-    <p>Beautiful, blazing-fast software that saves doctors hours of paperwork and empowers families to make smarter health decisions.</p>
-
-    <div class="pathway-grid">
-      <!-- Path A: Business -->
-      <a href="#business" class="path-card path-business reveal">
-        <div class="path-icon">🩺</div>
-        <div class="path-title">For Doctors & Clinics</div>
-        <div class="path-desc">Automate your clinic. Turn voice dictation into beautiful prescriptions, reduce no-shows with WhatsApp bots, and hire us for custom AI.</div>
-        <div class="path-btn">Explore B2B Solutions <span>→</span></div>
-      </a>
-
-      <!-- Path B: Personal -->
-      <a href="#personal" class="path-card path-personal reveal">
-        <div class="path-icon">👨‍👩‍👧‍👦</div>
-        <div class="path-title">For Individuals & Families</div>
-        <div class="path-desc">Navigate the healthcare system safely. Translate complex lab reports for free, find Govt hospitals, and get trusted recovery support.</div>
-        <div class="path-btn">Explore Free Tools <span>→</span></div>
-      </a>
-    </div>
-  </section>
-
-
-  <!-- ============================================
-       SECTION: FOR BUSINESS (Doctors & Partners)
-  ============================================ -->
-  <section id="business" class="b2b-section">
-    <div class="container">
-      <div class="b2b-header reveal">
-        <div class="label">Professional Suite</div>
-        <h2>Software that pays for itself.</h2>
-        <p style="color: var(--text-on-dark-muted); font-size: 18px; max-width: 600px; margin: 0 auto;">Designed strictly to save you time and grow your practice's revenue.</p>
-      </div>
-
-      <!-- AI Scribe -->
-      <div class="b2b-card reveal">
-        <div>
-          <div style="display: inline-block; padding: 4px 12px; background: rgba(61,158,255,0.15); color: var(--electric); border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 16px;">LIVE PRODUCT</div>
-          <h3>AI Doctor Scribe</h3>
-          <p>Stop writing. Speak your consultation notes in Hindi, Punjabi, or English, and instantly get a beautifully formatted prescription ready to print or WhatsApp.</p>
-          <ul class="b2b-list" style="list-style: none; padding: 0; margin-bottom: 32px;">
-            <li><span>✓</span> Saves ~2 hours daily</li>
-            <li><span>✓</span> Zero typing required</li>
-            <li><span>✓</span> 100% DPDP Compliant (Zero Data Retention)</li>
-          </ul>
-          <a href="scribe.html" class="btn btn-primary btn-lg">Try 5 Prescriptions Free</a>
-        </div>
-        <div style="background: #0f172a; border-radius: 12px; padding: 24px; border: 1px solid #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-          <div style="display:flex; align-items:center; gap: 12px; margin-bottom: 16px;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3d9eff, #1a7fd4); display:flex; align-items:center; justify-content:center; color:white; font-size:18px;">🎙️</div>
-            <div>
-              <div style="font-size: 12px; color: #64748b;">Live Dictation</div>
-              <div style="font-size: 14px; color: white;">"Patient has fever for 3 days..."</div>
-            </div>
-          </div>
-          <div style="background:#1e293b; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; color:#cbd5e1;">
-            <strong style="color:white;">Rx</strong><br/>
-            <strong>Diagnosis:</strong> Viral Pyrexia<br/>
-            <strong>Tab Paracetamol 650mg</strong> | 1-1-1 | 5 Days
-          </div>
-        </div>
-      </div>
-
-      <!-- Custom AI Agency -->
-      <div class="b2b-card reveal" style="background: linear-gradient(135deg, var(--navy-mid) 0%, #172554 100%);">
-        <div>
-          <h3>Curaah AI Agency</h3>
-          <p>Are you a Pharma company, Diagnostic Chain, or Large Hospital? Off-the-shelf software doesn't always fit. We build bespoke AI solutions powered by advanced LLMs tailored exactly to your workflows.</p>
-          <ul class="b2b-list" style="list-style: none; padding: 0; margin-bottom: 32px;">
-            <li><span>✓</span> Automated Lab Report Extraction (PDFs)</li>
-            <li><span>✓</span> Multilingual WhatsApp AI Agents</li>
-            <li><span>✓</span> Custom Clinical Workflows</li>
-          </ul>
-          <a href="whatsapp-sender.html" class="btn btn-outline btn-lg" style="color: white; border-color: rgba(255,255,255,0.3);">View WhatsApp AI Service</a>
-        </div>
-        <div style="padding: 32px; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px dashed rgba(61,158,255,0.3); text-align: center;">
-          <h4 style="color: white; font-size: 18px; margin-bottom: 12px;">Hire an IIT Ropar Incubated Team</h4>
-          <p style="color: var(--text-on-dark-muted); font-size: 14px; margin-bottom: 24px;">We deliver state-of-the-art AI prototypes in weeks, not months. No corporate overhead.</p>
-          <div style="font-size: 12px; color: var(--electric); text-transform: uppercase; font-weight: 700;">Starting from</div>
-          <div style="font-size: 32px; font-weight: 700; color: white;">₹25,000</div>
-        </div>
-      </div>
-
-      <!-- AI WhatsApp Receptionist -->
-      <div class="b2b-card reveal" style="background: rgba(37,211,102,0.05); border-color: rgba(37,211,102,0.2);">
-        <div>
-          <div style="display: inline-block; padding: 4px 12px; background: rgba(37,211,102,0.15); color: #25d366; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 16px;">AGENCY SERVICE</div>
-          <h3>AI WhatsApp Receptionist</h3>
-          <p>Never miss a patient inquiry. We build custom AI assistants that run 24/7 on your clinic's WhatsApp, answering questions and dispatching reports automatically.</p>
-          <ul class="b2b-list" style="list-style: none; padding: 0; margin-bottom: 32px;">
-            <li><span style="color: #25d366;">✓</span> Answers patient questions 24/7</li>
-            <li><span style="color: #25d366;">✓</span> Memorizes your prices & timings</li>
-            <li><span style="color: #25d366;">✓</span> Speaks Hindi, Punjabi & English</li>
-          </ul>
-          <a href="whatsapp-sender.html" class="btn btn-primary btn-lg" style="background: #25d366; color: black; box-shadow: 0 8px 24px rgba(37,211,102,0.3);">View AI Receptionist</a>
-        </div>
-        <div style="background: #111b21; border-radius: 12px; padding: 0; border: 1px solid #202c33; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;">
-          <div style="background: #202c33; padding: 16px; display:flex; align-items:center; gap: 12px;">
-            <div style="width: 36px; height: 36px; border-radius: 50%; background: #005c4b; display:flex; align-items:center; justify-content:center; color:white;">🏥</div>
-            <div>
-              <div style="font-size: 14px; font-weight: 600; color: #e9edef;">Curaah Diagnostics</div>
-              <div style="font-size: 11px; color: #8696a0;">online</div>
-            </div>
-          </div>
-          <div style="padding: 24px; background: #0b141a; background-image: url('assets/wa-bg.png'); background-size: cover;">
-            
-            <div style="background: #202c33; border-radius: 8px; border-top-left-radius: 0; padding: 12px; font-size: 13px; line-height: 1.5; color:#e9edef; max-width: 85%; margin-bottom: 12px; box-shadow: 0 1px 0.5px rgba(11,20,26,.13);">
-              Is the lab open today? What is the price of a Lipid Profile?
-            </div>
-
-            <div style="background: #005c4b; border-radius: 8px; border-top-right-radius: 0; padding: 12px; font-size: 13px; line-height: 1.5; color:#e9edef; max-width: 85%; margin-left: auto; box-shadow: 0 1px 0.5px rgba(11,20,26,.13);">
-              Yes, we are open until 8 PM! 🏥 The price of a Lipid Profile is ₹450. Would you like to book a home collection?
-              <div style="text-align: right; font-size: 10px; color: #8696a0; margin-top: 4px;">10:42 AM <span style="color: #53bdeb;">✓✓</span></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================
-       SECTION: FOR PERSONAL (Individuals & Families)
-  ============================================ -->
-  <section id="personal" class="b2c-section">
-    <div class="container">
-      <div class="b2c-header reveal">
-        <div class="label">For Individuals & Families</div>
-        <h2>Your Free Healthcare Toolkit</h2>
-        <p style="color: #64748b; font-size: 18px; max-width: 600px; margin: 0 auto;">No login required. Built strictly to help you make safe, informed decisions for your family.</p>
-      </div>
-
-      <div class="b2c-grid">
-        <!-- COMPANION — Featured -->
-        <a href="companion.html" class="b2c-card reveal" style="grid-column: 1 / -1; background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 2px solid #86efac;">
-          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <div class="b2c-icon" style="background: #00c48c; color: white; font-size: 28px; width: 56px; height: 56px; display:flex; align-items:center; justify-content:center; border-radius: 16px;">💊</div>
-            <div style="flex:1; min-width: 200px;">
-              <div style="display:inline-block; padding:3px 10px; background:rgba(0,196,140,0.15); color:#00856a; border-radius:12px; font-size:11px; font-weight:700; margin-bottom:6px;">NEW — AI COMPANION</div>
-              <h3 style="margin-bottom:4px;">Curaah Companion</h3>
-              <p style="margin:0;">Upload your prescription. Get daily medicine reminders on WhatsApp. Track your treatment journey. Keep your family informed — every single day.</p>
-            </div>
-            <div><span class="btn btn-primary" style="background:#00c48c; border:none; padding: 10px 20px; font-size: 14px; white-space:nowrap;">Start Free →</span></div>
-          </div>
-        </a>
-
-        <!-- Explainer -->
-        <a href="report-explainer.html" class="b2c-card reveal">
-          <div class="b2c-icon" style="background: #fff0b3; color: #ff8b00;">✨</div>
-          <h3>Report Explainer</h3>
-          <p>Upload any complex lab report (PDF/Image) and our AI translates it into simple language in seconds.</p>
-          <div><span class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">Try Free →</span></div>
-        </a>
-
-        <!-- Map -->
-        <a href="gov-map.html" class="b2c-card reveal">
-          <div class="b2c-icon" style="background: #e3fcef; color: #006644;">🏥</div>
-          <h3>Govt Health Map</h3>
-          <p>Check live crowd status, read community reviews, and find doctors at PHCs & Civil Hospitals.</p>
-          <div><span class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">View Map →</span></div>
-        </a>
-
-        <!-- Navigator -->
-        <a href="navigator.html" class="b2c-card reveal">
-          <div class="b2c-icon" style="background: rgba(61,158,255,0.1); color: var(--electric);">🧭</div>
-          <h3>Care Navigator</h3>
-          <p>Type your problem in Punjabi or Hindi. Get instant guidance on which hospital tier to visit.</p>
-          <div><span class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">Get Guidance →</span></div>
-        </a>
-
-        <!-- Drug Recovery -->
-        <a href="drug-recovery.html" class="b2c-card reveal">
-          <div class="b2c-icon" style="background: #fce7f3; color: #db2777;">🤝</div>
-          <h3>Recovery Support</h3>
-          <p>A free community utility helping families in Punjab find govt de-addiction centers and helplines.</p>
-          <div><span class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">Get Help →</span></div>
-        </a>
-
-        <!-- Medicine Assistant -->
-        <a href="medicine-info.html" class="b2c-card reveal">
-          <div class="b2c-icon" style="background: rgba(46, 204, 113, 0.1); color: #1e824c;">💊</div>
-          <h3>Medicine Info</h3>
-          <p>Find cheap generic (Jan Aushadhi) alternatives, side effects, and exact purpose of any medicine strip.</p>
-          <div><span class="btn btn-outline" style="padding: 6px 14px; font-size: 13px;">Check Medicine →</span></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================
-       FOOTER
-  ============================================ -->
-  <footer class="footer">
-    <div class="footer-grid">
-      <!-- Brand -->
-      <div>
-        <div class="footer-brand-name">
-          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-            <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
-            <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
-            <circle cx="18" cy="22" r="3.5" fill="white"/>
-          </svg>
-          curaah
-        </div>
-        <p class="footer-brand-desc">Curaah HealthTech Pvt Ltd.<br/>Incubated at IIT Ropar.</p>
-        <p class="footer-built">Built in <span>Punjab, India</span> 🇮🇳</p>
-      </div>
-
-      <!-- B2B -->
-      <div>
-        <div class="footer-col-title">For Clinics</div>
-        <ul class="footer-col-links">
-          <li><a href="scribe.html">AI Doctor Scribe</a></li>
-          <li><a href="#business">Custom AI Solutions</a></li>
-          <li><a href="whatsapp-sender.html">WhatsApp AI Receptionist</a></li>
-        </ul>
-      </div>
-
-      <!-- Free Tools -->
-      <div>
-        <div class="footer-col-title">For Families</div>
-        <ul class="footer-col-links">
-          <li><a href="companion.html" style="color:#00c48c; font-weight:600;">Curaah Companion ✨</a></li>
-          <li><a href="gov-map.html">Govt Health Map</a></li>
-          <li><a href="report-explainer.html">Report Explainer</a></li>
-          <li><a href="medicine-info.html">Medicine Info (Jan Aushadhi)</a></li>
-          <li><a href="navigator.html">Care Navigator</a></li>
-          <li><a href="drug-recovery.html">Recovery Support</a></li>
-        </ul>
-      </div>
-
-      <!-- Company -->
-      <div>
-        <div class="footer-col-title">Company</div>
-        <ul class="footer-col-links">
-          <li><a href="vision.html">Our Long-Term Vision</a></li>
-          <li><a href="mailto:curaahtech@gmail.com">Contact Us</a></li>
-          <li><a href="privacy.html">Privacy Policy (DPDP)</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p class="footer-bottom-text">© 2026 Curaah HealthTech Pvt Ltd. All rights reserved.</p>
-      <div class="footer-bottom-links">
-        <a href="vision.html">Explore the Curaah Ecosystem Vision</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-
-  <!-- PWA Install Banner -->
-  <div class="pwa-install-banner" id="installBanner" style="display:none;">
-    <div class="pwa-install-icon">
-      <img src="/assets/icons/icon-192.png" alt="Curaah" />
-    </div>
-    <div class="pwa-install-text">
-      <div class="pwa-install-title">Install Curaah App</div>
-      <div class="pwa-install-sub">Add to home screen for quick access</div>
-    </div>
-    <button class="pwa-install-btn" id="installBtn">Install</button>
-    <button class="pwa-install-close" id="installClose" aria-label="Dismiss">✕</button>
+  <div class="nav-cta">
+    <a href="family.html" class="btn btn-sm btn-ghost">Family Dashboard</a>
+    <a href="companion.html" class="btn btn-sm btn-blue">Get Started Free →</a>
   </div>
+  <div class="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob" id="mob">
+  <a href="#how" onclick="toggleMob()">How It Works</a>
+  <a href="#features" onclick="toggleMob()">Features</a>
+  <a href="#family" onclick="toggleMob()">For Families</a>
+  <a href="#ecosystem" onclick="toggleMob()">Ecosystem Suite</a>
+  <a href="#vision" onclick="toggleMob()">Roadmap</a>
+  <a href="family.html" onclick="toggleMob()">👨‍👩‍👧 Family Dashboard</a>
+  <a href="companion.html" onclick="toggleMob()">→ Start Health Journey</a>
+</div>
 
-  <!-- Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(r => console.log('[SW] Registered:', r.scope))
-          .catch(e => console.log('[SW] Error:', e));
-      });
-    }
-  </script>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow"><div class="pulse"></div> IIT Ropar Incubated · DPIIT Recognised · Punjab Startup </div>
+      <h1>Healthcare doesn't<br/>end at the<br/><em>clinic door.</em></h1>
+      <p class="hero-sub">After every doctor visit, patients are left alone — navigating complex medicine schedules, confusing lab reports, and diet changes with no support. Curaah is the AI companion that stays with them through every step of recovery.</p>
+      <div class="hero-ctas">
+        <a href="companion.html" class="btn btn-lg btn-blue">🚀 Try the Prototype — Free</a>
+        <a href="#how" class="btn btn-lg btn-ghost">See How It Works</a>
+      </div>
+      <div class="access-row">
+        <div class="ai"><div class="aid" style="background:var(--blue)"></div>📱 Mobile App</div>
+        <div class="ai"><div class="aid" style="background:#25d366"></div>💬 WhatsApp</div>
+        <div class="ai"><div class="aid" style="background:var(--amber)"></div>📞 AI Voice Call</div>
+        <div class="ai"><div class="aid" style="background:var(--purple)"></div>🌐 Hindi · Punjabi · English</div>
+      </div>
+    </div>
+    <div class="hr" style="position:relative;display:flex;justify-content:center;">
+      <div class="badge-f bf3">🤖 AI Companion Active</div>
+      <div class="phone">
+        <div class="pbar"></div>
+        <div class="phdr">
+          <div class="pgreet">Good morning 🌅</div>
+          <div class="pname">Curaah User</div>
+          <div class="pscore">
+            <div class="pring">82</div>
+            <div><div style="font-size:11px;font-weight:700">Health Score</div><div class="pchip">🔥 7-day streak</div></div>
+          </div>
+        </div>
+        <div class="plbl">Today's Doses</div>
+        <div class="pmed">
+          <span style="font-size:14px">🌅</span>
+          <div style="flex:1"><div style="font-size:11px;font-weight:700">Metformin 500mg</div><div style="font-size:9px;color:var(--dim)">Morning · 1 tablet</div></div>
+          <span style="color:var(--green);font-size:14px">✅</span>
+        </div>
+        <div class="pmed">
+          <span style="font-size:14px">🌙</span>
+          <div style="flex:1"><div style="font-size:11px;font-weight:700">Atorvastatin 10mg</div><div style="font-size:9px;color:var(--dim)">Night · 1 tablet</div></div>
+          <span style="font-size:11px;color:var(--amber)">⏳</span>
+        </div>
+        <div class="pbub">
+          <div class="pbubl">💬 Curaah AI</div>
+          <div class="pbubt">Your sugar was slightly high today. Try a 15-min walk after dinner! 🚶</div>
+        </div>
+      </div>
+      <div class="badge-f bf1">📊 Health Score: 82</div>
+      <div class="badge-f bf2">⏰ Dose Reminder Set</div>
+    </div>
+  </div>
+</section>
 
-  <!-- PWA Install Prompt Logic -->
-  <script>
-    let deferredPrompt = null;
-    const banner     = document.getElementById('installBanner');
-    const installBtn = document.getElementById('installBtn');
-    const closeBtn   = document.getElementById('installClose');
+<!-- PROBLEM STRIP -->
+<div class="ps">
+  <div class="pg">
+    <div class="pi reveal">
+      <div class="pstat">50%</div>
+      <div class="ptitle">Patients stop medicines within 6 months</div>
+      <div class="pdesc">Non-adherence is the #1 cause of preventable hospitalisations. Patients forget, misunderstand dosage, or feel better and stop. There is no support system after the clinic visit.</div>
+    </div>
+    <div class="pi reveal">
+      <div class="pstat">500M+</div>
+      <div class="ptitle">Chronic disease patients in India need lifelong management</div>
+      <div class="pdesc">77M+ diabetics, 220M+ hypertensives — most managing their condition alone with a paper prescription. Underserved by every existing healthcare app.</div>
+    </div>
+    <div class="pi reveal">
+      <div class="pstat">7 min</div>
+      <div class="ptitle">Average OPD consultation — then patients are on their own</div>
+      <div class="pdesc">A 7-minute appointment cannot cover diet, lifestyle, drug interactions, and family monitoring. There is a massive post-consultation care gap. Curaah fills it.</div>
+    </div>
+  </div>
+</div>
 
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const dismissed = localStorage.getItem('curaah-pwa-dismissed');
-      if (dismissed) return;
-      setTimeout(() => {
-        banner.style.display = 'flex';
-        requestAnimationFrame(() => banner.classList.add('show'));
-      }, 3000);
-    });
+<!-- STORY SECTION -->
+<section class="sec">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Why We Built This</div>
+      <h2 class="sh">Meet Rajinder Singh — 62 years old,<br/>retired worker, diabetic for 8 years.</h2>
+      <p class="ss ctr">His story is not unique. It is the story of 500 million Indians with chronic disease.</p>
+    </div>
+    <div class="sol-card reveal" style="margin-top:48px;">
+      <div>
+        <div class="sf"><div class="sfi">🏥</div><div><div class="sft">Doctor gives him a new prescription</div><div class="sfd">4 medicines. Complex timings. He goes home with a paper slip in his pocket.</div></div></div>
+        <div class="sf"><div class="sfi">💊</div><div><div class="sft">Day 3 — he confuses two medicines</div><div class="sfd">Takes his evening dose in the morning. No one at home to check.</div></div></div>
+        <div class="sf"><div class="sfi">😔</div><div><div class="sft">Day 7 — he runs out</div><div class="sfd">Doesn't know how to reorder. Skips medicine for 3 days rather than admit he doesn't understand.</div></div></div>
+        <div class="sf"><div class="sfi">👨‍👩‍👧</div><div><div class="sft">His daughter is in Canada</div><div class="sfd">She calls every Sunday. She doesn't know. She has no visibility into what's happening.</div></div></div>
+        <div class="sf"><div class="sfi" style="background:rgba(255,71,87,.12);border-color:rgba(255,71,87,.2)">🚨</div><div><div class="sft" style="color:var(--red)">Day 21 — blood sugar spikes. Emergency at 2 AM.</div><div class="sfd">Avoidable. Entirely preventable. This happens to millions of Rajinders every month.</div></div></div>
+      </div>
+      <div>
+        <div style="background:rgba(61,158,255,.05);border:1px solid var(--bb);border-radius:var(--r);padding:24px;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">What Curaah Changes</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">AI reads the prescription</strong> — extracts every medicine, dosage, and timing automatically</div></div>
+            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Daily reminders</strong> — via app, WhatsApp, or a voice call in Punjabi</div></div>
+            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Family stays informed</strong> — daughter in Canada gets weekly updates</div></div>
+            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">AI understands why he skips</strong> — adapts reminders, flags barriers to family</div></div>
+            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">SOS in one tap</strong> — GPS + full medical record sent to family and 108</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(0,196,140,.05);border:1px solid rgba(0,196,140,.2);border-radius:var(--r);padding:18px;">
+          <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:8px">"Rajinder is not a careless patient. He is an unsupported one."</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65">Curaah is built for the 500 million Rajinders across India — people managing chronic disease alone, with no digital support system designed for them.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    installBtn?.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      banner.classList.remove('show');
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-    });
+<!-- HOW IT WORKS -->
+<section class="sec how-bg" id="how">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">How It Works</div>
+      <h2 class="sh">From prescription to recovery — 4 steps</h2>
+      <p class="ss ctr">Designed for elderly patients who have never used a smartphone, and powerful enough for tech-savvy caregivers who want full control.</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="hi">
+        <div class="hn">1</div>
+        <div class="ht">Register &amp; Build Your Profile</div>
+        <div class="hd">Tell Curaah about your age, health condition, lifestyle, and existing medicines. AI builds your complete health context — stored securely so you never repeat yourself.</div>
+      </div>
+      <div class="hi">
+        <div class="hn">2</div>
+        <div class="ht">Upload Your Prescription</div>
+        <div class="hd">Take a photo of your prescription. AI extracts every medicine, dosage, and timing automatically. Pharmacist verification adds clinical accuracy before your plan is created.</div>
+      </div>
+      <div class="hi">
+        <div class="hn">3</div>
+        <div class="ht">AI Companions You Every Day</div>
+        <div class="hd">Timely reminders, diet guidance, exercise advice. Ask the AI anything in your language. Log vitals. Upload lab reports monthly. Your family monitors your progress in real-time.</div>
+      </div>
+      <div class="hi">
+        <div class="hn">4</div>
+        <div class="ht">Walk Into Your Doctor With Data</div>
+        <div class="hd">Generate a comprehensive health PDF — adherence record, vitals history, lab trends — at any time. Your next appointment becomes a productive conversation, not a memory test.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    closeBtn?.addEventListener('click', () => {
-      banner.classList.remove('show');
-      localStorage.setItem('curaah-pwa-dismissed', '1');
-    });
+<!-- FEATURES -->
+<section class="sec" id="features">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Core Features</div>
+      <h2 class="sh">Everything your recovery needs</h2>
+      <p class="ss ctr">Not a general wellness app. Every feature is designed around the realities of long-term chronic disease treatment adherence.</p>
+    </div>
+    <div class="bento reveal">
+      <div class="bc w2" style="--amb:rgba(61,158,255,.06)">
+        <div class="bico">💊</div>
+        <div class="bti">Prescription Intelligence &amp; Smart Scheduling</div>
+        <div class="bde">Photo-to-schedule in seconds. AI extracts every medicine, dosage, frequency, and instruction from any handwritten or printed prescription. A pharmacist verification layer adds clinical accuracy. Creates a personalised daily schedule — morning, afternoon, night — accounting for food timings and known interactions.</div>
+        <span class="btag tl">Core Feature</span>
+      </div>
+      <div class="bc" style="--amb:rgba(167,139,250,.05)">
+        <div class="bico">🤖</div>
+        <div class="bti">Multilingual AI Health Companion</div>
+        <div class="bde">Ask anything in Hindi, Punjabi, or English. The AI knows your full medical history — medicines, vitals, diet, and lab data. Every answer is contextual and personalised, not generic internet advice.</div>
+        <span class="btag ta">Multilingual AI</span>
+      </div>
+      <div class="bc" style="--amb:rgba(61,158,255,.05)">
+        <div class="bico">🔬</div>
+        <div class="bti">Lab Report Explainer</div>
+        <div class="bde">Upload reports monthly. AI performs secondary validation and explains HbA1c, creatinine, cholesterol, and 50+ values in simple words. Track how your condition improves over months.</div>
+        <span class="btag tl">Core Feature</span>
+      </div>
+      <div class="bc" style="--amb:rgba(0,196,140,.04)">
+        <div class="bico">📸</div>
+        <div class="bti">Medicine Strip Identifier</div>
+        <div class="bde">Photograph a tablet strip — AI identifies the medicine, confirms it matches your schedule, explains its purpose, checks expiry, and flags potentially concerning combinations from multiple doctors.</div>
+        <span class="btag ta">AI Vision</span>
+      </div>
+      <div class="bc" style="--amb:rgba(0,196,140,.05)">
+        <div class="bico">🍱</div>
+        <div class="bti">Food Camera &amp; Nutrition Intelligence</div>
+        <div class="bde">Photograph food or scan packet ingredients. AI shows exactly how this meal affects your specific health condition — sugar impact, sodium, fat levels — with healthier alternatives.</div>
+        <span class="btag ta">AI Vision</span>
+      </div>
+      <div class="bc" style="--amb:rgba(255,71,87,.04)">
+        <div class="bico">🚨</div>
+        <div class="bti">SOS Emergency System</div>
+        <div class="bde">One tap sends GPS location + full medical record to family and 108 emergency services. DPDP 2023 compliant OTP consent gate. First responders get your medicines, allergies, and conditions instantly.</div>
+        <span class="btag" style="background:rgba(255,71,87,.12);color:var(--red)">Emergency Ready</span>
+      </div>
+      <div class="bc" style="--amb:rgba(61,158,255,.05)">
+        <div class="bico">📊</div>
+        <div class="bti">Vitals Tracking</div>
+        <div class="bde">Log blood pressure, blood sugar, weight, SpO2, and temperature. See visual trends over weeks. Know exactly how your treatment is progressing — and share it with family.</div>
+        <span class="btag tl">Core Feature</span>
+      </div>
+      <div class="bc" style="--amb:rgba(167,139,250,.05)">
+        <div class="bico">📄</div>
+        <div class="bti">Doctor-Ready Health PDF</div>
+        <div class="bde">One-click PDF with full health summary — medicines taken, adherence percentage, vitals history, lab results. Print it before your next doctor visit. Every appointment becomes more productive.</div>
+        <span class="btag tf">Caregiver Tool</span>
+      </div>
+      <div class="bc" style="--amb:rgba(0,196,140,.04)">
+        <div class="bico">🌿</div>
+        <div class="bti">Personalised Recovery Nutrition Kits</div>
+        <div class="bde">AI-recommended organic herb kits — Giloy, Ashwagandha, Neem — tailored to your condition. Sourced from pesticide-free cooperative farms in Sangrur, Punjab. Packaged by women SHGs.</div>
+        <span class="btag" style="background:rgba(0,196,140,.15);color:var(--green)">Affordable Monthly Price</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-    window.addEventListener('appinstalled', () => {
-      banner.style.display = 'none';
-      deferredPrompt = null;
-    });
-  </script>
+<!-- ACCESS MODES -->
+<section class="sec how-bg">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">For Every Indian</div>
+      <h2 class="sh">Works for all — regardless of technology comfort</h2>
+      <p class="ss ctr">India's chronic disease patients span all generations. Curaah is designed to reach every one of them — however they're comfortable receiving support.</p>
+    </div>
+    <div class="modes reveal">
+      <div class="mc mc1">
+        <span class="mico">📱</span>
+        <div class="mti">Mobile App</div>
+        <div class="mde">Full AI companion experience — prescription upload, vitals logging, AI chat, lab report explainer, food camera, family dashboard, SOS, and health timeline. Designed for patients and caregivers who use smartphones.</div>
+        <div class="mwho mw1">Tech-savvy patients &amp; caregivers</div>
+      </div>
+      <div class="mc mc2">
+        <span class="mico">💬</span>
+        <div class="mti">WhatsApp</div>
+        <div class="mde">Receive medicine reminders. Reply "liya" to log a dose. Get AI health tips and weekly summaries. No new app to install — works within the platform 1 billion Indians already use daily.</div>
+        <div class="mwho mw2">Patients comfortable with WhatsApp</div>
+      </div>
+      <div class="mc mc3">
+        <span class="mico">📞</span>
+        <div class="mti">AI Voice Call</div>
+        <div class="mde">AI calls at a set time daily, in Punjabi, Hindi, or English. Patient simply says "हाँ, दवाई ले ली" — and adherence is logged automatically. Built for elderly patients who cannot use any app.</div>
+        <div class="mwho mw3">Elderly patients without smartphones</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAMILY DASHBOARD -->
+<section class="sec fam-bg" id="family">
+  <div style="padding:96px 5%;">
+    <div class="fam-grid">
+      <div class="reveal">
+        <div class="tag" style="display:inline-block;margin-bottom:16px">Family-Centred Care</div>
+        <h2 class="sh" style="text-align:left">Your parents are in Punjab.<br/>You're in Delhi.<br/><em style="font-style:normal;color:var(--blue)">You're still with them.</em></h2>
+        <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px">India's families are geographically spread but emotionally close. With consent-based family dashboards, caregivers get real-time visibility into their loved ones' health journey — from anywhere in the world.</p>
+        <div class="ff"><div class="ffi">📊</div><div><div class="fft">Real-time Adherence Monitoring</div><div class="ffd">See which medicines were taken, at what time, and which were missed — as it happens, on any device.</div></div></div>
+        <div class="ff"><div class="ffi">📈</div><div><div class="fft">Vitals History &amp; Trends</div><div class="ffd">Blood sugar, blood pressure, weight — visualised over weeks. See improvement, catch warning signs early.</div></div></div>
+        <div class="ff"><div class="ffi">📄</div><div><div class="fft">Weekly Health PDF</div><div class="ffd">Auto-generated summary — medicines, adherence, vitals, labs. Print it for the next doctor visit.</div></div></div>
+        <div class="ff"><div class="ffi">🚨</div><div><div class="fft">SOS Emergency Alerts</div><div class="ffd">If your loved one triggers SOS, you get real-time GPS and their full medical record — instantly.</div></div></div>
+        <a href="family.html" class="btn btn-md btn-blue" style="display:inline-flex;margin-top:8px">👨‍👩‍👧 Open Family Dashboard →</a>
+      </div>
+      <div class="fmock reveal">
+        <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Family Dashboard — Live Preview</div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green),#00e5a0);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;">R</div>
+          <div style="flex:1"><div style="font-weight:700;font-size:14px">Curaah User</div><div style="font-size:11px;color:var(--muted)">Diabetes + Hypertension</div></div>
+          <div class="fpill fpg">● Active</div>
+        </div>
+        <div class="frow"><span style="font-size:13px">🌅 Morning Medicine</span><span class="fpill fpg">✅ 08:12 AM</span></div>
+        <div class="frow"><span style="font-size:13px">☀️ Afternoon Dose</span><span class="fpill fpg">✅ 01:30 PM</span></div>
+        <div class="frow"><span style="font-size:13px">🌙 Night Medicine</span><span class="fpill fpy">⏳ Tonight</span></div>
+        <div class="frow"><span style="font-size:13px">🩸 Blood Sugar</span><span style="font-size:14px;font-weight:900;color:var(--amber)">132 ↑</span></div>
+        <div class="frow"><span style="font-size:13px">❤️ Blood Pressure</span><span style="font-size:14px;font-weight:900;color:var(--green)">128/82 ✓</span></div>
+        <div class="fgrid">
+          <div class="fstat"><div class="fsn" style="color:var(--green)">86%</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Adherence</div></div>
+          <div class="fstat"><div class="fsn" style="color:var(--amber)">🔥 7</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Day streak</div></div>
+          <div class="fstat"><div class="fsn" style="color:var(--red)">1</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Missed today</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE BROAD HOSPITALS & CLINICS ECOSYSTEM -->
+<section class="sec how-bg" id="ecosystem">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">The Curaah Ecosystem</div>
+      <h2 class="sh">B2B Professional Suite &amp; Healthcare Utilities</h2>
+      <p class="ss ctr">Beyond the Adherence Companion, Curaah is building a complete healthcare continuity suite for clinics, doctors, labs, and patients.</p>
+    </div>
+
+    <div class="eco-grid reveal">
+      <!-- B2B Suite -->
+      <div class="eco-box b2b">
+        <div class="eco-title" style="color:var(--blue)">🏥 B2B Professional Suite</div>
+        <p class="eco-subtitle">Designed strictly to save clinicians time and automate laboratory operations with zero workflow disruption.</p>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:var(--bd);color:var(--blue)">🎙️</div>
+          <div style="flex:1">
+            <div class="eco-item-title">AI Doctor Scribe</div>
+            <div class="eco-item-desc">Speak naturally in Hindi, Punjabi, or English. AI generates structured, professional English prescriptions in seconds, saving 2+ hours daily.</div>
+            <div class="eco-links">
+              <a href="scribe.html" class="eco-lnk">Try AI Scribe Free →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:var(--bd);color:var(--blue)">💬</div>
+          <div style="flex:1">
+            <div class="eco-item-title">WhatsApp AI Receptionist &amp; Dispatcher</div>
+            <div class="eco-item-desc">Automated WhatsApp agents for labs and clinics that answer queries, memorize pricing, and send PDF reports to patients.</div>
+            <div class="eco-links">
+              <a href="whatsapp-sender.html" class="eco-lnk">View WhatsApp Sender →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:var(--bd);color:var(--blue)">📋</div>
+          <div style="flex:1">
+            <div class="eco-item-title">Printable Clinic Slips</div>
+            <div class="eco-item-desc">Generate clean prescription, referral, appointment, and token slip previews for low-cost clinic printing and patient handoff.</div>
+            <div class="eco-links">
+              <a href="print-slips.html" class="eco-lnk">Open Print Slips →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2C Utilities -->
+      <div class="eco-box b2c">
+        <div class="eco-title" style="color:var(--green)">💚 Free Patient &amp; Family Utilities</div>
+        <p class="eco-subtitle">No login required. Public health tools built to help families navigate the healthcare system and find resources safely.</p>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:rgba(0,196,140,.1);color:var(--green)">🏥</div>
+          <div style="flex:1">
+            <div class="eco-item-title">Govt Health Map &amp; Care Navigator</div>
+            <div class="eco-item-desc">Crowdsourced mapping of Clinics &amp; government hospitals. Find departments, see live wait times, and get guidance on where to go.</div>
+            <div class="eco-links">
+              <a href="gov-map.html" class="eco-lnk" style="color:var(--green)">Open Health Map →</a>
+              <a href="navigator.html" class="eco-lnk" style="color:var(--green)">Care Navigator →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:rgba(0,196,140,.1);color:var(--green)">🔬</div>
+          <div style="flex:1">
+            <div class="eco-item-title">Lab Report Explainer</div>
+            <div class="eco-item-desc">Upload any diagnostic lab report image or PDF and get a breakdown of complex medical terms in simple, regional language.</div>
+            <div class="eco-links">
+              <a href="report-explainer.html" class="eco-lnk" style="color:var(--green)">Explain Report Free →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="eco-item">
+          <div class="eco-ico" style="background:rgba(0,196,140,.1);color:var(--green)">💊</div>
+          <div style="flex:1">
+            <div class="eco-item-title">Jan Aushadhi Finder &amp; Recovery Support</div>
+            <div class="eco-item-desc">Look up generic alternative pricing, side effects, and find de-addiction centers or emergency helplines in Punjab.</div>
+            <div class="eco-links">
+              <a href="medicine-info.html" class="eco-lnk" style="color:var(--green)">Medicine Info →</a>
+              <a href="drug-recovery.html" class="eco-lnk" style="color:var(--green)">Recovery Directory →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S BUILT / TRACTION -->
+<section class="sec">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Traction</div>
+      <h2 class="sh">Built. Registered. Ready to launch.</h2>
+      <p class="ss ctr">We are not asking for money to build a dream — we are asking for support to launch something already built.</p>
+    </div>
+    <div class="built-grid reveal">
+      <div class="bitem"><div class="bitem-ico">🌐</div><div><div class="bitem-t">Fully Working Prototype</div><div class="bitem-d">Complete companion app live — prescription upload, AI chat, vitals, lab reports, SOS, family dashboard.</div><span class="done-badge db-done">✅ Live Today</span></div></div>
+      <div class="bitem"><div class="bitem-ico">🏢</div><div><div class="bitem-t">Company Registered</div><div class="bitem-d">Curaah HealthTech Pvt Ltd — MCA approved and incorporated.</div><span class="done-badge db-done">✅ Done</span></div></div>
+      <div class="bitem"><div class="bitem-ico">🏛️</div><div><div class="bitem-t">IIT Ropar Incubation</div><div class="bitem-d">IIT Ropar TBIF Incubated.</div><span class="done-badge db-done">✅ Done</span></div></div>
+      <div class="bitem"><div class="bitem-ico">🇮🇳</div><div><div class="bitem-t">DPIIT Startup India Recognised</div><div class="bitem-d">Zero income tax for 3 years. Eligible for government scheme funding.</div><span class="done-badge db-done">✅ Done</span></div></div>
+      <div class="bitem"><div class="bitem-ico">🤖</div><div><div class="bitem-t">AI Integration Complete</div><div class="bitem-d">Voice AI (Hindi/Punjabi/English Regional Language NLP) + prescription intelligence + food camera vision.</div><span class="done-badge db-done">✅ Live</span></div></div>
+      <div class="bitem"><div class="bitem-ico">📱</div><div><div class="bitem-t">Multi-Channel Architecture</div><div class="bitem-d">App + WhatsApp + AI Voice Call — all three access modes built from day one.</div><span class="done-badge db-done">✅ Built</span></div></div>
+      <div class="bitem"><div class="bitem-ico">🏥</div><div><div class="bitem-t">Hospital Pilot Conversations</div><div class="bitem-d">2 hospital/clinics have validated the problem — onboarding conversations in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
+      <div class="bitem"><div class="bitem-ico">👨‍⚕️</div><div><div class="bitem-t">Pharmacist, Nutritionist, Trainers Partner Network</div><div class="bitem-d">Human-in-the-loop verification model designed — pharmacist, nutritionist, trainers etc. partners being onboarded.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section class="sec how-bg">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Market Opportunity</div>
+      <h2 class="sh">The market is not a problem.<br/>The problem is the market.</h2>
+      <p class="ss ctr">India's chronic disease burden is massive — and growing. Most patients are underserved by every existing digital health solution.</p>
+    </div>
+    <div class="mkt-grid reveal">
+      <div class="mkt-card" style="border-color:rgba(61,158,255,.2)"><div class="mkt-num" style="color:var(--blue)">77M+</div><div class="mkt-lbl">Diabetic patients in India</div><div class="mkt-sub">2nd highest globally. Most managing treatment alone with a paper prescription.</div></div>
+      <div class="mkt-card" style="border-color:rgba(0,196,140,.2)"><div class="mkt-num" style="color:var(--green)">220M+</div><div class="mkt-lbl">Hypertension patients</div><div class="mkt-sub">Mostly uncontrolled and unmonitored — no continuous care support.</div></div>
+      <div class="mkt-card" style="border-color:rgba(167,139,250,.2)"><div class="mkt-num" style="color:var(--purple)">500M+</div><div class="mkt-lbl">Chronic disease patients total</div><div class="mkt-sub">India — growing 8% annually. Every one of them needs adherence support.</div></div>
+      <div class="mkt-card" style="border-color:rgba(255,159,0,.2)"><div class="mkt-num" style="color:var(--amber)">30M+</div><div class="mkt-lbl">NRI diaspora — anxious caregivers</div><div class="mkt-sub">Children abroad willing to pay premium to monitor elderly parents in India. High-value segment.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE MODEL -->
+<section class="sec">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Revenue Model</div>
+      <h2 class="sh">Free for everyone.<br/>Premium for those who need more.</h2>
+      <p class="ss ctr">Freemium model — access is universal, premium features for power users and families.</p>
+    </div>
+    <div class="rev-grid reveal">
+      <div class="rcard" style="border:1px solid rgba(255,255,255,.1)">
+        <div class="rname" style="color:var(--muted)">Free Forever</div>
+        <div class="rprice">₹0</div>
+        <div class="rdiv"></div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Basic medicine reminders app only</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Lab report explainer (3/month)</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> AI companion (2 questions/day)</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Basic adherence log (without AI)</div>
+      </div>
+      <div class="rcard" style="border:1px solid var(--bb)">
+        <div class="rname" style="color:var(--blue)">Curaah Care</div>
+        <div class="rprice" style="color:var(--blue)">₹99<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div>
+        <div class="rdiv"></div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Unlimited AI companion</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Full adherence tracking</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Family dashboard (1 member)</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Weekly health summary on WhatsApp</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Medicine photo verification</div>
+      </div>
+      <div class="rcard" style="border:1px solid rgba(0,196,140,.25)">
+        <div class="rname" style="color:var(--green)">Curaah Family</div>
+        <div class="rprice" style="color:var(--green)">₹199<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div>
+        <div class="rdiv"></div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Everything in Care</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> 3 family dashboard members</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> SOS emergency alerts</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Priority pharmacist, nutritionist, trainer check</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Caregiver push notifications</div>
+      </div>
+      <div class="rcard" style="border:1px solid rgba(255,159,0,.25)">
+        <div class="rname" style="color:var(--amber)">Curaah NRI</div>
+        <div class="rprice" style="color:var(--amber)">$9<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div>
+        <div class="rdiv"></div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Everything in Family</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Daily WhatsApp update (English)</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> Bilingual: English + Punjabi</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> International emergency alert</div>
+        <div class="rfeature"><span style="color:var(--green)">✓</span> NRI caregiver priority support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="ti"><div class="tilo">🏛️</div><div><div class="tilb">IIT Ropar Incubated</div><div class="tilsub">Research-backed, institution-supported</div></div></div>
+    <div class="ti"><div class="tilo">🇮🇳</div><div><div class="tilb">DPIIT Recognised Startup</div><div class="tilsub">Startup India registered</div></div></div>
+    <div class="ti"><div class="tilo">🔒</div><div><div class="tilb">DPDP 2023 Compliant</div><div class="tilsub">End-to-end encryption · Consent-first</div></div></div>
+    <div class="ti"><div class="tilo">🌿</div><div><div class="tilb">Punjab and Local Farmer Sourcing</div><div class="tilsub">Pesticide-free kits · Women SHG packaged</div></div></div>
+    <div class="ti"><div class="tilo">🤖</div><div><div class="tilb">AI Powered</div><div class="tilsub">Hindi · Punjabi · English · Regional NLP</div></div></div>
+  </div>
+</div>
+
+<!-- VISION / ROADMAP -->
+<section class="sec" id="vision">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Vision &amp; Roadmap</div>
+      <h2 class="sh">Building India's healthcare<br/>continuity platform — phase by phase</h2>
+      <p class="ss ctr">Curaah begins as an AI companion. It will evolve into a comprehensive healthcare continuity ecosystem — from recovery kits to community intelligence and rural health kiosks.</p>
+    </div>
+    <div class="roadmap reveal">
+      <div class="rm"><div class="rmdot rd-live">1</div><div class="rmc"><div class="rmph">Phase 1 — Prototype </div><div class="rmti">AI Health &amp; Adherence Companion (B2C)</div><div class="rmde">Chronic disease patients register, upload prescriptions, track medicines via App/WhatsApp/Voice Call. Family monitors remotely via consent-based dashboard. SOS emergency system. Recovery kits from Punjab farms.</div><span class="rmbadge rb-live">🟢 Prototype  — Seeking Launch Funding</span></div></div>
+      <div class="rm"><div class="rmdot rd-soon">2</div><div class="rmc"><div class="rmph">Phase 2 — 2027</div><div class="rmti">Agritech Recovery Kits &amp; Community Growth</div><div class="rmde">Scale recovery kit subscriptions. Disease-specific support circles where patients motivate each other. WhatsApp and voice call AI fully operational at scale for non-tech rural patients.</div><span class="rmbadge rb-soon">🟡 In Development</span></div></div>
+      <div class="rm"><div class="rmdot rd-plan">3</div><div class="rmc"><div class="rmph">Phase 3 — 2027-28</div><div class="rmti">Outbreak Intelligence &amp; IoT Wearables</div><div class="rmde">Auto-sync vitals from smartbands and glucometers. Aggregated anonymous symptom data enables outbreak prediction and disease burden mapping for public health teams and district officials.</div><span class="rmbadge rb-plan">⚪ Planned</span></div></div>
+      <div class="rm"><div class="rmdot rd-plan">4</div><div class="rmc"><div class="rmph">Phase 4 — 2028-29</div><div class="rmti">Rural Health Kiosks &amp; Proxy Agent Network</div><div class="rmde">AI kiosks in village panchayat offices. Proxy agents (ASHA workers) help non-tech patients access Curaah. Basic diagnostics, teleconsultation, medicine access for villages with limited connectivity.</div><span class="rmbadge rb-plan">⚪ Planned</span></div></div>
+      <div class="rm"><div class="rmdot rd-plan">R</div><div class="rmc"><div class="rmph">Research — IIT Ropar Collaboration</div><div class="rmti">Preventive AI &amp; Academic Research</div><div class="rmde">AI-based anemia screening via conjunctiva photos, oral cancer detection, TB medication adherence monitoring, acoustic cough screening. Real-world data contributing to national research and preventive health policy.</div><span class="rmbadge rb-plan">⚪ Future Research</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec cta-bg">
+  <div class="wrap">
+    <div class="cta-inner reveal">
+      <div class="tag" style="display:inline-block;margin-bottom:18px">Try the Prototype</div>
+      <div class="cta-h">Your health journey starts right now.</div>
+      <p class="cta-sub">Curaah is live and free to try. Whether you're a patient managing a chronic condition, or a child worried about an elderly parent — Curaah is already built and waiting for you.</p>
+      <div class="cta-btns">
+        <a href="companion.html" class="btn btn-lg btn-blue">🚀 Try AI Companion — Free</a>
+        <a href="family.html" class="btn btn-lg btn-ghost">👨‍👩‍👧 Monitor My Family's Health</a>
+      </div>
+      <div class="cta-trust">
+        <span class="ctitem">🏛️ IIT Ropar Incubated</span>
+        <span class="ctitem">🔒 DPDP 2023 Compliant</span>
+        <span class="ctitem">🇮🇳 Made in India</span>
+        <span class="ctitem">🌿 Punjab Farm Sourced Kits</span>
+        <span class="ctitem">⚡ Free to Try</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div>
+      <div class="fbrand">
+        <svg class="lsvg" viewBox="0 0 36 36" fill="none"><path d="M18 3L5 9L5 21Q5 30 18 34Q31 30 31 21L31 9Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10Q13 15 13 20Q13 25 18 28Q23 25 23 20Q23 15 18 10Z" fill="#3d9eff" opacity=".9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
+        <span style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif">curaah</span>
+      </div>
+      <p class="ftagline">Healthcare continuity through AI. Ensuring treatment doesn't end when a patient leaves the clinic. IIT Ropar Incubated · DPIIT Recognised · Startup Punjab Applicant.</p>
+    </div>
+    <div class="fc">
+      <div class="fch">B2C Platform</div>
+      <a href="companion.html">AI Companion App</a>
+      <a href="family.html">Family Dashboard</a>
+      <a href="gov-map.html">Govt Health Map</a>
+      <a href="report-explainer.html">Report Explainer</a>
+      <a href="medicine-info.html">Medicine Info</a>
+    </div>
+    <div class="fc">
+      <div class="fch">B2B Clinic Suite</div>
+      <a href="scribe.html">AI Doctor Scribe</a>
+      <a href="whatsapp-sender.html">WhatsApp Receptionist</a>
+      <a href="print-slips.html">Print Slips</a>
+    </div>
+    <div class="fc">
+      <div class="fch">Company</div>
+      <a href="#vision">Our Roadmap</a>
+      <a href="mailto:curaahtech@gmail.com">Contact Us</a>
+      <a href="mailto:curaahtech@gmail.com">For Investors</a>
+      <a href="#ecosystem">Startup Punjab</a>
+    </div>
+    <div class="fc">
+      <div class="fch">Legal</div>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">DPDP Compliance</a>
+      <a href="terms.html#medical-disclaimer">Medical Disclaimer</a>
+    </div>
+  </div>
+  <div class="fbot">
+    <p>© 2026 Curaah HealthTech Pvt Ltd · All rights reserved · Built in Punjab, Built for India</p>
+    <p class="disc">⚠️ Curaah is an AI support tool, not a substitute for medical advice. Always consult your doctor.</p>
+  </div>
+</footer>
+
+<button class="st" id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const nav=document.getElementById('nav');
+const st=document.getElementById('st');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('solid',scrollY>60);
+  st.classList.toggle('vis',scrollY>400);
+});
+function toggleMob(){document.getElementById('mob').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('#mob')&&!e.target.closest('.ham'))document.getElementById('mob').classList.remove('open');});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+</script>
 </body>
 </html>
