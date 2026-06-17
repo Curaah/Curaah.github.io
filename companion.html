@@ -71,11 +71,13 @@
         </div>
         <div class="onboard-field">
           <label class="onboard-label">Phone Number (Username ID)</label>
-          <input class="onboard-input" id="obPhone" placeholder="Mobile number" type="tel" />
+          <input class="onboard-input" id="obPhone" placeholder="10-digit mobile number" type="tel" maxlength="10" />
+          <div id="obPhoneWarn" style="color:#ef4444;font-size:11px;margin-top:4px;display:none;font-weight:600;">⚠️ Please enter a valid 10-digit Indian mobile number</div>
         </div>
         <div class="onboard-field" id="obPasswordGroup" style="display:none">
-          <label class="onboard-label">Choose a Password / PIN (min 4 digits)</label>
-          <input class="onboard-input" id="obPassword" placeholder="Choose a password" type="password" />
+          <label class="onboard-label">Choose a Password / PIN (min 6 characters)</label>
+          <input class="onboard-input" id="obPassword" placeholder="Choose a secure password" type="password" />
+          <div id="obPasswordWarn" style="color:#ef4444;font-size:11px;margin-top:4px;display:none;font-weight:600;">⚠️ Password must be at least 6 characters</div>
         </div>
         
         <div class="onboard-field">
@@ -211,6 +213,24 @@
         <div class="onboard-field">
           <label class="onboard-label">Latest Lab Reports Summary</label>
           <textarea class="onboard-input" id="obLabsText" rows="1" placeholder="Enter test values (e.g. HbA1c: 7.2) if any"></textarea>
+        </div>
+        
+        <div class="onboard-field">
+          <label class="onboard-label">Or Upload Latest Lab Report</label>
+          <input type="file" id="obLabFile" accept="image/*,application/pdf" style="display:none;" />
+          <div class="lab-upload" id="obLabUploadArea" onclick="document.getElementById('obLabFile').click()" style="padding:14px;border:1.5px dashed var(--border-subtle);border-radius:12px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.02);transition:var(--transition);">
+            <div style="font-size:24px;margin-bottom:4px;">🔬</div>
+            <div style="font-size:12.5px;font-weight:700;color:var(--green);">Click to upload Photo / PDF</div>
+            <div style="font-size:10.5px;color:var(--text-muted);margin-top:2px;">AI will read and explain your lab values</div>
+          </div>
+          <div id="obLabLoading" style="display:none;text-align:center;padding:8px 0;">
+            <div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px;"></div>
+            <span style="font-size:12px;color:var(--text-muted);">AI reading lab values...</span>
+          </div>
+          <div id="obLabPreview" style="display:none;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:space-between;background:rgba(0,196,140,0.06);padding:6px 12px;border-radius:8px;border:1px solid rgba(0,196,140,0.15);">
+            <span>🔬 Lab Report Loaded</span>
+            <button style="background:transparent;border:none;color:#ef4444;font-size:12px;cursor:pointer;font-weight:700;" onclick="clearObLabFile(event)">Remove</button>
+          </div>
         </div>
 
         <div style="display:flex;gap:12px;margin-top:20px;">
@@ -575,6 +595,34 @@
 <!-- MISSED DOSE SURVEY MODAL -->
 <div class="modal-overlay" id="modalMissedSurvey" onclick="if(event.target===this)closeModal('modalMissedSurvey')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title" style="color:var(--danger)">📋 Why did you miss this dose?</div><p style="font-size:13.5px;color:var(--text-muted);line-height:1.5;margin-bottom:16px">Help Curaah improve your reminders:</p><input type="hidden" id="surveyMedId" /><input type="hidden" id="surveyPeriod" /><div id="surveyBtns" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('forget')">⏰ I simply forgot the time</button><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('sideeffect')">🤢 Side effects are bothering me</button><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('cost')">💸 Ran out / Medicine too expensive</button></div><div id="surveyResult" style="display:none;margin-top:12px"></div></div></div>
 
+<!-- MEDICATION RECONCILIATION MODAL -->
+<div class="modal-overlay" id="modalReconcile" onclick="if(event.target===this)closeModal('modalReconcile')">
+  <div class="modal-sheet" style="background:#0d1b35;max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💊 Reconcile Medications</div>
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:16px;">
+      Curaah AI detected new medications. Review and confirm which medicines should stay active on your schedule:
+    </p>
+    
+    <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">
+      Keep on Schedule (Existing Medicines)
+    </div>
+    <div id="reconcileActiveList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+      <!-- Dynamic list of current active meds -->
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">
+      Add to Schedule (New Prescription)
+    </div>
+    <div id="reconcileNewList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+      <!-- Dynamic list of new prescription meds -->
+    </div>
+    
+    <input type="hidden" id="reconcileIsOnboarding" value="false" />
+    <button class="btn-primary" style="background:var(--green);border:none;font-weight:700;" onclick="submitReconciliation()">Confirm & Update Schedule ✓</button>
+  </div>
+</div>
+
 <!-- AI CHAT MODAL -->
 <div class="modal-overlay" id="modalAIChat" onclick="if(event.target===this)closeModal('modalAIChat')"><div class="modal-sheet" style="max-height:85vh;display:flex;flex-direction:column;padding:0"><div class="modal-handle" style="margin-top:16px"></div><div class="modal-title" style="padding:0 24px;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>💬</span> Curaah AI Health Companion</div>
   <div id="aiChatHistory" style="flex:1;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:8px;min-height:280px;max-height:380px"></div>
@@ -622,6 +670,7 @@ let medicines=JSON.parse(localStorage.getItem('curaah_medicines')||'[]');
 let adherence=JSON.parse(localStorage.getItem('curaah_adherence')||'[]');
 let vitals=JSON.parse(localStorage.getItem('curaah_vitals')||'[]');
 let labReports=JSON.parse(localStorage.getItem('curaah_labs')||'[]');
+let sideEffects=JSON.parse(localStorage.getItem('curaah_side_effects')||'[]');
 let timeline=JSON.parse(localStorage.getItem('curaah_timeline')||'[]');
 let logsCount=parseInt(localStorage.getItem('curaah_logs_count')||'0');
 let familyCode=localStorage.getItem('curaah_family_code');
@@ -687,13 +736,26 @@ function validateStep1() {
   const phone = document.getElementById('obPhone').value.trim();
   const pwd = document.getElementById('obPassword').value;
   
-  const isPhoneEntered = phone.length > 0;
-  document.getElementById('obPasswordGroup').style.display = isPhoneEntered ? 'block' : 'none';
-
-  let isValid = name.length > 0 && phone.length > 0;
-  if (isPhoneEntered) {
-    isValid = isValid && pwd.length >= 4;
+  const phoneRegex = /^[6-9]\d{9}$/;
+  const isPhoneValid = phoneRegex.test(phone);
+  
+  if (phone.length > 0 && !isPhoneValid) {
+    document.getElementById('obPhoneWarn').style.display = 'block';
+  } else {
+    document.getElementById('obPhoneWarn').style.display = 'none';
   }
+  
+  const showPassword = phone.length > 0 && isPhoneValid;
+  document.getElementById('obPasswordGroup').style.display = showPassword ? 'block' : 'none';
+  
+  const isPasswordValid = pwd.length >= 6;
+  if (showPassword && pwd.length > 0 && !isPasswordValid) {
+    document.getElementById('obPasswordWarn').style.display = 'block';
+  } else {
+    document.getElementById('obPasswordWarn').style.display = 'none';
+  }
+  
+  const isValid = name.length > 0 && isPhoneValid && isPasswordValid;
   document.getElementById('btnNext1').disabled = !isValid;
 }
 
@@ -796,7 +858,7 @@ function validateStep4() {
       const responseData = await r.json();
       const extractedData = responseData.data || responseData;
       
-      uploadedPrescriptionMeds = (extractedData.medicines || []).map((m, i) => ({
+      const parsedMeds = (extractedData.medicines || []).map((m, i) => ({
         id: 'm' + Date.now() + '_' + i,
         name: m.name,
         dosage: m.dosage || '',
@@ -806,13 +868,10 @@ function validateStep4() {
         start_date: today(),
         active: true
       }));
-
-      const medsSummary = (extractedData.medicines || []).map(m => `${m.name} (${m.dosage || ''} ${m.frequency || ''})`).join(', ');
-      document.getElementById('obMedsText').value = medsSummary;
       
       uploadedPrescriptionUrl = 'local_onboard_rx_image';
       document.getElementById('obRxPreview').style.display = 'flex';
-      validateStep3();
+      openReconciliation(parsedMeds, true);
     } catch(err) {
       alert('Could not read prescription. Please enter your medicines manually.');
       document.getElementById('obRxUploadArea').style.display = 'block';
@@ -829,6 +888,46 @@ function validateStep4() {
     document.getElementById('obRxPreview').style.display = 'none';
     document.getElementById('obRxUploadArea').style.display = 'block';
     validateStep3();
+  };
+
+  document.getElementById('obLabFile').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('obLabUploadArea').style.display = 'none';
+    document.getElementById('obLabLoading').style.display = 'block';
+    document.getElementById('obLabPreview').style.display = 'none';
+    
+    try {
+      const b64 = await fileToBase64(file);
+      const r = await fetch(SUPA_URL + '/functions/v1/report-explainer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPA_KEY, 'apikey': SUPA_KEY },
+        body: JSON.stringify({ image: { mimeType: file.type || 'image/jpeg', base64: b64.split(',')[1] }, language: 'English' })
+      });
+      if (!r.ok) throw new Error('extraction failed');
+      const responseData = await r.json();
+      const summary = responseData.summary || '';
+      
+      const formatted = `Summary: ${summary}\n\nAbnormal Findings:\n` + (responseData.abnormal_findings?.map(f=>`• ${f}`).join('\n') || 'None');
+      document.getElementById('obLabsText').value = formatted;
+      
+      document.getElementById('obLabPreview').style.display = 'flex';
+      validateStep4();
+    } catch(err) {
+      alert('Could not read lab report. Please enter your results manually.');
+      document.getElementById('obLabUploadArea').style.display = 'block';
+    } finally {
+      document.getElementById('obLabLoading').style.display = 'none';
+      e.target.value = '';
+    }
+  });
+
+  window.clearObLabFile = function(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('obLabPreview').style.display = 'none';
+    document.getElementById('obLabUploadArea').style.display = 'block';
+    document.getElementById('obLabsText').value = '';
+    validateStep4();
   };
 
   window.submitWizard = async () => {
@@ -961,13 +1060,14 @@ window.handleOnboardLogin=async function(){
 // ====== SERVER SYNC ======
 window.syncDataWithServer=async function(){
   if(!patientId||patientId.startsWith('local_'))return;
-  try{const d=await callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines,adherence,vitals,labs:labReports,settings:profile});
+  try{const d=await callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines,adherence,vitals,labs:labReports,side_effects:sideEffects,settings:profile});
     if(d.status==='success'){
       if(d.settings){profile={...profile,...d.settings};save('curaah_profile',profile);}
       if(d.medicines&&d.medicines.length){medicines=d.medicines.map(m=>({id:m.id,name:m.medicine_name,dosage:m.dosage||'',frequency:m.frequency||'',duration_days:m.duration_days,purpose:m.purpose||'',start_date:m.start_date,active:m.is_active}));save('curaah_medicines',medicines);}
       if(d.adherence&&d.adherence.length){adherence=d.adherence.map(a=>({key:`${a.medicine_id}_${a.scheduled_date}_${a.scheduled_time}`,medicine_id:a.medicine_id,date:a.scheduled_date,period:a.scheduled_time,status:a.status}));save('curaah_adherence',adherence);}
       if(d.vitals&&d.vitals.length){vitals=d.vitals.map(v=>({id:v.id,type:v.type,value:v.value,num:parseFloat(v.num),unit:v.unit,date:v.logged_date,time:v.logged_time}));save('curaah_vitals',vitals);}
       if(d.labs&&d.labs.length){labReports=d.labs.map(l=>({id:l.id,date:l.report_date,raw:l.raw_text,explanation:l.explanation,time:l.logged_time}));save('curaah_labs',labReports);}
+      if(d.side_effects&&d.side_effects.length){sideEffects=d.side_effects.map(s=>({id:s.id,description:s.description,severity:s.severity,ai_assessment:s.ai_assessment,reported_at:s.reported_at}));save('curaah_side_effects',sideEffects);}
       initAppFormsOnly();renderAll();
     }
   }catch(e){console.warn('Sync offline:',e);}
@@ -1054,15 +1154,16 @@ document.getElementById('rxFile').addEventListener('change',async e=>{
     if(!r.ok)throw new Error('failed');
     const responseData=await r.json();
     const extractedData=responseData.data||responseData;
-    medicines=(extractedData.medicines||[]).map((m,i)=>({id:'m'+Date.now()+'_'+i,name:m.name,dosage:m.dosage||'',frequency:m.frequency||'',duration_days:m.duration_days||null,purpose:m.purpose||'',start_date:today(),active:true}));
-    save('curaah_medicines',medicines);addTL('blue',`✅ Prescription read: ${medicines.length} medicines extracted`);
+    const parsedMeds=(extractedData.medicines||[]).map((m,i)=>({id:'m'+Date.now()+'_'+i,name:m.name,dosage:m.dosage||'',frequency:m.frequency||'',duration_days:m.duration_days||null,purpose:m.purpose||'',start_date:today(),active:true}));
     if(extractedData.follow_up_date)addTL('blue',`📅 Follow-up: ${extractedData.follow_up_date}`);
-    if(!patientId.startsWith('local_'))syncDataWithServer();
+    document.getElementById('rxLoading').style.display='none';
+    openReconciliation(parsedMeds, false);
   }catch(err){
-    medicines=[{id:'m1',name:'Metformin 500mg',dosage:'1 tablet',frequency:'Twice a day',duration_days:30,purpose:'Diabetes Control',start_date:today(),active:true},{id:'m2',name:'Atorvastatin 10mg',dosage:'1 tablet',frequency:'Night',duration_days:30,purpose:'Cholesterol',start_date:today(),active:true}];
-    save('curaah_medicines',medicines);addTL('blue','Demo prescription loaded (offline fallback)');
+    document.getElementById('rxLoading').style.display='none';
+    const parsedMeds=[{id:'m_fallback_1',name:'Metformin 500mg',dosage:'1 tablet',frequency:'Twice a day',duration_days:30,purpose:'Diabetes Control',start_date:today(),active:true},{id:'m_fallback_2',name:'Atorvastatin 10mg',dosage:'1 tablet',frequency:'Night',duration_days:30,purpose:'Cholesterol',start_date:today(),active:true}];
+    openReconciliation(parsedMeds, false);
   }
-  document.getElementById('rxLoading').style.display='none';renderAll();e.target.value='';
+  e.target.value='';
 });
 
 // ====== DOSE HELPERS ======
@@ -1306,15 +1407,27 @@ window.submitSideEffect=async function(){
   const desc=document.getElementById('seDesc').value.trim();if(!desc){alert('Please describe what you feel');return;}
   const medId=document.getElementById('seMed').value;const med=medicines.find(m=>m.id===medId);
   const res=document.getElementById('seResult');res.style.display='block';res.innerHTML='<div class="spinner"></div>';
+  
+  let sev='yellow', explanation='Symptom logged.', action='';
   try{const d=await fetch(SUPA_URL+'/functions/v1/side-effect-analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY},body:JSON.stringify({description:desc,medicine_name:med?med.name:'Unknown',patient_context:profile?.condition||''})});
     const data=await d.json();
-    const sev=(data.severity||'').toLowerCase();
+    sev=(data.severity||'').toLowerCase();
     const sc=sev==='red'?'#ef4444':sev==='yellow'?'#f59e0b':'#00c48c';
-    const explanation=data.assessment||data.explanation||'';
-    const action=data.recommendation||data.action||'';
+    explanation=data.assessment||data.explanation||'';
+    action=data.recommendation||data.action||'';
     res.innerHTML=`<div style="background:${sc}11;border:1px solid ${sc}33;border-radius:12px;padding:16px"><div style="font-weight:800;color:${sc};font-size:15px;margin-bottom:6px">${sev.toUpperCase()} Severity</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">${explanation}</div>${action?`<div style="margin-top:8px;font-size:13px;font-weight:700">➡️ ${action}</div>`:''}</div>`;
     addTL('yellow',`⚠️ Side effect: "${desc.substring(0,40)}" — ${sev.toUpperCase()} severity`);
-  }catch(e){setTimeout(()=>{res.innerHTML=`<div style="background:#f59e0b11;border:1px solid #f59e0b33;border-radius:12px;padding:16px"><div style="font-weight:800;color:#f59e0b;font-size:15px;margin-bottom:6px">YELLOW Severity</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">Symptom logged. If symptoms persist or worsen, please consult your doctor.</div></div>`;addTL('yellow',`⚠️ Side effect: "${desc.substring(0,40)}"`)},800);}
+  }catch(e){
+    res.innerHTML=`<div style="background:#f59e0b11;border:1px solid #f59e0b33;border-radius:12px;padding:16px"><div style="font-weight:800;color:#f59e0b;font-size:15px;margin-bottom:6px">YELLOW Severity</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">Symptom logged. If symptoms persist or worsen, please consult your doctor.</div></div>`;
+    addTL('yellow',`⚠️ Side effect: "${desc.substring(0,40)}"`);
+  }
+  
+  const entry={id:'se_'+Date.now(),description:desc,severity:sev,ai_assessment:explanation,reported_at:new Date().toISOString()};
+  sideEffects.push(entry);
+  save('curaah_side_effects',sideEffects);
+  if(!patientId.startsWith('local_')){
+    syncDataWithServer();
+  }
 };
 
 // ====== TIMELINE ======
@@ -1324,6 +1437,107 @@ function addTL(color,text){timeline.push({color,text,date:new Date().toISOString
 window.openModal=id=>document.getElementById(id).classList.add('open');
 window.closeModal=id=>document.getElementById(id).classList.remove('open');
 window.copyCode=()=>navigator.clipboard.writeText(familyCode).then(()=>alert('Family code copied!')).catch(()=>{});
+
+window.openReconciliation = function(newMeds, isOnboarding) {
+  const activeMeds = medicines.filter(m => m.active !== false);
+  const activeListEl = document.getElementById('reconcileActiveList');
+  const newListEl = document.getElementById('reconcileNewList');
+  if (activeListEl) activeListEl.innerHTML = '';
+  if (newListEl) newListEl.innerHTML = '';
+  const onboardingInput = document.getElementById('reconcileIsOnboarding');
+  if (onboardingInput) onboardingInput.value = isOnboarding ? 'true' : 'false';
+  window.reconcileNewMeds = newMeds;
+  if (activeMeds.length === 0) {
+    if (activeListEl) activeListEl.innerHTML = '<div style="font-size:12.5px;color:var(--text-muted);padding:4px 0;">No existing medicines active.</div>';
+  } else {
+    activeMeds.forEach(m => {
+      if (activeListEl) {
+        activeListEl.innerHTML += `
+          <label style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;border:1px solid var(--border-subtle);cursor:pointer;margin:0;width:100%;box-sizing:border-box;">
+            <input type="checkbox" class="reconcile-active-cb" data-id="${m.id}" checked style="width:18px;height:18px;cursor:pointer;flex-shrink:0;" />
+            <div style="font-size:13px;line-height:1.4;">
+              <strong style="color:var(--text);">${esc(m.name)}</strong>
+              <div style="font-size:11px;color:var(--text-muted);">${esc(m.dosage)} · ${esc(m.frequency)}</div>
+            </div>
+          </label>
+        `;
+      }
+    });
+  }
+  if (newMeds.length === 0) {
+    if (newListEl) newListEl.innerHTML = '<div style="font-size:12.5px;color:var(--text-muted);padding:4px 0;">No new medicines detected.</div>';
+  } else {
+    newMeds.forEach((m, idx) => {
+      if (newListEl) {
+        newListEl.innerHTML += `
+          <label style="display:flex;align-items:center;gap:10px;background:rgba(0,196,140,0.04);padding:10px;border-radius:8px;border:1px solid rgba(0,196,140,0.15);cursor:pointer;margin:0;width:100%;box-sizing:border-box;">
+            <input type="checkbox" class="reconcile-new-cb" data-idx="${idx}" checked style="width:18px;height:18px;cursor:pointer;flex-shrink:0;" />
+            <div style="font-size:13px;line-height:1.4;">
+              <strong style="color:var(--green);">${esc(m.name)}</strong>
+              <div style="font-size:11px;color:var(--text-muted);">${esc(m.dosage)} · ${esc(m.frequency)}</div>
+            </div>
+          </label>
+        `;
+      }
+    });
+  }
+  openModal('modalReconcile');
+};
+
+window.submitReconciliation = function() {
+  const isOnboarding = document.getElementById('reconcileIsOnboarding')?.value === 'true';
+  const activeCbs = document.querySelectorAll('.reconcile-active-cb');
+  activeCbs.forEach(cb => {
+    const medId = cb.getAttribute('data-id');
+    const med = medicines.find(m => m.id === medId);
+    if (med) {
+      const isChecked = cb.checked;
+      if (med.active !== isChecked) {
+        med.active = isChecked;
+        if (!isChecked) {
+          addTL('yellow', `Discontinued medicine: ${med.name}`);
+        }
+      }
+    }
+  });
+  const newCbs = document.querySelectorAll('.reconcile-new-cb');
+  const addedMeds = [];
+  newCbs.forEach(cb => {
+    if (cb.checked) {
+      const idx = parseInt(cb.getAttribute('data-idx'));
+      const med = window.reconcileNewMeds[idx];
+      if (med) {
+        const existing = medicines.find(existingMed => existingMed.name.toLowerCase() === med.name.toLowerCase() && existingMed.active !== false);
+        if (existing) {
+          existing.dosage = med.dosage || existing.dosage;
+          existing.frequency = med.frequency || existing.frequency;
+          existing.purpose = med.purpose || existing.purpose;
+        } else {
+          med.start_date = today();
+          med.active = true;
+          medicines.push(med);
+        }
+        addedMeds.push(med.name);
+      }
+    }
+  });
+  if (addedMeds.length > 0) {
+    addTL('blue', `Added new medicines: ${addedMeds.join(', ')}`);
+  }
+  if (isOnboarding) {
+    uploadedPrescriptionMeds = medicines;
+    const medsSummary = medicines.filter(m => m.active !== false).map(m => `${m.name} (${m.dosage || ''} ${m.frequency || ''})`).join(', ');
+    document.getElementById('obMedsText').value = medsSummary;
+    validateStep3();
+  } else {
+    save('curaah_medicines', medicines);
+    if (patientId && !patientId.startsWith('local_')) {
+      syncDataWithServer();
+    }
+    renderAll();
+  }
+  closeModal('modalReconcile');
+};
 
 // ====== SOS ======
 window.triggerSOS=async function(){
@@ -1393,7 +1607,25 @@ window.sendUserChatMessage=async function(preset){
   const inp=document.getElementById('aiChatInput');const txt=preset||inp.value.trim();if(!txt)return;if(!preset)inp.value='';
   const hist=document.getElementById('aiChatHistory');hist.innerHTML+=`<div class="chat-msg user">${esc(txt)}</div>`;
   const lid='l'+Date.now();hist.innerHTML+=`<div class="chat-msg bot" id="${lid}"><span class="typing-dots"><span></span><span></span><span></span></span></div>`;hist.scrollTop=hist.scrollHeight;
-  const ctx={name:profile?.name||'Patient',condition:profile?.condition||'General',language:profile?.language||'English',medicines:medicines.map(m=>`${m.name} ${m.dosage} (${m.frequency})`).join(', ')||'None',vitals:vitals.slice(-5).map(v=>`${v.type}: ${v.value} on ${v.date}`).join('; ')||'None logged',today_adherence:adherence.filter(a=>a.date===today()).map(a=>`${a.period}: ${a.status}`).join(', ')||'None'};
+  const ctx={
+    name:profile?.name||'Patient',
+    condition:profile?.condition||'General',
+    language:profile?.language||'English',
+    medicines:medicines.filter(m=>m.active!==false).map(m=>`${m.name} ${m.dosage} (${m.frequency})`).join(', ')||'None',
+    vitals:vitals.slice(-5).map(v=>`${v.type}: ${v.value} on ${v.date}`).join('; ')||'None logged',
+    today_adherence:adherence.filter(a=>a.date===today()).map(a=>`${a.period}: ${a.status}`).join(', ')||'None',
+    age:profile?.age||'Not specified',
+    gender:profile?.gender||'Not specified',
+    district:profile?.district||'Not specified',
+    relationship:profile?.relationship||'Self',
+    allergies:profile?.allergies||'None',
+    height:profile?.height||'Not specified',
+    weight:profile?.weight||'Not specified',
+    specific_problems:profile?.specific_problems||'None',
+    daily_routine:JSON.stringify(profile?.daily_routine||{}),
+    side_effects:sideEffects.map(s=>`[Severity: ${s.severity}, reported: ${s.reported_at}] ${s.description}`).join('; ')||'None reported',
+    latest_labs:labReports.map(l=>`[Date: ${l.date}] ${l.raw}`).join('; ')||profile?.latest_labs||'None logged'
+  };
   try{const d=await callBackend({action:'chat',patient_id:patientId,device_id:deviceId,message:txt,patient_context:ctx});const reply=d.response||d.message||d.reply;const el=document.getElementById(lid);if(el&&reply)el.innerHTML=reply;else if(el)el.innerHTML=localAIReply(txt,ctx);}
   catch(e){const el=document.getElementById(lid);if(el)el.innerHTML=localAIReply(txt,ctx);}
   hist.scrollTop=hist.scrollHeight;
