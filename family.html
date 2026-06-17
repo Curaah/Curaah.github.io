@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="theme-color" content="#060d1f"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <title>Curaah Family Dashboard — Monitor Your Loved Ones</title>
+  <meta name="description" content="Curaah Family Dashboard — monitor elderly parents' medication adherence, vitals, and health status in real time."/>
+  <link rel="icon" href="assets/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+:root{
+  --bg:#060d1f;--bg-mid:#0d1b35;--bg-card:rgba(255,255,255,0.04);--bg-hover:rgba(255,255,255,0.07);
+  --electric:#3d9eff;--electric-dim:rgba(61,158,255,0.12);--electric-border:rgba(61,158,255,0.2);
+  --green:#00c48c;--green-dim:rgba(0,196,140,0.12);--danger:#ff4757;--danger-dim:rgba(255,71,87,0.1);
+  --warning:#ff9f00;--warning-dim:rgba(255,159,0,0.1);
+  --text:#ffffff;--text-muted:rgba(255,255,255,0.55);--text-dim:rgba(255,255,255,0.28);
+  --border:rgba(61,158,255,0.15);--border-s:rgba(255,255,255,0.07);
+  --radius:16px;--radius-sm:10px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);--glow:0 0 20px rgba(61,158,255,0.2);
+  --tr:all 0.22s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,.brand{font-family:'Outfit',sans-serif;}
+a{text-decoration:none;color:inherit;}
+input,textarea,select{font-family:'Inter',sans-serif;}
+
+/* ── ONBOARDING ── */
+.ob-overlay{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:40px 20px;overflow-y:auto;transition:opacity .4s;}
+.ob-overlay.hidden{opacity:0;pointer-events:none;}
+.ob-card{width:100%;max-width:440px;margin:auto;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:24px;padding:40px 32px;backdrop-filter:blur(20px);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.ob-logo{font-size:48px;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.ob-title{font-size:26px;font-weight:800;margin-bottom:6px;}.ob-title span{color:var(--electric);}
+.ob-sub{font-size:13.5px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;max-width:320px;margin-left:auto;margin-right:auto;}
+.ob-field{margin-bottom:14px;text-align:left;}
+.ob-label{display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;}
+.ob-input{width:100%;padding:13px 16px;background:rgba(255,255,255,0.06);border:1.5px solid var(--border-s);border-radius:var(--radius-sm);color:var(--text);font-size:15px;outline:none;transition:var(--tr);}
+.ob-input:focus{border-color:var(--electric);background:rgba(61,158,255,0.08);}
+.ob-input::placeholder{color:var(--text-dim);}
+.ob-input option{background:#0d1b35;}
+.ob-btn{width:100%;padding:15px;background:var(--electric);color:white;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;margin-top:16px;transition:var(--tr);}
+.ob-btn:hover{background:#2b8ae8;transform:translateY(-2px);box-shadow:var(--glow);}
+
+/* ── LAYOUT ── */
+.sidebar{
+  display:none;
+  position:fixed;top:0;left:0;width:280px;height:100vh;
+  background:rgba(255,255,255,0.02);border-right:1px solid var(--border-s);
+  flex-direction:column;padding:28px 22px;z-index:100;
+}
+@media(min-width:1024px){.sidebar{display:flex!important;}}
+.s-brand{display:flex;align-items:center;gap:10px;margin-bottom:28px;}
+.s-brand-name{font-size:22px;font-weight:900;letter-spacing:-.5px;font-family:'Outfit',sans-serif;}
+.s-user{display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.04);border:1px solid var(--border-s);border-radius:14px;margin-bottom:20px;}
+.s-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--electric),#5b9fff);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:white;flex-shrink:0;}
+.s-name{font-size:14px;font-weight:700;}.s-role{font-size:11px;color:var(--text-muted);}
+.s-patients-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+.patient-chip{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:var(--tr);border:1px solid transparent;margin-bottom:6px;}
+.patient-chip:hover{background:rgba(255,255,255,0.05);}
+.patient-chip.active{background:rgba(61,158,255,0.12);border-color:var(--electric-border);}
+.patient-chip-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green),#00e5a0);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;}
+.patient-chip-name{font-size:13px;font-weight:700;}.patient-chip-cond{font-size:11px;color:var(--text-muted);}
+.s-nav{display:flex;flex-direction:column;gap:4px;flex:1;margin-top:16px;}
+.s-nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;color:var(--text-muted);transition:var(--tr);}
+.s-nav-item:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.s-nav-item.active{background:var(--electric-dim);color:var(--electric);border:1px solid var(--electric-border);}
+.add-patient-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;cursor:pointer;color:var(--electric);font-size:13px;font-weight:700;border:1px dashed var(--electric-border);transition:var(--tr);margin-bottom:8px;}
+.add-patient-btn:hover{background:var(--electric-dim);}
+.s-footer{font-size:11px;color:var(--text-dim);padding-top:20px;border-top:1px solid var(--border-s);line-height:1.5;}
+.sos-sidebar-btn{background:var(--danger);color:white;border:none;border-radius:12px;padding:12px;font-weight:800;font-size:14px;cursor:pointer;margin-bottom:16px;width:100%;transition:var(--tr);animation:sosPulse 2s infinite;}
+@keyframes sosPulse{0%{box-shadow:0 0 0 0 rgba(255,71,87,.6);}70%{box-shadow:0 0 0 10px rgba(255,71,87,0);}100%{box-shadow:0 0 0 0 rgba(255,71,87,0);}}
+
+.main-panel{min-height:100vh;display:flex;flex-direction:column;}
+@media(min-width:1024px){.main-panel{margin-left:280px;}}
+
+/* ── MOBILE TOP BAR ── */
+.mob-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(6,13,31,0.95);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border-s);}
+.mob-brand{font-size:18px;font-weight:900;font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:6px;}
+.mob-sos{background:var(--danger);color:white;border:none;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;animation:sosPulse 2s infinite;}
+@media(min-width:1024px){.mob-topbar{display:none!important;}}
+
+/* ── MOBILE PATIENT CHIPS ── */
+.mob-patients{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border-s);scrollbar-width:none;}
+.mob-patients::-webkit-scrollbar{display:none;}
+@media(min-width:1024px){.mob-patients{display:none!important;}}
+.mob-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:20px;border:1.5px solid var(--border-s);cursor:pointer;white-space:nowrap;transition:var(--tr);font-size:13px;font-weight:600;flex-shrink:0;}
+.mob-chip.active{border-color:var(--electric);background:var(--electric-dim);color:var(--electric);}
+.mob-chip-add{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+
+/* ── CONTENT ── */
+.content{padding:24px 20px;max-width:900px;}
+@media(min-width:1024px){.content{padding:40px;}}
+
+/* ── PAGE SECTIONS ── */
+.page{display:none;}.page.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── CARDS ── */
+.card{background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-s);padding:20px;box-shadow:var(--shadow);transition:var(--tr);backdrop-filter:blur(10px);}
+.card:hover{background:var(--bg-hover);border-color:var(--border);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
+.card-sm{background:var(--bg-card);border-radius:var(--radius-sm);border:1px solid var(--border-s);padding:16px;text-align:center;transition:var(--tr);}
+.stat-label{font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-value{font-size:28px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;}
+.stat-sub{font-size:12px;color:var(--text-muted);margin-top:4px;}
+
+/* ── PATIENT HEADER ── */
+.patient-header{background:linear-gradient(160deg,#0d1b35,#0a2744);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px;position:relative;overflow:hidden;}
+.patient-header::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(61,158,255,0.1),transparent);border-radius:50%;}
+.ph-flex{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.ph-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--green),#00e5a0);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:white;flex-shrink:0;box-shadow:0 4px 16px rgba(0,196,140,0.3);}
+.ph-name{font-size:22px;font-weight:800;font-family:'Outfit',sans-serif;}
+.ph-cond{font-size:13px;color:var(--text-muted);margin-top:2px;}
+.ph-last-seen{font-size:11px;color:var(--text-dim);margin-top:4px;}
+.ph-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.ph-stat{background:rgba(255,255,255,0.05);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--border-s);}
+.ph-stat-val{font-size:22px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;}
+.ph-stat-label{font-size:11px;color:var(--text-muted);margin-top:4px;font-weight:600;}
+.ph-sos{background:var(--danger);color:white;border:none;border-radius:12px;padding:10px 20px;font-weight:800;font-size:13px;cursor:pointer;animation:sosPulse 2s infinite;position:absolute;top:20px;right:20px;}
+
+/* ── MED STATUS ── */
+.med-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border-s);}
+.med-row:last-child{border-bottom:none;}
+.med-info{flex:1;}
+.med-name{font-size:14px;font-weight:700;color:var(--text);}
+.med-dose{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.status-badge{font-size:12px;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;}
+.status-taken{background:rgba(0,196,140,0.15);color:var(--green);border:1px solid rgba(0,196,140,0.3);}
+.status-missed{background:var(--danger-dim);color:var(--danger);border:1px solid rgba(255,71,87,0.3);}
+.status-pending{background:var(--warning-dim);color:var(--warning);border:1px solid rgba(255,159,0,0.3);}
+.period-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:var(--electric-dim);color:var(--electric);margin-left:6px;}
+
+/* ── VITALS ── */
+.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.vital-card{background:var(--bg-card);border:1px solid var(--border-s);border-radius:var(--radius-sm);padding:14px;text-align:center;transition:var(--tr);}
+.vital-card:hover{border-color:var(--border);background:var(--bg-hover);}
+.vital-emoji{font-size:24px;margin-bottom:6px;}
+.vital-val{font-size:22px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;}
+.vital-val.good{color:var(--green);}.vital-val.warn{color:var(--warning);}.vital-val.bad{color:var(--danger);}
+.vital-unit{font-size:10px;color:var(--text-dim);font-weight:600;}
+.vital-name{font-size:11px;color:var(--text-muted);font-weight:700;margin-top:3px;}
+.vital-date{font-size:10px;color:var(--text-dim);margin-top:2px;}
+.vital-trend{font-size:11px;font-weight:700;margin-top:2px;}
+.trend-up{color:var(--danger);}.trend-down{color:var(--green);}.trend-stable{color:var(--text-dim);}
+
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-size:17px;font-weight:800;font-family:'Outfit',sans-serif;}
+.sec-action{font-size:13px;font-weight:600;color:var(--electric);cursor:pointer;}
+
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-s);}
+.tl-item:last-child{border-bottom:none;}
+.tl-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.tl-dot.green{background:var(--green);box-shadow:0 0 6px rgba(0,196,140,0.5);}
+.tl-dot.red{background:var(--danger);}.tl-dot.yellow{background:var(--warning);}.tl-dot.blue{background:var(--electric);}
+.tl-text{font-size:13.5px;color:var(--text-muted);line-height:1.4;}
+.tl-time{font-size:11px;color:var(--text-dim);margin-top:2px;}
+
+/* ── LINK SECTION ── */
+.link-code-wrap{display:flex;gap:10px;align-items:center;margin-bottom:16px;}
+.link-code-input{flex:1;padding:14px 18px;background:rgba(255,255,255,0.06);border:2px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:22px;font-weight:800;letter-spacing:4px;text-transform:uppercase;text-align:center;outline:none;transition:var(--tr);}
+.link-code-input:focus{border-color:var(--electric);background:rgba(61,158,255,0.08);}
+.link-code-input::placeholder{font-size:14px;letter-spacing:0;font-weight:400;color:var(--text-dim);}
+.link-select{width:100%;padding:12px 14px;background:rgba(255,255,255,0.06);border:1.5px solid var(--border-s);border-radius:var(--radius-sm);color:var(--text);font-size:14px;outline:none;transition:var(--tr);margin-bottom:14px;}
+.link-select:focus{border-color:var(--electric);}
+.link-select option{background:#0d1b35;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:var(--tr);border:none;font-family:'Inter',sans-serif;}
+.btn-primary{background:var(--electric);color:white;width:100%;}
+.btn-primary:hover{background:#2b8ae8;transform:translateY(-2px);box-shadow:var(--glow);}
+.btn-primary:active{transform:scale(.97);}
+.btn-green{background:var(--green);color:white;width:100%;}
+.btn-green:hover{background:#00a874;transform:translateY(-2px);}
+.btn-danger{background:var(--danger);color:white;width:100%;}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-s);width:100%;}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:var(--radius-sm);padding:14px;font-size:13px;line-height:1.6;margin-top:12px;}
+.alert-warning{background:var(--warning-dim);border:1px solid rgba(255,159,0,0.3);color:var(--warning);}
+.alert-success{background:var(--green-dim);border:1px solid rgba(0,196,140,0.3);color:var(--green);}
+.alert-danger{background:var(--danger-dim);border:1px solid rgba(255,71,87,0.3);color:var(--danger);}
+.alert-info{background:var(--electric-dim);border:1px solid var(--electric-border);color:var(--electric);}
+
+/* ── MODAL (SOS) ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#0d1b35;border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 60px rgba(0,0,0,0.6);animation:fadeIn .3s ease;}
+
+/* ── PDF PRINT ── */
+@media print{
+  body,.sidebar,.mob-topbar,.mob-patients,.modal-overlay,.ai-float,header,.page:not(.active){display:none!important;}
+  .print-area{display:block!important;}
+  .print-area *{color:#000!important;background:white!important;box-shadow:none!important;}
+}
+.print-area{display:none;}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:60px 20px;}
+.empty-icon{font-size:52px;margin-bottom:12px;}
+.empty-title{font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:6px;}
+.empty-sub{font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.6;}
+
+/* ── SIDE EFFECTS ── */
+.se-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border-s);}
+.se-row:last-child{border-bottom:none;}
+.se-info{flex:1;}
+.se-desc{font-size:13.5px;font-weight:600;color:var(--text);}
+.se-med{font-size:11px;color:var(--text-muted);margin-top:2px;}
+
+/* ── SPINNER ── */
+.spinner{width:32px;height:32px;margin:24px auto;border:3px solid rgba(61,158,255,.15);border-top-color:var(--electric);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:480px){.vitals-grid{grid-template-columns:repeat(3,1fr);gap:8px;}.ph-stats{gap:8px;}}
+  </style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-card">
+    <div class="ob-logo">
+      <svg width="56" height="56" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+        <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+        <circle cx="18" cy="22" r="3.5" fill="white"/>
+      </svg>
+    </div>
+    <div class="ob-title">Family <span>Dashboard</span></div>
+    <div class="ob-sub">Monitor your loved ones' health in real-time. Enter your details to get started as a caregiver.</div>
+    <div class="ob-field"><label class="ob-label">Your Name</label><input class="ob-input" id="obName" placeholder="Your full name"/></div>
+    <div class="ob-field"><label class="ob-label">Your Relationship</label><select class="ob-input" id="obRel"><option value="">Select your relation</option><option>Son</option><option>Daughter</option><option>Spouse</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+    <div class="ob-field"><label class="ob-label">Phone (optional)</label><input class="ob-input" id="obPhone" placeholder="Your phone number" type="tel"/></div>
+    <button class="ob-btn" id="obBtn" onclick="startCaregiver()">Continue as Caregiver →</button>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="s-brand">
+    <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
+      <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
+      <circle cx="18" cy="22" r="3.5" fill="white"/>
+    </svg>
+    <span class="s-brand-name">Curaah</span>
+  </div>
+  <div class="s-user"><div class="s-avatar" id="sAvatar">?</div><div><div class="s-name" id="sName">Caregiver</div><div class="s-role">Family Monitor</div></div></div>
+  <div class="s-patients-label">Linked Patients</div>
+  <div id="sPatientsList"></div>
+  <div class="add-patient-btn" onclick="showPage('link')"><span>➕</span> Add Family Member</div>
+  <nav class="s-nav">
+    <div class="s-nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span>📊</span> Dashboard</div>
+    <div class="s-nav-item" onclick="showPage('meds')" id="nav-meds"><span>💊</span> Medications</div>
+    <div class="s-nav-item" onclick="showPage('vitals')" id="nav-vitals"><span>📈</span> Vitals</div>
+    <div class="s-nav-item" onclick="showPage('timeline')" id="nav-timeline"><span>🕐</span> Timeline</div>
+    <div class="s-nav-item" onclick="showPage('link')" id="nav-link"><span>🔗</span> Link Patient</div>
+  </nav>
+  <button class="sos-sidebar-btn" onclick="openSOS()">🚨 Emergency SOS</button>
+  <a class="s-nav-item" href="companion.html" style="margin-bottom:8px;color:var(--text-muted)"><span>←</span> Patient App</a>
+  <div class="s-footer"><strong style="color:var(--text)">Curaah HealthTech</strong><br/>IIT Ropar Incubated · DPIIT Registered</div>
+</aside>
+
+<!-- MOBILE TOP BAR -->
+<div class="mob-topbar">
+  <div class="mob-brand">
+    <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
+    Curaah <span style="font-size:12px;color:var(--text-muted);font-weight:500;margin-left:4px">Family</span>
+  </div>
+  <button class="mob-sos" onclick="openSOS()">🚨 SOS</button>
+</div>
+
+<!-- MOBILE PATIENT CHIPS -->
+<div class="mob-patients" id="mobPatients"></div>
+
+<div class="main-panel">
+<div class="content">
+
+<!-- DASHBOARD PAGE -->
+<div class="page active" id="page-dashboard">
+  <!-- No patient linked -->
+  <div id="noPatientView">
+    <div class="empty">
+      <div class="empty-icon">🔗</div>
+      <div class="empty-title">No Patients Linked Yet</div>
+      <div class="empty-sub">Enter a Family Share Code from your family member's Curaah app to start monitoring their health.</div>
+      <button class="btn btn-primary" style="max-width:280px;margin:0 auto" onclick="showPage('link')">Link a Family Member →</button>
+    </div>
+  </div>
+
+  <!-- Patient dashboard -->
+  <div id="patientDashboard" style="display:none">
+    <div class="patient-header" id="patientHeader">
+      <button class="ph-sos" onclick="openSOS()">🚨 SOS</button>
+      <div class="ph-flex">
+        <div class="ph-avatar" id="phAvatar">P</div>
+        <div>
+          <div class="ph-name" id="phName">Patient Name</div>
+          <div class="ph-cond" id="phCond">Condition</div>
+          <div class="ph-last-seen" id="phLastSeen">Last active: —</div>
+        </div>
+      </div>
+      <div class="ph-stats">
+        <div class="ph-stat"><div class="ph-stat-val" id="phAdh" style="color:var(--green)">—%</div><div class="ph-stat-label">Today's Adherence</div></div>
+        <div class="ph-stat"><div class="ph-stat-val" id="phStreak" style="color:var(--warning)">—</div><div class="ph-stat-label">Day Streak 🔥</div></div>
+        <div class="ph-stat"><div class="ph-stat-val" id="phMissed" style="color:var(--danger)">—</div><div class="ph-stat-label">Missed Today</div></div>
+      </div>
+    </div>
+
+    <!-- Quick vitals -->
+    <div class="sec-header"><div class="sec-title">Latest Vitals</div><div class="sec-action" onclick="showPage('vitals')">View All →</div></div>
+    <div class="vitals-grid" id="quickVitals">
+      <div class="vital-card"><div class="vital-emoji">🩸</div><div class="vital-val good" id="qSugar">—</div><div class="vital-unit">mg/dL</div><div class="vital-name">Blood Sugar</div><div class="vital-date" id="qSugarDate"></div></div>
+      <div class="vital-card"><div class="vital-emoji">❤️</div><div class="vital-val" id="qBP">—</div><div class="vital-unit">mmHg</div><div class="vital-name">Blood Pressure</div><div class="vital-date" id="qBPDate"></div></div>
+      <div class="vital-card"><div class="vital-emoji">⚖️</div><div class="vital-val" id="qWeight">—</div><div class="vital-unit">kg</div><div class="vital-name">Weight</div><div class="vital-date" id="qWeightDate"></div></div>
+    </div>
+
+    <!-- Today's meds -->
+    <div class="sec-header" style="margin-top:8px"><div class="sec-title">Today's Medicine Status</div><div class="sec-action" onclick="showPage('meds')">See Full Schedule →</div></div>
+    <div class="card" style="margin-bottom:24px"><div id="quickMeds"><div class="spinner"></div></div></div>
+
+    <!-- Recent timeline -->
+    <div class="sec-header"><div class="sec-title">Recent Activity</div></div>
+    <div class="card" id="quickTimeline"><div class="spinner"></div></div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+      <button class="btn btn-green" style="flex:1" onclick="generateHealthPDF()">📄 Generate Health PDF</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="refreshData()">🔄 Refresh Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEDICATIONS PAGE -->
+<div class="page" id="page-meds">
+  <div class="sec-header"><div class="sec-title">Full Medicine Schedule</div></div>
+  <div class="card" id="fullMeds"><div class="empty"><div class="empty-icon">💊</div><div class="empty-text" style="font-weight:700">Link a patient to see their schedule</div></div></div>
+</div>
+
+<!-- VITALS PAGE -->
+<div class="page" id="page-vitals">
+  <div class="sec-header"><div class="sec-title">Vitals History</div></div>
+  <div class="card-grid" id="vitalsDetail">
+    <div class="card"><div style="font-weight:800;margin-bottom:12px;font-size:15px">🩸 Blood Sugar</div><div id="sugarHistory"><div class="spinner"></div></div></div>
+    <div class="card"><div style="font-weight:800;margin-bottom:12px;font-size:15px">❤️ Blood Pressure</div><div id="bpHistory"><div class="spinner"></div></div></div>
+    <div class="card"><div style="font-weight:800;margin-bottom:12px;font-size:15px">⚖️ Weight</div><div id="weightHistory"><div class="spinner"></div></div></div>
+  </div>
+</div>
+
+<!-- TIMELINE PAGE -->
+<div class="page" id="page-timeline">
+  <div class="sec-header"><div class="sec-title">Health Timeline</div></div>
+  <div class="card" id="fullTimeline"><div class="spinner"></div></div>
+</div>
+
+<!-- LINK PATIENT PAGE -->
+<div class="page" id="page-link">
+  <div style="max-width:480px">
+    <div class="sec-header"><div class="sec-title">🔗 Link a Family Member</div></div>
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:24px">
+      Ask your family member to open their Curaah app → Profile → Copy Family Share Code. Enter that 6-character code below.
+    </p>
+    <div class="ob-field">
+      <label class="ob-label">Family Share Code (from patient's app)</label>
+      <div class="link-code-wrap">
+        <input class="link-code-input" id="linkCode" placeholder="e.g. ABC123" maxlength="6" oninput="this.value=this.value.toUpperCase()"/>
+      </div>
+    </div>
+    <div class="ob-field">
+      <label class="ob-label">Your Relationship to this Patient</label>
+      <select class="link-select" id="linkRel">
+        <option value="">Select relationship</option>
+        <option>Son</option><option>Daughter</option><option>Spouse</option>
+        <option>Parent</option><option>Sibling</option><option>Other</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="linkPatient()">🔗 Link Family Member</button>
+    <div id="linkResult" style="margin-top:16px"></div>
+
+    <!-- OR: Demo Mode -->
+    <div style="text-align:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border-s)">
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px">Or try with demo patient data</p>
+      <button class="btn btn-ghost" style="max-width:240px;margin:0 auto" onclick="loadDemoPatient()">👁️ Load Demo Patient</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main-panel -->
+
+<!-- SOS MODAL -->
+<div class="modal-overlay" id="modalSOS" onclick="if(event.target===this)closeModal('modalSOS')">
+  <div class="modal-box" style="border-top:4px solid var(--danger)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;justify-content:center">
+      <span style="font-size:24px;animation:sosPulse 1s infinite">🚨</span>
+      <div style="font-size:20px;font-weight:900;color:var(--danger);font-family:'Outfit',sans-serif">EMERGENCY SOS</div>
+      <span style="font-size:24px;animation:sosPulse 1s infinite">🚨</span>
+    </div>
+    <div style="background:var(--danger-dim);border:1px solid rgba(255,71,87,0.3);border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;color:var(--danger);font-weight:700;margin-bottom:6px">📡 Alerting Emergency Contacts...</div>
+      <div style="font-size:12.5px;color:var(--text-muted);line-height:1.7;font-family:monospace">
+        <strong>Patient:</strong> <span id="sosPatName">—</span><br/>
+        <strong>Condition:</strong> <span id="sosCond">—</span><br/>
+        <strong>GPS:</strong> <span id="sosGPS">Acquiring...</span><br/>
+        <strong>Alerting:</strong> Primary caregiver · Nearby 108
+      </div>
+    </div>
+    <!-- DPDP Gate -->
+    <div id="sosDPDP" style="background:rgba(61,158,255,0.08);border:1px solid var(--electric-border);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px">
+      <div style="font-size:22px;margin-bottom:6px">🔒</div>
+      <div style="font-weight:800;font-size:14px;color:var(--electric);margin-bottom:6px">DPDP 2023 Consent Gate</div>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">Enter OTP sent to patient's registered number to access medical records. <strong style="color:var(--text)">Demo OTP: 4812</strong></p>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <input type="text" id="sosOTP" style="width:100px;text-align:center;font-size:18px;font-weight:800;letter-spacing:3px;padding:8px;background:rgba(255,255,255,0.06);border:1.5px solid var(--border);border-radius:8px;color:var(--text);outline:none" placeholder="OTP" maxlength="4"/>
+        <button onclick="verifyOTP()" style="padding:8px 16px;background:var(--electric);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer">Unlock EMR</button>
+      </div>
+      <div id="sosOTPErr" style="font-size:11px;color:var(--danger);font-weight:700;display:none;margin-top:8px">Invalid OTP. Try again.</div>
+    </div>
+    <!-- Unlocked EMR -->
+    <div id="sosEMR" style="display:none;background:rgba(0,196,140,0.08);border:1px solid rgba(0,196,140,0.3);border-radius:12px;padding:16px;margin-bottom:16px">
+      <div style="font-weight:800;color:var(--green);font-size:14px;margin-bottom:10px">🔓 Patient Medical Record — Emergency Access</div>
+      <div id="sosEMRContent" style="font-size:12.5px;line-height:1.9;color:var(--text-muted);font-family:monospace"></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <a href="tel:108" class="btn btn-danger" style="flex:1;text-decoration:none">📞 Call 108</a>
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modalSOS')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT AREA -->
+<div class="print-area" id="printArea"></div>
+
+<script>
+const SUPA_URL='https://lospowxozjnoiawxbojg.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxvc3Bvd3hvempub2lhd3hib2pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTIzMjksImV4cCI6MjA5MjMyODMyOX0.KBfNiJIKweEAqVJ8q_G8ZkbU5qi4vfglRhazKIH32ic';
+
+let cgProfile=JSON.parse(localStorage.getItem('curaah_cg_profile')||'null');
+let cgDeviceId=localStorage.getItem('curaah_cg_device_id');
+let linkedPatients=JSON.parse(localStorage.getItem('curaah_linked_patients')||'[]');
+let activePatientIdx=0;
+let patientData={medicines:[],adherence:[],vitals:[],timeline:[],profile:null};
+
+if(!cgDeviceId){cgDeviceId='cgd_'+Math.random().toString(36).substring(2,14);localStorage.setItem('curaah_cg_device_id',cgDeviceId);}
+
+async function callBackend(payload){
+  const r=await fetch(SUPA_URL+'/functions/v1/companion-backend',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY,'x-device-id':cgDeviceId},body:JSON.stringify(payload)});
+  if(!r.ok)throw new Error('API '+r.status);
+  return r.json();
+}
+
+// ── INIT ──
+(function init(){
+  if(cgProfile){
+    document.getElementById('obOverlay').classList.add('hidden');
+    renderSidebarUser();
+    renderPatientsList();
+    if(linkedPatients.length>0){selectPatient(0);}
+    else{showPage('link');}
+  }
+})();
+
+function startCaregiver(){
+  const name=document.getElementById('obName').value.trim();
+  const rel=document.getElementById('obRel').value;
+  const phone=document.getElementById('obPhone').value.trim();
+  if(!name||!rel){alert('Please enter your name and relationship.');return;}
+  cgProfile={name,relationship:rel,phone,created_at:new Date().toISOString()};
+  localStorage.setItem('curaah_cg_profile',JSON.stringify(cgProfile));
+  document.getElementById('obOverlay').classList.add('hidden');
+  renderSidebarUser();
+  showPage('link');
+}
+
+function renderSidebarUser(){
+  if(!cgProfile)return;
+  const av=(cgProfile.name||'?').charAt(0).toUpperCase();
+  document.getElementById('sAvatar').textContent=av;
+  document.getElementById('sName').textContent=cgProfile.name;
+}
+
+function renderPatientsList(){
+  const el=document.getElementById('sPatientsList');
+  const mob=document.getElementById('mobPatients');
+  el.innerHTML='';mob.innerHTML='';
+  linkedPatients.forEach((p,i)=>{
+    const av=(p.name||'?').charAt(0).toUpperCase();
+    el.innerHTML+=`<div class="patient-chip ${i===activePatientIdx?'active':''}" onclick="selectPatient(${i})"><div class="patient-chip-avatar">${av}</div><div><div class="patient-chip-name">${p.name||'Patient'}</div><div class="patient-chip-cond">${p.condition||'—'}</div></div></div>`;
+    mob.innerHTML+=`<div class="mob-chip ${i===activePatientIdx?'active':''}" onclick="selectPatient(${i})">${av} ${p.name||'Patient'}</div>`;
+  });
+  mob.innerHTML+=`<div class="mob-chip mob-chip-add" onclick="showPage('link')">+ Add</div>`;
+}
+
+function selectPatient(idx){
+  activePatientIdx=idx;
+  renderPatientsList();
+  if(linkedPatients[idx]){
+    loadPatientData(linkedPatients[idx]);
+    showPage('dashboard');
+  }
+}
+
+async function loadPatientData(patient){
+  document.getElementById('noPatientView').style.display='none';
+  document.getElementById('patientDashboard').style.display='block';
+  renderPatientHeader(patient,null);
+
+  try{
+    const d=await callBackend({action:'sync-data',device_id:patient.device_id||cgDeviceId,patient_id:patient.id});
+    if(d.status==='success'){
+      const meds=(d.medicines||[]).map(m=>({id:m.id,name:m.medicine_name||m.name,dosage:m.dosage||'',frequency:m.frequency||'',purpose:m.purpose||''}));
+      const adh=d.adherence||[];
+      const vits=d.vitals||[];
+      const tl=d.timeline||[];
+      patientData={medicines:meds,adherence:adh,vitals:vits,timeline:tl,profile:patient};
+      renderAllData(patient,meds,adh,vits,tl);
+    }else{loadDemoData(patient);}
+  }catch(e){loadDemoData(patient);}
+}
+
+function loadDemoData(patient){
+  const meds=[{id:'m1',name:'Metformin 500mg',dosage:'1 tablet',frequency:'Twice a day',purpose:'Diabetes Control'},{id:'m2',name:'Atorvastatin 10mg',dosage:'1 tablet',frequency:'Night',purpose:'Cholesterol'},{id:'m3',name:'Amlodipine 5mg',dosage:'1 tablet',frequency:'Morning',purpose:'Blood Pressure'}];
+  const today=new Date().toISOString().split('T')[0];
+  const adh=[{medicine_id:'m1',date:today,period:'Morning',status:'taken',responded_at:new Date(Date.now()-4*3600000).toISOString()},{medicine_id:'m3',date:today,period:'Morning',status:'taken',responded_at:new Date(Date.now()-4*3600000).toISOString()},{medicine_id:'m1',date:today,period:'Night',status:'pending'},{medicine_id:'m2',date:today,period:'Night',status:'pending'}];
+  const vits=[{type:'sugar',value:'132',unit:'mg/dL',date:today,time:'07:30'},{type:'bp',value:'128/84',unit:'mmHg',date:today,time:'07:35'},{type:'weight',value:'72.4',unit:'kg',date:today,time:'07:40'}];
+  const tl=[{color:'green',text:'✅ Took Metformin 500mg (Morning)',date:new Date(Date.now()-4*3600000).toISOString()},{color:'green',text:'✅ Took Amlodipine 5mg (Morning)',date:new Date(Date.now()-4.1*3600000).toISOString()},{color:'blue',text:'📊 Blood Sugar logged: 132 mg/dL',date:new Date(Date.now()-4.5*3600000).toISOString()},{color:'yellow',text:'⚠️ Mild dizziness reported — Low severity',date:new Date(Date.now()-24*3600000).toISOString()}];
+  patientData={medicines:meds,adherence:adh,vitals:vits,timeline:tl,profile:patient};
+  renderAllData(patient,meds,adh,vits,tl);
+}
+
+function renderAllData(patient,meds,adh,vits,tl){
+  renderPatientHeader(patient,adh);
+  renderQuickVitals(vits);
+  renderQuickMeds(meds,adh);
+  renderQuickTimeline(tl);
+  renderFullMeds(meds,adh);
+  renderVitalsDetail(vits);
+  renderFullTimeline(tl);
+}
+
+function renderPatientHeader(p,adh){
+  const av=(p.name||'P').charAt(0).toUpperCase();
+  document.getElementById('phAvatar').textContent=av;
+  document.getElementById('phName').textContent=p.name||'Patient';
+  document.getElementById('phCond').textContent=p.condition||'Chronic Disease';
+  document.getElementById('phLastSeen').textContent='Last active: '+new Date().toLocaleDateString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('sosPatName').textContent=p.name||'—';
+  document.getElementById('sosCond').textContent=p.condition||'—';
+  if(adh){
+    const today=new Date().toISOString().split('T')[0];
+    const todayAdh=adh.filter(a=>a.date===today||a.scheduled_date===today);
+    const taken=todayAdh.filter(a=>a.status==='taken').length;
+    const total=todayAdh.length;
+    const pct=total>0?Math.round(taken/total*100):0;
+    document.getElementById('phAdh').textContent=total>0?pct+'%':'—';
+    document.getElementById('phMissed').textContent=todayAdh.filter(a=>a.status==='missed').length;
+  }
+  document.getElementById('phStreak').textContent='5 🔥';
+}
+
+function renderQuickVitals(vits){
+  const types=['sugar','bp','weight'];const ids=['qSugar','qBP','qWeight'];const dateIds=['qSugarDate','qBPDate','qWeightDate'];
+  types.forEach((t,i)=>{
+    const last=[...vits].filter(v=>v.type===t).reverse()[0];
+    const el=document.getElementById(ids[i]);const de=document.getElementById(dateIds[i]);
+    if(el)el.textContent=last?last.value:'—';
+    if(de)de.textContent=last?'on '+last.date:'No data';
+    if(el&&last){
+      if(t==='sugar'){const v=parseFloat(last.value);el.className='vital-val '+(v>180?'bad':v>140?'warn':'good');}
+      else if(t==='bp'){const v=parseFloat(last.value);el.className='vital-val '+(v>140?'bad':v>120?'warn':'good');}
+    }
+  });
+}
+
+function renderQuickMeds(meds,adh){
+  const el=document.getElementById('quickMeds');const today=new Date().toISOString().split('T')[0];
+  if(!meds.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">No medicines on record</div>';return;}
+  el.innerHTML=meds.map(m=>{
+    const allPeriods=getPeriods(m.frequency);
+    return allPeriods.map(p=>{
+      const log=adh.find(a=>(a.medicine_id===m.id||a.medicine_id===m.id)&&(a.date===today||a.scheduled_date===today)&&(a.period===p||a.scheduled_time===p));
+      const s=log?log.status:'pending';
+      const badge=s==='taken'?`<span class="status-badge status-taken">✅ TAKEN ${log.responded_at?new Date(log.responded_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''}</span>`:s==='missed'?`<span class="status-badge status-missed">❌ MISSED</span>`:`<span class="status-badge status-pending">⏳ ${p}</span>`;
+      return`<div class="med-row"><div class="med-info"><div class="med-name">${m.name} <span class="period-tag">${p}</span></div><div class="med-dose">${m.dosage||''}${m.purpose?' · '+m.purpose:''}</div></div>${badge}</div>`;
+    }).join('');
+  }).join('');
+}
+
+function renderQuickTimeline(tl){
+  const el=document.getElementById('quickTimeline');
+  if(!tl.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">No recent activity</div>';return;}
+  el.innerHTML=tl.slice(0,6).map(t=>`<div class="tl-item"><div class="tl-dot ${t.color}"></div><div><div class="tl-text">${t.text}</div><div class="tl-time">${new Date(t.date).toLocaleString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div></div></div>`).join('');
+}
+
+function renderFullMeds(meds,adh){
+  const el=document.getElementById('fullMeds');const today=new Date().toISOString().split('T')[0];
+  if(!meds.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">No medicines on record</div>';return;}
+  const periods=['Morning','Afternoon','Night'];
+  el.innerHTML=periods.map(p=>{
+    const pMeds=meds.filter(m=>getPeriods(m.frequency).includes(p));
+    if(!pMeds.length)return'';
+    return`<div style="margin-bottom:20px"><div style="font-size:13px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">${p==='Morning'?'🌅':''}${p==='Afternoon'?'☀️':''}${p==='Night'?'🌙':''} ${p}</div>`+pMeds.map(m=>{const log=adh.find(a=>a.medicine_id===m.id&&(a.date===today||a.scheduled_date===today)&&(a.period===p||a.scheduled_time===p));const s=log?log.status:'pending';const badge=s==='taken'?`<span class="status-badge status-taken">✅ Taken</span>`:s==='missed'?`<span class="status-badge status-missed">❌ Missed</span>`:`<span class="status-badge status-pending">⏳ Pending</span>`;return`<div class="med-row"><div class="med-info"><div class="med-name">${m.name}</div><div class="med-dose">${m.dosage||''}${m.purpose?' · '+m.purpose:''}</div></div>${badge}</div>`;}).join('')+'</div>';
+  }).join('');
+}
+
+function renderVitalsDetail(vits){
+  const types=['sugar','bp','weight'];const containers=['sugarHistory','bpHistory','weightHistory'];const labels=['Blood Sugar','Blood Pressure','Weight'];const units=['mg/dL','mmHg','kg'];
+  types.forEach((t,i)=>{
+    const el=document.getElementById(containers[i]);const filtered=vits.filter(v=>v.type===t).slice(-10).reverse();
+    if(!filtered.length){el.innerHTML='<div style="color:var(--text-dim);font-size:13px;text-align:center;padding:20px">No readings logged yet</div>';return;}
+    el.innerHTML=filtered.map(v=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-s)"><span style="font-size:13px;color:var(--text-muted)">${v.date} ${v.time||''}</span><span style="font-size:16px;font-weight:800;font-family:'Outfit',sans-serif">${v.value} <span style="font-size:11px;font-weight:400;color:var(--text-dim)">${units[i]}</span></span></div>`).join('');
+  });
+}
+
+function renderFullTimeline(tl){
+  const el=document.getElementById('fullTimeline');
+  if(!tl.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text-dim)">No timeline events yet</div>';return;}
+  el.innerHTML=tl.map(t=>`<div class="tl-item"><div class="tl-dot ${t.color}"></div><div><div class="tl-text">${t.text}</div><div class="tl-time">${new Date(t.date).toLocaleString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div></div></div>`).join('');
+}
+
+function getPeriods(f){const fl=(f||'').toLowerCase();if(/thrice|3.*day|tid/i.test(fl))return['Morning','Afternoon','Night'];if(/twice|2.*day|bd|bid/i.test(fl))return['Morning','Night'];if(/night|hs|bed/i.test(fl))return['Night'];if(/afternoon|noon/i.test(fl))return['Afternoon'];return['Morning'];}
+
+async function linkPatient(){
+  const code=document.getElementById('linkCode').value.trim().toUpperCase();
+  const rel=document.getElementById('linkRel').value;
+  const res=document.getElementById('linkResult');
+  if(code.length!==6){res.innerHTML='<div class="alert alert-warning">Please enter a valid 6-character code.</div>';return;}
+  if(!rel){res.innerHTML='<div class="alert alert-warning">Please select your relationship.</div>';return;}
+  res.innerHTML='<div class="spinner"></div>';
+  try{
+    const d=await callBackend({action:'link-family',share_code:code,device_id:cgDeviceId,relationship:rel});
+    if(d.status==='success'||d.patient_id){
+      const patient={id:d.patient_id,name:d.patient_name||'Family Member',condition:d.condition||'Chronic',device_id:d.device_id,share_code:code,relationship:rel};
+      linkedPatients=linkedPatients.filter(p=>p.share_code!==code);linkedPatients.push(patient);
+      localStorage.setItem('curaah_linked_patients',JSON.stringify(linkedPatients));
+      renderPatientsList();selectPatient(linkedPatients.length-1);
+      res.innerHTML=`<div class="alert alert-success">✅ Successfully linked to ${patient.name}'s account!</div>`;
+    }else{res.innerHTML=`<div class="alert alert-warning">${d.message||'Could not link. Please check the code.'}</div>`;}
+  }catch(e){
+    res.innerHTML='<div class="alert alert-info">ℹ️ Demo mode: Loading sample patient data...</div>';
+    setTimeout(()=>loadDemoPatient(),1000);
+  }
+}
+
+function loadDemoPatient(){
+  const demo={id:'demo_'+Date.now(),name:'Curaah User',condition:'Diabetes + Hypertension',relationship:'Son',share_code:'DEMO01'};
+  linkedPatients=linkedPatients.filter(p=>p.id!==demo.id||!p.name.includes('Curaah'));linkedPatients.push(demo);
+  localStorage.setItem('curaah_linked_patients',JSON.stringify(linkedPatients));
+  renderPatientsList();selectPatient(linkedPatients.length-1);
+}
+
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const p=document.getElementById('page-'+name);if(p)p.classList.add('active');
+  document.querySelectorAll('.s-nav-item').forEach(n=>n.classList.remove('active'));
+  const ni=document.getElementById('nav-'+name);if(ni)ni.classList.add('active');
+}
+
+function refreshData(){
+  if(linkedPatients[activePatientIdx])loadPatientData(linkedPatients[activePatientIdx]);
+}
+
+function openSOS(){
+  document.getElementById('modalSOS').classList.add('open');
+  document.getElementById('sosOTP').value='';
+  document.getElementById('sosOTPErr').style.display='none';
+  document.getElementById('sosDPDP').style.display='block';
+  document.getElementById('sosEMR').style.display='none';
+  const gps=document.getElementById('sosGPS');gps.textContent='Acquiring GPS...';
+  if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{gps.textContent=`${p.coords.latitude.toFixed(5)}° N, ${p.coords.longitude.toFixed(5)}° E`;},()=>{gps.textContent='30.97531° N, 76.52733° E (IIT Ropar Hub)';},{timeout:4000});}
+  else{gps.textContent='30.97531° N, 76.52733° E';}
+}
+
+function verifyOTP(){
+  const val=document.getElementById('sosOTP').value.trim();
+  if(val==='4812'){
+    document.getElementById('sosDPDP').style.display='none';
+    document.getElementById('sosEMR').style.display='block';
+    const p=patientData.profile||{};
+    const meds=(patientData.medicines||[]).map(m=>`${m.name} ${m.dosage} (${m.frequency})`).join(', ')||'No medications';
+    document.getElementById('sosEMRContent').innerHTML=`Patient: ${p.name||'—'}<br/>Condition: ${p.condition||'—'}<br/>Medications: ${meds}<br/>Blood Group: Unknown<br/>Emergency: Primary caregiver notified`;
+  }else{document.getElementById('sosOTPErr').style.display='block';}
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function generateHealthPDF(){
+  const p=patientData.profile||{};
+  const meds=(patientData.medicines||[]).map(m=>`${m.name} — ${m.dosage} (${m.frequency})`).join('\n');
+  const vits=(patientData.vitals||[]).slice(-5).map(v=>`${v.type}: ${v.value} ${v.unit} on ${v.date}`).join('\n');
+  const content=document.getElementById('printArea');
+  content.style.display='block';
+  content.innerHTML=`<div style="font-family:Arial;padding:40px;max-width:800px;margin:0 auto;color:#000">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #3d9eff;padding-bottom:20px;margin-bottom:30px">
+      <div><h1 style="font-size:28px;color:#060d1f">CURAAH Health Report</h1><p style="color:#666">AI Health &amp; Adherence Companion · IIT Ropar Incubated</p></div>
+      <div style="text-align:right"><p><strong>Patient:</strong> ${p.name||'—'}</p><p><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'})}</p></div>
+    </div>
+    <h2 style="color:#060d1f;margin-bottom:10px">Patient Information</h2>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:30px"><tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Condition</td><td style="padding:8px;border:1px solid #ddd">${p.condition||'—'}</td><td style="padding:8px;border:1px solid #ddd;font-weight:bold">Report Period</td><td style="padding:8px;border:1px solid #ddd">Last 30 days</td></tr></table>
+    <h2 style="color:#060d1f;margin-bottom:10px">Active Medications</h2>
+    <pre style="background:#f5f5f5;padding:16px;border-radius:8px;font-size:13px;white-space:pre-wrap">${meds||'No medications on record'}</pre>
+    <h2 style="color:#060d1f;margin:20px 0 10px">Recent Vitals</h2>
+    <pre style="background:#f5f5f5;padding:16px;border-radius:8px;font-size:13px;white-space:pre-wrap">${vits||'No vitals logged'}</pre>
+    <h2 style="color:#060d1f;margin:20px 0 10px">Doctor Notes (To be filled by patient)</h2>
+    <div style="border:1px solid #ddd;border-radius:8px;padding:16px;min-height:120px"></div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #ddd;font-size:12px;color:#888;text-align:center">Generated by Curaah AI Health Companion · IIT Ropar Incubated · ⚠️ This report is for reference only. Always follow your doctor's advice.</div>
+  </div>`;
+  window.print();
+  setTimeout(()=>{content.style.display='none';},2000);
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
