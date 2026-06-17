@@ -736,7 +736,14 @@ async function callBackend(payload){
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY,'x-device-id':deviceId},
     body:JSON.stringify(payload)
   });
-  if(!r.ok)throw new Error('API '+r.status);
+  if(!r.ok) {
+    let errMsg = 'API ' + r.status;
+    try {
+      const errData = await r.json();
+      if (errData && errData.message) errMsg = errData.message;
+    } catch(e) {}
+    throw new Error(errMsg);
+  }
   return r.json();
 }
 
@@ -1069,9 +1076,11 @@ function validateStep4() {
         localStorage.setItem('curaah_patient_id', patientId);
         localStorage.setItem('curaah_family_code', familyCode);
       } else {
+        alert('Registration failed: ' + (d.message || 'Unknown error'));
         setupOffline(n);
       }
     } catch(e) {
+      alert('Registration Server Error: ' + e.message);
       setupOffline(n);
     }
 
