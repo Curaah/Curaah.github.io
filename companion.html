@@ -1174,8 +1174,32 @@ function initAppFormsOnly(){
 
 function initAIChat(){
   const hist=document.getElementById('aiChatHistory');
-  const meds=medicines.map(m=>m.name).join(', ');
-  hist.innerHTML=`<div class="chat-msg bot">Namaste, <strong>${profile?.name||'there'}</strong>! 🙏 I am your Curaah AI Health Companion.<br/><br/>You have <strong>${profile?.condition||'a health condition'}</strong>. ${meds?'Your medicines: <strong>'+meds+'</strong>.':'Upload a prescription to track your medicines.'}<br/><br/>How can I help you today? Ask me about diet, medicines, exercise, or side effects!</div>`;
+  const activeMeds=medicines.filter(m=>m.active!==false);
+  const meds=activeMeds.map(m=>m.name).join(', ');
+  
+  let condMsg = '';
+  const cond = profile?.condition || 'Healthy';
+  if (cond.toLowerCase() === 'healthy') {
+    condMsg = `Your health focus is set to <strong>maintaining wellness and staying fit</strong>.`;
+  } else {
+    condMsg = `You have registered with health focus: <strong>${esc(cond)}</strong>.`;
+  }
+  
+  let medMsg = '';
+  if (meds) {
+    medMsg = ` Your active medicines are: <strong>${esc(meds)}</strong>.`;
+  } else {
+    medMsg = ` Upload a prescription to track your medicines.`;
+  }
+  
+  let promptMsg = '';
+  if (activeMeds.length > 0) {
+    promptMsg = `How can I help you today? Ask me about diet, medicines, exercise, or side effects!`;
+  } else {
+    promptMsg = `How can I help you today? Ask me about diet, fitness, or wellness tips!`;
+  }
+  
+  hist.innerHTML=`<div class="chat-msg bot">Namaste, <strong>${esc(profile?.name||'there')}</strong>! 🙏 I am your Curaah AI Health Companion.<br/><br/>${condMsg}${medMsg}<br/><br/>${promptMsg}</div>`;
 }
 
 // ====== TAB SWITCHING ======
