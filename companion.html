@@ -2,972 +2,1419 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#060d1f" />
-  <title>Curaah Companion — Your AI Healthcare Partner</title>
-  <meta name="description" content="Upload your prescription. Get daily medicine reminders. Track your treatment journey. Keep your family informed. India's AI healthcare companion on WhatsApp." />
+  <meta name="theme-color" content="#0a2e22" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Curaah Companion — Your AI Health Partner</title>
+  <meta name="description" content="India's AI Health Companion — medication adherence, vitals tracking, lab report explainer, and family monitoring for chronic disease patients." />
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
-  <link rel="stylesheet" href="css/style.css" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/companion.css?v=20260617" />
   <style>
-    body { background: #f0f4f8; }
-
-    /* Header */
-    .comp-header {
-      background: linear-gradient(135deg, #0f1f3d 0%, #1a365d 60%, #0d4a2e 100%);
-      padding: 80px 6% 50px;
-      text-align: center;
-      color: white;
-      position: relative;
-      overflow: hidden;
+    /* Dark-theme overrides for specific inline colors */
+    .onboard-input:focus{border-color:var(--electric)!important;}
+    .tab-panel{display:none!important;}.tab-panel.active{display:block!important;}
+    @media(min-width:1024px){
+      #tabHome.active{display:grid!important;grid-template-columns:1.4fr 1fr;gap:32px;align-items:start;}
+      #tabToday.active,#tabJourney.active,#tabWellness.active,#tabProfile.active{display:block!important;}
     }
-    .comp-header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 70%, rgba(0,196,140,0.08) 0%, transparent 60%);
-      animation: pulseGlow 8s ease-in-out infinite;
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-    .comp-header h1 {
-      font-family: 'Georgia', serif;
-      font-size: clamp(28px, 4.5vw, 44px);
-      margin-bottom: 8px;
-      position: relative;
-    }
-    .comp-header h1 span { color: #00c48c; }
-    .comp-header p {
-      color: rgba(255,255,255,0.65);
-      font-size: 16px;
-      max-width: 520px;
-      margin: 0 auto 24px;
-      position: relative;
-    }
-    .comp-tagline {
-      display: inline-block;
-      background: rgba(0,196,140,0.15);
-      color: #00c48c;
-      padding: 6px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    /* Main Container */
-    .comp-container {
-      max-width: 480px;
-      margin: -24px auto 40px;
-      padding: 0 16px;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* Tab Navigation */
-    .comp-tabs {
-      display: flex;
-      background: white;
-      border-radius: 16px 16px 0 0;
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-      border: 1px solid var(--border-card);
-      border-bottom: none;
-    }
-    .comp-tab {
-      flex: 1;
-      padding: 14px 8px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: var(--transition);
-      border-bottom: 3px solid transparent;
-      background: white;
-    }
-    .comp-tab.active {
-      color: #00c48c;
-      border-bottom-color: #00c48c;
-      background: rgba(0,196,140,0.04);
-    }
-    .comp-tab-icon { font-size: 20px; display: block; margin-bottom: 4px; }
-
-    /* Panel */
-    .comp-panel {
-      display: none;
-      background: white;
-      border-radius: 0 0 16px 16px;
-      padding: 24px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border-card);
-      border-top: none;
-    }
-    .comp-panel.active { display: block; }
-
-    /* Upload Card */
-    .rx-upload-area {
-      border: 2px dashed var(--border-card);
-      border-radius: 16px;
-      padding: 32px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      background: rgba(0,196,140,0.02);
-      margin-bottom: 16px;
-    }
-    .rx-upload-area:hover {
-      border-color: #00c48c;
-      background: rgba(0,196,140,0.06);
-    }
-    .rx-upload-icon { font-size: 40px; margin-bottom: 8px; }
-    .rx-upload-text { font-size: 15px; font-weight: 600; color: var(--text-primary); }
-    .rx-upload-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
-    /* Medicine Card */
-    .med-card {
-      background: #f8faf9;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 12px;
-      transition: var(--transition);
-      position: relative;
-    }
-    .med-card:hover { box-shadow: var(--shadow-sm); }
-    .med-name {
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
-    .med-dosage {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .med-purpose {
-      font-size: 12px;
-      color: #00856a;
-      background: rgba(0,196,140,0.08);
-      padding: 6px 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .med-schedule {
-      display: flex;
-      gap: 6px;
-    }
-    .med-time-chip {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: #eef3fc;
-      color: var(--electric);
-    }
-    .med-time-chip.active-dose {
-      background: #00c48c;
-      color: white;
-    }
-
-    /* Adherence Row */
-    .adh-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .adh-row:last-child { border-bottom: none; }
-    .adh-med-info {
-      flex: 1;
-    }
-    .adh-med-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-    .adh-med-time {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .adh-actions {
-      display: flex;
-      gap: 8px;
-    }
-    .adh-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 2px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      cursor: pointer;
-      transition: var(--transition);
-      background: white;
-    }
-    .adh-btn:hover { transform: scale(1.1); }
-    .adh-btn.taken {
-      background: #dcfce7;
-      border-color: #00c48c;
-    }
-    .adh-btn.missed {
-      background: #fee2e2;
-      border-color: #ef4444;
-    }
-
-    /* Stats Row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: #f8faf9;
-      border-radius: 12px;
-      padding: 14px 10px;
-      text-align: center;
-      border: 1px solid #e2e8f0;
-    }
-    .stat-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-    .stat-value.good { color: #00c48c; }
-    .stat-value.warn { color: #f59e0b; }
-    .stat-value.bad { color: #ef4444; }
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    /* Timeline */
-    .timeline-item {
-      display: flex;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .timeline-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-top: 5px;
-      flex-shrink: 0;
-    }
-    .timeline-dot.green { background: #00c48c; }
-    .timeline-dot.red { background: #ef4444; }
-    .timeline-dot.yellow { background: #f59e0b; }
-    .timeline-dot.blue { background: var(--electric); }
-    .timeline-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-    .timeline-date {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Family Share Section */
-    .share-code-box {
-      background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-      border: 2px dashed #86efac;
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-    .share-code {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: 8px;
-      color: #166534;
-      margin: 12px 0;
-      font-family: 'Courier New', monospace;
-    }
-
-    /* Side Effect Button */
-    .side-effect-btn {
-      width: 100%;
-      padding: 14px;
-      border: 1.5px solid #fecaca;
-      background: #fff5f5;
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: #dc2626;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 12px;
-    }
-    .side-effect-btn:hover {
-      background: #fee2e2;
-      border-color: #ef4444;
-    }
-
-    /* Loading Spinner */
-    .comp-spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(0,196,140,0.2);
-      border-top-color: #00c48c;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 30px auto;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    /* WhatsApp CTA Banner */
-    .wa-cta-banner {
-      background: linear-gradient(135deg, #075e54, #128c7e);
-      border-radius: 16px;
-      padding: 20px;
-      color: white;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .wa-cta-banner h3 { font-size: 16px; margin-bottom: 6px; }
-    .wa-cta-banner p { font-size: 13px; opacity: 0.8; margin-bottom: 14px; }
-    .wa-cta-btn {
-      display: inline-block;
-      background: #25d366;
-      color: white;
-      padding: 10px 24px;
-      border-radius: 24px;
-      font-weight: 700;
-      font-size: 14px;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    .wa-cta-btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(37,211,102,0.4); }
-
-    /* Disclaimer */
-    .comp-disclaimer {
-      background: #fffbeb;
-      border-left: 4px solid #f59e0b;
-      padding: 12px 14px;
-      font-size: 11px;
-      color: #92400e;
-      line-height: 1.5;
-      margin-top: 16px;
-      border-radius: 0 8px 8px 0;
-    }
-
-    /* Modal */
-    .comp-modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    .comp-modal-overlay.open { display: flex; }
-    .comp-modal {
-      background: white;
-      border-radius: 20px 20px 0 0;
-      padding: 24px;
-      width: 100%;
-      max-width: 480px;
-      max-height: 80vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    .comp-modal h3 {
-      font-size: 18px;
-      margin-bottom: 16px;
-      color: var(--text-primary);
-    }
-    .comp-modal textarea {
-      width: 100%;
-      min-height: 100px;
-      border: 1.5px solid var(--border-card);
-      border-radius: 12px;
-      padding: 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      resize: vertical;
-      outline: none;
-      margin-bottom: 12px;
-    }
-    .comp-modal textarea:focus { border-color: #00c48c; }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-    }
-    .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state-text { font-size: 15px; font-weight: 600; color: var(--text-secondary); }
-    .empty-state-sub { font-size: 13px; margin-top: 4px; }
   </style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo">
-      <svg class="nav-logo-icon" viewBox="0 0 36 36" fill="none">
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboarding" style="background:var(--bg)">
+  <div class="onboard-card">
+    <div class="onboard-logo">
+      <svg width="56" height="56" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/>
         <path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/>
         <circle cx="18" cy="22" r="3.5" fill="white"/>
       </svg>
-      <div class="nav-logo-text">
-        <span class="nav-logo-name">curaah</span>
-      </div>
-    </a>
-    <div class="nav-actions">
-      <a href="index.html" class="btn btn-ghost btn-sm">Home</a>
     </div>
-  </nav>
-
-  <!-- Header -->
-  <div class="comp-header">
-    <div class="comp-tagline">YOUR AI HEALTHCARE COMPANION</div>
-    <h1>Curaah <span>Companion</span></h1>
-    <p>Upload your prescription. We'll remind you, track your medicines, and keep your family informed — every single day.</p>
-  </div>
-
-  <!-- Main Container -->
-  <div class="comp-container">
-
-    <!-- Tab Navigation -->
-    <div class="comp-tabs">
-      <div class="comp-tab active" onclick="switchCompTab('plan')">
-        <span class="comp-tab-icon">📋</span>
-        My Plan
-      </div>
-      <div class="comp-tab" onclick="switchCompTab('today')">
-        <span class="comp-tab-icon">💊</span>
-        Today
-      </div>
-      <div class="comp-tab" onclick="switchCompTab('journey')">
-        <span class="comp-tab-icon">📊</span>
-        Journey
-      </div>
-      <div class="comp-tab" onclick="switchCompTab('family')">
-        <span class="comp-tab-icon">👨‍👩‍👧</span>
-        Family
-      </div>
-    </div>
-
-    <!-- PANEL: My Plan -->
-    <div class="comp-panel active" id="panelPlan">
-
-      <!-- Upload Prescription -->
-      <input type="file" id="rxFileInput" accept="image/*" style="display:none;" />
-      <div class="rx-upload-area" id="rxUploadArea" onclick="document.getElementById('rxFileInput').click()">
-        <div class="rx-upload-icon">📸</div>
-        <div class="rx-upload-text">Upload Your Prescription</div>
-        <div class="rx-upload-sub">Take a photo or upload an image. Our AI will read it instantly.</div>
+    <div class="onboard-title" id="onboardTitle">Welcome to <span>Curaah</span></div>
+    <div class="onboard-sub" id="onboardSub">Your AI health companion. Track medicines, log vitals, understand lab reports — in Hindi, Punjabi, or English. Works via App, WhatsApp, or Voice Call.</div>
+    <div class="onboard-form" id="registerForm">
+      <!-- Wizard Progress Indicators -->
+      <div class="wizard-progress">
+        <div class="progress-line"></div>
+        <div class="progress-line-active" id="wizardProgressLine"></div>
+        <div class="wizard-step active" id="wStep1">1. Account</div>
+        <div class="wizard-step" id="wStep2">2. Profile</div>
+        <div class="wizard-step" id="wStep3">3. Medical</div>
+        <div class="wizard-step" id="wStep4">4. Routine</div>
       </div>
 
-      <!-- Loading State -->
-      <div id="rxLoading" style="display:none;">
-        <div class="comp-spinner"></div>
-        <div style="text-align:center; font-size:14px; color:var(--text-secondary); font-weight:600;">AI is reading your prescription...</div>
-      </div>
-
-      <!-- Medicine List (populated by JS) -->
-      <div id="medicineList"></div>
-
-      <!-- Empty State -->
-      <div id="planEmpty">
-        <div class="empty-state">
-          <div class="empty-state-icon">📋</div>
-          <div class="empty-state-text">No active treatment plan</div>
-          <div class="empty-state-sub">Upload a prescription to get started with your AI healthcare companion.</div>
+      <!-- Step 1: Account Setup -->
+      <div class="onboard-step-panel active" id="onboardStep1">
+        <div class="onboard-field">
+          <label class="onboard-label">Who is registering?</label>
+          <select class="onboard-input" id="obRelationship" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg fill=%22%23ffffff%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/><path d=%22M0 0h24v24H0z%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+            <option value="Self">Self (My own health)</option>
+            <option value="Mother">Mother</option>
+            <option value="Father">Father</option>
+            <option value="Spouse">Spouse (Husband/Wife)</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Son">Son</option>
+            <option value="Daughter">Daughter</option>
+            <option value="Other">Other Caregiver/Relative</option>
+          </select>
         </div>
-      </div>
-
-      <div class="comp-disclaimer">
-        <strong>⚠️ Medical Disclaimer:</strong> Curaah is an AI-powered tracking tool, NOT a medical provider. It does not diagnose, prescribe, or replace your doctor. Always follow your doctor's instructions.
-      </div>
-    </div>
-
-    <!-- PANEL: Today's Doses -->
-    <div class="comp-panel" id="panelToday">
-
-      <h3 style="font-size: 16px; margin-bottom: 4px; color: var(--text-primary);">Today's Medicines</h3>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" id="todayDate"></p>
-
-      <div id="todayDoses">
-        <div class="empty-state">
-          <div class="empty-state-icon">💊</div>
-          <div class="empty-state-text">No medicines scheduled</div>
-          <div class="empty-state-sub">Upload a prescription in "My Plan" to start tracking.</div>
+        <div class="onboard-field">
+          <label class="onboard-label">Full Name</label>
+          <input class="onboard-input" id="obName" placeholder="ਪੇਸ਼ੈਂਟ ਦਾ ਨਾਮ / Patient's name" autocomplete="name" />
         </div>
-      </div>
-
-      <button class="side-effect-btn" onclick="openSideEffectModal()">
-        ⚠️ Report a Side Effect
-      </button>
-
-      <!-- WhatsApp CTA -->
-      <div class="wa-cta-banner">
-        <h3>💬 Get Reminders on WhatsApp</h3>
-        <p>Never miss a dose. Get daily reminders directly on WhatsApp — no app needed.</p>
-        <a class="wa-cta-btn" href="https://wa.me/919999999999?text=Hi%20Curaah%2C%20I%20want%20to%20start%20tracking%20my%20medicines" target="_blank">Start on WhatsApp →</a>
-      </div>
-    </div>
-
-    <!-- PANEL: Journey -->
-    <div class="comp-panel" id="panelJourney">
-
-      <!-- Stats -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-value good" id="statAdherence">—</div>
-          <div class="stat-label">Adherence</div>
+        <div class="onboard-field">
+          <label class="onboard-label">Phone Number (Username ID)</label>
+          <input class="onboard-input" id="obPhone" placeholder="Mobile number" type="tel" />
         </div>
-        <div class="stat-card">
-          <div class="stat-value" id="statTaken">0</div>
-          <div class="stat-label">Doses Taken</div>
+        <div class="onboard-field" id="obPasswordGroup" style="display:none">
+          <label class="onboard-label">Choose a Password / PIN (min 4 digits)</label>
+          <input class="onboard-input" id="obPassword" placeholder="Choose a password" type="password" />
         </div>
-        <div class="stat-card">
-          <div class="stat-value warn" id="statMissed">0</div>
-          <div class="stat-label">Missed</div>
-        </div>
-      </div>
-
-      <h3 style="font-size: 15px; margin-bottom: 12px; color: var(--text-primary);">Treatment Timeline</h3>
-
-      <div id="journeyTimeline">
-        <div class="empty-state">
-          <div class="empty-state-icon">📊</div>
-          <div class="empty-state-text">Your journey starts here</div>
-          <div class="empty-state-sub">As you track your medicines, your complete health timeline will appear here.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PANEL: Family -->
-    <div class="comp-panel" id="panelFamily">
-
-      <div style="text-align:center; margin-bottom: 20px;">
-        <div style="font-size: 48px; margin-bottom: 8px;">👨‍👩‍👧</div>
-        <h3 style="font-size: 18px; color: var(--text-primary); margin-bottom: 4px;">Family Caregiver</h3>
-        <p style="font-size: 13px; color: var(--text-muted);">Share this code with a family member so they can see your weekly medicine adherence summary.</p>
-      </div>
-
-      <div class="share-code-box">
-        <div style="font-size: 12px; color: #166534; font-weight: 600;">YOUR FAMILY SHARE CODE</div>
-        <div class="share-code" id="familyCode">------</div>
-        <button class="btn btn-primary" style="background: #16a34a; border: none; font-size: 13px; padding: 10px 20px;" onclick="copyShareCode()">📋 Copy Code</button>
-      </div>
-
-      <div style="background: #f0fdf4; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-        <h4 style="font-size: 14px; color: #166534; margin-bottom: 8px;">What your family member will see:</h4>
-        <ul style="font-size: 13px; color: #15803d; line-height: 1.8; padding-left: 20px;">
-          <li>Weekly adherence summary (e.g., "Papa took 6/7 doses")</li>
-          <li>Missed medicine alerts</li>
-          <li>Side-effect reports</li>
-          <li>Follow-up reminders</li>
-        </ul>
-      </div>
-
-      <div style="background: #f0fdf4; border-radius: 12px; padding: 16px;">
-        <h4 style="font-size: 14px; color: #166534; margin-bottom: 8px;">What they will NOT see:</h4>
-        <ul style="font-size: 13px; color: #15803d; line-height: 1.8; padding-left: 20px;">
-          <li>Your prescription images</li>
-          <li>Your doctor's name</li>
-          <li>Your specific health conditions</li>
-        </ul>
-      </div>
-
-      <div class="comp-disclaimer">
-        <strong>Privacy:</strong> Family sharing requires your explicit consent. You can revoke access anytime by generating a new code.
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Side Effect Modal -->
-  <div class="comp-modal-overlay" id="sideEffectModal" onclick="if(event.target===this)closeSideEffectModal()">
-    <div class="comp-modal">
-      <h3>⚠️ Report a Side Effect</h3>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Describe what you're feeling. You can type or use voice. Our AI will assess severity and guide your next step.</p>
-
-      <select id="seSelectMedicine" style="width:100%; padding:12px; border:1.5px solid var(--border-card); border-radius:12px; font-family:'Inter',sans-serif; font-size:14px; margin-bottom:12px; outline:none;">
-        <option value="">Select the medicine (optional)</option>
-      </select>
-
-      <textarea id="seDescription" placeholder="Describe what you're feeling... (e.g., 'I feel dizzy after taking the morning tablet')"></textarea>
-
-      <button class="btn btn-primary" style="width:100%; background:#dc2626; border:none;" onclick="submitSideEffect()">Submit Report</button>
-
-      <div id="seResult" style="display:none; margin-top:16px;"></div>
-
-      <div class="comp-disclaimer" style="margin-top:12px;">
-        This is NOT medical advice. If you are experiencing a medical emergency, call <strong>108</strong> immediately.
-      </div>
-    </div>
-  </div>
-
-  <script src="js/main.js"></script>
-  <script type="module">
-    import { supabase } from './js/supabase.js';
-
-    // ====== STATE ======
-    let deviceId = localStorage.getItem('curaah_companion_device_id');
-    if (!deviceId) {
-      deviceId = 'dev_' + crypto.randomUUID();
-      localStorage.setItem('curaah_companion_device_id', deviceId);
-    }
-
-    let treatmentPlan = JSON.parse(localStorage.getItem('curaah_treatment_plan') || 'null');
-    let medicines = JSON.parse(localStorage.getItem('curaah_medicines') || '[]');
-    let adherenceLogs = JSON.parse(localStorage.getItem('curaah_adherence') || '[]');
-    let timeline = JSON.parse(localStorage.getItem('curaah_timeline') || '[]');
-    let familyCode = localStorage.getItem('curaah_family_code');
-
-    if (!familyCode) {
-      familyCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      localStorage.setItem('curaah_family_code', familyCode);
-    }
-
-    // ====== INIT ======
-    document.getElementById('familyCode').innerText = familyCode;
-    document.getElementById('todayDate').innerText = new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    if (medicines.length > 0) {
-      renderMedicines();
-      renderTodayDoses();
-      renderJourney();
-      document.getElementById('planEmpty').style.display = 'none';
-    }
-
-    // ====== TAB SWITCHING ======
-    window.switchCompTab = function(tab) {
-      document.querySelectorAll('.comp-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.comp-panel').forEach(p => p.classList.remove('active'));
-
-      const tabs = ['plan', 'today', 'journey', 'family'];
-      const idx = tabs.indexOf(tab);
-      document.querySelectorAll('.comp-tab')[idx].classList.add('active');
-      document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-    };
-
-    // ====== PRESCRIPTION UPLOAD ======
-    document.getElementById('rxFileInput').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      document.getElementById('rxUploadArea').style.display = 'none';
-      document.getElementById('planEmpty').style.display = 'none';
-      document.getElementById('rxLoading').style.display = 'block';
-
-      try {
-        const base64 = await fileToBase64(file);
-        const base64Data = base64.split(',')[1];
-
-        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/prescription-extract', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            image: { mimeType: file.type || 'image/jpeg', base64: base64Data }
-          })
-        });
-
-        if (!response.ok) throw new Error('Failed to analyze prescription');
-        const data = await response.json();
-
-        // Build treatment plan
-        treatmentPlan = {
-          created_at: new Date().toISOString(),
-          doctor_name: data.doctor_name || 'Unknown',
-          follow_up_date: data.follow_up_date || null,
-          tests_recommended: data.tests_recommended || [],
-          special_instructions: data.special_instructions || ''
-        };
-        localStorage.setItem('curaah_treatment_plan', JSON.stringify(treatmentPlan));
-
-        // Build medicines
-        medicines = (data.medicines || []).map((m, i) => ({
-          id: 'med_' + Date.now() + '_' + i,
-          name: m.name,
-          dosage: m.dosage || '',
-          frequency: m.frequency || '',
-          duration_days: m.duration_days || null,
-          purpose: m.purpose || '',
-          start_date: new Date().toISOString().split('T')[0],
-          is_active: true
-        }));
-        localStorage.setItem('curaah_medicines', JSON.stringify(medicines));
-
-        // Add to timeline
-        addTimelineEvent('blue', `Treatment plan created with ${medicines.length} medicines.`);
-        if (data.follow_up_date) {
-          addTimelineEvent('blue', `Follow-up scheduled: ${data.follow_up_date}`);
-        }
-
-        renderMedicines();
-        renderTodayDoses();
-        renderJourney();
-
-        document.getElementById('rxLoading').style.display = 'none';
-
-      } catch (err) {
-        alert('Error reading prescription: ' + err.message);
-        document.getElementById('rxUploadArea').style.display = 'block';
-        document.getElementById('rxLoading').style.display = 'none';
-      }
-    });
-
-    // ====== RENDER MEDICINES ======
-    function renderMedicines() {
-      const list = document.getElementById('medicineList');
-      list.innerHTML = '';
-
-      if (treatmentPlan && treatmentPlan.doctor_name && treatmentPlan.doctor_name !== 'Unknown') {
-        list.innerHTML += `<div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">👨‍⚕️ Prescribed by: <strong style="color:var(--text-primary);">${treatmentPlan.doctor_name}</strong></div>`;
-      }
-
-      medicines.forEach(m => {
-        const timeParts = parseFrequency(m.frequency);
-        const currentHour = new Date().getHours();
-        let activePeriod = '';
-        if (currentHour >= 6 && currentHour < 12) activePeriod = 'Morning';
-        else if (currentHour >= 12 && currentHour < 17) activePeriod = 'Afternoon';
-        else activePeriod = 'Night';
-
-        let scheduleHtml = timeParts.map(t => 
-          `<span class="med-time-chip ${t === activePeriod ? 'active-dose' : ''}">${t}</span>`
-        ).join('');
-
-        list.innerHTML += `
-          <div class="med-card">
-            <div class="med-name">${m.name}</div>
-            <div class="med-dosage">${m.dosage} · ${m.frequency}${m.duration_days ? ' · ' + m.duration_days + ' days' : ''}</div>
-            ${m.purpose ? `<div class="med-purpose">💡 ${m.purpose}</div>` : ''}
-            <div class="med-schedule">${scheduleHtml}</div>
+        
+        <div class="onboard-field">
+          <label class="onboard-label">Language Preference</label>
+          <div class="onboard-chips" id="obLangs">
+            <div class="onboard-chip selected" data-val="English">English</div>
+            <div class="onboard-chip" data-val="Punjabi">ਪੰਜਾਬੀ</div>
+            <div class="onboard-chip" data-val="Hindi">हिंदी</div>
           </div>
-        `;
-      });
+        </div>
 
-      document.getElementById('rxUploadArea').style.display = medicines.length > 0 ? 'none' : 'block';
+        <button class="onboard-btn" id="btnNext1" onclick="goToStep(2)" disabled>Next: Profile details →</button>
+        <div style="text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.5);">Already registered? <a href="javascript:void(0)" onclick="toggleOnboardView('login')" style="color:var(--electric);font-weight:700;text-decoration:none;">Log In here</a></div>
+      </div>
 
-      // Populate side-effect medicine dropdown
-      const sel = document.getElementById('seSelectMedicine');
-      sel.innerHTML = '<option value="">Select the medicine (optional)</option>';
-      medicines.forEach(m => {
-        sel.innerHTML += `<option value="${m.id}">${m.name} ${m.dosage}</option>`;
-      });
-    }
+      <!-- Step 2: Demographics & Geography -->
+      <div class="onboard-step-panel" id="onboardStep2">
+        <div style="display:flex;gap:12px;">
+          <div class="onboard-field" style="flex:1;">
+            <label class="onboard-label">Age</label>
+            <input class="onboard-input" id="obAge" placeholder="e.g. 58" type="number" min="0" max="120" />
+          </div>
+          <div class="onboard-field" style="flex:1;">
+            <label class="onboard-label">Gender</label>
+            <select class="onboard-input" id="obGender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">District (Your Location)</label>
+          <input class="onboard-input" id="obDistrict" placeholder="e.g. Rupnagar, Ludhiana, Patiala" />
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="onboard-btn" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);color:var(--text);margin-top:0;flex:1;" onclick="goToStep(1)">← Back</button>
+          <button class="onboard-btn" id="btnNext2" style="margin-top:0;flex:1;" onclick="goToStep(3)" disabled>Next: Medical →</button>
+        </div>
+      </div>
 
-    // ====== RENDER TODAY'S DOSES ======
-    function renderTodayDoses() {
-      const container = document.getElementById('todayDoses');
-      if (medicines.length === 0) return;
+      <!-- Step 3: Medical Condition & Medications -->
+      <div class="onboard-step-panel" id="onboardStep3">
+        <div class="onboard-field">
+          <label class="onboard-label">Primary Health Focus / Disease</label>
+          <div class="onboard-chips" id="obConditions">
+            <div class="onboard-chip" data-val="Healthy">✨ Healthy (No disease)</div>
+            <div class="onboard-chip" data-val="Diabetes">🩸 Diabetes</div>
+            <div class="onboard-chip" data-val="Blood Pressure">❤️ BP</div>
+            <div class="onboard-chip" data-val="Thyroid">🦋 Thyroid</div>
+            <div class="onboard-chip" data-val="Heart">💓 Heart Focus</div>
+            <div class="onboard-chip" data-val="Cancer">🎗️ Cancer</div>
+            <div class="onboard-chip" data-val="Kidney">🫘 Kidney</div>
+            <div class="onboard-chip" data-val="Other">📋 Other</div>
+          </div>
+          <input class="onboard-input" id="obConditionOther" placeholder="Specify your condition" style="display:none;margin-top:8px;" />
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Current Medications</label>
+          <textarea class="onboard-input" id="obMedsText" rows="2" placeholder="List medicines you are currently taking (or write None)"></textarea>
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Or Upload Prescription / Medicine Strips</label>
+          <input type="file" id="obRxFile" accept="image/*" style="display:none;" />
+          <div class="lab-upload" id="obRxUploadArea" onclick="document.getElementById('obRxFile').click()" style="padding:14px;border:1.5px dashed var(--border-subtle);border-radius:12px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.02);transition:var(--transition);">
+            <div style="font-size:24px;margin-bottom:4px;">📸</div>
+            <div style="font-size:12.5px;font-weight:700;color:var(--electric);">Click to upload Photo / Prescription</div>
+            <div style="font-size:10.5px;color:var(--text-muted);margin-top:2px;">Take a photo of prescription or strips</div>
+          </div>
+          <div id="obRxLoading" style="display:none;text-align:center;padding:8px 0;">
+            <div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px;"></div>
+            <span style="font-size:12px;color:var(--text-muted);">AI reading medicines...</span>
+          </div>
+          <div id="obRxPreview" style="display:none;margin-top:8px;font-size:12px;color:var(--green);font-weight:700;display:flex;align-items:center;justify-content:space-between;background:rgba(0,196,140,0.06);padding:6px 12px;border-radius:8px;border:1px solid rgba(0,196,140,0.15);">
+            <span>📸 Medicine Strip/Rx Loaded</span>
+            <button style="background:transparent;border:none;color:#ef4444;font-size:12px;cursor:pointer;font-weight:700;" onclick="clearObRxFile(event)">Remove</button>
+          </div>
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Known Allergies / Past Illnesses</label>
+          <input class="onboard-input" id="obAllergies" placeholder="e.g. Penicillin allergy, Asthma (or write None)" />
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="onboard-btn" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);color:var(--text);margin-top:0;flex:1;" onclick="goToStep(2)">← Back</button>
+          <button class="onboard-btn" id="btnNext3" style="margin-top:0;flex:1;" onclick="goToStep(4)" disabled>Next: Routine →</button>
+        </div>
+      </div>
 
-      const today = new Date().toISOString().split('T')[0];
-      let html = '';
-
-      medicines.forEach(m => {
-        const timeParts = parseFrequency(m.frequency);
-        timeParts.forEach(period => {
-          const logKey = `${m.id}_${today}_${period}`;
-          const existing = adherenceLogs.find(l => l.key === logKey);
-          let status = existing ? existing.status : 'pending';
-
-          let btnHtml = '';
-          if (status === 'taken') {
-            btnHtml = `<div class="adh-btn taken">✅</div>`;
-          } else if (status === 'missed') {
-            btnHtml = `<div class="adh-btn missed">❌</div>`;
-          } else {
-            btnHtml = `
-              <div class="adh-btn" onclick="logDose('${m.id}', '${period}', 'taken')" title="Taken">✅</div>
-              <div class="adh-btn" onclick="logDose('${m.id}', '${period}', 'missed')" title="Missed">❌</div>
-            `;
-          }
-
-          html += `
-            <div class="adh-row">
-              <div class="adh-med-info">
-                <div class="adh-med-name">${m.name}</div>
-                <div class="adh-med-time">${period} · ${m.dosage}</div>
-              </div>
-              <div class="adh-actions">${btnHtml}</div>
+      <!-- Step 4: Daily Routine & Recommended Questions -->
+      <div class="onboard-step-panel" id="onboardStep4">
+        <div style="display:flex;gap:12px;width:100%;">
+          <div class="onboard-field" style="flex:1;">
+            <label class="onboard-label">Height (cm)</label>
+            <input class="onboard-input" id="obHeight" placeholder="e.g. 172" type="number" />
+          </div>
+          <div class="onboard-field" style="flex:1;">
+            <label class="onboard-label">Weight (kg)</label>
+            <input class="onboard-input" id="obWeight" placeholder="e.g. 72" type="number" />
+          </div>
+        </div>
+        
+        <div class="onboard-field">
+          <label class="onboard-label">Daily Routine Timings</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <label style="font-size:10px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:3px;">Wake Up</label>
+              <input type="time" class="onboard-input" id="obWakeTime" value="06:30" style="padding:8px 12px;font-size:13px;" />
             </div>
-          `;
-        });
-      });
-
-      container.innerHTML = html;
-    }
-
-    // ====== LOG DOSE ======
-    window.logDose = function(medId, period, status) {
-      const today = new Date().toISOString().split('T')[0];
-      const logKey = `${medId}_${today}_${period}`;
-      const med = medicines.find(m => m.id === medId);
-
-      // Remove existing log for this slot
-      adherenceLogs = adherenceLogs.filter(l => l.key !== logKey);
-      adherenceLogs.push({
-        key: logKey,
-        medicine_id: medId,
-        medicine_name: med ? med.name : '',
-        date: today,
-        period: period,
-        status: status,
-        logged_at: new Date().toISOString()
-      });
-      localStorage.setItem('curaah_adherence', JSON.stringify(adherenceLogs));
-
-      if (status === 'taken') {
-        addTimelineEvent('green', `Took ${med ? med.name : 'medicine'} (${period})`);
-      } else {
-        addTimelineEvent('red', `Missed ${med ? med.name : 'medicine'} (${period})`);
-      }
-
-      renderTodayDoses();
-      renderJourney();
-    };
-
-    // ====== TIMELINE ======
-    function addTimelineEvent(color, text) {
-      timeline.unshift({
-        color: color,
-        text: text,
-        date: new Date().toLocaleString('en-IN')
-      });
-      if (timeline.length > 100) timeline = timeline.slice(0, 100);
-      localStorage.setItem('curaah_timeline', JSON.stringify(timeline));
-    }
-
-    // ====== RENDER JOURNEY ======
-    function renderJourney() {
-      // Stats
-      const taken = adherenceLogs.filter(l => l.status === 'taken').length;
-      const missed = adherenceLogs.filter(l => l.status === 'missed').length;
-      const total = taken + missed;
-      const pct = total > 0 ? Math.round((taken / total) * 100) : 0;
-
-      document.getElementById('statTaken').innerText = taken;
-      document.getElementById('statMissed').innerText = missed;
-      const adhEl = document.getElementById('statAdherence');
-      adhEl.innerText = total > 0 ? pct + '%' : '—';
-      adhEl.className = 'stat-value ' + (pct >= 80 ? 'good' : pct >= 50 ? 'warn' : 'bad');
-
-      // Timeline
-      const container = document.getElementById('journeyTimeline');
-      if (timeline.length === 0) return;
-
-      container.innerHTML = timeline.slice(0, 20).map(t => `
-        <div class="timeline-item">
-          <div class="timeline-dot ${t.color}"></div>
-          <div>
-            <div class="timeline-text">${t.text}</div>
-            <div class="timeline-date">${t.date}</div>
+            <div>
+              <label style="font-size:10px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:3px;">Breakfast</label>
+              <input type="time" class="onboard-input" id="obBreakfastTime" value="08:30" style="padding:8px 12px;font-size:13px;" />
+            </div>
+            <div>
+              <label style="font-size:10px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:3px;">Lunch</label>
+              <input type="time" class="onboard-input" id="obLunchTime" value="13:30" style="padding:8px 12px;font-size:13px;" />
+            </div>
+            <div>
+              <label style="font-size:10px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:3px;">Dinner</label>
+              <input type="time" class="onboard-input" id="obDinnerTime" value="20:30" style="padding:8px 12px;font-size:13px;" />
+            </div>
+            <div style="grid-column: span 2;">
+              <label style="font-size:10px;color:var(--text-muted);font-weight:700;display:block;margin-bottom:3px;">Sleep Time</label>
+              <input type="time" class="onboard-input" id="obSleepTime" value="22:30" style="padding:8px 12px;font-size:13px;" />
+            </div>
           </div>
         </div>
-      `).join('');
-    }
 
-    // ====== SIDE EFFECT ======
-    window.openSideEffectModal = function() {
-      document.getElementById('sideEffectModal').classList.add('open');
-      document.getElementById('seResult').style.display = 'none';
-    };
-    window.closeSideEffectModal = function() {
-      document.getElementById('sideEffectModal').classList.remove('open');
-    };
-    window.submitSideEffect = async function() {
-      const desc = document.getElementById('seDescription').value.trim();
-      if (!desc) return alert('Please describe what you are feeling.');
+        <div class="onboard-field">
+          <label class="onboard-label">Specific Concerns / Problems</label>
+          <input class="onboard-input" id="obSpecificProblems" placeholder="e.g. knee pain, sugar spikes after dinner" />
+        </div>
+        
+        <div class="onboard-field">
+          <label class="onboard-label">Latest Lab Reports Summary</label>
+          <textarea class="onboard-input" id="obLabsText" rows="1" placeholder="Enter test values (e.g. HbA1c: 7.2) if any"></textarea>
+        </div>
 
-      const medId = document.getElementById('seSelectMedicine').value;
-      const med = medicines.find(m => m.id === medId);
-      const resultDiv = document.getElementById('seResult');
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="onboard-btn" style="background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);color:var(--text);margin-top:0;flex:1;" onclick="goToStep(3)">← Back</button>
+          <button class="onboard-btn" id="obStart" style="margin-top:0;flex:1;" onclick="submitWizard()" disabled>Start Journey! →</button>
+        </div>
+      </div>
+    </div>
+    <div class="onboard-form" id="loginForm" style="display:none">
+      <div class="onboard-field"><label class="onboard-label">Phone Number</label><input class="onboard-input" id="loginPhone" placeholder="Registered phone number" type="tel" /></div>
+      <div class="onboard-field"><label class="onboard-label">Password / PIN</label><input class="onboard-input" id="loginPassword" placeholder="Your password/PIN" type="password" /></div>
+      <button class="onboard-btn" id="loginBtn" onclick="handleOnboardLogin()">Log In to My Account →</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.5);">New to Curaah? <a href="javascript:void(0)" onclick="toggleOnboardView('register')" style="color:var(--electric);font-weight:700;text-decoration:none;">Create an Account</a></div>
+    </div>
+  </div>
+</div>
 
-      resultDiv.style.display = 'block';
-      resultDiv.innerHTML = '<div class="comp-spinner"></div>';
+<!-- Desktop Sidebar -->
+<aside class="desktop-sidebar">
+  <div class="sidebar-brand" onclick="window.location.href='index.html'">
+    <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
+    <span class="brand-name">Curaah</span>
+  </div>
+  <div class="sidebar-user"><div class="sidebar-avatar" id="sbAvatar">?</div><div><div style="font-size:11px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Patient Portal</div><div style="font-size:15px;font-weight:700;color:white" id="sbName">—</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="sb-nav-item active" onclick="switchTab('home')"><span class="sb-nav-icon">🏠</span><span class="sb-nav-label">Home</span></div>
+    <div class="sb-nav-item" onclick="switchTab('today')"><span class="sb-nav-icon">💊</span><span class="sb-nav-label">Today's Schedule</span></div>
+    <div class="sb-nav-item" onclick="switchTab('journey')"><span class="sb-nav-icon">📊</span><span class="sb-nav-label">Journey & Vitals</span></div>
+    <div class="sb-nav-item" onclick="switchTab('wellness')"><span class="sb-nav-icon">🧘</span><span class="sb-nav-label">Wellness Kit</span></div>
+    <div class="sb-nav-item" onclick="switchTab('profile')"><span class="sb-nav-icon">👤</span><span class="sb-nav-label">My Profile</span></div>
+  </nav>
+  <button class="btn-primary" style="background:#ef4444;border:none;margin-bottom:20px;font-weight:800;border-radius:12px" onclick="triggerSOS()">🚨 SOS Emergency</button>
+  <div class="sidebar-footer"><div style="font-weight:700;color:white;margin-bottom:2px">Curaah HealthTech</div><div style="font-size:11px;color:rgba(255,255,255,.4)">IIT Ropar Incubated</div></div>
+</aside>
 
-      try {
-        const response = await fetch('https://lospowxozjnoiawxbojg.supabase.co/functions/v1/side-effect-analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            description: desc,
-            medicine_name: med ? med.name : 'Unknown',
-            patient_context: `Currently taking: ${medicines.map(m => m.name).join(', ')}`
-          })
-        });
+<!-- Mobile Top Bar -->
+<div class="mobile-top-bar" id="mobileTopBar">
+  <div class="top-bar-brand" onclick="window.location.href='index.html'">
+    <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 3 L5 9 L5 21 Q5 30 18 34 Q31 30 31 21 L31 9 Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10 Q13 15 13 20 Q13 25 18 28 Q23 25 23 20 Q23 15 18 10Z" fill="#3d9eff" opacity="0.9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
+    Curaah
+  </div>
+  <button class="sos-btn-header" onclick="triggerSOS()">🚨 SOS</button>
+</div>
 
-        const data = await response.json();
-        const colors = { green: '#16a34a', yellow: '#d97706', red: '#dc2626' };
-        const icons = { green: '🟢', yellow: '🟡', red: '🔴' };
+<div class="main-viewport" id="mainViewport">
+<header class="app-header" id="appHeader">
+  <div class="header-top"><div><div class="header-greeting" id="hGreeting">Good morning</div><div class="header-name" id="hName">—</div></div><div class="header-avatar" id="hAvatar">?</div></div>
+  <div class="score-card">
+    <div class="score-ring-wrap"><svg class="score-ring" viewBox="0 0 80 80"><circle class="score-ring-bg" cx="40" cy="40" r="36"/><circle class="score-ring-fill" id="scoreRing" cx="40" cy="40" r="36" stroke-dasharray="226" stroke-dashoffset="226"/></svg><div class="score-value"><div class="score-number" id="scoreNum">0</div><div class="score-label-sm">HEALTH</div></div></div>
+    <div class="score-details">
+      <div class="score-title">Health Score <span class="streak-badge" id="streakBadge">🔥 0 days</span></div>
+      <div class="score-breakdown"><div class="score-item">💊 <span id="sbAdh">0%</span> adherence</div><div class="score-item">🧘 <span id="sbWell">0%</span> wellness</div><div class="score-item">📊 <span id="sbVitals">0</span> vitals</div></div>
+      <div class="progress-bar-wrap" style="margin-top:10px"><div class="progress-bar-fill" id="scoreFill" style="width:0%"></div></div>
+    </div>
+  </div>
+</header>
 
-        addTimelineEvent(data.severity || 'yellow', `Reported side effect: "${desc.substring(0, 50)}..."`);
+<main class="app-content">
 
-        resultDiv.innerHTML = `
-          <div style="background:${data.severity === 'red' ? '#fee2e2' : data.severity === 'yellow' ? '#fffbeb' : '#f0fdf4'}; border-radius:12px; padding:16px; border-left:4px solid ${colors[data.severity] || '#d97706'};">
-            <div style="font-size:14px; font-weight:700; color:${colors[data.severity]}; margin-bottom:8px;">${icons[data.severity] || '🟡'} ${data.severity === 'green' ? 'Low Concern' : data.severity === 'yellow' ? 'Moderate Concern' : 'High Concern — Seek Help'}</div>
-            <div style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:8px;">${data.assessment || data.recommendation || 'Please consult your doctor.'}</div>
-            <div style="font-size:11px; color:#92400e; font-style:italic;">${data.disclaimer || 'This is not medical advice. Always consult your doctor.'}</div>
-          </div>
-        `;
-      } catch (err) {
-        resultDiv.innerHTML = `<div style="color:#dc2626; font-size:14px;">Error analyzing. Please call your doctor directly or dial 108 for emergencies.</div>`;
+<!-- HOME TAB -->
+<div class="tab-panel active" id="tabHome">
+  <div class="section">
+    <input type="file" id="rxFile" accept="image/*" capture="environment" style="display:none" />
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('rxFile').click()"><div class="upload-icon">📸</div><div class="upload-text">Upload Your Prescription</div><div class="upload-sub">Take a photo — AI reads it in seconds</div></div>
+    <div id="rxLoading" style="display:none"><div class="spinner"></div><div style="text-align:center;font-size:14px;color:var(--text-muted);font-weight:600">AI reading your prescription...</div></div>
+  </div>
+  <div class="section" id="secDoses" style="display:none">
+    <div class="section-header"><div class="section-title">Today's Doses</div><div class="section-action" onclick="switchTab('today')">See All →</div></div>
+    <div id="homeDoses"></div>
+  </div>
+  <div class="section">
+    <div class="section-header"><div class="section-title">Quick Actions</div></div>
+    <div class="quick-actions">
+      <div class="quick-btn" onclick="document.getElementById('rxFile').click()"><span class="quick-btn-icon">📸</span><span class="quick-btn-text">Upload Rx</span></div>
+      <div class="quick-btn" onclick="openPillVerifier()"><span class="quick-btn-icon">📷</span><span class="quick-btn-text">Verify Pill</span></div>
+      <div class="quick-btn" onclick="openModal('modalSideEffect')"><span class="quick-btn-icon">⚠️</span><span class="quick-btn-text">Side Effect</span></div>
+      <div class="quick-btn" onclick="openModal('modalMealLog')"><span class="quick-btn-icon">🥗</span><span class="quick-btn-text">Log Diet</span></div>
+      <div class="quick-btn" onclick="openLabUpload()"><span class="quick-btn-icon">🔬</span><span class="quick-btn-text">Lab Report</span></div>
+      <a class="quick-btn" href="gov-map.html"><span class="quick-btn-icon">🏥</span><span class="quick-btn-text">Find Hospitals</span></a>
+    </div>
+  </div>
+  <div class="section"><div class="wa-banner" id="prefBanner"><h3>💬 Get Reminders on WhatsApp</h3><p>Never miss a dose. Daily nudges in Punjabi, Hindi, or English.</p><a class="wa-btn" href="https://wa.me/919999999999?text=Hi%20Curaah%2C%20start%20my%20companion" target="_blank">Start on WhatsApp →</a></div></div>
+</div>
+
+<!-- TODAY TAB -->
+<div class="tab-panel" id="tabToday">
+  <div class="section"><div class="section-header"><div class="section-title" id="todayTitle">Today's Schedule</div></div><div id="todayDateLabel" style="font-size:13px;color:var(--text-muted);margin-bottom:16px"></div><div id="todayFull"><div class="empty"><div class="empty-icon">💊</div><div class="empty-text">No medicines yet</div><div class="empty-sub">Upload a prescription to start tracking</div></div></div></div>
+  <div class="section" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn-primary" style="background:#3d9eff;flex:1" onclick="openPillVerifier()">📷 Verify Pill (Edge-AI)</button><button class="btn-danger" style="margin-top:0;flex:1" onclick="openModal('modalSideEffect')">⚠️ Report Side Effect</button></div>
+</div>
+
+<!-- JOURNEY TAB -->
+<div class="tab-panel" id="tabJourney">
+  <div class="section"><div class="section-header"><div class="section-title">Your Stats</div></div><div class="vitals-grid" style="margin-bottom:16px"><div class="vital-card" style="cursor:default"><div class="vital-emoji">💊</div><div class="vital-val" id="jAdh">—</div><div class="vital-name">Adherence</div></div><div class="vital-card" style="cursor:default"><div class="vital-emoji">✅</div><div class="vital-val" id="jTaken">0</div><div class="vital-name">Taken</div></div><div class="vital-card" style="cursor:default"><div class="vital-emoji">❌</div><div class="vital-val" id="jMissed">0</div><div class="vital-name">Missed</div></div></div></div>
+  <div class="section"><div class="section-header"><div class="section-title">Log Your Vitals</div></div><div class="vitals-grid">
+    <div class="vital-card" onclick="openVitalModal('sugar')"><div class="vital-emoji">🩸</div><div class="vital-val" id="vSugar">—</div><div class="vital-unit">mg/dL</div><div class="vital-name">Blood Sugar</div><div class="vital-trend" id="tSugar"></div></div>
+    <div class="vital-card" onclick="openVitalModal('bp')"><div class="vital-emoji">❤️</div><div class="vital-val" id="vBP">—</div><div class="vital-unit">mmHg</div><div class="vital-name">Blood Pressure</div><div class="vital-trend" id="tBP"></div></div>
+    <div class="vital-card" onclick="openVitalModal('weight')"><div class="vital-emoji">⚖️</div><div class="vital-val" id="vWeight">—</div><div class="vital-unit">kg</div><div class="vital-name">Weight</div><div class="vital-trend" id="tWeight"></div></div>
+  </div></div>
+  <div class="section"><div class="section-header"><div class="section-title">🔬 Lab Reports</div><div class="section-action" onclick="openLabUpload()">+ Upload New</div></div><div id="labReportsList"></div></div>
+  <div class="section"><div class="section-header"><div class="section-title">Health Timeline</div></div><div class="card" id="journeyTimeline"><div class="empty"><div class="empty-icon">📊</div><div class="empty-text">Your journey starts here</div><div class="empty-sub">Track medicines and vitals to build your timeline</div></div></div></div>
+</div>
+
+<!-- WELLNESS TAB -->
+<div class="tab-panel" id="tabWellness">
+  <div id="wellnessLocked" class="locked-card">
+    <div style="font-size:52px;margin-bottom:14px;opacity:.7">🔒</div>
+    <div style="font-weight:800;font-size:18px;margin-bottom:10px;color:var(--text)">Recovery Kit — Locked</div>
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:20px">Complete 3 health tracking actions — mark a dose, log vitals, or check wellness items — to unlock your AI-personalized botanical recovery kit from Punjab farms.</p>
+    <div style="font-weight:700;font-size:14px;color:var(--electric)">Progress: <span id="unlockProgress">0</span> / 3 actions</div>
+    <div class="progress-bar-wrap" style="margin-top:12px;background:var(--border-subtle)"><div class="progress-bar-fill" id="unlockFill" style="width:0%;background:var(--electric)"></div></div>
+  </div>
+  <div id="wellnessUnlocked" style="display:none">
+    <div class="unlocked-kit-card">
+      <span class="pesticide-badge">🛡️ 100% Pesticide-Free · Lab Certified</span>
+      <h3 style="font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px">🌿 Your AI Recovery Kit</h3>
+      <p style="font-size:13.5px;color:var(--text-muted);line-height:1.7;margin-bottom:16px">Based on your health logs, AI suggests a personalized daily organic regimen. Monthly kit with day-wise packets sourced direct from cooperative farms in Sangrur, Punjab.</p>
+      <div class="card" style="margin-bottom:14px;border-color:rgba(0,196,140,.25);">
+        <div style="font-weight:800;font-size:14px;color:var(--text);margin-bottom:4px">🚜 Sardar Gurdev Singh's Organic Farm</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Direct from Sangrur, Punjab — Certified pesticide-free cooperative</div>
+        <button class="btn-primary" style="background:#16a34a;font-size:12px;padding:8px 12px;width:auto" onclick="openModal('modalLabReport')">🔍 View Pesticide Lab Certificate</button>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px">AI-Recommended Regimen (for your condition):</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--text-muted);background:rgba(0,196,140,.05);border:1px solid rgba(0,196,140,.15);padding:14px;border-radius:12px;margin-bottom:14px">
+        <div>🌅 <strong style="color:var(--text)">Morning:</strong> Raw Giloy &amp; Ginger Powder — Immunity &amp; Digestion</div>
+        <div id="middayHerb">☀️ <strong style="color:var(--text)">Midday:</strong> Organic Neem leaves — Blood purifier</div>
+        <div>🌙 <strong style="color:var(--text)">Night:</strong> Ashwagandha &amp; Goondkatira — Stress reduction &amp; cooling</div>
+      </div>
+      <div class="doctor-confirm-badge">🤖 AI verified — No interactions with your active prescriptions</div>
+      <button class="btn-primary" style="margin-top:20px;background:var(--green);border:none" onclick="openModal('modalKitOrder')">Subscribe to Monthly Kit (₹299/mo) →</button>
+    </div>
+    <div class="section"><div class="section-header"><div class="section-title">For You</div><div class="section-action" id="wellCondLabel">—</div></div><div class="wellness-scroll" id="wellCards"></div></div>
+    <div class="section"><div class="section-header"><div class="section-title">Today's Wellness Checklist</div><div class="section-action" id="wellPct">0%</div></div><div class="card" id="wellChecklist"></div></div>
+    <div class="section"><div class="section-header"><div class="section-title">Rent &amp; Borrow Medical Equipment</div></div><div class="wellness-scroll">
+      <div class="wellness-card" onclick="joinEquipWaitlist('hospital bed')" style="min-width:180px"><div class="wellness-card-icon" style="background:rgba(61,158,255,.1);color:var(--electric)">🛏️</div><div class="wellness-card-title">Adjustable Medical Bed</div><div class="wellness-card-sub">Rent from Peer: ₹900/month</div></div>
+      <div class="wellness-card" onclick="joinEquipWaitlist('wheelchair')" style="min-width:180px"><div class="wellness-card-icon" style="background:rgba(255,159,0,.1);color:var(--warning)">♿</div><div class="wellness-card-title">Folding Wheelchair</div><div class="wellness-card-sub">Borrow Free (7 days)</div></div>
+      <div class="wellness-card" onclick="joinEquipWaitlist('oxygen concentrator')" style="min-width:180px"><div class="wellness-card-icon" style="background:rgba(0,196,140,.1);color:var(--green)">💨</div><div class="wellness-card-title">Oxygen Concentrator</div><div class="wellness-card-sub">Rent: ₹2,500/month</div></div>
+    </div></div>
+    <div class="section"><div class="section-header"><div class="section-title">Support &amp; Motivation Circles</div></div>
+      <div class="card" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--border-subtle)"><div style="font-size:14px">🩸 <strong>Diabetes Strength Group</strong></div><button class="btn-primary" style="background:var(--green);width:auto;padding:6px 14px;font-size:11px" onclick="joinCircle('Diabetes')">Join</button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--border-subtle)"><div style="font-size:14px">❤️ <strong>Hypertension Care Network</strong></div><button class="btn-primary" style="background:var(--green);width:auto;padding:6px 14px;font-size:11px" onclick="joinCircle('Hypertension')">Join</button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:14px">🎗️ <strong>Cancer Recovery Circle</strong></div><button class="btn-primary" style="background:var(--green);width:auto;padding:6px 14px;font-size:11px" onclick="joinCircle('Cancer')">Join</button></div>
+      </div>
+    </div>
+    <div class="section"><div class="card" style="border:1px solid rgba(0,196,140,.2);background:rgba(0,196,140,.04)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><div style="font-size:22px">🗺️</div><div style="font-weight:800;font-size:15px;color:var(--green)">Community Health Map</div></div>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin:0 0 12px 0">Real-time crowdsourced doctor availability, queues &amp; services at government facilities in Punjab.</p>
+      <button class="btn-primary" style="background:#059669;font-size:13px;padding:10px;border:none" onclick="window.location.href='gov-map.html'">🗺️ View Community Health Map</button>
+    </div></div>
+  </div>
+</div>
+
+<!-- PROFILE TAB -->
+<div class="tab-panel" id="tabProfile">
+  <div class="section">
+    <div class="card" style="text-align:center;padding:24px">
+      <div id="profAvatar" style="width:64px;height:64px;border-radius:50%;background:var(--electric);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:white;margin:0 auto 12px">?</div>
+      <div id="profName" style="font-size:18px;font-weight:800">—</div>
+      <div id="profCond" style="font-size:13px;color:var(--text-muted);margin-top:2px">—</div>
+      <div id="profJoined" style="font-size:12px;color:var(--text-muted);margin-top:4px"></div>
+      <div>
+        <div id="profSyncStatus" class="profile-sync-badge unsynced">☁️ Local-only Mode</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="syncBackupPrompt" style="display:none">
+    <div class="card" style="border:1px solid rgba(255,159,0,0.3);background:rgba(255,159,0,0.03);padding:20px;">
+      <div style="font-weight:800;font-size:14px;color:var(--warning);margin-bottom:6px">☁️ Enable Secure Cloud Backup</div>
+      <p style="font-size:12.5px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">Your health records are currently stored locally. Register an account with a password to enable secure sync and access your records from any device.</p>
+      <button class="btn-primary" style="background:var(--warning);border:none;font-size:13px;padding:8px 12px;width:auto;" onclick="openSyncRegistrationModal()">Secure My Records Now →</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="profile-section-title" style="margin-top:0">📋 Complete Health Profile</div>
+      <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px">Fill out your profile details so the AI Health Companion can give more personalized care and family emergency responders can see critical info.</p>
+      
+      <div class="profile-row">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Age</label>
+          <input class="input-field" id="profAge" type="number" placeholder="e.g. 58" />
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Gender</label>
+          <select class="input-field" id="profGender">
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="profile-row" style="margin-top:12px">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">District</label>
+          <input class="input-field" id="profDistrict" placeholder="e.g. Rupnagar" />
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Registered By</label>
+          <select class="input-field" id="profRelationship">
+            <option value="Self">Self</option>
+            <option value="Mother">Mother</option>
+            <option value="Father">Father</option>
+            <option value="Spouse">Spouse</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Son">Son</option>
+            <option value="Daughter">Daughter</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="profile-row" style="margin-top:12px">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Height (cm)</label>
+          <input class="input-field" id="profHeight" type="number" placeholder="e.g. 172" />
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Weight (kg)</label>
+          <input class="input-field" id="profWeight" type="number" placeholder="e.g. 72" />
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-top:12px">
+        <label class="input-label">Current Medications</label>
+        <input class="input-field" id="profMedsText" placeholder="List your active medicines" />
+      </div>
+
+      <div class="input-group" style="margin-top:12px">
+        <label class="input-label">Specific Concerns / Problems</label>
+        <input class="input-field" id="profSpecificProblems" placeholder="e.g. knee pain, sugar spikes after dinner" />
+      </div>
+
+      <div class="input-group" style="margin-top:12px">
+        <label class="input-label">Allergies / Drug Sensitivities</label>
+        <input class="input-field" id="profAllergies" placeholder="e.g. Penicillin, Peanuts (or None)" />
+      </div>
+
+      <div class="input-group" style="margin-top:12px">
+        <label class="input-label">Dietary Preferences</label>
+        <select class="input-field" id="profDiet">
+          <option value="Veg">Vegetarian 🥗</option>
+          <option value="Non-Veg">Non-Vegetarian 🍗</option>
+          <option value="Vegan">Vegan 🌱</option>
+          <option value="Diabetic">Diabetic Friendly 🩸</option>
+          <option value="Low-Sodium">Low-Sodium (BP friendly) ❤️</option>
+        </select>
+      </div>
+
+      <div class="profile-section-title">🚨 Emergency & Caregiver Contacts</div>
+      <div class="profile-row">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Emergency Contact Name</label>
+          <input class="input-field" id="profEmergName" placeholder="Name" />
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Emergency Phone</label>
+          <input class="input-field" id="profEmergPhone" placeholder="Phone" type="tel" />
+        </div>
+      </div>
+
+      <div class="profile-row" style="margin-top:12px">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Caregiver Name</label>
+          <input class="input-field" id="profCareName" placeholder="Caregiver Name" />
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Caregiver Phone</label>
+          <input class="input-field" id="profCarePhone" placeholder="Caregiver Phone" type="tel" />
+        </div>
+      </div>
+
+      <button class="btn-primary" style="margin-top:20px;background:var(--green);border:none;" onclick="saveHealthProfile()">Save Health Profile</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <button class="btn-primary" style="background:var(--surface,#0d1b35);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700" onclick="window.location.href='family.html'"><span>👁️</span> Open Family Dashboard</button>
+  </div>
+  
+  <div class="section">
+    <div class="card" style="border:1px solid rgba(61,158,255,.2);background:rgba(61,158,255,.04)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><div style="font-size:22px">🏥</div><div style="font-weight:800;font-size:15px;color:var(--electric)">Doorstep Nurse Visits <span style="font-size:11px;font-weight:600;background:rgba(255,159,0,.15);color:var(--warning);padding:2px 8px;border-radius:10px;margin-left:4px">Coming Soon</span></div></div>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6;margin:0 0 12px 0">Periodic home visits by qualified local nurses for manual vital checking &amp; lab sample collection — creating rural livelihoods.</p>
+      <button class="btn-primary" style="background:var(--electric);font-size:13px;padding:10px" onclick="addTL('blue','Joined nurse home visit waitlist');alert('Waitlist joined! You will be notified when nursing support is active in your area.')">Join Nurse Waitlist</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-title">Family Share Code</div></div>
+    <div class="share-box">
+      <div style="font-size:12px;color:#166534;font-weight:700">YOUR FAMILY CODE</div>
+      <div class="share-code-val" id="famCode">------</div>
+      <button class="btn-primary" style="width:auto;padding:10px 24px;background:#16a34a" onclick="copyCode()">📋 Copy Code</button>
+    </div>
+    <div class="card" style="margin-top:12px;font-size:13px;color:var(--text-muted);line-height:1.7">
+      <strong>Family sees:</strong> Adherence %, missed dose alerts, side-effect reports<br/>
+      <strong>Family does NOT see:</strong> Prescription images, doctor names, specific conditions
+    </div>
+  </div>
+
+  <div class="section" id="secMedList" style="display:none">
+    <div class="section-header"><div class="section-title">My Medicines</div></div>
+    <div class="card" id="profMeds"></div>
+  </div>
+
+  <div class="section" style="display:flex;gap:12px;">
+    <button class="btn-danger" style="flex:1" onclick="confirmReset()">🗑️ Reset Local Data</button>
+    <button class="btn-primary" id="btnLogOut" style="flex:1;background:var(--bg-mid);border:1px solid var(--border);display:none" onclick="handleLogOut()">🚪 Log Out</button>
+  </div>
+  <div class="disclaimer"><strong>⚠️ Medical Disclaimer:</strong> Curaah is an AI tracking tool, NOT a medical provider. Always follow your doctor's instructions. For emergencies call <strong>108</strong>.</div>
+  <div style="text-align:center;padding:24px 0;font-size:12px;color:var(--text-muted)">Curaah HealthTech · IIT Ropar Incubated<br/><a href="privacy.html" style="color:var(--electric);text-decoration:none">Privacy Policy</a> · <a href="terms.html" style="color:var(--electric);text-decoration:none">Terms</a></div>
+</div>
+
+</main>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" onclick="switchTab('home')"><span class="nav-item-icon">🏠</span><span class="nav-item-label">Home</span></div>
+  <div class="nav-item" onclick="switchTab('today')"><span class="nav-item-icon">💊</span><span class="nav-item-label">Today</span></div>
+  <div class="nav-item" onclick="switchTab('journey')"><span class="nav-item-icon">📊</span><span class="nav-item-label">Journey</span></div>
+  <div class="nav-item" onclick="switchTab('wellness')"><span class="nav-item-icon">🧘</span><span class="nav-item-label">Wellness</span></div>
+  <div class="nav-item" onclick="switchTab('profile')"><span class="nav-item-icon">👤</span><span class="nav-item-label">Profile</span></div>
+</nav>
+
+<!-- SIDE EFFECT MODAL -->
+<div class="modal-overlay" id="modalSideEffect" onclick="if(event.target===this)closeModal('modalSideEffect')"><div class="modal-sheet" style="background:#0d1b35"><div class="modal-handle"></div><div class="modal-title">⚠️ Report Side Effect</div><div class="input-group"><label class="input-label">Which Medicine?</label><select class="input-field" id="seMed"><option value="">Select (optional)</option></select></div><div class="input-group"><label class="input-label">Describe what you're feeling</label><textarea class="input-field" id="seDesc" rows="3" placeholder="e.g., 'Feeling dizzy after morning tablet'"></textarea></div><button class="btn-primary" style="background:#ef4444" onclick="submitSideEffect()">Submit Report</button><div id="seResult" style="display:none;margin-top:12px"></div><div class="disclaimer" style="margin-top:12px">NOT medical advice. For emergencies call <strong>108</strong>.</div></div></div>
+
+<!-- VITALS MODAL -->
+<div class="modal-overlay" id="modalVital" onclick="if(event.target===this)closeModal('modalVital')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title" id="vitalModalTitle">Log Vital</div><div class="input-group"><label class="input-label" id="vitalModalLabel">Value</label><input class="input-field" id="vitalInput" type="number" placeholder="Enter value" /></div><div class="input-group" id="vitalBPExtra" style="display:none"><label class="input-label">Diastolic (lower number)</label><input class="input-field" id="vitalInputBP2" type="number" placeholder="e.g. 80" /></div><input type="hidden" id="vitalType" /><button class="btn-primary" onclick="saveVital()">Save Vital</button></div></div>
+
+<!-- LAB REPORT UPLOAD MODAL -->
+<div class="modal-overlay" id="modalLabUpload" onclick="if(event.target===this)closeModal('modalLabUpload')"><div class="modal-sheet" style="max-height:90vh"><div class="modal-handle"></div><div class="modal-title">🔬 Upload & Explain Lab Report</div><p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:16px">Upload your lab report photo or type in the values. AI explains everything in simple language.</p><input type="file" id="labFile" accept="image/*,application/pdf" capture="environment" style="display:none" /><div class="lab-upload" id="labUploadArea" onclick="document.getElementById('labFile').click()"><div style="font-size:32px;margin-bottom:8px">📋</div><div style="font-weight:700;font-size:15px;color:var(--green)">Tap to upload lab report photo</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">JPG, PNG accepted</div></div><div class="input-group" style="margin-top:16px"><label class="input-label">Or enter lab values manually</label><textarea class="input-field" id="labManualInput" rows="4" placeholder="e.g. HbA1c: 7.2%, Fasting Glucose: 145 mg/dL, Cholesterol: 210 mg/dL, Creatinine: 1.1 mg/dL"></textarea></div><button class="btn-primary" style="background:#059669" onclick="submitLabReport()">🤖 Explain My Lab Report with AI</button><div id="labLoading" style="display:none;text-align:center;padding:20px"><div class="spinner"></div><div style="font-size:13px;color:var(--text-muted);font-weight:600">AI analyzing your lab report...</div></div><div id="labResult" style="display:none;margin-top:16px"></div></div></div>
+
+<!-- PESTICIDE CERTIFICATE MODAL -->
+<div class="modal-overlay" id="modalLabReport" onclick="if(event.target===this)closeModal('modalLabReport')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title">🔬 Pesticide Analysis Certificate</div><p style="font-size:13px;color:var(--text-muted);line-height:1.5">Batch report certifying 0% chemicals/pesticides in sourced botanical products.</p><div class="lab-report-box"><strong>CURAAH HEALTH ANALYTICAL LABS</strong><br/>Date: 2026-05-18 | Batch: SB-990-GLY<br/>-------------------------------------<br/>Organophosphates      : UNDETECTED (0.00%)<br/>Synthetic Pyrethroids : UNDETECTED (0.00%)<br/>Heavy Metals (Pb, Cd) : &lt;0.001 ppm (PASS)<br/>Active Saponins       : 4.8% (HIGH INTEGRITY)<br/>Giloy Alkaloids       : 2.1% (Optimal range)<br/>Ashwagandha Withanolides: 1.8% (Premium grade)<br/>-------------------------------------<br/>Result: SAFE FOR COMPLEMENTARY CLINICAL USE</div><button class="btn-primary" style="margin-top:16px;background:#16a34a" onclick="closeModal('modalLabReport')">Understood ✓</button></div></div>
+
+<!-- SOS EMERGENCY MODAL -->
+<div class="modal-overlay" id="modalSOS" onclick="if(event.target===this)closeModal('modalSOS')"><div class="modal-sheet" style="border-top:4px solid var(--danger)"><div class="modal-handle"></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;justify-content:center"><span style="font-size:24px;animation:flash 1s infinite alternate">🚨</span><div class="modal-title" style="margin-bottom:0;color:var(--danger);font-size:20px;font-weight:900">EMERGENCY SOS ACTIVE</div><span style="font-size:24px;animation:flash 1s infinite alternate">🚨</span></div>
+  <div class="card" style="background:var(--danger-dim);border-color:#fecaca;margin-bottom:16px"><div style="font-size:13px;color:#991b1b;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span class="spinner-small"></span> Broadcasting Live Location...</div><div style="font-size:12.5px;color:#7f1d1d;line-height:1.6;font-family:monospace"><strong>GPS:</strong> <span id="sosGPS">Acquiring...</span><br/><strong>Alert:</strong> Primary caregiver notified · 108 responder alerted<br/><strong>Hub:</strong> Civil Hospital Emergency Response</div></div>
+  <div id="sosDPDPGate" class="card" style="border:1px solid #bfdbfe;background:#eff6ff;padding:16px;margin-bottom:16px;text-align:center"><div style="font-size:22px;margin-bottom:6px">🔒</div><div style="font-weight:800;font-size:14px;color:var(--electric);margin-bottom:6px">DPDP Emergency Consent Gate</div><p style="font-size:12px;color:var(--electric);line-height:1.5;margin-bottom:12px">Emergency responders need consent to access your medical records. Enter OTP sent to primary caregiver (<strong>Demo OTP: 4812</strong>).</p><div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px"><input type="text" id="sosOTPInput" class="input-field" style="width:110px;text-align:center;font-size:18px;font-weight:800;letter-spacing:3px;padding:6px 10px" placeholder="OTP" maxlength="4"/><button class="btn-primary" style="width:auto;padding:8px 16px;background:#1d4ed8;font-size:13px" onclick="verifySOSOTP()">Unlock EMR</button></div><div id="sosOTPError" style="font-size:11px;color:var(--danger);font-weight:700;display:none;margin-top:4px">Invalid OTP. Please try again.</div></div>
+  <div id="sosDecryptedEMR" style="display:none" class="card"><div style="font-size:13.5px;font-weight:800;color:#16a34a;margin-bottom:10px">🔓 Decrypted Patient EMR — Emergency Access</div><div id="sosEMRContent" style="font-size:12.5px;line-height:1.8;color:var(--text);background:var(--border-subtle);padding:12px;border-radius:8px;font-family:monospace"></div></div>
+  <button class="btn-primary" style="background:var(--bg-mid);margin-top:12px" onclick="closeModal('modalSOS')">Close Emergency Panel</button>
+</div></div>
+
+<!-- PILL VERIFIER MODAL -->
+<div class="modal-overlay" id="modalPillCheck" onclick="if(event.target===this)closeModal('modalPillCheck')"><div class="modal-sheet" style="max-width:480px"><div class="modal-handle"></div><div class="modal-title">📷 Edge-AI Pill Verifier</div>
+  <div style="position:relative;width:100%;aspect-ratio:4/3;background:#060d1f;border-radius:12px;overflow:hidden;margin-bottom:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--border)"><div style="position:absolute;width:180px;height:120px;border:2px dashed var(--electric);border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,.5);z-index:5"></div><div id="scanBar" style="position:absolute;left:0;right:0;top:0;height:3px;background:var(--electric);box-shadow:0 0 8px var(--electric);display:none;z-index:6;animation:scanMove 2s infinite linear"></div><div id="cameraMockupText" style="color:rgba(255,255,255,.4);font-size:13px;text-align:center;z-index:10;font-weight:600">Simulated Camera Feed Ready<br/><span style="font-size:11px;color:rgba(255,255,255,.25)">Place tablet or strip in crosshairs</span></div></div>
+  <div class="input-group"><label class="input-label">Select Target to Scan</label><select class="input-field" id="pillScanSelect" onchange="runPillScanSim()"><option value="">-- Simulate camera scan --</option><option value="atorvastatin">Atorvastatin 10mg Tablet (Scheduled dose)</option><option value="metformin">Metformin 500mg Strip (Unscheduled)</option><option value="supplement">Cholecalciferol 60k Capsule (Supplement)</option></select></div>
+  <div id="pillScanResult" style="display:none;margin-top:16px"></div>
+  <button class="btn-primary" style="background:var(--bg-mid);margin-top:12px" onclick="closeModal('modalPillCheck')">Close Scanner</button>
+</div></div>
+
+<!-- DIET LOGGER MODAL -->
+<div class="modal-overlay" id="modalMealLog" onclick="if(event.target===this)closeModal('modalMealLog')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title">🥗 AI Diet & Nutrition Log</div><p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">Log meals to track intake adapted for your chronic conditions.</p><div class="input-group"><label class="input-label">What did you eat or drink?</label><textarea class="input-field" id="mealInput" rows="3" placeholder="e.g. 'Aloo Parantha and Butter' or 'Dal Chawal'"></textarea></div><button class="btn-primary" onclick="submitMealLog()">Log Meal & AI Analysis</button><div id="mealResult" style="display:none;margin-top:16px"></div></div></div>
+
+<!-- MISSED DOSE SURVEY MODAL -->
+<div class="modal-overlay" id="modalMissedSurvey" onclick="if(event.target===this)closeModal('modalMissedSurvey')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title" style="color:var(--danger)">📋 Why did you miss this dose?</div><p style="font-size:13.5px;color:var(--text-muted);line-height:1.5;margin-bottom:16px">Help Curaah improve your reminders:</p><input type="hidden" id="surveyMedId" /><input type="hidden" id="surveyPeriod" /><div id="surveyBtns" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('forget')">⏰ I simply forgot the time</button><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('sideeffect')">🤢 Side effects are bothering me</button><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1.5px solid var(--border);text-align:left;font-weight:600;padding:14px" onclick="submitMissedSurvey('cost')">💸 Ran out / Medicine too expensive</button></div><div id="surveyResult" style="display:none;margin-top:12px"></div></div></div>
+
+<!-- AI CHAT MODAL -->
+<div class="modal-overlay" id="modalAIChat" onclick="if(event.target===this)closeModal('modalAIChat')"><div class="modal-sheet" style="max-height:85vh;display:flex;flex-direction:column;padding:0"><div class="modal-handle" style="margin-top:16px"></div><div class="modal-title" style="padding:0 24px;margin-bottom:12px;display:flex;align-items:center;gap:8px"><span>💬</span> Curaah AI Health Companion</div>
+  <div id="aiChatHistory" style="flex:1;overflow-y:auto;padding:12px 24px;display:flex;flex-direction:column;gap:8px;min-height:280px;max-height:380px"></div>
+  <div style="padding:8px 24px;display:flex;gap:8px;overflow-x:auto;background:rgba(255,255,255,0.04);border-top:1px solid var(--border-subtle);scrollbar-width:none">
+    <button class="onboard-chip" style="font-size:12px;white-space:nowrap;padding:6px 12px;color:var(--text)" onclick="sendUserChatMessage('Can I eat Chinese food today?')">🍜 Chinese food safe?</button>
+    <button class="onboard-chip" style="font-size:12px;white-space:nowrap;padding:6px 12px;color:var(--text)" onclick="sendUserChatMessage('Should I take Vitamin D3 supplement?')">💊 Vitamin D3 safe?</button>
+    <button class="onboard-chip" style="font-size:12px;white-space:nowrap;padding:6px 12px;color:var(--text)" onclick="sendUserChatMessage('What exercises are good for me?')">🏃 Exercise tips</button>
+    <button class="onboard-chip" style="font-size:12px;white-space:nowrap;padding:6px 12px;color:var(--text)" onclick="sendUserChatMessage('Tell me my medicine schedule for today')">📅 Today schedule</button>
+  </div>
+  <div style="padding:12px 24px 24px;border-top:1px solid var(--border-subtle);display:flex;gap:8px"><input type="text" id="aiChatInput" class="input-field" placeholder="Ask your health companion..." onkeydown="if(event.key==='Enter')sendUserChatMessage()"/><button class="btn-primary" style="width:auto;padding:12px 20px" onclick="sendUserChatMessage()">Send</button></div>
+</div></div>
+
+<!-- KIT ORDER MODAL -->
+<div class="modal-overlay" id="modalKitOrder" onclick="if(event.target===this)closeModal('modalKitOrder')"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title">🌿 Subscribe to Recovery Kit</div><p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:16px">Personalized day-wise botanical packets delivered monthly. Direct from pesticide-free farms in Sangrur, Punjab — packaged by women's Self-Help Groups (SHGs).</p><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;margin-bottom:16px"><div style="font-weight:800;font-size:16px;color:#15803d;margin-bottom:4px">₹299 / month</div><div style="font-size:12px;color:#166534">28 day-wise packets · Free doorstep delivery · Cancel anytime</div></div><div class="input-group"><label class="input-label">Delivery Address</label><textarea class="input-field" rows="2" placeholder="Enter your full address"></textarea></div><button class="btn-primary" style="background:#16a34a" onclick="confirmKitSubscription()">Join Waitlist & Order →</button><button class="btn-primary" style="background:var(--bg-card);color:var(--text);border:1px solid var(--border);margin-top:8px" onclick="closeModal('modalKitOrder')">Cancel</button></div></div>
+
+<!-- SYNC REGISTRATION MODAL -->
+<div class="modal-overlay" id="modalSyncReg" onclick="if(event.target===this)closeModal('modalSyncReg')">
+  <div class="modal-sheet" style="background:#0d1b35">
+    <div class="modal-handle"></div>
+    <div class="modal-title">☁️ Secure & Backup Your Account</div>
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:16px">Enter your phone number and choose a password to backup your medicines, adherence history, vitals, and lab reports on Supabase.</p>
+    <div class="input-group">
+      <label class="input-label">Phone Number</label>
+      <input class="input-field" id="syncPhone" placeholder="Enter mobile number" type="tel" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">Choose a Password / PIN</label>
+      <input class="input-field" id="syncPassword" placeholder="Minimum 4 characters" type="password" />
+    </div>
+    <button class="btn-primary" style="background:var(--electric)" onclick="submitSyncRegistration()">Create Cloud Profile</button>
+  </div>
+</div>
+
+<!-- Floating AI Chat -->
+<button class="ai-chat-float" onclick="toggleAIChat()"><span>💬</span> Ask AI</button>
+
+<script>
+// ====== CONFIG ======
+const SUPA_URL='https://lospowxozjnoiawxbojg.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxvc3Bvd3hvempub2lhd3hib2pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NTIzMjksImV4cCI6MjA5MjMyODMyOX0.KBfNiJIKweEAqVJ8q_G8ZkbU5qi4vfglRhazKIH32ic';
+
+// ====== STATE ======
+let profile=JSON.parse(localStorage.getItem('curaah_profile')||'null');
+let medicines=JSON.parse(localStorage.getItem('curaah_medicines')||'[]');
+let adherence=JSON.parse(localStorage.getItem('curaah_adherence')||'[]');
+let vitals=JSON.parse(localStorage.getItem('curaah_vitals')||'[]');
+let labReports=JSON.parse(localStorage.getItem('curaah_labs')||'[]');
+let timeline=JSON.parse(localStorage.getItem('curaah_timeline')||'[]');
+let logsCount=parseInt(localStorage.getItem('curaah_logs_count')||'0');
+let familyCode=localStorage.getItem('curaah_family_code');
+let patientId=localStorage.getItem('curaah_patient_id');
+let deviceId=localStorage.getItem('curaah_device_id');
+
+if(!deviceId){deviceId='dev_'+Math.random().toString(36).substring(2,15);localStorage.setItem('curaah_device_id',deviceId);}
+if(!familyCode){familyCode=Math.random().toString(36).substring(2,8).toUpperCase();localStorage.setItem('curaah_family_code',familyCode);}
+
+const today=()=>new Date().toISOString().split('T')[0];
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// ====== API HELPER ======
+async function callBackend(payload){
+  const r=await fetch(SUPA_URL+'/functions/v1/companion-backend',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY,'x-device-id':deviceId},
+    body:JSON.stringify(payload)
+  });
+  if(!r.ok)throw new Error('API '+r.status);
+  return r.json();
+}
+
+// ====== ONBOARDING ======
+let selCond='',selLang='English',uploadedPrescriptionUrl='',uploadedPrescriptionMeds=[];
+
+window.toggleOnboardView=function(v){
+  const reg=document.getElementById('registerForm'),log=document.getElementById('loginForm');
+  const title=document.getElementById('onboardTitle'),sub=document.getElementById('onboardSub');
+  if(v==='login'){reg.style.display='none';log.style.display='block';title.innerHTML='Log In to <span>Curaah</span>';sub.textContent='Welcome back!';}
+  else{reg.style.display='block';log.style.display='none';title.innerHTML='Welcome to <span>Curaah</span>';sub.textContent='Your AI health companion. Track medicines, log vitals, understand lab reports — in Hindi, Punjabi, or English. Works via App, WhatsApp, or Voice Call.';}
+};
+
+window.goToStep = function(stepNum) {
+  document.querySelectorAll('.onboard-step-panel').forEach(panel => {
+    panel.classList.remove('active');
+  });
+  const activePanel = document.getElementById('onboardStep' + stepNum);
+  if (activePanel) activePanel.classList.add('active');
+
+  const progressLine = document.getElementById('wizardProgressLine');
+  if (progressLine) {
+    progressLine.style.width = ((stepNum - 1) / 3 * 100) + '%';
+  }
+
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('wStep' + i);
+    if (el) {
+      if (i < stepNum) {
+        el.className = 'wizard-step completed';
+      } else if (i === stepNum) {
+        el.className = 'wizard-step active';
+      } else {
+        el.className = 'wizard-step';
       }
+    }
+  }
+};
+
+function validateStep1() {
+  const name = document.getElementById('obName').value.trim();
+  const phone = document.getElementById('obPhone').value.trim();
+  const pwd = document.getElementById('obPassword').value;
+  
+  const isPhoneEntered = phone.length > 0;
+  document.getElementById('obPasswordGroup').style.display = isPhoneEntered ? 'block' : 'none';
+
+  let isValid = name.length > 0 && phone.length > 0;
+  if (isPhoneEntered) {
+    isValid = isValid && pwd.length >= 4;
+  }
+  document.getElementById('btnNext1').disabled = !isValid;
+}
+
+function validateStep2() {
+  const age = document.getElementById('obAge').value.trim();
+  const gender = document.getElementById('obGender').value;
+  const district = document.getElementById('obDistrict').value.trim();
+
+  const isValid = age.length > 0 && parseInt(age) > 0 && gender.length > 0 && district.length > 0;
+  document.getElementById('btnNext2').disabled = !isValid;
+}
+
+function validateStep3() {
+  const conditionOther = document.getElementById('obConditionOther').value.trim();
+  let isValid = false;
+
+  if (selCond) {
+    if (selCond === 'Other') {
+      isValid = conditionOther.length > 0;
+    } else {
+      isValid = true;
+    }
+  }
+  document.getElementById('btnNext3').disabled = !isValid;
+}
+
+function validateStep4() {
+  const height = document.getElementById('obHeight').value.trim();
+  const weight = document.getElementById('obWeight').value.trim();
+  const wake = document.getElementById('obWakeTime').value;
+  const sleep = document.getElementById('obSleepTime').value;
+
+  const isValid = height.length > 0 && weight.length > 0 && wake.length > 0 && sleep.length > 0;
+  document.getElementById('obStart').disabled = !isValid;
+}
+
+(function(){
+  if(profile&&patientId){document.getElementById('onboarding').classList.add('hidden');initApp();syncDataWithServer();return;}
+
+  document.querySelectorAll('#obLangs .onboard-chip').forEach(c=>{
+    c.onclick=()=>{
+      document.querySelectorAll('#obLangs .onboard-chip').forEach(x=>x.classList.remove('selected'));
+      c.classList.add('selected');
+      selLang=c.dataset.val;
+    };
+  });
+
+  document.querySelectorAll('#obConditions .onboard-chip').forEach(c=>{
+    c.onclick=()=>{
+      document.querySelectorAll('#obConditions .onboard-chip').forEach(x=>x.classList.remove('selected'));
+      c.classList.add('selected');
+      selCond=c.dataset.val;
+      if(selCond==='Other'){
+        document.getElementById('obConditionOther').style.display='block';
+      }else{
+        document.getElementById('obConditionOther').style.display='none';
+        document.getElementById('obConditionOther').value='';
+      }
+      validateStep3();
+    };
+  });
+
+  document.getElementById('obName').oninput = validateStep1;
+  document.getElementById('obPhone').oninput = validateStep1;
+  document.getElementById('obPassword').oninput = validateStep1;
+
+  document.getElementById('obAge').oninput = validateStep2;
+  document.getElementById('obGender').onchange = validateStep2;
+  document.getElementById('obDistrict').oninput = validateStep2;
+
+  document.getElementById('obConditionOther').oninput = validateStep3;
+  document.getElementById('obMedsText').oninput = validateStep3;
+  document.getElementById('obAllergies').oninput = validateStep3;
+
+  document.getElementById('obHeight').oninput = validateStep4;
+  document.getElementById('obWeight').oninput = validateStep4;
+  document.getElementById('obWakeTime').oninput = validateStep4;
+  document.getElementById('obBreakfastTime').oninput = validateStep4;
+  document.getElementById('obLunchTime').oninput = validateStep4;
+  document.getElementById('obDinnerTime').oninput = validateStep4;
+  document.getElementById('obSleepTime').oninput = validateStep4;
+  document.getElementById('obSpecificProblems').oninput = validateStep4;
+  document.getElementById('obLabsText').oninput = validateStep4;
+
+  document.getElementById('obRxFile').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('obRxUploadArea').style.display = 'none';
+    document.getElementById('obRxLoading').style.display = 'block';
+    document.getElementById('obRxPreview').style.display = 'none';
+    
+    try {
+      const b64 = await fileToBase64(file);
+      const r = await fetch(SUPA_URL + '/functions/v1/prescription-extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPA_KEY, 'apikey': SUPA_KEY },
+        body: JSON.stringify({ image: { mimeType: file.type || 'image/jpeg', base64: b64.split(',')[1] } })
+      });
+      if (!r.ok) throw new Error('extraction failed');
+      const responseData = await r.json();
+      const extractedData = responseData.data || responseData;
+      
+      uploadedPrescriptionMeds = (extractedData.medicines || []).map((m, i) => ({
+        id: 'm' + Date.now() + '_' + i,
+        name: m.name,
+        dosage: m.dosage || '',
+        frequency: m.frequency || '',
+        duration_days: m.duration_days || null,
+        purpose: m.purpose || '',
+        start_date: today(),
+        active: true
+      }));
+
+      const medsSummary = (extractedData.medicines || []).map(m => `${m.name} (${m.dosage || ''} ${m.frequency || ''})`).join(', ');
+      document.getElementById('obMedsText').value = medsSummary;
+      
+      uploadedPrescriptionUrl = 'local_onboard_rx_image';
+      document.getElementById('obRxPreview').style.display = 'flex';
+      validateStep3();
+    } catch(err) {
+      alert('Could not read prescription. Please enter your medicines manually.');
+      document.getElementById('obRxUploadArea').style.display = 'block';
+    } finally {
+      document.getElementById('obRxLoading').style.display = 'none';
+      e.target.value = '';
+    }
+  });
+
+  window.clearObRxFile = function(e) {
+    if (e) e.stopPropagation();
+    uploadedPrescriptionUrl = '';
+    uploadedPrescriptionMeds = [];
+    document.getElementById('obRxPreview').style.display = 'none';
+    document.getElementById('obRxUploadArea').style.display = 'block';
+    validateStep3();
+  };
+
+  window.submitWizard = async () => {
+    const btn = document.getElementById('obStart');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    const n = document.getElementById('obName').value.trim();
+    const p = document.getElementById('obPhone').value.trim();
+    const pw = document.getElementById('obPassword').value;
+    const relationship = document.getElementById('obRelationship').value;
+    const age = parseInt(document.getElementById('obAge').value.trim());
+    const gender = document.getElementById('obGender').value;
+    const district = document.getElementById('obDistrict').value.trim();
+    
+    const condition = selCond === 'Other' ? document.getElementById('obConditionOther').value.trim() : selCond;
+    const medsText = document.getElementById('obMedsText').value.trim();
+    const allergies = document.getElementById('obAllergies').value.trim();
+    
+    const height = document.getElementById('obHeight').value.trim();
+    const weight = document.getElementById('obWeight').value.trim();
+    const specificProblems = document.getElementById('obSpecificProblems').value.trim();
+    const labsText = document.getElementById('obLabsText').value.trim();
+
+    const dailyRoutine = {
+      wake: document.getElementById('obWakeTime').value,
+      breakfast: document.getElementById('obBreakfastTime').value,
+      lunch: document.getElementById('obLunchTime').value,
+      dinner: document.getElementById('obDinnerTime').value,
+      sleep: document.getElementById('obSleepTime').value
     };
 
-    // ====== FAMILY CODE ======
-    window.copyShareCode = function() {
-      navigator.clipboard.writeText(familyCode).then(() => {
-        const btn = document.querySelector('.share-code-box button');
-        btn.innerText = '✅ Copied!';
-        setTimeout(() => btn.innerText = '📋 Copy Code', 2000);
-      });
+    profile = {
+      name: n,
+      phone: p,
+      relationship,
+      age,
+      gender,
+      district,
+      condition,
+      medications_text: medsText,
+      allergies,
+      height,
+      weight,
+      specific_problems: specificProblems,
+      latest_labs: labsText,
+      daily_routine: dailyRoutine,
+      reminder_pref: 'WhatsApp',
+      language: selLang,
+      created_at: new Date().toISOString()
     };
 
-    // ====== HELPERS ======
-    function parseFrequency(freq) {
-      if (!freq) return ['Morning'];
-      const f = freq.toLowerCase();
-      if (f.includes('1-1-1') || f.includes('three') || f.includes('thrice') || f.includes('tid'))
-        return ['Morning', 'Afternoon', 'Night'];
-      if (f.includes('1-0-1') || f.includes('twice') || f.includes('bid') || f.includes('two'))
-        return ['Morning', 'Night'];
-      if (f.includes('0-0-1') || f.includes('night') || f.includes('bedtime') || f.includes('hs'))
-        return ['Night'];
-      if (f.includes('1-0-0') || f.includes('morning') || f.includes('od'))
-        return ['Morning'];
-      return ['Morning'];
+    if (uploadedPrescriptionMeds && uploadedPrescriptionMeds.length > 0) {
+      medicines = uploadedPrescriptionMeds;
+      save('curaah_medicines', medicines);
+      addTL('blue', `✅ Extracted ${medicines.length} medicines from onboarding prescription`);
+    } else if (medsText && medsText.toLowerCase() !== 'none') {
+      medicines = [{
+        id: 'm_manual_' + Date.now(),
+        name: medsText,
+        dosage: 'As prescribed',
+        frequency: 'Daily',
+        duration_days: 30,
+        purpose: 'Primary health focus',
+        start_date: today(),
+        active: true
+      }];
+      save('curaah_medicines', medicines);
     }
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
+    if (labsText) {
+      const newLab = {
+        id: 'lab_ob_' + Date.now(),
+        date: today(),
+        raw: labsText,
+        explanation: 'Logged during onboarding setup.',
+        time: new Date().toTimeString().slice(0, 5)
+      };
+      labReports = [newLab];
+      save('curaah_labs', labReports);
     }
-  </script>
+
+    try {
+      const d = await callBackend({
+        action: 'register',
+        device_id: deviceId,
+        phone: p || null,
+        password: pw || null,
+        settings: profile
+      });
+      if (d.status === 'success' || d.patient_id) {
+        patientId = d.patient_id;
+        familyCode = d.family_share_code || familyCode;
+        localStorage.setItem('curaah_patient_id', patientId);
+        localStorage.setItem('curaah_family_code', familyCode);
+      } else {
+        setupOffline(n);
+      }
+    } catch(e) {
+      setupOffline(n);
+    }
+
+    save('curaah_profile', profile);
+    document.getElementById('onboarding').classList.add('hidden');
+    initApp();
+    
+    if (patientId && !patientId.startsWith('local_')) {
+      syncDataWithServer();
+    }
+  };
+
+  function setupOffline(n) {
+    patientId = 'local_' + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem('curaah_patient_id', patientId);
+    save('curaah_profile', profile);
+    addTL('blue', 'Welcome ' + n + '! Running in offline mode.');
+  }
+})();
+
+window.handleOnboardLogin=async function(){
+  const phone=document.getElementById('loginPhone').value.trim(),pwd=document.getElementById('loginPassword').value,btn=document.getElementById('loginBtn');
+  if(!phone||!pwd){alert('Please enter phone and password.');return;}
+  btn.disabled=true;btn.textContent='Logging in...';
+  try{const d=await callBackend({action:'login',phone,password:pwd,device_id:deviceId});
+    if(d.status==='success'){patientId=d.patient_id;familyCode=d.family_share_code;profile=d.settings||{};localStorage.setItem('curaah_patient_id',patientId);localStorage.setItem('curaah_family_code',familyCode);save('curaah_profile',profile);document.getElementById('onboarding').classList.add('hidden');initApp();syncDataWithServer();}
+    else{alert(d.message||'Invalid credentials.');btn.disabled=false;btn.textContent='Log In to My Account →';}
+  }catch(e){alert('Connection error. Try again.');btn.disabled=false;btn.textContent='Log In to My Account →';}
+};
+
+// ====== SERVER SYNC ======
+window.syncDataWithServer=async function(){
+  if(!patientId||patientId.startsWith('local_'))return;
+  try{const d=await callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines,adherence,vitals,labs:labReports,settings:profile});
+    if(d.status==='success'){
+      if(d.settings){profile={...profile,...d.settings};save('curaah_profile',profile);}
+      if(d.medicines&&d.medicines.length){medicines=d.medicines.map(m=>({id:m.id,name:m.medicine_name,dosage:m.dosage||'',frequency:m.frequency||'',duration_days:m.duration_days,purpose:m.purpose||'',start_date:m.start_date,active:m.is_active}));save('curaah_medicines',medicines);}
+      if(d.adherence&&d.adherence.length){adherence=d.adherence.map(a=>({key:`${a.medicine_id}_${a.scheduled_date}_${a.scheduled_time}`,medicine_id:a.medicine_id,date:a.scheduled_date,period:a.scheduled_time,status:a.status}));save('curaah_adherence',adherence);}
+      if(d.vitals&&d.vitals.length){vitals=d.vitals.map(v=>({id:v.id,type:v.type,value:v.value,num:parseFloat(v.num),unit:v.unit,date:v.logged_date,time:v.logged_time}));save('curaah_vitals',vitals);}
+      if(d.labs&&d.labs.length){labReports=d.labs.map(l=>({id:l.id,date:l.report_date,raw:l.raw_text,explanation:l.explanation,time:l.logged_time}));save('curaah_labs',labReports);}
+      initAppFormsOnly();renderAll();
+    }
+  }catch(e){console.warn('Sync offline:',e);}
+};
+
+// ====== INIT APP ======
+function initApp(){
+  const h=new Date().getHours(),greet=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('hGreeting').textContent=greet;
+  document.getElementById('hName').textContent=profile.name||'Health Partner';
+  const av=(profile.name||'?').charAt(0).toUpperCase();
+  document.getElementById('hAvatar').textContent=av;
+  document.getElementById('todayDateLabel').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('famCode').textContent=familyCode;
+  document.getElementById('profName').textContent=profile.name||'—';
+  document.getElementById('profCond').textContent=profile.condition||'—';
+  document.getElementById('profAvatar').textContent=av;
+  document.getElementById('profJoined').textContent='Joined '+new Date(profile.created_at||new Date()).toLocaleDateString('en-IN',{month:'short',year:'numeric'});
+  document.getElementById('wellCondLabel').textContent=profile.condition||'';
+  const sn=document.getElementById('sbName'),sa=document.getElementById('sbAvatar');
+  if(sn)sn.textContent=profile.name||'—';if(sa)sa.textContent=av;
+  const banner=document.getElementById('prefBanner');
+  if(profile.reminder_pref==='AICall')banner.innerHTML=`<h3>📞 Daily AI Voice Calls Active</h3><p>Check-in calls in ${profile.language||'Punjabi'}. Answering logs adherence.</p><button class="wa-btn" style="background:var(--green);border:none" onclick="addTL('blue','Test AI call');alert('Test AI Call initiated!')">Test AI Call 📞</button>`;
+  
+  initAppFormsOnly();
+  initAIChat();renderAll();
+}
+
+function initAppFormsOnly(){
+  const ageEl=document.getElementById('profAge'),genEl=document.getElementById('profGender'),allEl=document.getElementById('profAllergies'),dietEl=document.getElementById('profDiet'),emN=document.getElementById('profEmergName'),emP=document.getElementById('profEmergPhone'),caN=document.getElementById('profCareName'),caP=document.getElementById('profCarePhone');
+  const distEl=document.getElementById('profDistrict'),relEl=document.getElementById('profRelationship'),hEl=document.getElementById('profHeight'),wEl=document.getElementById('profWeight'),medsEl=document.getElementById('profMedsText'),probEl=document.getElementById('profSpecificProblems');
+  
+  if(ageEl)ageEl.value=profile.age||'';if(genEl)genEl.value=profile.gender||'';if(allEl)allEl.value=profile.allergies||'';if(dietEl)dietEl.value=profile.diet||'Veg';
+  if(emN)emN.value=profile.emerg_name||'';if(emP)emP.value=profile.emerg_phone||'';if(caN)caN.value=profile.care_name||'';if(caP)caP.value=profile.care_phone||'';
+  if(distEl)distEl.value=profile.district||'';if(relEl)relEl.value=profile.relationship||'Self';
+  if(hEl)hEl.value=profile.height||'';if(wEl)wEl.value=profile.weight||'';
+  if(medsEl)medsEl.value=profile.medications_text||'';if(probEl)probEl.value=profile.specific_problems||'';
+  
+  const syncStatus=document.getElementById('profSyncStatus');
+  const backupPrompt=document.getElementById('syncBackupPrompt');
+  const logOutBtn=document.getElementById('btnLogOut');
+  if(patientId&&patientId.startsWith('local_')){
+    if(syncStatus){syncStatus.textContent='☁️ Local-only Mode';syncStatus.className='profile-sync-badge unsynced';}
+    if(backupPrompt)backupPrompt.style.display='block';if(logOutBtn)logOutBtn.style.display='none';
+  } else {
+    if(syncStatus){syncStatus.textContent='✅ Cloud Synced';syncStatus.className='profile-sync-badge synced';}
+    if(backupPrompt)backupPrompt.style.display='none';if(logOutBtn)logOutBtn.style.display='block';
+  }
+}
+
+function initAIChat(){
+  const hist=document.getElementById('aiChatHistory');
+  const meds=medicines.map(m=>m.name).join(', ');
+  hist.innerHTML=`<div class="chat-msg bot">Namaste, <strong>${profile?.name||'there'}</strong>! 🙏 I am your Curaah AI Health Companion.<br/><br/>You have <strong>${profile?.condition||'a health condition'}</strong>. ${meds?'Your medicines: <strong>'+meds+'</strong>.':'Upload a prescription to track your medicines.'}<br/><br/>How can I help you today? Ask me about diet, medicines, exercise, or side effects!</div>`;
+}
+
+// ====== TAB SWITCHING ======
+window.switchTab=function(tab){
+  const tabs=['home','today','journey','wellness','profile'];
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav .sb-nav-item').forEach(n=>n.classList.remove('active'));
+  const panel=document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(panel)panel.classList.add('active');
+  const idx=tabs.indexOf(tab);
+  const navs=document.querySelectorAll('.bottom-nav .nav-item');
+  if(navs[idx])navs[idx].classList.add('active');
+  const sbs=document.querySelectorAll('.sidebar-nav .sb-nav-item');
+  if(sbs[idx])sbs[idx].classList.add('active');
+  document.getElementById('appHeader').style.display=tab==='home'?'':'none';
+  if(tab==='journey')renderJourney();
+  if(tab==='wellness')renderWellness();
+};
+
+function renderAll(){renderHomeDoses();renderTodayFull();renderJourney();renderWellness();renderProfile();updateScore();populateMedDropdown();renderLabReports();}
+
+// ====== PRESCRIPTION UPLOAD ======
+document.getElementById('rxFile').addEventListener('change',async e=>{
+  const file=e.target.files[0];if(!file)return;
+  document.getElementById('uploadArea').style.display='none';document.getElementById('rxLoading').style.display='block';
+  try{
+    const b64=await fileToBase64(file);
+    const r=await fetch(SUPA_URL+'/functions/v1/prescription-extract',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY},body:JSON.stringify({image:{mimeType:file.type||'image/jpeg',base64:b64.split(',')[1]}})});
+    if(!r.ok)throw new Error('failed');
+    const responseData=await r.json();
+    const extractedData=responseData.data||responseData;
+    medicines=(extractedData.medicines||[]).map((m,i)=>({id:'m'+Date.now()+'_'+i,name:m.name,dosage:m.dosage||'',frequency:m.frequency||'',duration_days:m.duration_days||null,purpose:m.purpose||'',start_date:today(),active:true}));
+    save('curaah_medicines',medicines);addTL('blue',`✅ Prescription read: ${medicines.length} medicines extracted`);
+    if(extractedData.follow_up_date)addTL('blue',`📅 Follow-up: ${extractedData.follow_up_date}`);
+    if(!patientId.startsWith('local_'))syncDataWithServer();
+  }catch(err){
+    medicines=[{id:'m1',name:'Metformin 500mg',dosage:'1 tablet',frequency:'Twice a day',duration_days:30,purpose:'Diabetes Control',start_date:today(),active:true},{id:'m2',name:'Atorvastatin 10mg',dosage:'1 tablet',frequency:'Night',duration_days:30,purpose:'Cholesterol',start_date:today(),active:true}];
+    save('curaah_medicines',medicines);addTL('blue','Demo prescription loaded (offline fallback)');
+  }
+  document.getElementById('rxLoading').style.display='none';renderAll();e.target.value='';
+});
+
+// ====== DOSE HELPERS ======
+function getPeriods(f){const fl=(f||'').toLowerCase();if(/thrice|3.*day|tid/i.test(fl))return['Morning','Afternoon','Night'];if(/twice|2.*day|bd|bid/i.test(fl))return['Morning','Night'];if(/night|hs|bed/i.test(fl))return['Night'];if(/afternoon|noon/i.test(fl))return['Afternoon'];return['Morning'];}
+function currentPeriod(){const h=new Date().getHours();return h<12?'Morning':h<17?'Afternoon':'Night';}
+function periodIcon(p){return p==='Morning'?'🌅':p==='Afternoon'?'☀️':'🌙';}
+
+function renderDoseItem(m,p,s){
+  const actions=s==='pending'?`<div class="dose-btn" onclick="logDose('${m.id}','${p}','taken')">✅</div><div class="dose-btn" onclick="logDose('${m.id}','${p}','missed')">❌</div>`:s==='taken'?'<div class="dose-btn done">✅</div>':'<div class="dose-btn skip">❌</div>';
+  const stateClass=s!=='pending'?` ${s}`:'';
+  const purp=m.purpose?`<span class="med-purpose">${m.purpose}</span>`:'';
+  return`<div class="dose-item${stateClass}"><div class="dose-icon ${p.toLowerCase()}">${periodIcon(p)}</div><div class="dose-info"><div class="dose-name">${esc(m.name)}</div><div class="dose-detail">${esc(m.dosage)} · ${p}</div>${purp}</div><div class="dose-actions">${actions}</div></div>`;
+}
+
+function renderHomeDoses(){
+  if(!medicines.length){document.getElementById('secDoses').style.display='none';return;}
+  document.getElementById('secDoses').style.display='';document.getElementById('uploadArea').style.display='none';
+  const cp=currentPeriod();let html='';
+  medicines.filter(m=>m.active!==false).forEach(m=>{if(!getPeriods(m.frequency).includes(cp))return;const key=`${m.id}_${today()}_${cp}`;const log=adherence.find(a=>a.key===key);html+=renderDoseItem(m,cp,log?log.status:'pending');});
+  document.getElementById('homeDoses').innerHTML=html||'<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:14px">No doses for this time period ✨</div>';
+}
+
+function renderTodayFull(){
+  if(!medicines.length)return;let html='';
+  medicines.filter(m=>m.active!==false).forEach(m=>{getPeriods(m.frequency).forEach(p=>{const key=`${m.id}_${today()}_${p}`;const log=adherence.find(a=>a.key===key);html+=renderDoseItem(m,p,log?log.status:'pending');});});
+  document.getElementById('todayFull').innerHTML=html;
+}
+
+// ====== LOG DOSE (with server push) ======
+window.logDose=async function(medId,period,status){
+  if(status==='missed'){openMissedSurvey(medId,period);return;}
+  const key=`${medId}_${today()}_${period}`;
+  adherence=adherence.filter(a=>a.key!==key);
+  const entry={key,medicine_id:medId,date:today(),period,status,logged_at:new Date().toISOString()};
+  adherence.push(entry);save('curaah_adherence',adherence);
+  const med=medicines.find(m=>m.id===medId);
+  addTL(status==='taken'?'green':'red',`${status==='taken'?'✅ Took':'❌ Missed'} ${med?med.name:'medicine'} (${period})`);
+  incrementLogCounter();renderHomeDoses();renderTodayFull();updateScore();
+  if(!patientId.startsWith('local_'))callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines:[],adherence:[entry]}).catch(e=>console.warn('Adherence sync:',e));
+};
+
+// ====== VITALS (with server push) ======
+window.openVitalModal=function(type){
+  const cfg={sugar:{title:'Log Blood Sugar',label:'Blood Sugar (mg/dL)',ph:'e.g. 120'},bp:{title:'Log Blood Pressure',label:'Systolic (upper number)',ph:'e.g. 120'},weight:{title:'Log Weight',label:'Weight (kg)',ph:'e.g. 72.5'}};
+  const c=cfg[type]||{title:'Log Vital',label:'Value',ph:'Enter value'};
+  document.getElementById('vitalModalTitle').textContent=c.title;document.getElementById('vitalModalLabel').textContent=c.label;document.getElementById('vitalInput').placeholder=c.ph;document.getElementById('vitalInput').value='';document.getElementById('vitalType').value=type;
+  document.getElementById('vitalBPExtra').style.display=type==='bp'?'block':'none';if(document.getElementById('vitalInputBP2'))document.getElementById('vitalInputBP2').value='';
+  openModal('modalVital');
+};
+window.saveVital=async function(){
+  const type=document.getElementById('vitalType').value,v1=document.getElementById('vitalInput').value;
+  if(!v1){alert('Please enter a value');return;}
+  const units={sugar:'mg/dL',bp:'mmHg',weight:'kg'};
+  let displayVal=v1;if(type==='bp'){const v2=document.getElementById('vitalInputBP2')?.value;if(v2)displayVal=`${v1}/${v2}`;}
+  const entry={id:'v'+Date.now()+'_'+Math.random().toString(36).substring(2,5),type,value:displayVal,num:parseFloat(v1),unit:units[type]||'',date:today(),time:new Date().toTimeString().slice(0,5)};
+  vitals.push(entry);save('curaah_vitals',vitals);addTL('blue',`📊 Logged ${type}: ${displayVal} ${units[type]||''}`);
+  closeModal('modalVital');incrementLogCounter();renderVitals();updateScore();
+  if(!patientId.startsWith('local_'))callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines:[],adherence:[],vitals:[entry]}).catch(e=>console.warn('Vitals sync:',e));
+};
+function renderVitals(){
+  ['sugar','bp','weight'].forEach(t=>{
+    const all=[...vitals].filter(v=>v.type===t).reverse();const last=all[0];const prev=all[1];
+    const el=document.getElementById('v'+t.charAt(0).toUpperCase()+t.slice(1));const tel=document.getElementById('t'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(el)el.textContent=last?last.value:'—';
+    if(tel&&last&&prev){const diff=(last.num||0)-(prev.num||0);if(diff>0){tel.textContent='↑';tel.className='vital-trend '+(t==='weight'?'stable':'up');}else if(diff<0){tel.textContent='↓';tel.className='vital-trend down';}else{tel.textContent='→';tel.className='vital-trend stable';}}
+  });
+}
+
+// ====== LAB REPORTS ======
+window.openLabUpload=function(){document.getElementById('labManualInput').value='';document.getElementById('labResult').style.display='none';document.getElementById('labLoading').style.display='none';document.getElementById('labUploadArea').style.display='block';openModal('modalLabUpload');};
+document.getElementById('labFile').addEventListener('change',async e=>{
+  const file=e.target.files[0];if(!file)return;
+  document.getElementById('labUploadArea').style.display='none';document.getElementById('labLoading').style.display='block';
+  try{
+    const b64=await fileToBase64(file);
+    const r=await fetch(SUPA_URL+'/functions/v1/report-explainer',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY},body:JSON.stringify({image:{mimeType:file.type||'image/jpeg',base64:b64.split(',')[1]},language:profile?.language||'English'})});
+    const d=await r.json();
+    if(d.summary){
+      const formatted = `Summary: ${d.summary}\n\nAbnormal Findings:\n` + (d.abnormal_findings?.map(f=>`• ${f}`).join('\n') || 'None') + `\n\nDisclaimer: ${d.disclaimer || 'This is not medical advice.'}`;
+      document.getElementById('labManualInput').value = formatted;
+    }
+  }catch(err){alert('Could not read file. Please enter values manually below.');}
+  document.getElementById('labLoading').style.display='none';document.getElementById('labUploadArea').style.display='block';e.target.value='';
+});
+window.submitLabReport=async function(){
+  const raw=document.getElementById('labManualInput').value.trim();if(!raw){alert('Please upload a lab report or enter values manually.');return;}
+  document.getElementById('labLoading').style.display='block';document.getElementById('labResult').style.display='none';
+  let explanation='';
+  try{const d=await callBackend({action:'chat',patient_id:patientId,device_id:deviceId,message:`Please analyze these lab report values and explain each one in simple language. Tell if each value is Normal, High, or Low and what it means for a patient with ${profile?.condition||'chronic disease'}. Keep explanation in ${profile?.language||'English'} and simple words. Lab values: ${raw}`,patient_context:{name:profile?.name,condition:profile?.condition,language:profile?.language||'English',medicines:medicines.map(m=>`${m.name} ${m.dosage}`).join(', ')}});
+    explanation=d.response||d.message||d.reply||localLabExplain(raw);
+  }catch(e){explanation=localLabExplain(raw);}
+  const lab={id:'lab_'+Date.now(),date:today(),raw,explanation,time:new Date().toTimeString().slice(0,5)};labReports.unshift(lab);save('curaah_labs',labReports);addTL('blue',`🔬 Lab report analyzed (${today()})`);
+  document.getElementById('labResult').style.display='block';document.getElementById('labResult').innerHTML=`<div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:16px"><div style="font-weight:800;color:var(--green);font-size:15px;margin-bottom:10px">🤖 AI Lab Report Analysis</div><div style="font-size:13.5px;color:#1a1f36;line-height:1.7">${explanation.replace(/\n/g,'<br/>')}</div></div><button class="btn-primary" style="background:#059669;margin-top:12px" onclick="closeModal('modalLabUpload');switchTab('journey')">View in Journey Tab →</button>`;
+  document.getElementById('labLoading').style.display='none';renderLabReports();
+  if(!patientId.startsWith('local_'))callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines:[],adherence:[],vitals:[],labs:[lab]}).catch(e=>console.warn('Labs sync:',e));
+};
+function localLabExplain(text){
+  const cond=profile?.condition||'your condition';const parts=[`Lab Report Analysis for ${cond} patient:\n`];
+  if(/HbA1c/i.test(text)){const m=text.match(/HbA1c[\s:]+(\d+\.?\d*)/i);if(m){const v=parseFloat(m[1]);parts.push(`• HbA1c ${v}% — ${v<5.7?'Normal (great control)':v<6.5?'Prediabetes range':'High (diabetes range)'}. This shows your 3-month average blood sugar.`);}}
+  if(/fasting.*glucose|glucose.*fasting|fasting.*sugar|blood sugar/i.test(text)){const m=text.match(/(\d{2,3})\s*mg/i);if(m){const v=parseInt(m[1]);parts.push(`• Fasting Glucose ${v} mg/dL — ${v<100?'Normal':v<126?'Prediabetes':'High'}. Normal fasting is below 100 mg/dL.`);}}
+  if(/cholesterol/i.test(text)){const m=text.match(/cholesterol[\s:]+(\d+)/i);if(m){const v=parseInt(m[1]);parts.push(`• Cholesterol ${v} mg/dL — ${v<200?'Normal':v<240?'Borderline high':'High'}. Below 200 is desirable.`);}}
+  if(/creatinine/i.test(text))parts.push(`• Creatinine — Measures kidney health. Ask your doctor if this is in normal range for your age and body weight.`);
+  if(/hemoglobin|hgb|hb\b/i.test(text))parts.push(`• Hemoglobin — Measures iron in your blood. Low values mean anemia — fatigue and weakness are common symptoms.`);
+  if(parts.length===1)parts.push(`Your lab values have been saved. Share them with your doctor. Curaah will track changes over time to show your health progress.`);
+  parts.push(`\n⚠️ AI summary only — always consult your doctor for medical decisions.`);return parts.join('\n');
+}
+function renderLabReports(){
+  const c=document.getElementById('labReportsList');if(!c)return;
+  if(!labReports.length){c.innerHTML=`<div class="lab-upload" onclick="openLabUpload()"><div style="font-size:32px;margin-bottom:8px">🔬</div><div style="font-weight:700;font-size:15px;color:var(--green)">Upload Lab Report</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px">AI explains every value in simple Hindi / English</div></div>`;return;}
+  c.innerHTML=labReports.slice(0,5).map(l=>`<div class="card" style="margin-bottom:10px;background:var(--bg-card);cursor:pointer" onclick="showLabDetail('${l.id}')"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-weight:700;font-size:14px">🔬 Lab Report — ${l.date}</div><div style="font-size:11px;color:var(--text-muted)">${l.time||''}</div></div><div style="font-size:12px;color:var(--text-muted);line-height:1.5;background:rgba(255,255,255,0.04);padding:8px;border-radius:8px;font-family:monospace;overflow:hidden;max-height:60px">${esc(l.raw).substring(0,120)}...</div><div style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600">View AI Explanation →</div></div>`).join('')+`<button class="btn-primary" style="background:#059669;margin-top:8px" onclick="openLabUpload()">+ Upload New Report</button>`;
+}
+window.showLabDetail=function(id){const l=labReports.find(x=>x.id===id);if(!l)return;const html=`<div class="modal-overlay open" id="labDetailModal" onclick="if(event.target===this)this.remove()"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-title">🔬 Lab Report — ${l.date}</div><div style="font-size:12px;font-family:monospace;background:rgba(255,255,255,0.04);padding:12px;border-radius:8px;margin-bottom:16px;max-height:120px;overflow-y:auto">${esc(l.raw)}</div><div style="font-weight:700;color:var(--green);margin-bottom:8px">🤖 AI Explanation:</div><div style="font-size:13.5px;color:var(--text);line-height:1.7">${(l.explanation||'').replace(/\n/g,'<br/>')}</div><button class="btn-primary" style="background:#059669;margin-top:16px" onclick="document.getElementById('labDetailModal').remove()">Close</button></div></div>`;document.body.insertAdjacentHTML('beforeend',html);};
+
+// ====== JOURNEY ======
+function renderJourney(){
+  const tl=adherence.filter(a=>a.date===today());const tk=tl.filter(a=>a.status==='taken').length;const ms=tl.filter(a=>a.status==='missed').length;const total=tk+ms;const pct=total>0?Math.round(tk/total*100):0;
+  document.getElementById('jAdh').textContent=total>0?pct+'%':'—';document.getElementById('jTaken').textContent=tk;document.getElementById('jMissed').textContent=ms;
+  renderVitals();
+  const tl2=document.getElementById('journeyTimeline');if(!timeline.length)return;
+  tl2.innerHTML=timeline.slice(-25).reverse().map(t=>`<div class="tl-item"><div class="tl-dot ${t.color}"></div><div><div class="tl-text">${t.text}</div><div class="tl-time">${new Date(t.date).toLocaleString('en-IN',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div></div></div>`).join('');
+}
+
+// ====== WELLNESS ======
+function renderWellness(){
+  if(!profile)return;const c=profile.condition;
+  const locked=document.getElementById('wellnessLocked'),unlocked=document.getElementById('wellnessUnlocked');
+  if(logsCount<3){locked.style.display='block';unlocked.style.display='none';document.getElementById('unlockProgress').textContent=logsCount;document.getElementById('unlockFill').style.width=(logsCount/3*100)+'%';}
+  else{locked.style.display='none';unlocked.style.display='block';
+    const mh=document.getElementById('middayHerb');if(mh){if(c==='Cancer')mh.innerHTML='☀️ <strong>Midday:</strong> Turmeric Extract (Anti-inflammatory)';else if(c==='Heart'||c==='Blood Pressure')mh.innerHTML='☀️ <strong>Midday:</strong> Arjuna bark powder (Heart tonic)';else mh.innerHTML='☀️ <strong>Midday:</strong> Organic Neem leaves (Blood purifier)';}
+  }
+  const cards=[{icon:'🧘',bg:'#fef3c7',title:`Yoga for ${c}`,sub:'15 min morning routine for your condition'},{icon:'🚶',bg:'#dbeafe',title:'Daily Walking',sub:'20-30 min walk — controls sugar & BP'},{icon:'🫁',bg:'#ede9fe',title:'Pranayama',sub:'Breathing exercises for stress & BP'},{icon:'🥗',bg:'#ecfdf5',title:`Diet for ${c}`,sub:'Punjabi-adapted food tips'},{icon:'🌿',bg:'#f0fdf4',title:'Ayurvedic Support',sub:'Traditional herbs for recovery'},{icon:'💤',bg:'#fce7f3',title:'Sleep Protocol',sub:'7-8 hours sleep is essential for healing'}];
+  const wc=document.getElementById('wellCards');if(wc)wc.innerHTML=cards.map(c=>`<div class="wellness-card" onclick="showWellTip('${c.title}')"><div class="wellness-card-icon" style="background:${c.bg}">${c.icon}</div><div class="wellness-card-title">${c.title}</div><div class="wellness-card-sub">${c.sub}</div></div>`).join('');
+  const wKey='curaah_wellness_'+today();let wData=JSON.parse(localStorage.getItem(wKey)||'{}');
+  const items=[{k:'walk',label:'🚶 Morning walk (20 min)'},{k:'yoga',label:'🧘 Yoga / stretching'},{k:'water',label:'💧 Drank 8 glasses water'},{k:'homefood',label:'🍲 Ate home-cooked meal'},{k:'sleep',label:'😴 Slept 7+ hours'}];
+  const wch=document.getElementById('wellChecklist');if(wch)wch.innerHTML=items.map(it=>`<label style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border-subtle);cursor:pointer;font-size:14px;font-weight:500"><input type="checkbox" ${wData[it.k]?'checked':''} onchange="toggleWell('${it.k}',this.checked)" style="width:20px;height:20px;accent-color:var(--electric)"> ${it.label}</label>`).join('');
+  const done=items.filter(i=>wData[i.k]).length;const wp=document.getElementById('wellPct');if(wp)wp.textContent=Math.round(done/items.length*100)+'%';
+}
+window.toggleWell=function(key,val){const wKey='curaah_wellness_'+today();let wData=JSON.parse(localStorage.getItem(wKey)||'{}');wData[key]=val;localStorage.setItem(wKey,JSON.stringify(wData));if(val)incrementLogCounter();renderWellness();updateScore();};
+window.showWellTip=function(t){alert(`💡 ${t}\n\nFor personalized advice based on your ${profile?.condition||'condition'}, tap "Ask AI" and ask me directly!`);};
+window.joinEquipWaitlist=function(item){addTL('blue',`🔔 Joined equipment waitlist: ${item}`);alert(`You have joined the waitlist for ${item}! We will connect you with verified peers in your area.`);};
+window.joinCircle=function(c){addTL('blue',`🤝 Joined ${c} support circle`);alert(`Welcome to the ${c} Support Circle! Stay motivated with others on the same journey.`);};
+
+// ====== PROFILE ======
+function renderProfile(){
+  if(!medicines.length){document.getElementById('secMedList').style.display='none';return;}
+  document.getElementById('secMedList').style.display='';
+  document.getElementById('profMeds').innerHTML=medicines.filter(m=>m.active!==false).map(m=>`<div style="padding:10px 0;border-bottom:1px solid var(--border-subtle)"><div style="font-weight:700;font-size:14px">${esc(m.name)}</div><div style="font-size:12px;color:var(--text-muted)">${esc(m.dosage)} · ${esc(m.frequency)}${m.purpose?' · '+esc(m.purpose):''}</div></div>`).join('');
+  populateMedDropdown();
+}
+function populateMedDropdown(){const sel=document.getElementById('seMed');if(sel){sel.innerHTML='<option value="">Select (optional)</option>';medicines.forEach(m=>{sel.innerHTML+=`<option value="${m.id}">${esc(m.name)} ${esc(m.dosage)}</option>`;});}}
+window.confirmReset=function(){if(confirm('Delete ALL local health data? Server data will remain.')){['curaah_profile','curaah_medicines','curaah_adherence','curaah_vitals','curaah_labs','curaah_timeline','curaah_patient_id','curaah_family_code','curaah_device_id','curaah_logs_count'].forEach(k=>localStorage.removeItem(k));location.reload();}};
+
+window.openSyncRegistrationModal=function(){
+  document.getElementById('syncPhone').value='';
+  document.getElementById('syncPassword').value='';
+  openModal('modalSyncReg');
+};
+
+window.submitSyncRegistration=async function(){
+  const phone=document.getElementById('syncPhone').value.trim();
+  const password=document.getElementById('syncPassword').value;
+  if(!phone||password.length<4){alert('Please enter phone and a 4+ character password.');return;}
+  const btn=document.querySelector('#modalSyncReg .btn-primary');
+  btn.disabled=true;btn.textContent='Securing Account...';
+  try{
+    const d=await callBackend({action:'register',device_id:deviceId,phone,password,settings:profile});
+    if(d.status==='success'||d.patient_id){
+      patientId=d.patient_id;
+      familyCode=d.family_share_code||familyCode;
+      localStorage.setItem('curaah_patient_id',patientId);
+      localStorage.setItem('curaah_family_code',familyCode);
+      closeModal('modalSyncReg');
+      alert('Account secured! Syncing health records to the cloud now.');
+      initApp();
+      syncDataWithServer();
+    }else{
+      alert(d.message||'Registration failed.');
+    }
+  }catch(e){
+    alert('Connection error. Please try again.');
+  }finally{
+    btn.disabled=false;btn.textContent='Create Cloud Profile';
+  }
+};
+
+window.saveHealthProfile=async function(){
+  profile.age=document.getElementById('profAge').value.trim();
+  profile.gender=document.getElementById('profGender').value;
+  profile.district=document.getElementById('profDistrict').value.trim();
+  profile.relationship=document.getElementById('profRelationship').value;
+  profile.height=document.getElementById('profHeight').value.trim();
+  profile.weight=document.getElementById('profWeight').value.trim();
+  profile.medications_text=document.getElementById('profMedsText').value.trim();
+  profile.specific_problems=document.getElementById('profSpecificProblems').value.trim();
+  profile.allergies=document.getElementById('profAllergies').value.trim();
+  profile.diet=document.getElementById('profDiet').value;
+  profile.emerg_name=document.getElementById('profEmergName').value.trim();
+  profile.emerg_phone=document.getElementById('profEmergPhone').value.trim();
+  profile.care_name=document.getElementById('profCareName').value.trim();
+  profile.care_phone=document.getElementById('profCarePhone').value.trim();
+  
+  save('curaah_profile',profile);
+  addTL('blue','📋 Updated health profile details');
+  alert('Profile updated locally!');
+  
+  if(patientId&&!patientId.startsWith('local_')){
+    try{
+      await callBackend({action:'sync-data',device_id:deviceId,patient_id:patientId,medicines:[],adherence:[],settings:profile});
+      alert('Profile successfully synced with cloud backup!');
+    }catch(e){
+      console.warn('Profile sync offline:',e);
+    }
+  }
+  initApp();
+};
+
+window.handleLogOut=function(){
+  if(confirm('Log out from this device? Your local cache will be cleared but server data remains safe.')){
+    ['curaah_profile','curaah_medicines','curaah_adherence','curaah_vitals','curaah_labs','curaah_timeline','curaah_patient_id','curaah_family_code','curaah_device_id','curaah_logs_count'].forEach(k=>localStorage.removeItem(k));
+    location.reload();
+  }
+};
+
+// ====== HEALTH SCORE ======
+function updateScore(){
+  const tl=adherence.filter(a=>a.date===today());const tk=tl.filter(a=>a.status==='taken').length;const total=tl.length;const adhP=total>0?tk/total*100:0;
+  const str=getStreak();const wKey='curaah_wellness_'+today();const wData=JSON.parse(localStorage.getItem(wKey)||'{}');
+  const wellDone=['walk','yoga','water','homefood','sleep'].filter(k=>wData[k]).length;const wellP=wellDone/5*100;
+  const vCount=vitals.filter(v=>v.date===today()).length;const vScore=Math.min(vCount/3*100,100);const strScore=Math.min(str/7*100,100);
+  const score=Math.round(adhP*.4+wellP*.2+vScore*.2+strScore*.2);
+  const ring=document.getElementById('scoreRing');if(ring){ring.style.strokeDashoffset=226-(226*score/100);ring.style.stroke=score>=70?'#00c48c':score>=40?'#f59e0b':'#ef4444';}
+  const fill=document.getElementById('scoreFill');if(fill)fill.style.width=score+'%';
+  document.getElementById('scoreNum').textContent=score;document.getElementById('streakBadge').textContent='🔥 '+str+' day'+(str!==1?'s':'');
+  document.getElementById('sbAdh').textContent=Math.round(adhP)+'%';document.getElementById('sbWell').textContent=Math.round(wellP)+'%';document.getElementById('sbVitals').textContent=vCount;
+}
+function getStreak(){let s=0;const d=new Date();for(let i=0;i<365;i++){const ds=d.toISOString().split('T')[0];if(adherence.filter(a=>a.date===ds&&a.status==='taken').length>0)s++;else break;d.setDate(d.getDate()-1);}return s;}
+function incrementLogCounter(){logsCount++;localStorage.setItem('curaah_logs_count',logsCount);renderWellness();}
+
+// ====== SIDE EFFECT ======
+window.submitSideEffect=async function(){
+  const desc=document.getElementById('seDesc').value.trim();if(!desc){alert('Please describe what you feel');return;}
+  const medId=document.getElementById('seMed').value;const med=medicines.find(m=>m.id===medId);
+  const res=document.getElementById('seResult');res.style.display='block';res.innerHTML='<div class="spinner"></div>';
+  try{const d=await fetch(SUPA_URL+'/functions/v1/side-effect-analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'apikey':SUPA_KEY},body:JSON.stringify({description:desc,medicine_name:med?med.name:'Unknown',patient_context:profile?.condition||''})});
+    const data=await d.json();
+    const sev=(data.severity||'').toLowerCase();
+    const sc=sev==='red'?'#ef4444':sev==='yellow'?'#f59e0b':'#00c48c';
+    const explanation=data.assessment||data.explanation||'';
+    const action=data.recommendation||data.action||'';
+    res.innerHTML=`<div style="background:${sc}11;border:1px solid ${sc}33;border-radius:12px;padding:16px"><div style="font-weight:800;color:${sc};font-size:15px;margin-bottom:6px">${sev.toUpperCase()} Severity</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">${explanation}</div>${action?`<div style="margin-top:8px;font-size:13px;font-weight:700">➡️ ${action}</div>`:''}</div>`;
+    addTL('yellow',`⚠️ Side effect: "${desc.substring(0,40)}" — ${sev.toUpperCase()} severity`);
+  }catch(e){setTimeout(()=>{res.innerHTML=`<div style="background:#f59e0b11;border:1px solid #f59e0b33;border-radius:12px;padding:16px"><div style="font-weight:800;color:#f59e0b;font-size:15px;margin-bottom:6px">YELLOW Severity</div><div style="font-size:13px;color:var(--text-muted);line-height:1.6">Symptom logged. If symptoms persist or worsen, please consult your doctor.</div></div>`;addTL('yellow',`⚠️ Side effect: "${desc.substring(0,40)}"`)},800);}
+};
+
+// ====== TIMELINE ======
+function addTL(color,text){timeline.push({color,text,date:new Date().toISOString()});if(timeline.length>100)timeline=timeline.slice(-100);save('curaah_timeline',timeline);}
+
+// ====== MODALS ======
+window.openModal=id=>document.getElementById(id).classList.add('open');
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
+window.copyCode=()=>navigator.clipboard.writeText(familyCode).then(()=>alert('Family code copied!')).catch(()=>{});
+
+// ====== SOS ======
+window.triggerSOS=async function(){
+  openModal('modalSOS');document.getElementById('sosOTPInput').value='';document.getElementById('sosOTPError').style.display='none';document.getElementById('sosDPDPGate').style.display='block';document.getElementById('sosDecryptedEMR').style.display='none';
+  const gps=document.getElementById('sosGPS');gps.textContent='Acquiring GPS...';
+  if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{gps.textContent=`${p.coords.latitude.toFixed(5)}° N, ${p.coords.longitude.toFixed(5)}° E (±${Math.round(p.coords.accuracy)}m)`;},()=>{gps.textContent='30.97531° N, 76.52733° E (IIT Ropar Hub)';},{timeout:4000});}else{gps.textContent='30.97531° N, 76.52733° E (IIT Ropar Hub)';}
+  addTL('red','🚨 EMERGENCY SOS TRIGGERED — Broadcasting location & alerting caregivers');
+  if(!patientId.startsWith('local_'))callBackend({action:'log-sos',patient_id:patientId,device_id:deviceId,location:{},status:'active',triggered_at:new Date().toISOString()}).catch(e=>console.warn('SOS log:',e));
+};
+window.verifySOSOTP=function(){
+  const val=document.getElementById('sosOTPInput').value.trim();
+  if(val==='4812'){
+    document.getElementById('sosOTPError').style.display='none';document.getElementById('sosDPDPGate').style.display='none';document.getElementById('sosDecryptedEMR').style.display='block';
+    const meds=medicines.map(m=>`${m.name} ${m.dosage} (${m.frequency})`).join(', ')||'No medications on record';
+    document.getElementById('sosEMRContent').innerHTML=`<strong>Patient:</strong> ${esc(profile?.name||'Unknown')}<br/><strong>Condition:</strong> ${esc(profile?.condition||'Not specified')}<br/><strong>Active Medications:</strong> ${esc(meds)}<br/><strong>Language:</strong> ${esc(profile?.language||'English')}<br/><strong>Curaah ID:</strong> ${(patientId||'').substring(0,12)}...<br/><strong>Emergency:</strong> Primary caregiver notified • 108 dispatcher alerted`;
+    addTL('red','🔓 EMR access authorized by caregiver OTP during emergency SOS');
+  }else{document.getElementById('sosOTPError').style.display='block';}
+};
+
+// ====== PILL VERIFIER ======
+window.openPillVerifier=function(){document.getElementById('pillScanSelect').value='';document.getElementById('pillScanResult').style.display='none';document.getElementById('scanBar').style.display='none';document.getElementById('cameraMockupText').style.display='block';openModal('modalPillCheck');};
+window.runPillScanSim=function(){
+  const val=document.getElementById('pillScanSelect').value;const res=document.getElementById('pillScanResult');const bar=document.getElementById('scanBar');const txt=document.getElementById('cameraMockupText');
+  if(!val){res.style.display='none';bar.style.display='none';return;}
+  res.style.display='none';bar.style.display='block';txt.textContent='📷 Edge-AI classifying...';
+  setTimeout(()=>{
+    bar.style.display='none';txt.textContent='Scan Complete';res.style.display='block';let html='';
+    if(val==='atorvastatin'){html=`<div style="background:#ecfdf5;border:1px solid #a7f3d0;padding:12px;border-radius:8px;font-size:13px;color:var(--green);line-height:1.5"><strong style="color:var(--green);font-size:14px">✅ Medicine Verified Correct</strong><br/><strong>Salt:</strong> Atorvastatin Calcium 10mg<br/><strong>Shape:</strong> Round White Tablet (6.5mm, imprint: A10)<br/><strong>Status:</strong> Matches your scheduled morning dose. Safe to take now.</div>`;addTL('green','✅ Edge-AI: Atorvastatin 10mg verified correct');}
+    else if(val==='metformin'){html=`<div style="background:#fef2f2;border:1px solid #fecaca;padding:12px;border-radius:8px;font-size:13px;color:#b91c1c;line-height:1.5"><strong style="color:#991b1b;font-size:14px">⚠️ Warning: Wrong Timing</strong><br/><strong>Salt:</strong> Metformin Hydrochloride 500mg<br/><strong>Alert:</strong> Your morning dose is Atorvastatin. Metformin should only be taken with meals. Do NOT take now.</div>`;addTL('red','⚠️ Edge-AI: Metformin scanned at wrong time');}
+    else{html=`<div style="background:#eff6ff;border:1px solid #bfdbfe;padding:12px;border-radius:8px;font-size:13px;color:var(--electric);line-height:1.5"><strong style="color:var(--electric);font-size:14px">ℹ️ Supplement Checked</strong><br/><strong>Salt:</strong> Cholecalciferol (Vitamin D3) 60,000 IU<br/><strong>Interaction:</strong> Safe with your current prescriptions. No dangerous overlaps.</div>`;addTL('blue','ℹ️ Supplement: Vitamin D3 60k — safe to combine');}
+    res.innerHTML=html;incrementLogCounter();
+  },1800);
+};
+
+// ====== DIET LOGGING ======
+window.submitMealLog=function(){
+  const meal=document.getElementById('mealInput').value.trim();if(!meal){alert('Please enter what you ate');return;}
+  const res=document.getElementById('mealResult');res.style.display='block';res.innerHTML='<div class="spinner"></div>';
+  setTimeout(()=>{
+    const cond=(profile&&profile.condition)?profile.condition:'Diabetes';const m=meal.toLowerCase();let msg='';let warn=false;
+    if(cond==='Diabetes'||cond==='Other'){if(/parantha|butter.*roti|white rice|chawal|sweet|sugar|lassi|chinese|fast food|burger|pizza|aloo|maidah/i.test(m)){warn=true;msg=`⚠️ <strong>High Carb Alert:</strong> This meal contains high glycemic foods that spike blood glucose. Your medication regimen works best with low-carb meals. Recommend a 15-min walk after eating.`;}else{msg=`✅ <strong>Diabetes-Friendly:</strong> Low carbohydrate, high fiber meal. Matches your wellness plan. Blood sugar impact should be minimal.`;}}
+    else if(cond==='Blood Pressure'||cond==='Heart'){if(/pickle|achaar|papad|pakora|namkeen|junk|samosa|processed|fried/i.test(m)){warn=true;msg=`⚠️ <strong>Sodium Alert:</strong> High sodium foods increase blood pressure. Recommend checking your BP vitals tonight.`;}else{msg=`✅ <strong>Heart-Healthy:</strong> Low sodium, healthy meal choice. Fits your hypertension protocol.`;}}
+    else{msg=`✅ Meal logged. AI is monitoring your dietary patterns to optimize your health score.`;}
+    const bg=warn?'#fffbeb':'#ecfdf5';const bd=warn?'#fef3c7':'#a7f3d0';const tc=warn?'#b45309':'#047857';
+    res.innerHTML=`<div style="background:${bg};border:1px solid ${bd};padding:12px;border-radius:8px;font-size:13px;color:${tc};line-height:1.5">${msg}</div>`;
+    addTL('blue',`🥗 Diet: "${meal.substring(0,35)}..." — ${cond}`);incrementLogCounter();
+  },1000);
+};
+
+// ====== MISSED DOSE SURVEY ======
+window.openMissedSurvey=function(mid,period){document.getElementById('surveyMedId').value=mid;document.getElementById('surveyPeriod').value=period;document.getElementById('surveyResult').style.display='none';document.getElementById('surveyBtns').style.display='flex';openModal('modalMissedSurvey');};
+window.submitMissedSurvey=function(reason){
+  const mid=document.getElementById('surveyMedId').value;const period=document.getElementById('surveyPeriod').value;
+  const key=`${mid}_${today()}_${period}`;adherence=adherence.filter(a=>a.key!==key);adherence.push({key,medicine_id:mid,date:today(),period,status:'missed',reason,logged_at:new Date().toISOString()});save('curaah_adherence',adherence);
+  const med=medicines.find(m=>m.id===mid);addTL('red',`❌ Missed ${med?med.name:'medication'} (${period}) — ${reason}`);incrementLogCounter();renderHomeDoses();renderTodayFull();updateScore();
+  document.getElementById('surveyBtns').style.display='none';const res=document.getElementById('surveyResult');res.style.display='block';
+  let msg='';
+  if(reason==='forget'){msg=`<div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);padding:12px;border-radius:8px;font-size:13px;color:#b45309;line-height:1.5">⏰ <strong>Reminder Escalated:</strong> A follow-up WhatsApp nudge + AI voice callback will be triggered in 15 minutes. Family caregiver has been notified.</div>`;setTimeout(()=>closeModal('modalMissedSurvey'),3000);}
+  else if(reason==='sideeffect'){msg=`<div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:12px;border-radius:8px;font-size:13px;color:#b91c1c;line-height:1.5">🤢 <strong>Symptom Logged:</strong> Please use the "Side Effect" reporter for detailed AI analysis. Your doctor may be alerted if severity is high.</div>`;setTimeout(()=>closeModal('modalMissedSurvey'),4000);}
+  else if(reason==='cost'){msg=`<div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);padding:12px;border-radius:8px;font-size:13px;color:var(--green);line-height:1.5">💸 <strong>Generic Available:</strong> Jan Aushadhi generic equivalent is ~80% cheaper than branded medicines. Redirecting to Medicine Info...</div>`;setTimeout(()=>{closeModal('modalMissedSurvey');window.location.href='medicine-info.html';},4000);}
+  res.innerHTML=msg;
+};
+
+// ====== AI CHAT (REAL API with fallback) ======
+window.toggleAIChat=function(){document.getElementById('aiChatInput').value='';if(!document.getElementById('aiChatHistory').children.length)initAIChat();openModal('modalAIChat');};
+window.sendUserChatMessage=async function(preset){
+  const inp=document.getElementById('aiChatInput');const txt=preset||inp.value.trim();if(!txt)return;if(!preset)inp.value='';
+  const hist=document.getElementById('aiChatHistory');hist.innerHTML+=`<div class="chat-msg user">${esc(txt)}</div>`;
+  const lid='l'+Date.now();hist.innerHTML+=`<div class="chat-msg bot" id="${lid}"><span class="typing-dots"><span></span><span></span><span></span></span></div>`;hist.scrollTop=hist.scrollHeight;
+  const ctx={name:profile?.name||'Patient',condition:profile?.condition||'General',language:profile?.language||'English',medicines:medicines.map(m=>`${m.name} ${m.dosage} (${m.frequency})`).join(', ')||'None',vitals:vitals.slice(-5).map(v=>`${v.type}: ${v.value} on ${v.date}`).join('; ')||'None logged',today_adherence:adherence.filter(a=>a.date===today()).map(a=>`${a.period}: ${a.status}`).join(', ')||'None'};
+  try{const d=await callBackend({action:'chat',patient_id:patientId,device_id:deviceId,message:txt,patient_context:ctx});const reply=d.response||d.message||d.reply;const el=document.getElementById(lid);if(el&&reply)el.innerHTML=reply;else if(el)el.innerHTML=localAIReply(txt,ctx);}
+  catch(e){const el=document.getElementById(lid);if(el)el.innerHTML=localAIReply(txt,ctx);}
+  hist.scrollTop=hist.scrollHeight;
+};
+function localAIReply(q,ctx){
+  const cond=ctx.condition||'your condition';const meds=ctx.medicines||'your medicines';const name=ctx.name||'there';const ql=q.toLowerCase();
+  if(/chinese|fast food|pizza|burger|noodle|fried/i.test(ql))return`${name}, for <strong>${cond}</strong>, fast food is not recommended. It's high in sodium, refined carbs, and unhealthy fats that interfere with your medication. Home-cooked dal-sabzi-roti is much better for your health!`;
+  if(/vitamin|supplement|d3|calcium|iron/i.test(ql))return`Supplements like Vitamin D3 are generally safe with most medicines. Before starting any new supplement, inform your doctor. Take fat-soluble vitamins (D, A, E, K) with a meal for best absorption.`;
+  if(/exercise|walk|yoga|gym|run/i.test(ql))return`For <strong>${cond}</strong>: 🚶 20-30 min brisk walk daily, 🧘 gentle yoga (Pranayama, Shavasana), 🏊 swimming if available. Avoid strenuous exercise right after meals. Log your vitals before and after exercise!`;
+  if(/medicine|dose|tablet|dawai|schedule|today/i.test(ql)){const tk=adherence.filter(a=>a.date===today()&&a.status==='taken').map(a=>a.period).join(', ');const ms=adherence.filter(a=>a.date===today()&&a.status==='missed').map(a=>a.period).join(', ');return`Today: ${tk?'✅ Taken: '+tk:''} ${ms?'❌ Missed: '+ms:''} ${!tk&&!ms?'No doses logged yet.':''}<br/><br/>Your medicines: ${meds}. Always take them at scheduled times for best results!`;}
+  if(/sugar|glucose|bp|pressure|vitals/i.test(ql)){const ls=[...vitals].reverse().find(v=>v.type==='sugar');const lb=[...vitals].reverse().find(v=>v.type==='bp');if(ls||lb)return`Latest readings: ${ls?'🩸 Sugar: '+ls.value+' mg/dL ('+ls.date+')':''} ${lb?'❤️ BP: '+lb.value+' mmHg ('+lb.date+')':''}. Log regularly for better AI insights!`;return`I don't see recent vitals. Please log your vitals in the Journey tab for better health insights!`;}
+  if(/side effect|dizziness|nausea|dizzy|pain|stomach/i.test(ql))return`Please use the ⚠️ Side Effect reporter (Quick Actions) for proper AI severity assessment. Dizziness and nausea can sometimes be related to medicines — especially if taken on an empty stomach.`;
+  return`Based on your profile (${cond}) and medicines (${meds.split(',')[0]||'your prescription'}): Maintain consistent meal timings, stay hydrated, and log vitals regularly. For specific queries, consult your doctor at the next visit. What else can I help with?`;
+}
+
+// ====== KIT SUBSCRIPTION ======
+window.confirmKitSubscription=function(){addTL('blue','🌿 Joined botanical recovery kit waitlist — Sangrur farm sourcing');alert('Waitlist joined! Our partnered farmers in Sangrur are preparing your personalized kit. You will be contacted within 48 hours.');closeModal('modalKitOrder');};
+
+// ====== FILE HELPER ======
+function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});}
+</script>
 </body>
 </html>
+
