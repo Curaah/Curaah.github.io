@@ -546,3 +546,11 @@ body {
 .profile-sync-badge.unsynced { background: rgba(255, 159, 0, 0.15); border: 1px solid rgba(255, 159, 0, 0.3); color: var(--warning); }
 .profile-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
+/* ── SELECT OPTION COLOR FIX ── */
+.onboard-input option,
+.input-field option,
+select option {
+  background-color: #0d1b35 !important;
+  color: #ffffff !important;
+}
+
