@@ -1732,6 +1732,9 @@ window.confirmKitSubscription=function(){addTL('blue','🌿 Joined botanical rec
 
 // ====== FILE HELPER ======
 function fileToBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
 </script>
 </body>
 </html>
