@@ -4,46 +4,47 @@
    serves an offline page when disconnected.
    ============================================ */
 
-const CACHE_NAME    = 'curaah-v2';
+const CACHE_NAME    = 'curaah-v4';
 const OFFLINE_URL   = '/offline.html';
 
 /* Static assets to pre-cache on install */
 const PRE_CACHE = [
   '/',
   '/index.html',
-  '/login.html',
-  '/register.html',
-  '/dashboard.html',
-  '/hospitals.html',
-  '/hospital-profile.html',
-  '/checkin.html',
-  '/attendent-portal.html',
-  '/staff-portal.html',
-  '/doctor-portal.html',
-  '/referral.html',
-  '/proxy-booking.html',
-  '/qr-generator.html',
-  '/onboard.html',
+  '/companion.html',
+  '/family.html',
+  '/gov-map.html',
+  '/report-explainer.html',
+  '/medicine-info.html',
+  '/privacy.html',
+  '/terms.html',
   '/offline.html',
-  '/import.html',
-  '/print-slips.html',
   '/css/style.css',
-  '/js/main.js',
-  '/js/supabase.js',
+  '/css/companion.css',
   '/manifest.json',
+  '/assets/logo.svg',
   '/assets/icons/icon-192.png',
   '/assets/icons/icon-512.png',
-  '/assets/icons/icon-180.png',
-  '/assets/icons/icon-maskable-512.png',
 ];
 
 /* ── INSTALL: pre-cache all static assets ── */
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW] Pre-caching assets');
-      return cache.addAll(PRE_CACHE);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('[SW] Pre-caching assets');
+        return Promise.all(
+          PRE_CACHE.map(async url => {
+            try {
+              const response = await fetch(new Request(url, { cache: 'reload' }));
+              if (response.ok) await cache.put(url, response);
+            } catch (err) {
+              console.warn('[SW] Skipped pre-cache:', url, err);
+            }
+          })
+        );
+      })
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -79,8 +80,10 @@ self.addEventListener('fetch', event => {
       fetch(request)
         .then(response => {
           /* Clone and cache fresh response */
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+          }
           return response;
         })
         .catch(async () => {
