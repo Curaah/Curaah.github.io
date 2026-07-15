@@ -27,9 +27,9 @@ export function render() {
       <!-- Brand -->
       <div class="auth-brand">
         <svg class="auth-logo" viewBox="0 0 64 64" fill="none">
-          <circle cx="32" cy="32" r="28" stroke="#3d9eff" stroke-width="2.5" opacity=".5"/>
-          <circle cx="32" cy="32" r="18" stroke="#00c48c" stroke-width="1.5" opacity=".3"/>
-          <path d="M32 18v28M18 32h28" stroke="#3d9eff" stroke-width="3" stroke-linecap="round"/>
+          <path d="M32 5L9 16L9 38Q9 54 32 61Q55 54 55 38L55 16Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="2"/>
+          <path d="M32 18Q24 27 24 36Q24 45 32 50Q40 45 40 36Q40 27 32 18Z" fill="#3d9eff" opacity=".9"/>
+          <circle cx="32" cy="39" r="6" fill="white"/>
         </svg>
         <h1 class="auth-title">Curaah Recover</h1>
         <p class="auth-subtitle">AI Recovery Intelligence Platform</p>
