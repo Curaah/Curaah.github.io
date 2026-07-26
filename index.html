@@ -249,6 +249,12 @@ button{font-family:'Inter',sans-serif;cursor:pointer;}
 .fstat{background:rgba(255,255,255,.04);border-radius:10px;padding:10px;text-align:center;}
 .fsn{font-size:20px;font-weight:900;font-family:'Outfit',sans-serif;}
 
+/* ── CARECONNECT ── */
+.cc-pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px;}
+@media(max-width:760px){.cc-pillars{grid-template-columns:1fr;}}
+.cc-card{border-radius:var(--r);padding:32px;position:relative;overflow:hidden;transition:var(--t);}
+.cc-card:hover{transform:translateY(-4px);box-shadow:var(--shxl);}
+
 /* ── MARKETPLACE ── */
 .mkt-place-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px;}
 @media(max-width:800px){.mkt-place-grid{grid-template-columns:1fr;}}
@@ -349,13 +355,6 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
 .disc{font-size:11.5px;color:rgba(255,71,87,.6);}
 .st{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:var(--blue);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:90;box-shadow:var(--glow);}
 .st.vis{display:flex;}.st:hover{transform:translateY(-3px);}
-
-/* ── FLOW DIAGRAM ── */
-.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin:32px auto;max-width:700px;}
-.flow-step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;text-align:center;min-width:100px;}
-.flow-step.gap{background:rgba(255,71,87,.08);border-color:rgba(255,71,87,.2);color:var(--red);}
-.flow-step.curaah{background:rgba(61,158,255,.1);border-color:var(--bb);color:var(--blue);}
-.flow-arrow{color:var(--dim);font-size:16px;}
   </style>
 </head>
 <body>
@@ -370,6 +369,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
     <a href="#story">Our Story</a>
     <a href="#recover">Curaah Recover</a>
     <a href="#family">For Families</a>
+    <a href="#community">CareConnect</a>
     <a href="#healthops">HealthOps</a>
     <a href="#different">Why Us</a>
   </div>
@@ -383,6 +383,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
   <a href="#story" onclick="toggleMob()">Our Story</a>
   <a href="#recover" onclick="toggleMob()">Curaah Recover</a>
   <a href="#family" onclick="toggleMob()">For Families</a>
+  <a href="#community" onclick="toggleMob()">CareConnect</a>
   <a href="#healthops" onclick="toggleMob()">HealthOps</a>
   <a href="#different" onclick="toggleMob()">Why Us</a>
   <a href="family.html" onclick="toggleMob()">👨‍👩‍👧 Family Dashboard</a>
@@ -551,7 +552,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
   </div>
 </section>
 
-<!-- ═══════════════════════════════════ THE RECOVERY GAP — RAJINDER STORY ═══════════════════════════════════ -->
+<!-- ═══════════════════════════════════ THE RECOVERY GAP ═══════════════════════════════════ -->
 <section class="sec how-bg">
   <div class="wrap">
     <div class="ctr reveal">
@@ -623,8 +624,8 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
           <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">WhatsApp Automation</strong> — reminders, follow-ups</div></div>
           <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Public Health Analytics</strong> — privacy-conscious insights</div></div>
         </div>
-        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">🟡 In Development — Pilots Open</div>
-        <div style="margin-top:16px"><a href="mailto:curaahtech@gmail.com" class="btn btn-md btn-ghost">Contact for Demo →</a></div>
+        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">🟡 Contract Based Development — Pilots Open</div>
+        <div style="margin-top:16px"><a href="mailto:curaahtech@gmail.com" class="btn btn-md btn-ghost">Contact for Service →</a></div>
       </div>
     </div>
   </div>
@@ -749,7 +750,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
   </div>
 </section>
 
-<!-- ═══════════════════════════════════ RECOVERY MARKETPLACE & COMMUNITY ═══════════════════════════════════ -->
+<!-- ═══════════════════════════════════ RECOVERY MARKETPLACE ═══════════════════════════════════ -->
 <section class="sec">
   <div class="wrap">
     <div class="ctr reveal">
@@ -770,17 +771,17 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
           <li>🍵 Wellness Products</li>
           <li>📦 Condition-Specific Kits</li>
         </ul>
-        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber);margin-top:16px">🟡 Coming Soon</div>
+        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber);margin-top:16px">🟡 Future Scope</div>
       </div>
       <div class="mp-card" style="border-color:rgba(167,139,250,.2);">
         <div style="font-size:36px;margin-bottom:12px">🤝</div>
-        <div class="mp-title" style="color:var(--purple)">Community & Recovery Ecosystem</div>
+        <div class="mp-title" style="color:var(--purple)">CareConnect Community & Recovery Ecosystem</div>
         <div class="mp-desc">A community-driven recovery ecosystem connecting patients with peer support, local resources, and hyperlocal health intelligence.</div>
         <ul class="mp-list">
           <li>👥 Patient Support Groups</li>
           <li>💬 Chronic Disease Communities</li>
           <li>📍 Local Health Resources</li>
-          <li>🏥 Medical Equipment Sharing</li>
+          <!-- <li>🏥 Medical Equipment Sharing</li> -->
           <li>📊 Hyperlocal Health Intelligence</li>
           <li>🧑‍⚕️ Expert Verification Network</li>
         </ul>
@@ -790,8 +791,140 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
   </div>
 </section>
 
+<!-- ═══════════════════════════════════ CURAAH CARECONNECT ═══════════════════════════════════ -->
+<section class="sec how-bg" id="community">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);color:var(--purple)">The Community Layer — Curaah Ecosystem</div>
+      <h2 class="sh">Beyond recovery.<br/><em style="background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">A community that heals together.</em></h2>
+      <p class="ss ctr">Once Curaah Recover and HealthOps are established, the ecosystem expands into its most powerful layer — <strong style="color:var(--ink)">Curaah CareConnect</strong>: a free, AI + GPS powered community network where patients, caregivers, NGOs, and families support each other in real time. This is our long-term social impact mission.</p>
+    </div>
+
+    <!-- Vision card -->
+    <div style="background:linear-gradient(160deg,rgba(167,139,250,.06),rgba(45,212,191,.04));border:1.5px solid rgba(167,139,250,.18);border-radius:var(--rxl);padding:36px 40px;margin:40px 0 48px;position:relative;overflow:hidden;" class="reveal">
+      <div style="position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.08),transparent);pointer-events:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--purple);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;">The Vision</div>
+          <div style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1.25;margin-bottom:16px;">"Healthcare doesn't have to be faced alone — not the recovery, and not the emergency."</div>
+          <p style="font-size:14px;color:var(--muted);line-height:1.8;">CareConnect turns Curaah from a personal health tool into a community health infrastructure — where AI and GPS connect patients, caregivers, NGOs, and families instantly. Entirely free. Built to save lives.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
+            <span style="font-size:22px;">🤝</span>
+            <div><div style="font-size:13px;font-weight:700;">Free for everyone, always</div><div style="font-size:12px;color:var(--muted);">CareConnect will never be monetized — it exists for social impact</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
+            <span style="font-size:22px;">🤖</span>
+            <div><div style="font-size:13px;font-weight:700;">Real-time AI + GPS dispatch</div><div style="font-size:12px;color:var(--muted);">Requests matched to nearest verified members in seconds</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
+            <span style="font-size:22px;">🏛️</span>
+            <div><div style="font-size:13px;font-weight:700;">NGOs & foundations included</div><div style="font-size:12px;color:var(--muted);">Any welfare organization can post camps and events for free</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Four pillars -->
+    <div class="cc-pillars reveal">
+
+      <div class="cc-card" style="background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.15);">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,71,87,.08),transparent);pointer-events:none;"></div>
+        <div style="font-size:36px;margin-bottom:14px;">🩸</div>
+        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--red);margin-bottom:10px;">Blood Request Network</div>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:18px;">A patient in need raises a blood request. Our AI instantly identifies the nearest eligible donors ranked by distance, blood type, last donation date, and trust score. Alerts go simultaneously to nearby caregivers, NGOs, local WhatsApp groups, and hospitals — all in seconds.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>AI ranks responders by: distance · blood type · last donation · availability · trust score</span></div>
+          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>Real-time GPS alerts to caregivers, NGOs, hospitals — simultaneously</span></div>
+          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>Status updates so patient and family know help is on the way</span></div>
+        </div>
+        <div style="background:rgba(255,71,87,.08);border-radius:8px;padding:12px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px;">Current vs Curaah CareConnect</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:rgba(255,255,255,.5)">Old:</strong> Post on WhatsApp → post on Facebook → call everyone → <em>sometimes</em> blood arrives.<br/><strong style="color:var(--red);">New:</strong> One request → AI dispatch → verified responders alerted in under 60 seconds.</div>
+        </div>
+      </div>
+
+      <div class="cc-card" style="background:rgba(0,196,140,.04);border:1px solid rgba(0,196,140,.15);">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,196,140,.08),transparent);pointer-events:none;"></div>
+        <div style="font-size:36px;margin-bottom:14px;">🏕️</div>
+        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--green);margin-bottom:10px;">NGO & Health Camp Discovery</div>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">Free eye camps. Vaccination drives. Blood donation camps. Cancer awareness walks. Organ donation drives. Diabetes screenings. Nobody currently aggregates these for patients who need them most. CareConnect becomes the platform every NGO posts to — and every patient discovers nearby.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Free Eye Camps</span>
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Blood Donation</span>
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Vaccination Drives</span>
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Organ Donation</span>
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Cancer Awareness</span>
+          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Diabetes Screening</span>
+        </div>
+        <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">→</span><span>NGOs post free. Location-aware alerts reach exactly the patients who benefit.</span></div>
+      </div>
+
+      <div class="cc-card" style="background:rgba(61,158,255,.04);border:1px solid rgba(61,158,255,.15);">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.08),transparent);pointer-events:none;"></div>
+        <div style="font-size:36px;margin-bottom:14px;">🤝</div>
+        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--blue);margin-bottom:10px;">Disease-Specific Communities</div>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">Not a generic social feed. Structured, moderated communities where patients with the same condition share recovery stories, celebrate milestones, receive verified educational content, and join expert-led webinars. A cancer patient should hear from someone who recovered — not random internet strangers.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🩺 Diabetes Community</div>
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🎗️ Cancer Recovery</div>
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">❤️ Heart Health</div>
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🧠 Mental Wellbeing</div>
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🫁 Kidney & Liver</div>
+          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🤱 Pregnancy Care</div>
+        </div>
+      </div>
+
+      <!-- <div class="cc-card" style="background:rgba(255,159,0,.04);border:1px solid rgba(255,159,0,.18);">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,159,0,.08),transparent);pointer-events:none;"></div>
+        <div style="font-size:36px;margin-bottom:14px;">🚨</div>
+        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--amber);margin-bottom:10px;">SOS Caregiver Dispatch</div>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">An elderly woman falls. No children nearby. She presses SOS. GPS alerts reach the nearest verified caregivers within seconds. One arrives in minutes. Another calls the ambulance. Another informs the family. Her complete medical history is shared instantly — medicines, allergies, doctors, conditions — all in one tap.</p>
+        <div style="background:rgba(255,159,0,.06);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px;letter-spacing:.4px;text-transform:uppercase;">How It Works</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">1.</span> Patient presses SOS → GPS location captured instantly</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">2.</span> AI ranks and alerts nearest verified caregivers in real time</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">3.</span> Full medical record shared with consented responders</div>
+            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">4.</span> Family notified simultaneously — wherever they are in the world</div>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+
+    <!-- Rewards strip -->
+    <div style="margin-top:24px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--r);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;" class="reveal">
+      <div>
+        <div style="font-size:15px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:6px;">Community Rewards — Because good deeds deserve recognition.</div>
+        <div style="font-size:13px;color:var(--muted);max-width:560px;line-height:1.7;">We don't pay caregivers — we celebrate them. Points, badges, verified volunteer certificates, leaderboards, volunteer hour tracking, annual recognition events, and NGO collaboration opportunities.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <span style="background:rgba(167,139,250,.12);color:var(--purple);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🏆 Points & Badges</span>
+        <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">📜 Certificates</span>
+        <span style="background:rgba(61,158,255,.1);color:var(--blue);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🏅 Leaderboard</span>
+        <span style="background:rgba(255,159,0,.1);color:var(--amber);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🤝 NGO Collaboration</span>
+      </div>
+    </div>
+
+    <!-- Ecosystem timeline -->
+    <div style="margin-top:32px;text-align:center;" class="reveal">
+      <div style="display:inline-flex;align-items:center;gap:0;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--rxl);padding:6px;flex-wrap:wrap;justify-content:center;">
+        <div style="padding:10px 20px;border-radius:16px;background:rgba(0,196,140,.12);font-size:13px;font-weight:700;color:var(--green);">🟢 Curaah Recover — Demo Live</div>
+        <div style="padding:10px 8px;color:var(--dim);font-size:16px;">→</div>
+        <div style="padding:10px 20px;border-radius:16px;background:rgba(255,159,0,.1);font-size:13px;font-weight:700;color:var(--amber);">🟡 Curaah HealthOps — Service Based Development</div>
+        <div style="padding:10px 8px;color:var(--dim);font-size:16px;">→</div>
+        <div style="padding:10px 20px;border-radius:16px;background:rgba(167,139,250,.1);font-size:13px;font-weight:700;color:var(--purple);">🔵 CareConnect — Coming Soon</div>
+      </div>
+      <p style="font-size:13px;color:var(--dim);margin-top:14px;max-width:560px;margin-left:auto;margin-right:auto;">CareConnect launches after Recover and HealthOps are established — built on the same platform, powered by the Curaah community, free for all.</p>
+    </div>
+
+  </div>
+</section>
+
 <!-- ═══════════════════════════════════ CURAAH HEALTHOPS ═══════════════════════════════════ -->
-<section class="sec how-bg" id="healthops">
+<section class="sec" id="healthops">
   <div class="wrap">
     <div class="ctr reveal">
       <div class="tag tag-green">Suite 2 — For Healthcare Facilities</div>
@@ -811,7 +944,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
 </section>
 
 <!-- ═══════════════════════════════════ WHY CURAAH IS DIFFERENT ═══════════════════════════════════ -->
-<section class="sec" id="different">
+<section class="sec how-bg" id="different">
   <div class="wrap">
     <div class="ctr reveal">
       <div class="tag">Why Curaah Is Different</div>
@@ -828,6 +961,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
           <li><span style="color:var(--red)">✗</span> Medicine delivery</li>
           <li><span style="color:var(--red)">✗</span> Generic health tips</li>
           <li><span style="color:var(--red)">✗</span> One-size-fits-all approach</li>
+          <li><span style="color:var(--red)">✗</span> No community support layer</li>
         </ul>
       </div>
       <div class="diff-box diff-curaah">
@@ -839,6 +973,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
           <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Longitudinal Health Intelligence</strong> — learning over time</li>
           <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Family-Centred Care</strong> — keeping families informed</li>
           <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Healthcare Operations</strong> — automating facility workflows</li>
+          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">CareConnect Community</strong> — free support network for all</li>
         </ul>
       </div>
     </div>
@@ -846,7 +981,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
 </section>
 
 <!-- ═══════════════════════════════════ TRACTION ═══════════════════════════════════ -->
-<section class="sec how-bg">
+<section class="sec">
   <div class="wrap">
     <div class="ctr reveal">
       <div class="tag">Traction</div>
@@ -857,17 +992,15 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
       <div class="bitem"><div class="bitem-ico">🌐</div><div><div class="bitem-t">Fully Working Curaah Recover</div><div class="bitem-d">Complete PWA with prescription upload, AI recovery companion, vitals tracking, lab reports, SOS, family dashboard — all live.</div><span class="done-badge db-done">✅ Live Today</span></div></div>
       <div class="bitem"><div class="bitem-ico">🏢</div><div><div class="bitem-t">Company Registered</div><div class="bitem-d">Curaah HealthTech Pvt Ltd — MCA approved and incorporated.</div><span class="done-badge db-done">✅ Done</span></div></div>
       <div class="bitem"><div class="bitem-ico">🏛️</div><div><div class="bitem-t">IIT Ropar Incubation</div><div class="bitem-d">IIT Ropar TBIF Incubated.</div><span class="done-badge db-done">✅ Done</span></div></div>
-      <!-- <div class="bitem"><div class="bitem-ico">🇮🇳</div><div><div class="bitem-t">DPIIT Startup India Recognised</div><div class="bitem-d">Zero income tax for 3 years. Eligible for government scheme funding.</div><span class="done-badge db-done">✅ Done</span></div></div> -->
-      <!-- <div class="bitem"><div class="bitem-ico">🤖</div><div><div class="bitem-t">6 AI Edge Functions Deployed</div><div class="bitem-d">Gemini 2.5 Flash — prescription extraction, pill identification, food analysis, side effect triage, report explanation, and recovery companion.</div><span class="done-badge db-done">✅ Live</span></div></div> -->
       <div class="bitem"><div class="bitem-ico">📱</div><div><div class="bitem-t">Multi-Channel Architecture</div><div class="bitem-d">PWA App + WhatsApp + AI Voice Call — three access modes designed from day one.</div><span class="done-badge db-done">✅ Built</span></div></div>
       <div class="bitem"><div class="bitem-ico">🏥</div><div><div class="bitem-t">Hospital Pilot Conversations</div><div class="bitem-d">Healthcare facilities have validated the problem — HealthOps pilot conversations in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
-      <div class="bitem"><div class="bitem-ico">👨‍⚕️</div><div><div class="bitem-t">Human-in-the-Loop Partner Network</div><div class="bitem-d">Doctors, Pharmacist, nutritionist, and trainer verification model designed — partner onboarding in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
+      <div class="bitem"><div class="bitem-ico">👨‍⚕️</div><div><div class="bitem-t">Human-in-the-Loop Partner Network</div><div class="bitem-d">Doctors, pharmacist, nutritionist, and trainer verification model designed — partner onboarding in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════ MARKET ═══════════════════════════════════ -->
-<section class="sec">
+<section class="sec how-bg">
   <div class="wrap">
     <div class="ctr reveal">
       <div class="tag">Market Opportunity</div>
@@ -884,7 +1017,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
 </section>
 
 <!-- ═══════════════════════════════════ REVENUE ═══════════════════════════════════ -->
-<section class="sec how-bg">
+<section class="sec">
   <div class="wrap">
     <div class="ctr reveal">
       <div class="tag">Revenue Model</div>
@@ -904,10 +1037,10 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
 <div class="trust-bar">
   <div class="trust-inner">
     <div class="ti"><div class="tilo">🏛️</div><div><div class="tilb">IIT Ropar Incubated</div><div class="tilsub">Research-backed, institution-supported</div></div></div>
-    <!-- <div class="ti"><div class="tilo">🇮🇳</div><div><div class="tilb">DPIIT Recognised Startup</div><div class="tilsub">Startup India registered</div></div></div> -->
     <div class="ti"><div class="tilo">🔒</div><div><div class="tilb">DPDP 2023 Compliant</div><div class="tilsub">Privacy-by-design · Consent-first</div></div></div>
     <div class="ti"><div class="tilo">🤖</div><div><div class="tilb">Responsible AI</div><div class="tilsub">Transparent · Explainable · Accurate</div></div></div>
     <div class="ti"><div class="tilo">🧑‍⚕️</div><div><div class="tilb">Human-in-the-Loop</div><div class="tilsub">AI assists, never replaces doctors</div></div></div>
+    <div class="ti"><div class="tilo">🤝</div><div><div class="tilb">CareConnect Community</div><div class="tilsub">Free · AI-powered · For everyone</div></div></div>
   </div>
 </div>
 
@@ -917,7 +1050,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
     <div class="cta-inner reveal">
       <div class="tag" style="display:inline-block;margin-bottom:18px">The Future of Healthcare</div>
       <div class="cta-h">Every patient deserves a<br/>personalized recovery system.</div>
-      <p class="cta-sub">We envision a future where every patient in India has personalized recovery support, every family can participate in care, every doctor maintains continuity beyond consultations, and every healthcare facility operates with intelligent digital infrastructure.<br/><br/><strong style="color:var(--ink)">Curaah is not building another healthcare app. Curaah is building the operating system for recovery and healthcare continuity in India.</strong></p>
+      <p class="cta-sub">We envision a future where every patient in India has personalized recovery support, every family can participate in care, every doctor maintains continuity beyond consultations, and every community has the tools to support each other in emergencies.<br/><br/><strong style="color:var(--ink)">Curaah is not building another healthcare app. Curaah is building the operating system for recovery, healthcare continuity, and community care in India.</strong></p>
       <div class="cta-btns">
         <a href="companion.html" class="btn btn-lg btn-blue">🚀 Start Recovery — Free</a>
         <a href="family.html" class="btn btn-lg btn-ghost">👨‍👩‍👧 Family Dashboard</a>
@@ -928,6 +1061,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
         <span class="ctitem">🔒 DPDP 2023 Compliant</span>
         <span class="ctitem">🇮🇳 Made in India</span>
         <span class="ctitem">🤖 Responsible AI</span>
+        <span class="ctitem">🤝 Free Community Layer</span>
         <span class="ctitem">⚡ Free to Try</span>
       </div>
     </div>
@@ -942,7 +1076,7 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
         <svg class="lsvg" viewBox="0 0 36 36" fill="none"><path d="M18 3L5 9L5 21Q5 30 18 34Q31 30 31 21L31 9Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10Q13 15 13 20Q13 25 18 28Q23 25 23 20Q23 15 18 10Z" fill="#3d9eff" opacity=".9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
         <span style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif">curaah</span>
       </div>
-      <p class="ftagline">Curaah HealthTech Private Limited. Building India's Personalized Recovery Intelligence Platform and Healthcare Operations Technology. IIT Ropar Incubated </p>
+      <p class="ftagline">Curaah HealthTech Private Limited. Building India's Personalized Recovery Intelligence Platform, Healthcare Operations Technology, and Community Care Network. IIT Ropar Incubated.</p>
     </div>
     <div class="fc">
       <div class="fch">Curaah Recover</div>
@@ -955,15 +1089,16 @@ footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32p
     <div class="fc">
       <div class="fch">Curaah HealthOps</div>
       <a href="scribe.html">AI Doctor Scribe</a>
-      <a href="whatsapp-sender.html">WhatsApp Automation</a>
-      <a href="print-slips.html">Print Slips</a>
+      <!-- <a href="whatsapp-sender.html">WhatsApp Automation</a>
+      <a href="print-slips.html">Print Slips</a> -->
       <a href="mailto:curaahtech@gmail.com">Request Pilot</a>
     </div>
     <div class="fc">
-      <div class="fch">Company</div>
-      <a href="#story">Our Story</a>
-      <a href="mailto:curaahtech@gmail.com">Contact Us</a>
-      <a href="mailto:curaahtech@gmail.com">For Investors</a>
+      <div class="fch">CareConnect</div>
+      <a href="#community">Blood Request Network</a>
+      <a href="#community">NGO Camp Discovery</a>
+      <a href="#community">Disease Communities</a>
+      <a href="#community">SOS Caregiver Dispatch</a>
     </div>
     <div class="fc">
       <div class="fch">Legal</div>
