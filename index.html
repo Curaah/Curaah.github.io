@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta name="theme-color" content="#060d1f"/>
-  <link rel="manifest" href="/manifest.json"/>
-  <link rel="apple-touch-icon" href="assets/icons/icon-180.png"/>
-  <title>Curaah HealthTech — Personalized Recovery. Continuous Care. Intelligent Healthcare.</title>
-  <meta name="description" content="Curaah HealthTech Private Limited builds India's Personalized Recovery Intelligence Platform and Healthcare Operations Technology. AI-powered patient recovery, medication intelligence, and healthcare automation. IIT Ropar Incubated."/>
-  <link rel="icon" href="assets/logo.svg"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#060d1f"/>
+<title>Curaah — India's Verified Community Backed Health Platform</title>
+<meta name="description" content="Curaah connects patients, volunteers, NGOs, blood banks and healthcare professionals in one GPS-aware, privacy-first, AI-powered platform. Free for Sewa. Built for India. IIT Ropar Incubated."/>
+<meta property="og:title" content="Curaah — Right Support, Right People, Right Time"/>
+<meta property="og:description" content="India's first verified community health platform. CareConnect coordinates NGOs, blood banks and volunteers. Curaah helps patients and health-conscious users. Free for Sewa."/>
+<meta name="robots" content="index,follow"/>
+<link rel="icon" href="assets/logo.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── TOKENS ────────────────────────────────────────────────── */
 :root{
-  --bg:#060d1f;--surface:#0d1b35;--card:rgba(255,255,255,.035);--card-h:rgba(255,255,255,.06);
-  --blue:#3d9eff;--bd:rgba(61,158,255,.12);--bb:rgba(61,158,255,.2);
-  --green:#00c48c;--gd:rgba(0,196,140,.1);
-  --red:#ff4757;--amber:#ff9f00;--purple:#a78bfa;--teal:#2dd4bf;
-  --ink:#fff;--muted:rgba(255,255,255,.55);--dim:rgba(255,255,255,.28);
-  --line:rgba(255,255,255,.07);--lineb:rgba(61,158,255,.15);
-  --r:16px;--rsm:10px;--rxl:24px;
-  --sh:0 4px 24px rgba(0,0,0,.45);--shxl:0 16px 60px rgba(0,0,0,.5);
-  --glow:0 0 40px rgba(61,158,255,.2);--t:.22s ease;--max:1180px;
+  --bg:#060d1f; --surf:#0d1b35; --card:rgba(255,255,255,.04); --card-h:rgba(255,255,255,.07);
+  --blue:#3d9eff; --bd:rgba(61,158,255,.12); --bb:rgba(61,158,255,.22);
+  --green:#00c48c; --gd:rgba(0,196,140,.1);
+  --red:#ff4757; --rd:rgba(255,71,87,.1);
+  --amber:#ff9f00; --ad:rgba(255,159,0,.1);
+  --purple:#a78bfa; --pd:rgba(167,139,250,.1);
+  --teal:#2dd4bf; --td:rgba(45,212,191,.1);
+  --ink:#fff; --muted:rgba(255,255,255,.58); --dim:rgba(255,255,255,.3);
+  --line:rgba(255,255,255,.07); --lineb:rgba(61,158,255,.18);
+  --r:14px; --rsm:9px; --rxl:22px;
+  --sh:0 4px 28px rgba(0,0,0,.45); --shxl:0 16px 60px rgba(0,0,0,.5);
+  --glow:0 0 40px rgba(61,158,255,.22);
+  --t:.22s ease; --max:1160px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -30,1106 +36,962 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);-webki
 h1,h2,h3,h4{font-family:'Outfit',sans-serif;}
 a{text-decoration:none;color:inherit;transition:var(--t);}
 button{font-family:'Inter',sans-serif;cursor:pointer;}
-.lsvg{width:34px;height:34px;flex-shrink:0;}
-.curaah-logo{display:flex;align-items:center;gap:10px;}
-.cn{font-size:20px;font-weight:900;font-family:'Outfit',sans-serif;letter-spacing:-.4px;}
-.ct{font-size:9px;color:var(--blue);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-top:1px;}
 
-/* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;
-  background:rgba(6,13,31,.88);backdrop-filter:blur(20px);
+/* ─── NAV ───────────────────────────────────────────────────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;
+  background:rgba(6,13,31,.88);backdrop-filter:blur(22px);
   border-bottom:1px solid var(--line);display:flex;align-items:center;
-  padding:0 5%;gap:32px;transition:var(--t);}
+  padding:0 5%;gap:28px;transition:var(--t);}
 .nav.solid{background:rgba(6,13,31,.98);box-shadow:0 4px 24px rgba(0,0,0,.3);}
-.nav-links{display:flex;gap:24px;align-items:center;flex:1;}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-name{font-family:'Outfit',sans-serif;font-size:19px;font-weight:900;letter-spacing:-.4px;}
+.brand-sub{font-size:9px;color:var(--blue);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;display:block;margin-top:1px;}
+.nav-links{display:flex;gap:22px;align-items:center;flex:1;}
 .nav-links a{font-size:13.5px;font-weight:500;color:var(--muted);}
 .nav-links a:hover{color:var(--ink);}
 .nav-cta{display:flex;gap:10px;align-items:center;margin-left:auto;}
-.btn{display:inline-flex;align-items:center;gap:6px;font-weight:700;border-radius:10px;transition:var(--t);white-space:nowrap;border:none;}
+.btn{display:inline-flex;align-items:center;gap:6px;font-weight:700;border-radius:10px;
+  transition:var(--t);white-space:nowrap;border:none;font-family:'Inter',sans-serif;}
 .btn-sm{padding:9px 18px;font-size:13px;}
-.btn-md{padding:13px 26px;font-size:14px;}
-.btn-lg{padding:16px 32px;font-size:16px;}
+.btn-md{padding:13px 26px;font-size:14.5px;}
+.btn-lg{padding:16px 34px;font-size:16px;}
 .btn-blue{background:var(--blue);color:#fff;box-shadow:var(--glow);}
 .btn-blue:hover{background:#2b8ae8;transform:translateY(-2px);}
 .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--muted);}
 .btn-ghost:hover{border-color:var(--blue);color:var(--ink);}
-.btn-green{background:var(--green);color:#fff;box-shadow:0 0 30px rgba(0,196,140,.2);}
-.btn-green:hover{background:#00a87a;transform:translateY(-2px);}
+.btn-teal{background:var(--teal);color:#060d1f;box-shadow:0 0 30px rgba(45,212,191,.25);}
+.btn-teal:hover{filter:brightness(1.1);transform:translateY(-2px);}
 .ham{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;}
 .ham span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;}
 @media(max-width:900px){.nav-links{display:none;}.btn-ghost{display:none;}.ham{display:flex;}}
-.mob{display:none;position:fixed;top:68px;left:0;right:0;z-index:199;
+.mob{display:none;position:fixed;top:66px;left:0;right:0;z-index:199;
   background:rgba(6,13,31,.99);border-bottom:1px solid var(--line);
-  flex-direction:column;padding:20px 5%;}
+  flex-direction:column;padding:18px 5%;}
 .mob.open{display:flex;}
-.mob a{font-size:16px;font-weight:600;color:var(--muted);padding:12px 0;border-bottom:1px solid var(--line);}
+.mob a{font-size:15px;font-weight:600;color:var(--muted);padding:13px 0;border-bottom:1px solid var(--line);}
 .mob a:last-child{border:none;color:var(--blue);font-weight:800;}
 
-/* ── LAYOUT ── */
-.sec{padding:96px 5%;}
+/* ─── LAYOUT HELPERS ────────────────────────────────────────── */
+.sec{padding:100px 5%;}
+.sec-sm{padding:68px 5%;}
 .wrap{max-width:var(--max);margin:0 auto;}
+.ctr{text-align:center;}
+.ctr .ss{margin:0 auto;}
 .tag{display:inline-block;background:var(--bd);border:1px solid var(--bb);
-  color:var(--blue);font-size:11.5px;font-weight:700;padding:5px 14px;border-radius:20px;
-  letter-spacing:.4px;margin-bottom:16px;}
-.tag-green{background:rgba(0,196,140,.1);border:1px solid rgba(0,196,140,.2);color:var(--green);}
-.tag-amber{background:rgba(255,159,0,.1);border:1px solid rgba(255,159,0,.2);color:var(--amber);}
-.sh{font-size:clamp(28px,4vw,46px);font-weight:900;line-height:1.08;letter-spacing:-1.2px;margin-bottom:16px;}
-.ss{font-size:16px;color:var(--muted);line-height:1.8;max-width:600px;}
-.ctr{text-align:center;}.ctr .ss{margin:0 auto;}
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+  color:var(--blue);font-size:11px;font-weight:700;padding:5px 14px;
+  border-radius:20px;letter-spacing:.5px;margin-bottom:14px;}
+.tag.red{background:var(--rd);border-color:rgba(255,71,87,.22);color:var(--red);}
+.tag.green{background:var(--gd);border-color:rgba(0,196,140,.22);color:var(--green);}
+.tag.amber{background:var(--ad);border-color:rgba(255,159,0,.22);color:var(--amber);}
+.tag.teal{background:var(--td);border-color:rgba(45,212,191,.22);color:var(--teal);}
+.tag.purple{background:var(--pd);border-color:rgba(167,139,250,.22);color:var(--purple);}
+.sh{font-size:clamp(27px,4vw,46px);font-weight:900;line-height:1.08;letter-spacing:-1.2px;margin-bottom:16px;}
+.ss{font-size:16px;color:var(--muted);line-height:1.85;max-width:610px;}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease;}
 .reveal.in{opacity:1;transform:translateY(0);}
 
-/* ── HERO ── */
-.hero{min-height:100svh;display:flex;align-items:center;
-  padding:120px 5% 80px;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-150px;right:-150px;width:600px;height:600px;
-  border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.07),transparent 65%);pointer-events:none;}
-.hero::after{content:'';position:absolute;bottom:-100px;left:-80px;width:440px;height:440px;
-  border-radius:50%;background:radial-gradient(circle,rgba(0,196,140,.04),transparent 65%);pointer-events:none;}
+/* ─── HERO ──────────────────────────────────────────────────── */
+.hero{min-height:100svh;display:flex;align-items:center;padding:120px 5% 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-160px;right:-120px;width:640px;height:640px;border-radius:50%;
+  background:radial-gradient(circle,rgba(61,158,255,.07),transparent 65%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-120px;left:-100px;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(45,212,191,.05),transparent 65%);pointer-events:none;}
 .hero-inner{max-width:var(--max);margin:0 auto;width:100%;
-  display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center;position:relative;z-index:1;}
-@media(max-width:960px){.hero-inner{grid-template-columns:1fr;}.hr{display:none;}}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;
-  background:rgba(61,158,255,.1);border:1px solid var(--bb);color:var(--blue);
-  font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;margin-bottom:24px;letter-spacing:.4px;}
-.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+  display:grid;grid-template-columns:1fr 430px;gap:70px;align-items:center;position:relative;z-index:1;}
+@media(max-width:980px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(61,158,255,.1);
+  border:1px solid var(--bb);color:var(--blue);font-size:12px;font-weight:700;
+  padding:6px 14px;border-radius:20px;margin-bottom:22px;letter-spacing:.4px;}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,196,140,.5);}70%{box-shadow:0 0 0 8px rgba(0,196,140,0);}}
-.hero h1{font-size:clamp(36px,5.5vw,62px);font-weight:900;line-height:1.06;letter-spacing:-2px;margin-bottom:22px;}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue),#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:17px;color:var(--muted);line-height:1.8;max-width:520px;margin-bottom:36px;}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px;}
-.access-row{display:flex;gap:20px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--line);}
-.ai{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:500;}
-.aid{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hero h1{font-size:clamp(36px,5.5vw,64px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:22px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue) 30%,var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.85;max-width:520px;margin-bottom:34px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px;}
+.hero-pills{display:flex;gap:14px;flex-wrap:wrap;padding-top:18px;border-top:1px solid var(--line);}
+.hp{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:500;}
+.hpd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 
-/* Phone mock */
-.phone{width:242px;background:rgba(255,255,255,.04);border:1.5px solid var(--lineb);
-  border-radius:36px;padding:20px 18px;box-shadow:var(--shxl),0 0 60px rgba(61,158,255,.08);
-  animation:lev 5s ease-in-out infinite;position:relative;}
-@keyframes lev{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-.pbar{width:52px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 18px;}
-.phdr{background:linear-gradient(135deg,#0d1b35,#0a2744);border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(--lineb);}
-.pgreet{font-size:10px;color:var(--dim);margin-bottom:2px;}
-.pname{font-size:15px;font-weight:800;font-family:'Outfit',sans-serif;}
-.pscore{display:flex;align-items:center;gap:10px;margin-top:10px;background:rgba(255,255,255,.04);border-radius:9px;padding:9px;}
-.pring{width:34px;height:34px;border-radius:50%;border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:var(--green);}
-.pchip{font-size:10px;font-weight:700;background:rgba(0,196,140,.15);color:var(--green);padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
-.plbl{font-size:9px;font-weight:800;color:var(--dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
-.pmed{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:9px;margin-bottom:6px;}
-.pbub{background:var(--bd);border:1px solid var(--bb);border-radius:10px;padding:9px;margin-top:8px;}
-.pbubl{font-size:9px;font-weight:800;color:var(--blue);margin-bottom:3px;}
-.pbubt{font-size:10.5px;color:var(--muted);line-height:1.5;}
-.badge-f{position:absolute;background:rgba(13,27,53,.96);border:1px solid var(--lineb);border-radius:12px;padding:8px 13px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:var(--sh);animation:lev 4s ease-in-out infinite;z-index:10;}
-.bf1{top:4%;right:15px;animation-delay:0s;color:var(--green);}
-.bf2{bottom:22%;right:20px;animation-delay:1.2s;color:var(--amber);}
-.bf3{top:42%;left:10px;animation-delay:.6s;color:var(--blue);}
+/* Hero visual — dual app mockup */
+.hero-visual{position:relative;display:flex;justify-content:center;padding-top:20px;}
+.app-card{width:205px;background:rgba(13,27,53,.9);border:1.5px solid var(--lineb);
+  border-radius:26px;padding:18px 16px;box-shadow:var(--shxl),0 0 50px rgba(61,158,255,.08);}
+.app-card.cc{animation:lev 5.5s ease-in-out infinite;}
+.app-card.pa{animation:lev 5.5s ease-in-out infinite;animation-delay:.8s;
+  position:absolute;right:-10px;top:60px;width:190px;}
+@keyframes lev{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.abar{width:46px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 16px;}
+.app-tag{font-size:8.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:8px;}
+.app-tag.g{color:var(--teal);}
+.arow{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:9px;padding:9px 10px;margin-bottom:7px;}
+.arow-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.arow-t{font-size:10px;font-weight:700;margin-bottom:1px;}
+.arow-s{font-size:9px;color:var(--dim);}
+.abadge{font-size:8.5px;font-weight:800;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}
+.ab-r{background:rgba(255,71,87,.2);color:var(--red);}
+.ab-g{background:rgba(0,196,140,.2);color:var(--green);}
+.ab-b{background:var(--bd);color:var(--blue);}
+.floatbadge{position:absolute;background:rgba(13,27,53,.96);border:1px solid var(--lineb);
+  border-radius:11px;padding:7px 12px;font-size:11px;font-weight:700;
+  white-space:nowrap;box-shadow:var(--sh);z-index:10;}
+.fb1{top:-5px;left:0;color:var(--green);animation:lev 4s ease-in-out infinite;}
+.fb2{bottom:30%;left:-15px;color:var(--amber);animation:lev 4s ease-in-out infinite;animation-delay:.6s;}
+.fb3{top:38%;right:-5px;color:var(--blue);animation:lev 4s ease-in-out infinite;animation-delay:1.1s;}
 
-/* ── STORY STAT ── */
-.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:48px;}
-@media(max-width:860px){.story-grid{grid-template-columns:1fr;gap:32px;}}
-.stat-ring{width:200px;height:200px;border-radius:50%;border:4px solid var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;position:relative;}
-.stat-ring::after{content:'';position:absolute;inset:-12px;border-radius:50%;border:1px dashed rgba(255,71,87,.2);}
-.stat-big{font-size:42px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--red);line-height:1;}
-.stat-unit{font-size:13px;color:var(--muted);font-weight:600;margin-top:4px;}
-.stat-contrast{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;}
-.sc-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center;}
-.sc-num{font-size:28px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;margin-bottom:4px;}
-.sc-lbl{font-size:11px;color:var(--muted);line-height:1.4;}
-
-/* ── PROBLEM STRIP ── */
-.ps{background:rgba(255,71,87,.03);border-top:1px solid rgba(255,71,87,.1);border-bottom:1px solid rgba(255,71,87,.1);}
-.pg{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,71,87,.08);gap:1px;max-width:var(--max);margin:0 auto;}
-@media(max-width:700px){.pg{grid-template-columns:1fr;}}
-.pi{background:var(--bg);padding:36px 28px;transition:var(--t);}
-.pi:hover{background:rgba(255,71,87,.04);}
-.pstat{font-size:40px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--red);line-height:1;margin-bottom:8px;}
-.ptitle{font-size:15px;font-weight:800;margin-bottom:8px;}
-.pdesc{font-size:13.5px;color:var(--muted);line-height:1.7;}
-
-/* ── STAKEHOLDER PROBLEMS ── */
-.stake-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:48px;}
-@media(max-width:1024px){.stake-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:640px){.stake-grid{grid-template-columns:1fr;}}
-.stake-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;transition:var(--t);text-align:center;}
-.stake-card:hover{background:var(--card-h);border-color:rgba(255,71,87,.2);transform:translateY(-3px);box-shadow:var(--sh);}
-.stake-ico{font-size:36px;margin-bottom:12px;}
-.stake-who{font-size:15px;font-weight:800;margin-bottom:10px;font-family:'Outfit',sans-serif;}
-.stake-list{list-style:none;text-align:left;font-size:12.5px;color:var(--muted);line-height:1.7;}
-.stake-list li{padding:3px 0;display:flex;gap:6px;}
-.stake-list li::before{content:'✗';color:var(--red);font-weight:800;flex-shrink:0;}
-
-/* ── SOLUTION CARD ── */
-.sol-card{background:linear-gradient(160deg,rgba(61,158,255,.06),rgba(0,196,140,.03));border:1px solid var(--lineb);border-radius:var(--rxl);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-top:48px;position:relative;overflow:hidden;}
-.sol-card::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.06),transparent);pointer-events:none;}
-@media(max-width:760px){.sol-card{grid-template-columns:1fr;gap:32px;padding:28px;}}
-.sf{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
-.sfi{width:40px;height:40px;border-radius:10px;background:var(--bd);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
-.sft{font-size:15px;font-weight:700;margin-bottom:3px;}
-.sfd{font-size:13px;color:var(--muted);line-height:1.65;}
-
-/* ── TWO SUITES ── */
-.suite-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;margin-top:56px;}
-@media(max-width:900px){.suite-grid{grid-template-columns:1fr;}}
-.suite-card{background:var(--surface);border-radius:var(--rxl);padding:40px;position:relative;overflow:hidden;transition:var(--t);}
-.suite-card:hover{transform:translateY(-4px);box-shadow:var(--sh);}
-.suite-card::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border-radius:50%;pointer-events:none;}
-.suite-card.primary{border:1.5px solid var(--bb);}
-.suite-card.primary::before{background:radial-gradient(circle,rgba(61,158,255,.08),transparent 70%);}
-.suite-card.secondary{border:1px solid var(--line);}
-.suite-card.secondary::before{background:radial-gradient(circle,rgba(0,196,140,.05),transparent 70%);}
-.suite-name{font-size:26px;font-weight:900;margin-bottom:6px;font-family:'Outfit',sans-serif;}
-.suite-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px;}
-.suite-features{display:flex;flex-direction:column;gap:12px;}
-.suite-feat{display:flex;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.5;}
-.suite-feat span{flex-shrink:0;font-weight:800;}
-.suite-badge{display:inline-block;font-size:10.5px;font-weight:800;padding:4px 12px;border-radius:20px;margin-top:16px;}
-
-/* ── HOW ── */
-.how-bg{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;}
-@media(max-width:900px){.how-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:500px){.how-grid{grid-template-columns:1fr;}}
-.hi{padding:32px 24px;border-right:1px solid var(--line);transition:var(--t);}
-.hi:last-child{border-right:none;}
-.hi:hover{background:var(--card-h);}
-@media(max-width:900px){.hi:nth-child(2){border-right:none;}.hi:nth-child(3){border-top:1px solid var(--line);}}
-@media(max-width:500px){.hi{border-right:none;border-bottom:1px solid var(--line);}.hi:last-child{border-bottom:none;}}
-.hn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#6366f1);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;margin-bottom:16px;box-shadow:var(--glow);}
-.ht{font-size:15px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
-.hd{font-size:13px;color:var(--muted);line-height:1.7;}
-
-/* ── BENTO ── */
-.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
-@media(max-width:1024px){.bento{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:640px){.bento{grid-template-columns:1fr;}}
-.bc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--t);position:relative;overflow:hidden;}
-.bc:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-4px);box-shadow:var(--sh);}
-.bc.w2{grid-column:span 2;}
-@media(max-width:500px){.bc.w2{grid-column:span 1;}}
-.bc::before{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,var(--amb,rgba(61,158,255,.08)),transparent);pointer-events:none;}
-.bico{font-size:32px;margin-bottom:14px;}
-.bti{font-size:17px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
-.bde{font-size:13.5px;color:var(--muted);line-height:1.7;}
-.btag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:12px;}
-.tl{background:rgba(0,196,140,.15);color:var(--green);}
-.ta{background:rgba(167,139,250,.12);color:var(--purple);}
-.tf{background:var(--bd);color:var(--blue);}
-
-/* ── MODES ── */
-.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;}
-@media(max-width:700px){.modes{grid-template-columns:1fr;}}
-.mc{border-radius:var(--r);padding:36px 28px;text-align:center;transition:var(--t);}
-.mc:hover{transform:translateY(-6px);box-shadow:var(--sh);}
-.mc1{background:rgba(61,158,255,.06);border:1px solid rgba(61,158,255,.2);}
-.mc2{background:rgba(37,211,102,.06);border:1px solid rgba(37,211,102,.2);}
-.mc3{background:rgba(255,159,0,.06);border:1px solid rgba(255,159,0,.2);}
-.mico{font-size:52px;margin-bottom:18px;display:block;}
-.mti{font-size:20px;font-weight:800;margin-bottom:10px;font-family:'Outfit',sans-serif;}
-.mde{font-size:14px;color:var(--muted);line-height:1.75;}
-.mwho{font-size:12px;font-weight:700;margin-top:16px;padding:6px 14px;border-radius:20px;display:inline-block;}
-.mw1{background:rgba(61,158,255,.15);color:var(--blue);}
-.mw2{background:rgba(37,211,102,.15);color:#25d366;}
-.mw3{background:rgba(255,159,0,.15);color:var(--amber);}
-
-/* ── FAMILY ── */
-.fam-bg{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-.fam-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;max-width:var(--max);margin:0 auto;}
-@media(max-width:880px){.fam-grid{grid-template-columns:1fr;gap:32px;}}
-.ff{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;}
-.ffi{width:42px;height:42px;border-radius:11px;background:var(--bd);border:1px solid var(--bb);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
-.fft{font-size:15px;font-weight:700;margin-bottom:3px;}
-.ffd{font-size:13.5px;color:var(--muted);line-height:1.6;}
-.fmock{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--sh);}
-.fpill{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;}
-.fpg{background:rgba(0,196,140,.15);color:var(--green);}
-.fpy{background:rgba(255,159,0,.12);color:var(--amber);}
-.frow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);}
-.frow:last-of-type{border-bottom:none;}
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
-.fstat{background:rgba(255,255,255,.04);border-radius:10px;padding:10px;text-align:center;}
-.fsn{font-size:20px;font-weight:900;font-family:'Outfit',sans-serif;}
-
-/* ── CARECONNECT ── */
-.cc-pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px;}
-@media(max-width:760px){.cc-pillars{grid-template-columns:1fr;}}
-.cc-card{border-radius:var(--r);padding:32px;position:relative;overflow:hidden;transition:var(--t);}
-.cc-card:hover{transform:translateY(-4px);box-shadow:var(--shxl);}
-
-/* ── MARKETPLACE ── */
-.mkt-place-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px;}
-@media(max-width:800px){.mkt-place-grid{grid-template-columns:1fr;}}
-.mp-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rxl);padding:36px;transition:var(--t);position:relative;overflow:hidden;}
-.mp-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--lineb);}
-.mp-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;pointer-events:none;}
-.mp-title{font-size:20px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
-.mp-desc{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
-.mp-list{list-style:none;display:flex;flex-wrap:wrap;gap:8px;}
-.mp-list li{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted);}
-
-/* ── HEALTHOPS ── */
-.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px;}
-@media(max-width:900px){.ops-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.ops-grid{grid-template-columns:1fr;}}
-.ops-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--t);}
-.ops-card:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-3px);box-shadow:var(--sh);}
-.ops-ico{font-size:28px;margin-bottom:12px;}
-.ops-title{font-size:16px;font-weight:800;margin-bottom:6px;font-family:'Outfit',sans-serif;}
-.ops-desc{font-size:13px;color:var(--muted);line-height:1.65;}
-.ops-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:10px;}
-
-/* ── WHY DIFFERENT ── */
-.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px;align-items:stretch;}
-@media(max-width:760px){.diff-grid{grid-template-columns:1fr;}}
-.diff-box{border-radius:var(--rxl);padding:36px;position:relative;overflow:hidden;}
-.diff-box::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;pointer-events:none;}
-.diff-others{background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.15);}
-.diff-others::before{background:radial-gradient(circle,rgba(255,71,87,.06),transparent);}
-.diff-curaah{background:rgba(61,158,255,.05);border:1.5px solid var(--bb);}
-.diff-curaah::before{background:radial-gradient(circle,rgba(61,158,255,.08),transparent);}
-.diff-title{font-size:18px;font-weight:800;margin-bottom:16px;font-family:'Outfit',sans-serif;}
-.diff-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
-.diff-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;line-height:1.5;}
-.diff-list li span{flex-shrink:0;font-weight:800;}
-
-/* ── WHAT'S BUILT ── */
-.built-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:48px;}
-@media(max-width:768px){.built-grid{grid-template-columns:1fr;}}
-.bitem{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;transition:var(--t);}
-.bitem:hover{background:var(--card-h);border-color:var(--lineb);}
-.bitem-ico{font-size:22px;flex-shrink:0;margin-top:2px;}
-.bitem-t{font-size:14px;font-weight:700;margin-bottom:3px;}
-.bitem-d{font-size:13px;color:var(--muted);line-height:1.6;}
-.done-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:6px;}
-.db-done{background:rgba(0,196,140,.15);color:var(--green);}
-.db-prog{background:rgba(255,159,0,.12);color:var(--amber);}
-
-/* ── MARKET ── */
-.mkt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px;}
-@media(max-width:700px){.mkt-grid{grid-template-columns:1fr;}}
-.mkt-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:var(--t);}
-.mkt-card:hover{background:var(--card-h);transform:translateY(-3px);}
-.mkt-num{font-size:42px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1;margin-bottom:8px;}
-.mkt-lbl{font-size:15px;font-weight:700;margin-bottom:4px;}
-.mkt-sub{font-size:13px;color:var(--muted);}
-
-/* ── REVENUE ── */
-.rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px;}
-@media(max-width:1024px){.rev-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.rev-grid{grid-template-columns:1fr;}}
-.rcard{background:var(--card);border-radius:var(--r);padding:24px;transition:var(--t);}
-.rcard:hover{transform:translateY(-4px);box-shadow:var(--sh);}
-.rname{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.rprice{font-size:28px;font-weight:900;font-family:'Outfit',sans-serif;margin-bottom:12px;}
-.rdiv{height:1px;background:var(--line);margin-bottom:12px;}
-.rfeature{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
-
-/* ── TRUST ── */
-.trust-bar{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 5%;}
-.trust-inner{max-width:var(--max);margin:0 auto;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+/* ─── TRUST BAR ─────────────────────────────────────────────── */
+.trust{background:rgba(255,255,255,.02);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 5%;}
+.trust-in{max-width:var(--max);margin:0 auto;display:flex;justify-content:center;gap:44px;flex-wrap:wrap;}
 .ti{display:flex;align-items:center;gap:10px;}
-.tilo{font-size:24px;}
-.tilb{font-size:13px;font-weight:700;color:var(--muted);}
-.tilsub{font-size:11px;color:var(--dim);}
+.ti-icon{font-size:22px;}
+.ti-label{font-size:13px;font-weight:700;color:var(--muted);}
+.ti-sub{font-size:10.5px;color:var(--dim);}
 
-/* ── CTA ── */
+/* ─── PROBLEM ───────────────────────────────────────────────── */
+.prob-strip{background:rgba(255,71,87,.03);border-top:1px solid rgba(255,71,87,.1);
+  border-bottom:1px solid rgba(255,71,87,.1);}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);
+  background:rgba(255,71,87,.08);gap:1px;max-width:var(--max);margin:0 auto;}
+@media(max-width:700px){.prob-grid{grid-template-columns:1fr;}}
+.prob-item{background:var(--bg);padding:38px 30px;transition:var(--t);}
+.prob-item:hover{background:rgba(255,71,87,.04);}
+.prob-stat{font-size:42px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--red);line-height:1;margin-bottom:9px;}
+.prob-title{font-size:15px;font-weight:800;margin-bottom:9px;}
+.prob-desc{font-size:13.5px;color:var(--muted);line-height:1.75;}
+
+/* ─── TWO APPS ──────────────────────────────────────────────── */
+.apps-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;margin-top:54px;}
+@media(max-width:880px){.apps-grid{grid-template-columns:1fr;}}
+.app-overview{border-radius:var(--rxl);padding:42px;position:relative;overflow:hidden;transition:var(--t);}
+.app-overview:hover{transform:translateY(-4px);box-shadow:var(--sh);}
+.app-overview::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;
+  border-radius:50%;pointer-events:none;}
+.app-ov-cc{background:var(--surf);border:1.5px solid var(--bb);}
+.app-ov-cc::before{background:radial-gradient(circle,rgba(61,158,255,.08),transparent 70%);}
+.app-ov-pa{background:var(--surf);border:1px solid var(--lineb);}
+.app-ov-pa::before{background:radial-gradient(circle,rgba(45,212,191,.07),transparent 70%);}
+.app-ov-name{font-size:26px;font-weight:900;margin-bottom:6px;}
+.app-ov-who{font-size:12px;font-weight:700;color:var(--dim);margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;}
+.app-ov-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px;}
+.feat-list{display:flex;flex-direction:column;gap:11px;}
+.feat-item{display:flex;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.5;}
+.feat-check{flex-shrink:0;font-weight:800;margin-top:1px;}
+.stakeholders{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;}
+.stake-pill{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);}
+
+/* ─── CARECONNECT FEATURES ──────────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:54px;}
+@media(max-width:900px){.feat-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:580px){.feat-grid{grid-template-columns:1fr;}}
+.feat-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:28px;transition:var(--t);position:relative;overflow:hidden;}
+.feat-card:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-4px);box-shadow:var(--sh);}
+.feat-card::before{content:'';position:absolute;top:-40px;right:-40px;width:110px;height:110px;
+  border-radius:50%;background:radial-gradient(circle,var(--accent,rgba(61,158,255,.08)),transparent);pointer-events:none;}
+.feat-num{font-size:11px;font-weight:800;color:var(--dim);margin-bottom:10px;letter-spacing:.5px;}
+.feat-title{font-size:16px;font-weight:800;margin-bottom:8px;font-family:'Outfit',sans-serif;}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.feat-wide{grid-column:span 2;}
+@media(max-width:580px){.feat-wide{grid-column:span 1;}}
+
+/* ─── PRIVACY ───────────────────────────────────────────────── */
+.privacy-bg{background:rgba(255,255,255,.015);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.privacy-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:50px;}
+@media(max-width:760px){.privacy-grid{grid-template-columns:1fr;}}
+.pv-box{border-radius:var(--rxl);padding:38px;position:relative;overflow:hidden;}
+.pv-never{background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.15);}
+.pv-always{background:rgba(0,196,140,.04);border:1px solid rgba(0,196,140,.15);}
+.pv-title{font-size:16px;font-weight:800;margin-bottom:18px;font-family:'Outfit',sans-serif;}
+.pv-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.pv-list li{font-size:13.5px;color:var(--muted);display:flex;gap:10px;line-height:1.55;}
+.pv-list li span{flex-shrink:0;font-weight:800;}
+
+/* ─── EMERGENCY ─────────────────────────────────────────────── */
+.sos-grid{display:grid;grid-template-columns:1fr 2fr;gap:22px;margin-top:52px;}
+@media(max-width:860px){.sos-grid{grid-template-columns:1fr;}}
+.sos-card{background:rgba(255,71,87,.04);border:1.5px solid rgba(255,71,87,.18);border-radius:var(--rxl);padding:36px;}
+.sos-title{font-size:20px;font-weight:800;margin-bottom:12px;font-family:'Outfit',sans-serif;}
+.sos-desc{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.sos-pts{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.sos-pts li{font-size:13px;color:var(--muted);display:flex;gap:9px;}
+.req-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+@media(max-width:600px){.req-grid{grid-template-columns:1fr 1fr;}}
+.req-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px;transition:var(--t);cursor:default;}
+.req-card:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-2px);}
+.req-num{font-size:10px;font-weight:800;color:var(--dim);margin-bottom:6px;letter-spacing:.5px;}
+.req-name{font-size:13px;font-weight:700;margin-bottom:4px;}
+.req-who{font-size:11.5px;color:var(--muted);line-height:1.5;}
+
+/* ─── SEWA POINTS ───────────────────────────────────────────── */
+.sewa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;}
+@media(max-width:860px){.sewa-grid{grid-template-columns:1fr;}}
+.sewa-box{border-radius:var(--rxl);padding:36px;}
+.sewa-earn{background:rgba(45,212,191,.05);border:1.5px solid rgba(45,212,191,.18);}
+.sewa-redeem{background:rgba(255,159,0,.05);border:1.5px solid rgba(255,159,0,.18);}
+.sewa-innovation{background:rgba(167,139,250,.05);border:1.5px solid rgba(167,139,250,.18);}
+.sewa-title{font-size:16px;font-weight:800;margin-bottom:16px;font-family:'Outfit',sans-serif;}
+.sewa-row{display:flex;justify-content:space-between;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+.sewa-row:last-child{border-bottom:none;}
+.sewa-row-pts{font-weight:800;color:var(--teal);}
+.sewa-row-pts.a{color:var(--amber);}
+.sewa-inno-text{font-size:13px;color:var(--muted);line-height:1.75;}
+.sewa-inno-text strong{color:var(--purple);}
+
+/* ─── BUSINESS MODEL ────────────────────────────────────────── */
+.model-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:52px;}
+@media(max-width:860px){.model-grid{grid-template-columns:1fr;}}
+.model-card{border-radius:var(--rxl);padding:36px;transition:var(--t);}
+.model-card:hover{transform:translateY(-4px);box-shadow:var(--sh);}
+.mc-free{background:rgba(0,196,140,.05);border:1.5px solid rgba(0,196,140,.2);}
+.mc-fair{background:rgba(61,158,255,.05);border:1.5px solid var(--bb);}
+.mc-future{background:rgba(167,139,250,.05);border:1.5px solid rgba(167,139,250,.2);}
+.mc-title{font-size:22px;font-weight:900;margin-bottom:8px;font-family:'Outfit',sans-serif;}
+.mc-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:18px;}
+.mc-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.mc-list li{font-size:13px;color:var(--muted);display:flex;gap:9px;line-height:1.5;}
+
+/* ─── WHY INDIA ─────────────────────────────────────────────── */
+.why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:52px;}
+@media(max-width:680px){.why-grid{grid-template-columns:1fr;}}
+.why-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:26px;display:flex;gap:16px;transition:var(--t);}
+.why-card:hover{background:var(--card-h);border-color:var(--lineb);}
+.why-num{font-size:28px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--blue);
+  flex-shrink:0;line-height:1;margin-top:3px;}
+.why-text-t{font-size:14px;font-weight:700;margin-bottom:5px;}
+.why-text-d{font-size:12.5px;color:var(--muted);line-height:1.65;}
+
+/* ─── ASK CURAAH ────────────────────────────────────────────── */
+.ask-bg{background:rgba(255,255,255,.015);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.ask-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;}
+@media(max-width:780px){.ask-grid{grid-template-columns:1fr;}}
+.ask-card{border-radius:var(--r);padding:30px;transition:var(--t);}
+.ask-card:hover{transform:translateY(-3px);box-shadow:var(--sh);}
+.ask-google{background:rgba(100,116,139,.06);border:1px solid rgba(100,116,139,.15);}
+.ask-generic{background:rgba(255,159,0,.05);border:1px solid rgba(255,159,0,.15);}
+.ask-curaah{background:rgba(167,139,250,.06);border:1.5px solid rgba(167,139,250,.25);}
+.ask-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:10px;}
+.ask-title{font-size:17px;font-weight:800;margin-bottom:14px;font-family:'Outfit',sans-serif;}
+.ask-pt{display:flex;gap:9px;font-size:13px;color:var(--muted);margin-bottom:9px;line-height:1.5;}
+.ask-verdict{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;
+  display:inline-block;margin-top:8px;}
+.av-bad{background:rgba(255,71,87,.15);color:var(--red);}
+.av-ok{background:rgba(255,159,0,.15);color:var(--amber);}
+.av-good{background:rgba(167,139,250,.2);color:var(--purple);}
+
+/* ─── TRACTION ──────────────────────────────────────────────── */
+.traction-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:52px;}
+@media(max-width:680px){.traction-grid{grid-template-columns:1fr;}}
+.tr-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:var(--t);}
+.tr-item:hover{background:var(--card-h);border-color:var(--lineb);}
+.tr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.tr-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.tr-desc{font-size:12.5px;color:var(--muted);line-height:1.6;}
+.tr-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:5px;}
+.tb-done{background:rgba(0,196,140,.15);color:var(--green);}
+.tb-next{background:rgba(255,159,0,.12);color:var(--amber);}
+
+/* ─── FUTURE ────────────────────────────────────────────────── */
+.future-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:50px;}
+@media(max-width:860px){.future-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:580px){.future-grid{grid-template-columns:1fr;}}
+.future-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:24px;transition:var(--t);}
+.future-card:hover{background:var(--card-h);border-color:var(--lineb);transform:translateY(-3px);}
+.future-ico{font-size:26px;margin-bottom:12px;}
+.future-title{font-size:14px;font-weight:800;margin-bottom:7px;font-family:'Outfit',sans-serif;}
+.future-desc{font-size:12.5px;color:var(--muted);line-height:1.65;}
+
+/* ─── CTA SECTION ───────────────────────────────────────────── */
 .cta-bg{background:linear-gradient(160deg,#0d1b35,#0a2744);border-top:1px solid var(--lineb);}
-.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
-.cta-h{font-size:clamp(28px,4vw,50px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;}
-.cta-sub{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:36px;}
+.cta-inner{max-width:720px;margin:0 auto;text-align:center;}
+.cta-h{font-size:clamp(28px,4.2vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;}
+.cta-h em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cta-sub{font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:36px;}
 .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-.cta-trust{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px;}
-.ctitem{font-size:12px;color:var(--dim);}
+.cta-note{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:22px;}
+.cta-note-item{font-size:12px;color:var(--dim);display:flex;gap:6px;align-items:center;}
 
-/* ── FOOTER ── */
-footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 32px;}
-.fg{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
-@media(max-width:900px){.fg{grid-template-columns:1fr 1fr;gap:28px;}}
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+footer{background:var(--bg);border-top:1px solid var(--line);padding:52px 5% 30px;}
+.fg{max-width:var(--max);margin:0 auto;display:grid;
+  grid-template-columns:2.2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+@media(max-width:860px){.fg{grid-template-columns:1fr 1fr;gap:28px;}}
 @media(max-width:500px){.fg{grid-template-columns:1fr;}}
 .fbrand{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.ftagline{font-size:13.5px;color:var(--muted);line-height:1.7;max-width:280px;}
-.fch{font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;}
+.ftagline{font-size:13.5px;color:var(--muted);line-height:1.75;max-width:270px;margin-bottom:16px;}
+.fch{font-size:10.5px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
 .fc a{display:block;font-size:14px;color:var(--muted);margin-bottom:10px;transition:var(--t);}
 .fc a:hover{color:var(--blue);}
-.fbot{max-width:var(--max);margin:0 auto;border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.fbot{max-width:var(--max);margin:0 auto;border-top:1px solid var(--line);
+  padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 .fbot p{font-size:12px;color:var(--dim);}
-.disc{font-size:11.5px;color:rgba(255,71,87,.6);}
-.st{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:var(--blue);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:90;box-shadow:var(--glow);}
+.st{position:fixed;bottom:24px;right:24px;width:44px;height:44px;background:var(--blue);
+  color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;
+  display:none;align-items:center;justify-content:center;z-index:90;box-shadow:var(--glow);}
 .st.vis{display:flex;}.st:hover{transform:translateY(-3px);}
-  </style>
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════ NAV ═══════════════════════════════════ -->
+<!-- ═══ NAV ══════════════════════════════════════════════════ -->
 <nav class="nav" id="nav">
-  <a class="curaah-logo" href="#">
-    <svg class="lsvg" viewBox="0 0 36 36" fill="none"><path d="M18 3L5 9L5 21Q5 30 18 34Q31 30 31 21L31 9Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10Q13 15 13 20Q13 25 18 28Q23 25 23 20Q23 15 18 10Z" fill="#3d9eff" opacity=".9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
-    <div><div class="cn">curaah</div><span class="ct">HealthTech</span></div>
+  <a class="brand" href="#">
+    <img src="assets/logo.svg" alt="Curaah Logo" style="width:36px;height:36px;flex-shrink:0;"/>
+    <div><div class="brand-name">curaah</div><span class="brand-sub">HealthTech</span></div>
   </a>
   <div class="nav-links">
-    <a href="#story">Our Story</a>
-    <a href="#recover">Curaah Recover</a>
-    <a href="#family">For Families</a>
-    <a href="#community">CareConnect</a>
-    <a href="#healthops">HealthOps</a>
-    <a href="#different">Why Us</a>
+    <a href="#problem">Problem</a>
+    <a href="#careconnect">CareConnect</a>
+    <a href="#curaah-app">Patient App</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#emergency">Emergency</a>
+    <a href="#sewa">Sewa Points</a>
+    <a href="#traction">Traction</a>
   </div>
   <div class="nav-cta">
-    <a href="family.html" class="btn btn-sm btn-ghost">Family Dashboard</a>
-    <a href="companion.html" class="btn btn-sm btn-blue">Start Recovery →</a>
+    <a href="#waitlist" class="btn btn-sm btn-ghost">For NGOs & Blood Banks</a>
+    <a href="#waitlist" class="btn btn-sm btn-blue">Join Waitlist →</a>
   </div>
   <div class="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
 </nav>
 <div class="mob" id="mob">
-  <a href="#story" onclick="toggleMob()">Our Story</a>
-  <a href="#recover" onclick="toggleMob()">Curaah Recover</a>
-  <a href="#family" onclick="toggleMob()">For Families</a>
-  <a href="#community" onclick="toggleMob()">CareConnect</a>
-  <a href="#healthops" onclick="toggleMob()">HealthOps</a>
-  <a href="#different" onclick="toggleMob()">Why Us</a>
-  <a href="family.html" onclick="toggleMob()">👨‍👩‍👧 Family Dashboard</a>
-  <a href="companion.html" onclick="toggleMob()">→ Start Recovery Journey</a>
+  <a href="#problem" onclick="toggleMob()">The Problem</a>
+  <a href="#careconnect" onclick="toggleMob()">CareConnect</a>
+  <a href="#curaah-app" onclick="toggleMob()">Patient App</a>
+  <a href="#privacy" onclick="toggleMob()">Privacy</a>
+  <a href="#emergency" onclick="toggleMob()">Emergency System</a>
+  <a href="#sewa" onclick="toggleMob()">Sewa Points</a>
+  <a href="#traction" onclick="toggleMob()">Traction</a>
+  <a href="#waitlist" onclick="toggleMob()">→ Join Waitlist</a>
 </div>
 
-<!-- ═══════════════════════════════════ HERO ═══════════════════════════════════ -->
+<!-- ═══ HERO ══════════════════════════════════════════════════ -->
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="eyebrow"><div class="pulse"></div> IIT Ropar Incubated </div>
-      <h1>Personalized<br/>Recovery.<br/><em>Continuous Care.</em></h1>
-      <p class="hero-sub">Healthcare doesn't fail because doctors are incapable. Healthcare fails because recovery happens outside hospitals. Curaah bridges this gap with AI-powered recovery intelligence, healthcare continuity, and personalized health guidance.</p>
+      <div class="eyebrow"><div class="pulse"></div> IIT Ropar TBIF Incubated &nbsp;·&nbsp; DPIIT Registered</div>
+      <h1>Right Support,<br/>for/by Right People,<br/><em>at the Right Time.</em></h1>
+      <p class="hero-sub">India's first verified community health platform — connecting patients, volunteers, NGOs, blood banks and healthcare professionals in one GPS-aware, privacy-first, AI-powered ecosystem. Free for Sewa. Fair for business.</p>
       <div class="hero-ctas">
-        <a href="companion.html" class="btn btn-lg btn-blue">🚀 Start Your Recovery — Free</a>
-        <a href="#story" class="btn btn-lg btn-ghost">Our Story ↓</a>
+        <a href="#waitlist" class="btn btn-lg btn-blue">Join Waitlist — Free</a>
+        <a href="#careconnect" class="btn btn-lg btn-ghost">See How It Works ↓</a>
       </div>
-      <div class="access-row">
-        <div class="ai"><div class="aid" style="background:var(--blue)"></div> 📱 PWA App</div>
-        <div class="ai"><div class="aid" style="background:#25d366"></div> 💬 WhatsApp</div>
-        <div class="ai"><div class="aid" style="background:var(--amber)"></div> 📞 AI Voice Call</div>
-        <div class="ai"><div class="aid" style="background:var(--purple)"></div> 🌐 Hindi · Punjabi · English</div>
+      <div class="hero-pills">
+        <div class="hp"><div class="hpd" style="background:var(--blue)"></div>Two Connected Apps</div>
+        <div class="hp"><div class="hpd" style="background:var(--green)"></div>Privacy First</div>
+        <div class="hp"><div class="hpd" style="background:var(--amber)"></div>Sewa Points System</div>
+        <div class="hp"><div class="hpd" style="background:var(--purple)"></div>AI-Powered</div>
+        <div class="hp"><div class="hpd" style="background:var(--red)"></div>Emergency System</div>
       </div>
     </div>
-    <div class="hr" style="position:relative;display:flex;justify-content:center;">
-      <div class="badge-f bf3">🤖 AI Recovery Active</div>
-      <div class="phone">
-        <div class="pbar"></div>
-        <div class="phdr">
-          <div class="pgreet">Good morning 🌅</div>
-          <div class="pname">Recovery Journey</div>
-          <div class="pscore"><div class="pring">82</div><div><div style="font-size:11px;font-weight:700">Recovery Score</div><div class="pchip">🔥 7-day streak</div></div></div>
+    <div class="hero-visual">
+      <div class="floatbadge fb1">+ Blood Emergency Dispatched</div>
+      <div class="floatbadge fb2">Sewa Points: +200</div>
+      <div class="floatbadge fb3">GPS Match Found</div>
+      <!-- CareConnect card -->
+      <div class="app-card cc">
+        <div class="abar"></div>
+        <div class="app-tag">CareConnect</div>
+        <div class="arow">
+          <div class="arow-dot" style="background:var(--red)"></div>
+          <div><div class="arow-t">Blood Emergency — O+</div><div class="arow-s">2.4km · 3 Banks Alerted</div><div class="abadge ab-r">URGENT</div></div>
         </div>
-        <div class="plbl">Today's Doses</div>
-        <div class="pmed"><span style="font-size:14px">🌅</span><div style="flex:1"><div style="font-size:11px;font-weight:700">Metformin 500mg</div><div style="font-size:9px;color:var(--dim)">Morning · After food</div></div><span style="color:var(--green);font-size:14px">✅</span></div>
-        <div class="pmed"><span style="font-size:14px">🌙</span><div style="flex:1"><div style="font-size:11px;font-weight:700">Atorvastatin 10mg</div><div style="font-size:9px;color:var(--dim)">Night · 1 tablet</div></div><span style="font-size:11px;color:var(--amber)">⏳</span></div>
-        <div class="pbub"><div class="pbubl">💬 Curaah AI</div><div class="pbubt">Your sugar was slightly high. Try a 15-min walk after dinner! 🚶</div></div>
-      </div>
-      <div class="badge-f bf1">📊 Recovery Score: 82</div>
-      <div class="badge-f bf2">🍱 Diet: SAFE for you</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ OUR STORY ═══════════════════════════════════ -->
-<section class="sec" id="story">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Our Story</div>
-      <h2 class="sh">A patient spends 45 minutes<br/>in the healthcare system.<br/>And 23 hours alone.</h2>
-      <p class="ss ctr">Curaah was founded from a simple observation: healthcare doesn't fail at diagnosis. It fails during recovery — the 23 hours and 15 minutes every day that patients spend outside the healthcare system.</p>
-    </div>
-    <div class="story-grid reveal">
-      <div>
-        <div class="stat-ring">
-          <div class="stat-big">23h 15m</div>
-          <div class="stat-unit">spent alone every day</div>
+        <div class="arow">
+          <div class="arow-dot" style="background:var(--blue)"></div>
+          <div><div class="arow-t">Diabetes Camp — Amritsar</div><div class="arow-s">Sat · 8 volunteers needed</div><div class="abadge ab-b">OPEN</div></div>
         </div>
-        <div class="stat-contrast">
-          <div class="sc-item"><div class="sc-num" style="color:var(--green)">10</div><div class="sc-lbl">minutes with doctor</div></div>
-          <div class="sc-item"><div class="sc-num" style="color:var(--green)">5</div><div class="sc-lbl">minutes with pharmacist</div></div>
-          <div class="sc-item"><div class="sc-num" style="color:var(--green)">30</div><div class="sc-lbl">minutes getting tests</div></div>
-          <div class="sc-item"><div class="sc-num" style="color:var(--red)">1,395</div><div class="sc-lbl">minutes unsupported</div></div>
+        <div class="arow">
+          <div class="arow-dot" style="background:var(--green)"></div>
+          <div><div class="arow-t">Wheelchair available to donate</div><div class="arow-s">Resource Board · 1.1km</div><div class="abadge ab-g">NEW</div></div>
         </div>
       </div>
-      <div>
-        <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:20px">During those unsupported hours, <strong style="color:var(--ink)">medicines are forgotten</strong>. Diets are ignored. Reports are misunderstood. Follow-ups are missed. Lifestyle recommendations are abandoned. Family members remain uninformed. Doctors lose visibility into patient progress.</p>
-        <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:20px">The result is that <strong style="color:var(--red)">millions of patients continue to suffer despite receiving medical treatment</strong>.</p>
-        <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:24px">We believe the future of healthcare is not only diagnosis and treatment. The future is <strong style="color:var(--blue)">Recovery Intelligence</strong>, <strong style="color:var(--green)">Healthcare Continuity</strong>, <strong style="color:var(--purple)">Personalized Health Guidance</strong>, and <strong style="color:var(--amber)">Data-Driven Recovery Outcomes</strong>.</p>
-        <div style="background:rgba(61,158,255,.05);border:1px solid var(--bb);border-radius:var(--r);padding:18px;">
-          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:8px">Our Mission</div>
-          <div style="font-size:13.5px;color:var(--muted);line-height:1.7">To create a continuous healthcare ecosystem where patients, families, doctors, healthcare facilities, and public health systems remain intelligently connected through data, AI, and personalized recovery support.</div>
+      <!-- Curaah App card -->
+      <div class="app-card pa">
+        <div class="abar"></div>
+        <div class="app-tag g">Curaah App</div>
+        <div style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:9px;padding:10px;margin-bottom:7px;">
+          <div style="font-size:9px;font-weight:800;color:var(--teal);margin-bottom:3px;">Health Score</div>
+          <div style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif;color:var(--teal);line-height:1;">82</div>
+          <div style="font-size:9px;color:var(--dim);margin-top:2px;">Good — streak: 7 days</div>
+        </div>
+        <div class="arow">
+          <div class="arow-dot" style="background:var(--green)"></div>
+          <div><div class="arow-t">Metformin 500mg</div><div class="arow-s">Morning — Taken</div></div>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:8px;margin-top:5px;">
+          <div style="font-size:8px;font-weight:800;color:var(--purple);margin-bottom:3px;">Ask Curaah</div>
+          <div style="font-size:9.5px;color:var(--muted);line-height:1.5;">Your sugar was elevated. A 15-min walk after lunch is recommended for you specifically.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════ PROBLEM STRIP ═══════════════════════════════════ -->
-<div class="ps">
-  <div class="pg">
-    <div class="pi reveal">
-      <div class="pstat">50%</div>
-      <div class="ptitle">Patients stop medicines within 6 months</div>
-      <div class="pdesc">Non-adherence is the #1 cause of preventable hospitalisations. Patients forget, misunderstand dosage, or feel better and stop.</div>
-    </div>
-    <div class="pi reveal">
-      <div class="pstat">500M+</div>
-      <div class="ptitle">Chronic patients managing recovery alone</div>
-      <div class="pdesc">77M+ diabetics, 220M+ hypertensives — most navigating complex prescriptions and dietary changes with zero digital support.</div>
-    </div>
-    <div class="pi reveal">
-      <div class="pstat">7 min</div>
-      <div class="ptitle">Average OPD consultation — then recovery is unsupported</div>
-      <div class="pdesc">A 7-minute appointment cannot cover diet, lifestyle, drug interactions, and family coordination. The recovery journey remains unmanaged.</div>
-    </div>
+<!-- ═══ TRUST BAR ═════════════════════════════════════════════ -->
+<div class="trust">
+  <div class="trust-in">
+    <div class="ti"><div class="ti-icon">🏛️</div><div><div class="ti-label">IIT Ropar TBIF</div><div class="ti-sub">Incubated Startup</div></div></div>
+    <div class="ti"><div class="ti-icon">🇮🇳</div><div><div class="ti-label">DPIIT Registered</div><div class="ti-sub">Startup India</div></div></div>
+    <div class="ti"><div class="ti-icon">🙏</div><div><div class="ti-label">Free for Sewa</div><div class="ti-sub">Community always free</div></div></div>
+    <div class="ti"><div class="ti-icon">🔒</div><div><div class="ti-label">Privacy First</div><div class="ti-sub">DPDP 2023 Compliant</div></div></div>
+    <div class="ti"><div class="ti-icon">📍</div><div><div class="ti-label">Punjab, India</div><div class="ti-sub">Sewa culture at core</div></div></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ THE PROBLEM — EVERY STAKEHOLDER ═══════════════════════════════════ -->
+<!-- ═══ PROBLEM ═══════════════════════════════════════════════ -->
 <section class="sec" id="problem">
   <div class="wrap">
     <div class="ctr reveal">
-      <div class="tag" style="background:rgba(255,71,87,.1);border-color:rgba(255,71,87,.2);color:var(--red)">The Problem We Are Solving</div>
-      <h2 class="sh">Today's healthcare is fragmented.<br/>Every stakeholder suffers.</h2>
-      <p class="ss ctr">Most healthcare apps focus on booking appointments, ordering medicines, and teleconsultations. Very few focus on helping patients recover.</p>
-    </div>
-    <div class="stake-grid reveal">
-      <div class="stake-card">
-        <div class="stake-ico">😔</div>
-        <div class="stake-who">Patients</div>
-        <ul class="stake-list">
-          <li>Forget medicines</li>
-          <li>Don't understand prescriptions</li>
-          <li>Misinterpret reports</li>
-          <li>Struggle with lifestyle changes</li>
-          <li>Cannot track recovery</li>
-          <li>Feel alone during treatment</li>
-        </ul>
-      </div>
-      <div class="stake-card">
-        <div class="stake-ico">👨‍👩‍👧</div>
-        <div class="stake-who">Families</div>
-        <ul class="stake-list">
-          <li>Don't know if medicines taken</li>
-          <li>Cannot monitor recovery</li>
-          <li>No visibility into progress</li>
-          <li>Information only in emergencies</li>
-          <li>Geographically distant</li>
-        </ul>
-      </div>
-      <div class="stake-card">
-        <div class="stake-ico">👨‍⚕️</div>
-        <div class="stake-who">Doctors</div>
-        <ul class="stake-list">
-          <li>Cannot monitor continuously</li>
-          <li>Cannot answer every question</li>
-          <li>Cannot guide patients daily</li>
-          <li>Lose visibility into adherence</li>
-          <li>No recovery data between visits</li>
-        </ul>
-      </div>
-      <div class="stake-card">
-        <div class="stake-ico">🏥</div>
-        <div class="stake-who">Facilities</div>
-        <ul class="stake-list">
-          <li>Administrative burden</li>
-          <li>Documentation overload</li>
-          <li>EHR maintenance costs</li>
-          <li>Patient flow issues</li>
-          <li>Manual workflows</li>
-        </ul>
-      </div>
-      <div class="stake-card">
-        <div class="stake-ico">🏛️</div>
-        <div class="stake-who">Public Health</div>
-        <ul class="stake-list">
-          <li>Manual data collection</li>
-          <li>Reporting delays</li>
-          <li>Documentation burden</li>
-          <li>Limited visibility</li>
-          <li>Fragmented systems</li>
-        </ul>
-      </div>
+      <div class="tag red">The Problem</div>
+      <h2 class="sh">India's community healthcare<br/>coordination is broken.</h2>
+      <p class="ss ctr">Three massive, unresolved gaps affecting hundreds of millions of Indians every single day — and no single platform has ever tried to solve all three together.</p>
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════ THE RECOVERY GAP ═══════════════════════════════════ -->
-<section class="sec how-bg">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">The Recovery Gap</div>
-      <h2 class="sh">Meet a typical Indian patient.<br/>His story is not unique.</h2>
+<div class="prob-strip">
+  <div class="prob-grid wrap">
+    <div class="prob-item reveal">
+      <div class="prob-stat">3 Million</div>
+      <div class="prob-title">Blood units shortage every year</div>
+      <div class="prob-desc">Millions of willing donors exist in India. But blood banks have no verified, privacy-safe way to find them fast. Emergencies fail not because of lack of will — but lack of coordination.</div>
     </div>
-    <div class="sol-card reveal">
-      <div>
-        <div class="sf"><div class="sfi">🏥</div><div><div class="sft">Doctor gives him a new prescription</div><div class="sfd">4 medicines. Complex timings. He goes home with a paper slip in his pocket.</div></div></div>
-        <div class="sf"><div class="sfi">💊</div><div><div class="sft">Day 3 — he confuses two medicines</div><div class="sfd">Takes his evening dose in the morning. No one at home to check.</div></div></div>
-        <div class="sf"><div class="sfi">😔</div><div><div class="sft">Day 7 — he runs out</div><div class="sfd">Doesn't know how to reorder. Skips medicine for 3 days.</div></div></div>
-        <div class="sf"><div class="sfi">👨‍👩‍👧</div><div><div class="sft">His daughter is in Canada</div><div class="sfd">She calls every Sunday. She doesn't know. She has no visibility.</div></div></div>
-        <div class="sf"><div class="sfi" style="background:rgba(255,71,87,.12);border-color:rgba(255,71,87,.2)">🚨</div><div><div class="sft" style="color:var(--red)">Day 21 — blood sugar spikes. Emergency at 2 AM.</div><div class="sfd">Avoidable. Entirely preventable. This happens to millions of patients every month.</div></div></div>
-      </div>
-      <div>
-        <div style="background:rgba(61,158,255,.05);border:1px solid var(--bb);border-radius:var(--r);padding:24px;margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">What Curaah Changes</div>
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">AI reads the prescription</strong> — extracts every medicine, dosage, and timing automatically</div></div>
-            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Personalized recovery plan</strong> — diet, exercise, lifestyle based on your specific condition</div></div>
-            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Family stays informed</strong> — daughter in Canada gets real-time recovery updates</div></div>
-            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Digital Health Twin</strong> — AI builds a continuously evolving understanding of health</div></div>
-            <div style="display:flex;gap:10px"><span style="color:var(--green);font-weight:800;flex-shrink:0">✓</span><div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">SOS in one tap</strong> — GPS + full medical record sent to family and 108</div></div>
-          </div>
-        </div>
-        <div style="background:rgba(0,196,140,.05);border:1px solid rgba(0,196,140,.2);border-radius:var(--r);padding:18px;">
-          <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:8px">"He is not a careless patient. He is an unsupported one."</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.65">Curaah is built for the 500 million patients across India managing chronic disease alone, with no recovery support system designed for them.</div>
-        </div>
-      </div>
+    <div class="prob-item reveal">
+      <div class="prob-stat">500,000+</div>
+      <div class="prob-title">NGOs coordinating through WhatsApp groups</div>
+      <div class="prob-desc">Over half a million active community health organizations — all operating through informal personal contacts and WhatsApp groups. No verified, structured coordination platform exists anywhere in India.</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ TWO SUITES OVERVIEW ═══════════════════════════════════ -->
-<section class="sec">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">A Dual-Suite Healthcare Ecosystem</div>
-      <h2 class="sh">Two suites. One connected ecosystem.</h2>
-      <p class="ss ctr">Curaah addresses both sides of the healthcare equation — empowering patients with continuous recovery support and enabling healthcare facilities with intelligent automation.</p>
+    <div class="prob-item reveal">
+      <div class="prob-stat">321 Million</div>
+      <div class="prob-title">Chronic patients getting generic health answers</div>
+      <div class="prob-desc">India's 321 million chronic disease patients search health questions on Google and get articles written for everyone — useful for no one specifically. Generic AI makes it worse with hallucinations.</div>
     </div>
-    <div class="suite-grid reveal">
-      <div class="suite-card primary">
-        <div class="tag" style="margin-bottom:18px">Flagship Product</div>
-        <div class="suite-name" style="color:var(--blue)">Curaah Recover</div>
-        <div class="suite-desc">Personalized Recovery Intelligence Platform — your AI-powered health companion, recovery coach, medication assistant, nutrition guide, and family care platform, all in one.</div>
-        <div class="suite-features">
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Digital Health Twin</strong> — evolving personalized health understanding</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Medication Intelligence</strong> — Rx upload, pill ID, drug interactions</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">AI Recovery Companion</strong> — multilingual, context-aware guidance</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Recovery Tracking</strong> — vitals, adherence, milestones, reports</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Nutrition & Lifestyle</strong> — condition-specific diet, exercise, yoga</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Family Dashboard</strong> — consent-based remote monitoring & SOS</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Recovery Marketplace</strong> — personalized kits, nutrition, wellness</div></div>
-        </div>
-        <div class="suite-badge" style="background:rgba(0,196,140,.15);color:var(--green)">🟢 Demo Live — Try Free Today</div>
-        <div style="margin-top:16px"><a href="companion.html" class="btn btn-md btn-blue">Start Recovery Journey →</a></div>
-      </div>
-      <div class="suite-card secondary">
-        <div class="tag tag-green" style="margin-bottom:18px">For Healthcare Facilities</div>
-        <div class="suite-name" style="color:var(--green)">Curaah HealthOps</div>
-        <div class="suite-desc">Healthcare Operations & Digital Transformation Platform. Intelligent automation for clinics, hospitals, and public health systems.</div>
-        <div class="suite-features">
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">AI-Assisted EHR</strong> — paper→digital with human verification</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Documentation Automation</strong> — registers, Rx, reports</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Smart Patient Kiosk</strong> — registration, queue, routing</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Doctor Suite</strong> — monitor patient recovery</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">WhatsApp Automation</strong> — reminders, follow-ups</div></div>
-          <div class="suite-feat"><span style="color:var(--green)">✓</span><div><strong style="color:var(--ink)">Public Health Analytics</strong> — privacy-conscious insights</div></div>
-        </div>
-        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">🟡 Contract Based Development — Pilots Open</div>
-        <div style="margin-top:16px"><a href="mailto:curaahtech@gmail.com" class="btn btn-md btn-ghost">Contact for Service →</a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ CURAAH RECOVER — DEEP DIVE ═══════════════════════════════════ -->
-<section class="sec how-bg" id="recover">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Curaah Recover — Core Features</div>
-      <h2 class="sh">Everything your recovery needs</h2>
-      <p class="ss ctr">Every patient is unique. Two patients with the same disease need different recovery strategies. Curaah creates personalized recovery journeys — not generic health recommendations.</p>
-    </div>
-    <div class="bento reveal">
-      <div class="bc w2" style="--amb:rgba(61,158,255,.06)">
-        <div class="bico">🧬</div>
-        <div class="bti">Digital Health Twin</div>
-        <div class="bde">Every patient builds a living, evolving health profile — your age, gender, conditions, prescriptions, medication history, lab reports, lifestyle habits, recovery trends, adherence behavior, and family support system. The AI continuously learns from your interactions and health data, developing a deep understanding of your unique recovery journey.</div>
-        <span class="btag tl">Core Philosophy</span>
-      </div>
-      <div class="bc" style="--amb:rgba(167,139,250,.05)">
-        <div class="bico">💊</div>
-        <div class="bti">Medication Intelligence Engine</div>
-        <div class="bde">Upload prescriptions, photograph medicine strips, scan tablets. AI verifies correct medicine, dosage, timing, prescription compliance, potential interactions, and duplicate therapies. Pharmacy-independent — works with medicines from any pharmacy.</div>
-        <span class="btag ta">AI Vision</span>
-      </div>
-      <div class="bc" style="--amb:rgba(61,158,255,.05)">
-        <div class="bico">🤖</div>
-        <div class="bti">AI Recovery Companion</div>
-        <div class="bde">Unlike generic chatbots, Curaah's AI already knows your medications, diseases, reports, and progress. Ask "Can I eat Chinese food today?" — the AI evaluates your disease, medication profile, recent health data, and recovery goals before responding.</div>
-        <span class="btag ta">Contextual AI</span>
-      </div>
-      <div class="bc" style="--amb:rgba(0,196,140,.04)">
-        <div class="bico">📊</div>
-        <div class="bti">Recovery Tracking & Visualization</div>
-        <div class="bde">Track blood sugar, HbA1c, blood pressure, weight, SpO2, laboratory markers, adherence scores, and recovery milestones. Beautiful visual dashboards help you understand whether recovery is actually happening — converting healthcare into measurable progress.</div>
-        <span class="btag tl">Core Feature</span>
-      </div>
-      <div class="bc" style="--amb:rgba(0,196,140,.05)">
-        <div class="bico">🍱</div>
-        <div class="bti">Personalized Recovery Planning</div>
-        <div class="bde">Recovery depends on nutrition, exercise, sleep, mental wellbeing, and lifestyle habits. AI generates personalized recommendations based on your disease, medications, health profile, recovery stage, geography, and environment — not generic internet advice.</div>
-        <span class="btag ta">AI Personalization</span>
-      </div>
-      <div class="bc" style="--amb:rgba(61,158,255,.05)">
-        <div class="bico">🔬</div>
-        <div class="bti">Lab Report Explainer</div>
-        <div class="bde">Upload lab reports. AI explains HbA1c, creatinine, cholesterol, and 50+ values in simple words your family can understand. Track how your condition improves over months of treatment.</div>
-        <span class="btag tl">Core Feature</span>
-      </div>
-      <div class="bc" style="--amb:rgba(255,71,87,.04)">
-        <div class="bico">🚨</div>
-        <div class="bti">SOS Emergency System</div>
-        <div class="bde">One tap sends GPS location + full medical record to family and 108 emergency services. DPDP 2023 compliant consent gate. First responders get your medicines, allergies, and conditions instantly.</div>
-        <span class="btag" style="background:rgba(255,71,87,.12);color:var(--red)">Emergency Ready</span>
-      </div>
-      <div class="bc" style="--amb:rgba(167,139,250,.05)">
-        <div class="bico">⚠️</div>
-        <div class="bti">Side Effect AI Triage</div>
-        <div class="bde">Report any side effect — AI classifies severity (green/yellow/red), explains possible causes, suggests safe home remedies for mild cases, and tells you exactly when to seek emergency care.</div>
-        <span class="btag ta">AI Triage</span>
-      </div>
-      <div class="bc" style="--amb:rgba(61,158,255,.05)">
-        <div class="bico">📄</div>
-        <div class="bti">Doctor-Ready Health PDF</div>
-        <div class="bde">One-click PDF with full recovery summary — medicines taken, adherence percentage, vitals history, lab trends, side effects. Every doctor visit becomes a productive, data-driven conversation.</div>
-        <span class="btag tf">Caregiver Tool</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ ACCESS MODES ═══════════════════════════════════ -->
-<section class="sec">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">For Every Indian</div>
-      <h2 class="sh">Recovery support — however you're comfortable</h2>
-      <p class="ss ctr">India's patients span all generations. Curaah reaches every one of them — from smartphone users to elderly patients who only use voice calls.</p>
-    </div>
-    <div class="modes reveal">
-      <div class="mc mc1"><span class="mico">📱</span><div class="mti">PWA App</div><div class="mde">Full AI recovery experience — prescription upload, vitals, AI chat, lab reports, food camera, pill ID, family dashboard, SOS, and health timeline. Works on any device with a browser.</div><div class="mwho mw1">Patients & caregivers with smartphones</div></div>
-      <div class="mc mc2"><span class="mico">💬</span><div class="mti">WhatsApp</div><div class="mde">Receive medicine reminders. Reply "liya" to log a dose. Get AI health tips and weekly recovery summaries. No new app needed — works on the platform 1 billion Indians already use.</div><div class="mwho mw2">Patients comfortable with WhatsApp</div></div>
-      <div class="mc mc3"><span class="mico">📞</span><div class="mti">AI Voice Call</div><div class="mde">AI calls at a set time daily, in Punjabi, Hindi, or English. Patient says "हाँ, दवाई ले ली" — and adherence is logged. Built for elderly patients who cannot use any screen.</div><div class="mwho mw3">Elderly patients without smartphones</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ FAMILY DASHBOARD ═══════════════════════════════════ -->
-<section class="sec fam-bg" id="family">
-  <div style="padding:96px 5%;">
-    <div class="fam-grid">
-      <div class="reveal">
-        <div class="tag" style="display:inline-block;margin-bottom:16px">Family & Caregiver Dashboard</div>
-        <h2 class="sh" style="text-align:left">Recovery is a<br/>family responsibility.<br/><em style="font-style:normal;color:var(--blue)">Now you can be there.</em></h2>
-        <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px">With patient consent, family members can monitor progress, track adherence, receive alerts, and stay informed — especially valuable for elderly patients, chronic disease patients, and long-term recovery journeys.</p>
-        <div class="ff"><div class="ffi">📊</div><div><div class="fft">Real-time Recovery Monitoring</div><div class="ffd">See medicines taken, vitals logged, and recovery milestones — as they happen, on any device.</div></div></div>
-        <div class="ff"><div class="ffi">📈</div><div><div class="fft">Vitals History & Trends</div><div class="ffd">Blood sugar, blood pressure, weight, SpO2 — visualised over weeks. Catch warning signs early.</div></div></div>
-        <div class="ff"><div class="ffi">📄</div><div><div class="fft">Doctor-Ready Health PDF</div><div class="ffd">Auto-generated summary — medicines, adherence, vitals, labs. Print it for the next visit.</div></div></div>
-        <div class="ff"><div class="ffi">🚨</div><div><div class="fft">SOS Emergency Alerts</div><div class="ffd">If your loved one triggers SOS, you get real-time GPS and full medical record — instantly.</div></div></div>
-        <a href="family.html" class="btn btn-md btn-blue" style="display:inline-flex;margin-top:8px">👨‍👩‍👧 Open Family Dashboard →</a>
-      </div>
-      <div class="fmock reveal">
-        <div style="font-size:11px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Family Dashboard — Live Preview</div>
-        <div style="display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;">
-          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--green),#00e5a0);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;">R</div>
-          <div style="flex:1"><div style="font-weight:700;font-size:14px">Patient Name</div><div style="font-size:11px;color:var(--muted)">Diabetes + Hypertension</div></div>
-          <div class="fpill fpg">● Recovering</div>
-        </div>
-        <div class="frow"><span style="font-size:13px">🌅 Morning Medicine</span><span class="fpill fpg">✅ 08:12 AM</span></div>
-        <div class="frow"><span style="font-size:13px">☀️ Afternoon Dose</span><span class="fpill fpg">✅ 01:30 PM</span></div>
-        <div class="frow"><span style="font-size:13px">🌙 Night Medicine</span><span class="fpill fpy">⏳ Tonight</span></div>
-        <div class="frow"><span style="font-size:13px">🩸 Blood Sugar</span><span style="font-size:14px;font-weight:900;color:var(--amber)">132 ↑</span></div>
-        <div class="frow"><span style="font-size:13px">❤️ Blood Pressure</span><span style="font-size:14px;font-weight:900;color:var(--green)">128/82 ✓</span></div>
-        <div class="fgrid">
-          <div class="fstat"><div class="fsn" style="color:var(--green)">86%</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Adherence</div></div>
-          <div class="fstat"><div class="fsn" style="color:var(--amber)">🔥 7</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Day streak</div></div>
-          <div class="fstat"><div class="fsn" style="color:var(--red)">1</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Missed today</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ RECOVERY MARKETPLACE ═══════════════════════════════════ -->
-<section class="sec">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag tag-green">Future Recovery Ecosystem</div>
-      <h2 class="sh">Personalized Recovery Marketplace<br/>& Community</h2>
-      <p class="ss ctr">As Curaah develops deeper recovery intelligence, the platform will expand into personalized products and community-driven recovery support.</p>
-    </div>
-    <div class="mkt-place-grid reveal">
-      <div class="mp-card" style="border-color:rgba(0,196,140,.2);">
-        <div style="font-size:36px;margin-bottom:12px">🧴</div>
-        <div class="mp-title" style="color:var(--green)">Personalized Recovery Kits</div>
-        <div class="mp-desc">AI-recommended products selected according to your individual recovery requirements, health profile, and disease condition — delivered to your doorstep.</div>
-        <ul class="mp-list">
-          <li>🌿 Nutrition Products</li>
-          <li>💊 Supplements</li>
-          <li>🧬 Nutraceuticals</li>
-          <li>🌾 Organic Health Products</li>
-          <li>🍵 Wellness Products</li>
-          <li>📦 Condition-Specific Kits</li>
-        </ul>
-        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber);margin-top:16px">🟡 Future Scope</div>
-      </div>
-      <div class="mp-card" style="border-color:rgba(167,139,250,.2);">
-        <div style="font-size:36px;margin-bottom:12px">🤝</div>
-        <div class="mp-title" style="color:var(--purple)">CareConnect Community & Recovery Ecosystem</div>
-        <div class="mp-desc">A community-driven recovery ecosystem connecting patients with peer support, local resources, and hyperlocal health intelligence.</div>
-        <ul class="mp-list">
-          <li>👥 Patient Support Groups</li>
-          <li>💬 Chronic Disease Communities</li>
-          <li>📍 Local Health Resources</li>
-          <!-- <li>🏥 Medical Equipment Sharing</li> -->
-          <li>📊 Hyperlocal Health Intelligence</li>
-          <li>🧑‍⚕️ Expert Verification Network</li>
-        </ul>
-        <div class="suite-badge" style="background:rgba(255,159,0,.12);color:var(--amber);margin-top:16px">🟡 Coming Soon</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ CURAAH CARECONNECT ═══════════════════════════════════ -->
-<section class="sec how-bg" id="community">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);color:var(--purple)">The Community Layer — Curaah Ecosystem</div>
-      <h2 class="sh">Beyond recovery.<br/><em style="background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">A community that heals together.</em></h2>
-      <p class="ss ctr">Once Curaah Recover and HealthOps are established, the ecosystem expands into its most powerful layer — <strong style="color:var(--ink)">Curaah CareConnect</strong>: a free, AI + GPS powered community network where patients, caregivers, NGOs, and families support each other in real time. This is our long-term social impact mission.</p>
-    </div>
-
-    <!-- Vision card -->
-    <div style="background:linear-gradient(160deg,rgba(167,139,250,.06),rgba(45,212,191,.04));border:1.5px solid rgba(167,139,250,.18);border-radius:var(--rxl);padding:36px 40px;margin:40px 0 48px;position:relative;overflow:hidden;" class="reveal">
-      <div style="position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.08),transparent);pointer-events:none;"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--purple);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;">The Vision</div>
-          <div style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif;line-height:1.25;margin-bottom:16px;">"Healthcare doesn't have to be faced alone — not the recovery, and not the emergency."</div>
-          <p style="font-size:14px;color:var(--muted);line-height:1.8;">CareConnect turns Curaah from a personal health tool into a community health infrastructure — where AI and GPS connect patients, caregivers, NGOs, and families instantly. Entirely free. Built to save lives.</p>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
-            <span style="font-size:22px;">🤝</span>
-            <div><div style="font-size:13px;font-weight:700;">Free for everyone, always</div><div style="font-size:12px;color:var(--muted);">CareConnect will never be monetized — it exists for social impact</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
-            <span style="font-size:22px;">🤖</span>
-            <div><div style="font-size:13px;font-weight:700;">Real-time AI + GPS dispatch</div><div style="font-size:12px;color:var(--muted);">Requests matched to nearest verified members in seconds</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;">
-            <span style="font-size:22px;">🏛️</span>
-            <div><div style="font-size:13px;font-weight:700;">NGOs & foundations included</div><div style="font-size:12px;color:var(--muted);">Any welfare organization can post camps and events for free</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Four pillars -->
-    <div class="cc-pillars reveal">
-
-      <div class="cc-card" style="background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.15);">
-        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,71,87,.08),transparent);pointer-events:none;"></div>
-        <div style="font-size:36px;margin-bottom:14px;">🩸</div>
-        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--red);margin-bottom:10px;">Blood Request Network</div>
-        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:18px;">A patient in need raises a blood request. Our AI instantly identifies the nearest eligible donors ranked by distance, blood type, last donation date, and trust score. Alerts go simultaneously to nearby caregivers, NGOs, local WhatsApp groups, and hospitals — all in seconds.</p>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
-          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>AI ranks responders by: distance · blood type · last donation · availability · trust score</span></div>
-          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>Real-time GPS alerts to caregivers, NGOs, hospitals — simultaneously</span></div>
-          <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--red);font-weight:700;flex-shrink:0;">→</span><span>Status updates so patient and family know help is on the way</span></div>
-        </div>
-        <div style="background:rgba(255,71,87,.08);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px;">Current vs Curaah CareConnect</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:rgba(255,255,255,.5)">Old:</strong> Post on WhatsApp → post on Facebook → call everyone → <em>sometimes</em> blood arrives.<br/><strong style="color:var(--red);">New:</strong> One request → AI dispatch → verified responders alerted in under 60 seconds.</div>
-        </div>
-      </div>
-
-      <div class="cc-card" style="background:rgba(0,196,140,.04);border:1px solid rgba(0,196,140,.15);">
-        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,196,140,.08),transparent);pointer-events:none;"></div>
-        <div style="font-size:36px;margin-bottom:14px;">🏕️</div>
-        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--green);margin-bottom:10px;">NGO & Health Camp Discovery</div>
-        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">Free eye camps. Vaccination drives. Blood donation camps. Cancer awareness walks. Organ donation drives. Diabetes screenings. Nobody currently aggregates these for patients who need them most. CareConnect becomes the platform every NGO posts to — and every patient discovers nearby.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Free Eye Camps</span>
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Blood Donation</span>
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Vaccination Drives</span>
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Organ Donation</span>
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Cancer Awareness</span>
-          <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;">Diabetes Screening</span>
-        </div>
-        <div style="display:flex;gap:10px;font-size:12.5px;color:var(--muted);"><span style="color:var(--green);font-weight:700;flex-shrink:0;">→</span><span>NGOs post free. Location-aware alerts reach exactly the patients who benefit.</span></div>
-      </div>
-
-      <div class="cc-card" style="background:rgba(61,158,255,.04);border:1px solid rgba(61,158,255,.15);">
-        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(61,158,255,.08),transparent);pointer-events:none;"></div>
-        <div style="font-size:36px;margin-bottom:14px;">🤝</div>
-        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--blue);margin-bottom:10px;">Disease-Specific Communities</div>
-        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">Not a generic social feed. Structured, moderated communities where patients with the same condition share recovery stories, celebrate milestones, receive verified educational content, and join expert-led webinars. A cancer patient should hear from someone who recovered — not random internet strangers.</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🩺 Diabetes Community</div>
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🎗️ Cancer Recovery</div>
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">❤️ Heart Health</div>
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🧠 Mental Wellbeing</div>
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🫁 Kidney & Liver</div>
-          <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--muted);">🤱 Pregnancy Care</div>
-        </div>
-      </div>
-
-      <!-- <div class="cc-card" style="background:rgba(255,159,0,.04);border:1px solid rgba(255,159,0,.18);">
-        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,159,0,.08),transparent);pointer-events:none;"></div>
-        <div style="font-size:36px;margin-bottom:14px;">🚨</div>
-        <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--amber);margin-bottom:10px;">SOS Caregiver Dispatch</div>
-        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:16px;">An elderly woman falls. No children nearby. She presses SOS. GPS alerts reach the nearest verified caregivers within seconds. One arrives in minutes. Another calls the ambulance. Another informs the family. Her complete medical history is shared instantly — medicines, allergies, doctors, conditions — all in one tap.</p>
-        <div style="background:rgba(255,159,0,.06);border-radius:10px;padding:14px;">
-          <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px;letter-spacing:.4px;text-transform:uppercase;">How It Works</div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">1.</span> Patient presses SOS → GPS location captured instantly</div>
-            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">2.</span> AI ranks and alerts nearest verified caregivers in real time</div>
-            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">3.</span> Full medical record shared with consented responders</div>
-            <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><span style="color:var(--amber);font-weight:800;flex-shrink:0;">4.</span> Family notified simultaneously — wherever they are in the world</div>
-          </div>
-        </div>
-      </div> -->
-
-    </div>
-
-    <!-- Rewards strip -->
-    <div style="margin-top:24px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--r);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;" class="reveal">
-      <div>
-        <div style="font-size:15px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:6px;">Community Rewards — Because good deeds deserve recognition.</div>
-        <div style="font-size:13px;color:var(--muted);max-width:560px;line-height:1.7;">We don't pay caregivers — we celebrate them. Points, badges, verified volunteer certificates, leaderboards, volunteer hour tracking, annual recognition events, and NGO collaboration opportunities.</div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <span style="background:rgba(167,139,250,.12);color:var(--purple);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🏆 Points & Badges</span>
-        <span style="background:rgba(0,196,140,.1);color:var(--green);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">📜 Certificates</span>
-        <span style="background:rgba(61,158,255,.1);color:var(--blue);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🏅 Leaderboard</span>
-        <span style="background:rgba(255,159,0,.1);color:var(--amber);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;">🤝 NGO Collaboration</span>
-      </div>
-    </div>
-
-    <!-- Ecosystem timeline -->
-    <div style="margin-top:32px;text-align:center;" class="reveal">
-      <div style="display:inline-flex;align-items:center;gap:0;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--rxl);padding:6px;flex-wrap:wrap;justify-content:center;">
-        <div style="padding:10px 20px;border-radius:16px;background:rgba(0,196,140,.12);font-size:13px;font-weight:700;color:var(--green);">🟢 Curaah Recover — Demo Live</div>
-        <div style="padding:10px 8px;color:var(--dim);font-size:16px;">→</div>
-        <div style="padding:10px 20px;border-radius:16px;background:rgba(255,159,0,.1);font-size:13px;font-weight:700;color:var(--amber);">🟡 Curaah HealthOps — Service Based Development</div>
-        <div style="padding:10px 8px;color:var(--dim);font-size:16px;">→</div>
-        <div style="padding:10px 20px;border-radius:16px;background:rgba(167,139,250,.1);font-size:13px;font-weight:700;color:var(--purple);">🔵 CareConnect — Coming Soon</div>
-      </div>
-      <p style="font-size:13px;color:var(--dim);margin-top:14px;max-width:560px;margin-left:auto;margin-right:auto;">CareConnect launches after Recover and HealthOps are established — built on the same platform, powered by the Curaah community, free for all.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ CURAAH HEALTHOPS ═══════════════════════════════════ -->
-<section class="sec" id="healthops">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag tag-green">Suite 2 — For Healthcare Facilities</div>
-      <h2 class="sh">Curaah HealthOps</h2>
-      <p class="ss ctr">Healthcare Operations & Digital Transformation Platform. Reduce operational burden, improve healthcare delivery, and maintain continuity of care — with a Human-in-the-Loop AI approach.</p>
-    </div>
-    <div class="ops-grid reveal">
-      <div class="ops-card"><div class="ops-ico">📋</div><div class="ops-title">AI-Assisted EHR Automation</div><div class="ops-desc">Digitize paper registers. Extract information from records. Convert paper records into structured EHR-ready formats. Healthcare workers verify all records before approval — Human-in-the-Loop.</div><div class="ops-badge" style="background:rgba(61,158,255,.12);color:var(--blue)">In Development</div></div>
-      <div class="ops-card"><div class="ops-ico">🎙️</div><div class="ops-title">AI Doctor Scribe</div><div class="ops-desc">Doctors speak in Hindi, Punjabi, or English. AI generates structured, professional prescriptions in seconds. Reduces 2+ hours of documentation daily.</div><div class="ops-badge" style="background:rgba(0,196,140,.15);color:var(--green)">Prototype Ready</div></div>
-      <div class="ops-card"><div class="ops-ico">🏥</div><div class="ops-title">Smart Patient Kiosk</div><div class="ops-desc">AI-powered self-service kiosk: patient registration, voice-based interaction, token generation, queue management, department routing, and EHR draft creation.</div><div class="ops-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">Future Module</div></div>
-      <div class="ops-card"><div class="ops-ico">👨‍⚕️</div><div class="ops-title">Doctor Suite</div><div class="ops-desc">Doctors monitor patient progress, review adherence data, receive recovery summaries, and maintain continuity of care between consultations.</div><div class="ops-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">Future Module</div></div>
-      <div class="ops-card"><div class="ops-ico">💬</div><div class="ops-title">Healthcare Communication</div><div class="ops-desc">Automate appointment reminders, follow-up communications, patient engagement, and health campaigns through WhatsApp and digital channels.</div><div class="ops-badge" style="background:rgba(61,158,255,.12);color:var(--blue)">In Development</div></div>
-      <div class="ops-card"><div class="ops-ico">📊</div><div class="ops-title">Public Health Intelligence</div><div class="ops-desc">Privacy-conscious analytics: disease trends, population health monitoring, public health reporting, healthcare planning, and resource allocation.</div><div class="ops-badge" style="background:rgba(255,159,0,.12);color:var(--amber)">Future Module</div></div>
-    </div>
-    <div style="text-align:center;margin-top:32px"><a href="mailto:curaahtech@gmail.com" class="btn btn-md btn-ghost">📧 Contact for HealthOps Pilot →</a></div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ WHY CURAAH IS DIFFERENT ═══════════════════════════════════ -->
-<section class="sec how-bg" id="different">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Why Curaah Is Different</div>
-      <h2 class="sh">We are not building another healthcare app.<br/>We are building the operating system for recovery.</h2>
-      <p class="ss ctr">We are not trying to replace doctors. We are trying to make every day between doctor visits smarter, safer, and more effective.</p>
-    </div>
-    <div class="diff-grid reveal">
-      <div class="diff-box diff-others">
-        <div class="diff-title" style="color:var(--red)">❌ Most Healthcare Startups Focus On</div>
-        <ul class="diff-list">
-          <li><span style="color:var(--red)">✗</span> Booking appointments</li>
-          <li><span style="color:var(--red)">✗</span> Ordering medicines</li>
-          <li><span style="color:var(--red)">✗</span> Teleconsultations</li>
-          <li><span style="color:var(--red)">✗</span> Medicine delivery</li>
-          <li><span style="color:var(--red)">✗</span> Generic health tips</li>
-          <li><span style="color:var(--red)">✗</span> One-size-fits-all approach</li>
-          <li><span style="color:var(--red)">✗</span> No community support layer</li>
-        </ul>
-      </div>
-      <div class="diff-box diff-curaah">
-        <div class="diff-title" style="color:var(--blue)">✨ Curaah Focuses On</div>
-        <ul class="diff-list">
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Recovery Intelligence</strong> — making recovery measurable</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Healthcare Continuity</strong> — bridging consultation gaps</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Personalization</strong> — your unique recovery journey</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Longitudinal Health Intelligence</strong> — learning over time</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Family-Centred Care</strong> — keeping families informed</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">Healthcare Operations</strong> — automating facility workflows</li>
-          <li><span style="color:var(--green)">✓</span> <strong style="color:var(--ink)">CareConnect Community</strong> — free support network for all</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ TRACTION ═══════════════════════════════════ -->
-<section class="sec">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Traction</div>
-      <h2 class="sh">Built. Registered. Ready to scale.</h2>
-      <p class="ss ctr">We are not asking for money to build a dream — we are asking for support to launch something already built.</p>
-    </div>
-    <div class="built-grid reveal">
-      <div class="bitem"><div class="bitem-ico">🌐</div><div><div class="bitem-t">Fully Working Curaah Recover</div><div class="bitem-d">Complete PWA with prescription upload, AI recovery companion, vitals tracking, lab reports, SOS, family dashboard — all live.</div><span class="done-badge db-done">✅ Live Today</span></div></div>
-      <div class="bitem"><div class="bitem-ico">🏢</div><div><div class="bitem-t">Company Registered</div><div class="bitem-d">Curaah HealthTech Pvt Ltd — MCA approved and incorporated.</div><span class="done-badge db-done">✅ Done</span></div></div>
-      <div class="bitem"><div class="bitem-ico">🏛️</div><div><div class="bitem-t">IIT Ropar Incubation</div><div class="bitem-d">IIT Ropar TBIF Incubated.</div><span class="done-badge db-done">✅ Done</span></div></div>
-      <div class="bitem"><div class="bitem-ico">📱</div><div><div class="bitem-t">Multi-Channel Architecture</div><div class="bitem-d">PWA App + WhatsApp + AI Voice Call — three access modes designed from day one.</div><span class="done-badge db-done">✅ Built</span></div></div>
-      <div class="bitem"><div class="bitem-ico">🏥</div><div><div class="bitem-t">Hospital Pilot Conversations</div><div class="bitem-d">Healthcare facilities have validated the problem — HealthOps pilot conversations in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
-      <div class="bitem"><div class="bitem-ico">👨‍⚕️</div><div><div class="bitem-t">Human-in-the-Loop Partner Network</div><div class="bitem-d">Doctors, pharmacist, nutritionist, and trainer verification model designed — partner onboarding in progress.</div><span class="done-badge db-prog">🔄 In Progress</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ MARKET ═══════════════════════════════════ -->
-<section class="sec how-bg">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Market Opportunity</div>
-      <h2 class="sh">The recovery gap is massive.<br/>And growing.</h2>
-      <p class="ss ctr">India's chronic disease burden is the largest in the world. Most patients are underserved — because no platform focuses on recovery.</p>
-    </div>
-    <div class="mkt-grid reveal">
-      <div class="mkt-card" style="border-color:rgba(61,158,255,.2)"><div class="mkt-num" style="color:var(--blue)">77M+</div><div class="mkt-lbl">Diabetic patients in India</div><div class="mkt-sub">2nd highest globally. Most managing recovery alone with a paper prescription.</div></div>
-      <div class="mkt-card" style="border-color:rgba(0,196,140,.2)"><div class="mkt-num" style="color:var(--green)">220M+</div><div class="mkt-lbl">Hypertension patients</div><div class="mkt-sub">Mostly uncontrolled and unmonitored — no continuous recovery support.</div></div>
-      <div class="mkt-card" style="border-color:rgba(167,139,250,.2)"><div class="mkt-num" style="color:var(--purple)">500M+</div><div class="mkt-lbl">Chronic disease patients total</div><div class="mkt-sub">Growing 8% annually. Every one of them needs recovery intelligence.</div></div>
-      <div class="mkt-card" style="border-color:rgba(255,159,0,.2)"><div class="mkt-num" style="color:var(--amber)">30M+</div><div class="mkt-lbl">NRI diaspora — anxious caregivers</div><div class="mkt-sub">Children abroad willing to pay premium to monitor elderly parents' recovery.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ REVENUE ═══════════════════════════════════ -->
-<section class="sec">
-  <div class="wrap">
-    <div class="ctr reveal">
-      <div class="tag">Revenue Model</div>
-      <h2 class="sh">Free for everyone.<br/>Premium for those who need more.</h2>
-      <p class="ss ctr">Freemium model — recovery support is universal, premium features for power users and families.</p>
-    </div>
-    <div class="rev-grid reveal">
-      <div class="rcard" style="border:1px solid rgba(255,255,255,.1)"><div class="rname" style="color:var(--muted)">Recover Free</div><div class="rprice">₹0</div><div class="rdiv"></div><div class="rfeature"><span style="color:var(--green)">✓</span> Basic medicine reminders</div><div class="rfeature"><span style="color:var(--green)">✓</span> Lab report explainer (3/month)</div><div class="rfeature"><span style="color:var(--green)">✓</span> AI companion (2 questions/day)</div><div class="rfeature"><span style="color:var(--green)">✓</span> Basic adherence log</div></div>
-      <div class="rcard" style="border:1px solid var(--bb)"><div class="rname" style="color:var(--blue)">Recover Care</div><div class="rprice" style="color:var(--blue)">₹99<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div><div class="rdiv"></div><div class="rfeature"><span style="color:var(--green)">✓</span> Unlimited AI companion</div><div class="rfeature"><span style="color:var(--green)">✓</span> Full recovery tracking</div><div class="rfeature"><span style="color:var(--green)">✓</span> Family dashboard (1 member)</div><div class="rfeature"><span style="color:var(--green)">✓</span> Weekly health summary</div><div class="rfeature"><span style="color:var(--green)">✓</span> Medicine photo verification</div></div>
-      <div class="rcard" style="border:1px solid rgba(0,196,140,.25)"><div class="rname" style="color:var(--green)">Recover Family</div><div class="rprice" style="color:var(--green)">₹199<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div><div class="rdiv"></div><div class="rfeature"><span style="color:var(--green)">✓</span> Everything in Care</div><div class="rfeature"><span style="color:var(--green)">✓</span> 3 family dashboard members</div><div class="rfeature"><span style="color:var(--green)">✓</span> SOS emergency alerts</div><div class="rfeature"><span style="color:var(--green)">✓</span> Priority pharmacist check</div><div class="rfeature"><span style="color:var(--green)">✓</span> Caregiver notifications</div></div>
-      <div class="rcard" style="border:1px solid rgba(255,159,0,.25)"><div class="rname" style="color:var(--amber)">Recover NRI</div><div class="rprice" style="color:var(--amber)">$9<span style="font-size:14px;font-weight:400;color:var(--muted)">/month</span></div><div class="rdiv"></div><div class="rfeature"><span style="color:var(--green)">✓</span> Everything in Family</div><div class="rfeature"><span style="color:var(--green)">✓</span> Daily WhatsApp update</div><div class="rfeature"><span style="color:var(--green)">✓</span> Bilingual: English + Regional</div><div class="rfeature"><span style="color:var(--green)">✓</span> International emergency alert</div><div class="rfeature"><span style="color:var(--green)">✓</span> NRI priority support</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════ TRUST BAR ═══════════════════════════════════ -->
-<div class="trust-bar">
-  <div class="trust-inner">
-    <div class="ti"><div class="tilo">🏛️</div><div><div class="tilb">IIT Ropar Incubated</div><div class="tilsub">Research-backed, institution-supported</div></div></div>
-    <div class="ti"><div class="tilo">🔒</div><div><div class="tilb">DPDP 2023 Compliant</div><div class="tilsub">Privacy-by-design · Consent-first</div></div></div>
-    <div class="ti"><div class="tilo">🤖</div><div><div class="tilb">Responsible AI</div><div class="tilsub">Transparent · Explainable · Accurate</div></div></div>
-    <div class="ti"><div class="tilo">🧑‍⚕️</div><div><div class="tilb">Human-in-the-Loop</div><div class="tilsub">AI assists, never replaces doctors</div></div></div>
-    <div class="ti"><div class="tilo">🤝</div><div><div class="tilb">CareConnect Community</div><div class="tilsub">Free · AI-powered · For everyone</div></div></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ CTA ═══════════════════════════════════ -->
-<section class="sec cta-bg">
+<!-- ═══ TWO APPS ═══════════════════════════════════════════════ -->
+<section class="sec" id="solution">
   <div class="wrap">
-    <div class="cta-inner reveal">
-      <div class="tag" style="display:inline-block;margin-bottom:18px">The Future of Healthcare</div>
-      <div class="cta-h">Every patient deserves a<br/>personalized recovery system.</div>
-      <p class="cta-sub">We envision a future where every patient in India has personalized recovery support, every family can participate in care, every doctor maintains continuity beyond consultations, and every community has the tools to support each other in emergencies.<br/><br/><strong style="color:var(--ink)">Curaah is not building another healthcare app. Curaah is building the operating system for recovery, healthcare continuity, and community care in India.</strong></p>
-      <div class="cta-btns">
-        <a href="companion.html" class="btn btn-lg btn-blue">🚀 Start Recovery — Free</a>
-        <a href="family.html" class="btn btn-lg btn-ghost">👨‍👩‍👧 Family Dashboard</a>
-        <a href="mailto:curaahtech@gmail.com" class="btn btn-lg btn-green">🏥 HealthOps Demo</a>
+    <div class="ctr reveal">
+      <div class="tag">Two Apps. One Ecosystem.</div>
+      <h2 class="sh">Every person in India's<br/>community health space — one platform.</h2>
+      <p class="ss ctr">Curaah is not one app. It is a unified ecosystem with a shared backend — CareConnect for the community side, Curaah App for the consumer side. Every stakeholder. One platform. One mission.</p>
+    </div>
+    <div class="apps-grid reveal">
+      <div class="app-overview app-ov-cc">
+        <div class="tag" style="margin-bottom:18px;">Flagship Product</div>
+        <div class="app-ov-name" style="color:var(--blue)">Curaah CareConnect</div>
+        <div class="app-ov-who">For NGOs · Blood Banks · Volunteers · Healthcare Professionals</div>
+        <div class="app-ov-desc">A verified coordination hub for everyone doing community health work. GPS-aware, privacy-first, AI-powered. The NGO coordination layer India has never had.</div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>Privacy-first volunteer coordination</strong> — no personal details shared without 3-tap consent</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>Blood emergency 3-track dispatch</strong> — simultaneous alert to banks, NGOs, and matched donors</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>GPS-smart event notifications</strong> — diabetes camp notifies only diabetics in that area</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>Cross-organization coordination</strong> — NGO-to-NGO, resource sharing, co-managed events</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>WhatsApp AI poster sharing</strong> — auto-generated poster in EN/HI/Punjabi for each event</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>Resource Coordination Board</strong> — post needs and offers of equipment, medicines, space</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--green)">✓</span><span><strong>AI Area Health Intel</strong> — NGOs get disease patterns, volunteer availability, blood shortage alerts</span></div>
+        </div>
+        <div class="stakeholders">
+          <span class="stake-pill" style="color:var(--green);border-color:rgba(0,196,140,.2);">Volunteers</span>
+          <span class="stake-pill" style="color:var(--blue);border-color:rgba(61,158,255,.2);">NGOs</span>
+          <span class="stake-pill" style="color:var(--red);border-color:rgba(255,71,87,.2);">Blood Banks</span>
+          <span class="stake-pill" style="color:var(--purple);border-color:rgba(167,139,250,.2);">Healthcare Professionals</span>
+        </div>
       </div>
-      <div class="cta-trust">
-        <span class="ctitem">🏛️ IIT Ropar Incubated</span>
-        <span class="ctitem">🔒 DPDP 2023 Compliant</span>
-        <span class="ctitem">🇮🇳 Made in India</span>
-        <span class="ctitem">🤖 Responsible AI</span>
-        <span class="ctitem">🤝 Free Community Layer</span>
-        <span class="ctitem">⚡ Free to Try</span>
+      <div class="app-overview app-ov-pa">
+        <div class="tag teal" style="margin-bottom:18px;">Consumer App</div>
+        <div class="app-ov-name" style="color:var(--teal)">Curaah App</div>
+        <div class="app-ov-who">For Patients · Health-Conscious Users</div>
+        <div class="app-ov-desc">AI-powered health companion for individuals. Track health, get personalized AI guidance, complete daily health tasks, and raise emergency requests — all in one app.</div>
+        <div class="feat-list">
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>Ask Curaah</strong> — health answers specific to YOUR medicines, labs, and history. Not generic.</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>Medicine management</strong> — 4-slot schedule, drug interactions, Jan Aushadhi alternatives</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>Health tracking</strong> — vitals, lab reports, trends, health timeline</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>Personalized daily tasks</strong> — generated from your prescription, labs, and vitals data</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>9 emergency request types</strong> — blood, ambulance, oxygen, medicine, nurse and more</span></div>
+          <div class="feat-item"><span class="feat-check" style="color:var(--teal)">✓</span><span><strong>SOS system</strong> — instant GPS alert to family contacts only. Zero strangers.</span></div>
+        </div>
+        <div class="stakeholders">
+          <span class="stake-pill" style="color:var(--teal);border-color:rgba(45,212,191,.2);">Patients</span>
+          <span class="stake-pill" style="color:var(--blue);border-color:rgba(61,158,255,.2);">Health-Conscious Users</span>
+        </div>
+        <div style="margin-top:18px;padding:14px;background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.15);border-radius:var(--rsm);">
+          <div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:5px;">Account Transition</div>
+          <div style="font-size:12.5px;color:var(--muted);">Health-conscious users who get diagnosed can transition to Patient on the same account — all health history preserved.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+<!-- ═══ CARECONNECT FEATURES ══════════════════════════════════ -->
+<section class="sec how-bg" id="careconnect">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag teal">CareConnect — 5 Core Innovations</div>
+      <h2 class="sh">Five features that do not exist<br/>anywhere in India today.</h2>
+      <p class="ss ctr">Every feature solves a real coordination failure. Together, they create a network effect that gets stronger the more organizations and volunteers join.</p>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat-card feat-wide" style="--accent:rgba(61,158,255,.1);">
+        <div class="feat-num">01 — FLAGSHIP</div>
+        <div class="feat-title" style="color:var(--blue);">Privacy-First Relay System</div>
+        <div class="feat-desc">Volunteers and organizations coordinate without ever sharing personal contact details. All messages route through the Curaah relay — like Ola's masked calling, but for community health. Volunteer consent is a dial, not a switch: Level 0 (relay only) → Level 1 (first name + city) → Level 2 (full contact, 3-tap confirm, always revocable). An NGO running a camp in Amritsar will never see a volunteer's phone number unless that volunteer explicitly consents, per interaction, every time.</div>
+      </div>
+      <div class="feat-card" style="--accent:rgba(255,71,87,.08);">
+        <div class="feat-num">02</div>
+        <div class="feat-title" style="color:var(--red);">Blood Emergency 3-Track Dispatch</div>
+        <div class="feat-desc">One patient request fires three parallel tracks simultaneously: blood banks within 100km, NGOs with blood coordination experience, and opted-in volunteers with matching blood group. First confirmed response wins. Patient sees live status. All communication through relay — no contact shared until patient approves.</div>
+      </div>
+      <div class="feat-card" style="--accent:rgba(0,196,140,.08);">
+        <div class="feat-num">03</div>
+        <div class="feat-title" style="color:var(--green);">GPS-Smart Notifications</div>
+        <div class="feat-desc">Events are not broadcast to everyone. A diabetes camp notifies only diabetics in the relevant area. A women's health drive notifies only women. The feed is open to all in-app — but every alert is surgically targeted. Right person, right time, zero noise.</div>
+      </div>
+      <div class="feat-card" style="--accent:rgba(255,159,0,.08);">
+        <div class="feat-num">04</div>
+        <div class="feat-title" style="color:var(--amber);">Cross-Org Coordination</div>
+        <div class="feat-desc">NGOs discover each other, share mobile vans, co-manage events, and respond to cross-city resource needs — all through the relay. An NGO in Chandigarh can share their health van with an NGO in Ropar for the weekend. Logged. Impact credited to both.</div>
+      </div>
+      <div class="feat-card" style="--accent:rgba(167,139,250,.08);">
+        <div class="feat-num">05</div>
+        <div class="feat-title" style="color:var(--purple);">WhatsApp AI Poster Sharing</div>
+        <div class="feat-desc">Every posted event auto-generates an AI-designed image poster and pre-written message in English, Hindi, and Punjabi. One tap to share on WhatsApp. Extends platform reach to people who have never installed the app. The community grows itself.</div>
+      </div>
+      <div class="feat-card" style="--accent:rgba(45,212,191,.08);">
+        <div class="feat-num">+</div>
+        <div class="feat-title" style="color:var(--teal);">Resource Coordination Board</div>
+        <div class="feat-desc">Post a need or offer — hospital beds, ECG machines, wheelchairs, surplus medicines, shared mobile vans. AI matches donors with recipients. Tax documentation auto-generated. Impact logged. Donor gets an impact receipt. Completely new for India.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ASK CURAAH ════════════════════════════════════════════ -->
+<section class="sec ask-bg" id="curaah-app">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag purple">Ask Curaah — AI Health Intelligence</div>
+      <h2 class="sh">Better than Google.<br/>Safer than generic AI.</h2>
+      <p class="ss ctr">Health search in India is broken. Google gives the same article to everyone. Generic AI hallucinates. Curaah answers questions specific to <em>your</em> data — your medicines, your labs, your history.</p>
+    </div>
+    <div class="ask-grid reveal">
+      <div class="ask-card ask-google">
+        <div class="ask-label">Google Search</div>
+        <div class="ask-title">Same answer for everyone</div>
+        <div class="ask-pt"><span style="color:var(--red);font-weight:800;">—</span>Generic WebMD articles written for all ages, all conditions, all medicines</div>
+        <div class="ask-pt"><span style="color:var(--red);font-weight:800;">—</span>No knowledge of your personal health data whatsoever</div>
+        <div class="ask-pt"><span style="color:var(--red);font-weight:800;">—</span>Results incentivized by advertising revenue</div>
+        <div class="ask-pt"><span style="color:var(--red);font-weight:800;">—</span>No medical curation or verification of content</div>
+        <div class="ask-verdict av-bad">Generic. Not useful for you.</div>
+      </div>
+      <div class="ask-card ask-generic">
+        <div class="ask-label">ChatGPT / Generic AI</div>
+        <div class="ask-title">No access to your profile</div>
+        <div class="ask-pt"><span style="color:var(--amber);font-weight:800;">—</span>No knowledge of your medicines, labs, vitals, or conditions</div>
+        <div class="ask-pt"><span style="color:var(--amber);font-weight:800;">—</span>Hallucinates medical information confidently</div>
+        <div class="ask-pt"><span style="color:var(--amber);font-weight:800;">—</span>Generic disclaimers — same answer regardless of who asks</div>
+        <div class="ask-pt"><span style="color:var(--amber);font-weight:800;">—</span>No pharmacist verification loop</div>
+        <div class="ask-verdict av-ok">Better, but still generic.</div>
+      </div>
+      <div class="ask-card ask-curaah">
+        <div class="ask-label">Ask Curaah</div>
+        <div class="ask-title">Personalized to YOUR data</div>
+        <div class="ask-pt"><span style="color:var(--purple);font-weight:800;">+</span>Knows your medicines, dosages, lab history, vitals, conditions</div>
+        <div class="ask-pt"><span style="color:var(--purple);font-weight:800;">+</span>5-agent pipeline: RAG from Health Twin + Tavily latest evidence</div>
+        <div class="ask-pt"><span style="color:var(--purple);font-weight:800;">+</span>Safety Critic AI removes overclaims and ensures safety</div>
+        <div class="ask-pt"><span style="color:var(--purple);font-weight:800;">+</span>Answers in Hindi, Punjabi, Tamil, or English</div>
+        <div class="ask-verdict av-good">Personalized. Verified. Safe.</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;padding:20px 24px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:var(--r);max-width:800px;margin-left:auto;margin-right:auto;text-align:center;">
+      <span style="font-size:13px;color:var(--muted);font-style:italic;">"You are 42, diabetic, on Metformin 500mg, HbA1c 8.2 last month. Can you eat mangoes this summer?" — Ask Curaah answers <strong style="color:var(--purple);">this specific question for you</strong>. Google cannot. ChatGPT cannot. Only Curaah can.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRIVACY ════════════════════════════════════════════════ -->
+<section class="sec" id="privacy">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag green">Privacy Architecture</div>
+      <h2 class="sh">Privacy is not a feature.<br/>It is the foundation.</h2>
+      <p class="ss ctr">Every interaction, every message, every piece of data on Curaah is governed by rules that cannot be overridden — not by orgs, not by admins, not by us.</p>
+    </div>
+    <div class="privacy-grid reveal">
+      <div class="pv-box pv-never">
+        <div class="pv-title" style="color:var(--red);">What Never Happens</div>
+        <ul class="pv-list">
+          <li><span style="color:var(--red);">✗</span>Volunteer's phone number or address shared with NGO without 3-tap explicit consent</li>
+          <li><span style="color:var(--red);">✗</span>Patient health data shared with any third party — ever. Under any circumstances.</li>
+          <li><span style="color:var(--red);">✗</span>Patient conditions visible to NGOs, volunteers, or healthcare professionals</li>
+          <li><span style="color:var(--red);">✗</span>Patient-to-patient messaging, posting, or comment sections — ever</li>
+          <li><span style="color:var(--red);">✗</span>SOS dispatched to strangers — family contacts you chose, only</li>
+          <li><span style="color:var(--red);">✗</span>Health data pooled for advertising, profiling, or third-party sale</li>
+        </ul>
+      </div>
+      <div class="pv-box pv-always">
+        <div class="pv-title" style="color:var(--green);">What Always Happens</div>
+        <ul class="pv-list">
+          <li><span style="color:var(--green);">✓</span><span><strong>Consent Dial —</strong> Level 0: relay only. Level 1: name + city. Level 2: full contact (3-tap, revocable anytime)</span></li>
+          <li><span style="color:var(--green);">✓</span><span><strong>Relay Messaging —</strong> all messages routed through platform. Phone numbers never stored in the messages table. Ever.</span></li>
+          <li><span style="color:var(--green);">✓</span><span><strong>Granular volunteer consent —</strong> blood donation, emergency response, area — all separate decisions. Per interaction.</span></li>
+          <li><span style="color:var(--green);">✓</span><span><strong>DPDP 2023 Compliant —</strong> right to erasure honored within 72 hours. Account deletion removes all data.</span></li>
+          <li><span style="color:var(--green);">✓</span><span><strong>Patient AI is private —</strong> Health Twin uses your data only to serve you. Never pooled.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EMERGENCY ══════════════════════════════════════════════ -->
+<section class="sec" id="emergency" style="background:rgba(255,71,87,.02);">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag red">Emergency System</div>
+      <h2 class="sh">SOS for family. Requests for community.<br/>Two separate, safe systems.</h2>
+      <p class="ss ctr">An SOS is a private alarm for your loved ones. An emergency request is a structured call to the community. Both are privacy-protected. Neither dispatches strangers without your knowledge.</p>
+    </div>
+    <div class="sos-grid reveal">
+      <div class="sos-card">
+        <div class="sos-title" style="color:var(--red);">SOS Button</div>
+        <div style="font-size:11px;font-weight:800;color:var(--red);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;">Family Only. Zero Strangers. Always.</div>
+        <div class="sos-desc">Instantly alerts your pre-added emergency contacts by WhatsApp and SMS with your live GPS location. Updates every 2 minutes until you press "I'm Safe." No volunteers involved. No dispatch. Just your family, right away.</div>
+        <ul class="sos-pts">
+          <li><span style="color:var(--red);font-weight:800;">→</span> 2-tap confirm prevents accidental triggers</li>
+          <li><span style="color:var(--red);font-weight:800;">→</span> Emergency contacts must consent before being added</li>
+          <li><span style="color:var(--red);font-weight:800;">→</span> Event logged with timestamp for medical records</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px;">9 Community Emergency Request Types</div>
+        <div class="req-grid">
+          <div class="req-card"><div class="req-num">01</div><div class="req-name" style="color:var(--red);">Blood Request</div><div class="req-who">3-track: banks + NGOs + matched volunteers</div></div>
+          <div class="req-card"><div class="req-num">02</div><div class="req-name" style="color:var(--amber);">Ambulance</div><div class="req-who">GPS-dispatched donated community ambulance</div></div>
+          <div class="req-card"><div class="req-num">03</div><div class="req-name" style="color:var(--blue);">Oxygen Cylinder</div><div class="req-who">Nearest donors and NGO oxygen stocks</div></div>
+          <div class="req-card"><div class="req-num">04</div><div class="req-name" style="color:var(--teal);">Rare Medicine</div><div class="req-who">State-wide pharmacy + NGO network</div></div>
+          <div class="req-card"><div class="req-num">05</div><div class="req-name" style="color:var(--purple);">Plasma / Platelets</div><div class="req-who">Dengue, cancer, surgery patients</div></div>
+          <div class="req-card"><div class="req-num">06</div><div class="req-name" style="color:var(--green);">Post-Discharge</div><div class="req-who">NGO home care + volunteer caretakers</div></div>
+          <div class="req-card"><div class="req-num">07</div><div class="req-name" style="color:var(--blue);">Equipment</div><div class="req-who">Wheelchair, crutches — NGO lending programs</div></div>
+          <div class="req-card"><div class="req-num">08</div><div class="req-name" style="color:var(--amber);">Home Nurse</div><div class="req-who">Verified nurse / physio home visits</div></div>
+          <div class="req-card"><div class="req-num">09</div><div class="req-name" style="color:var(--muted);">Palliative Care</div><div class="req-who">NGOs specializing in end-of-life care</div></div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--dim);padding:10px 14px;background:var(--card);border-radius:var(--rsm);">All 9 request types are privacy-protected — no personal details shared until the patient approves the responding party.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SEWA POINTS ════════════════════════════════════════════ -->
+<section class="sec" id="sewa">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag amber">Sewa Points System</div>
+      <h2 class="sh">Good deeds. Real rewards.<br/>A world-first innovation.</h2>
+      <p class="ss ctr">Every verified contribution — volunteering, health tasks, blood donation, resource sharing — earns Sewa Points that can be redeemed for real, tangible benefits. Including a first-in-India insurance innovation.</p>
+    </div>
+    <div class="sewa-grid reveal">
+      <div class="sewa-box sewa-earn">
+        <div class="sewa-title" style="color:var(--teal);">How You Earn</div>
+        <div class="sewa-row"><span>Confirmed blood donation</span><span class="sewa-row-pts">+200</span></div>
+        <div class="sewa-row"><span>Blood emergency response</span><span class="sewa-row-pts">+150</span></div>
+        <div class="sewa-row"><span>Attending community camp</span><span class="sewa-row-pts">+50</span></div>
+        <div class="sewa-row"><span>Daily health task completed</span><span class="sewa-row-pts">+10</span></div>
+        <div class="sewa-row"><span>30-day vitals streak</span><span class="sewa-row-pts">+100</span></div>
+        <div class="sewa-row"><span>Resource donation on board</span><span class="sewa-row-pts">+75</span></div>
+        <div class="sewa-row"><span>Emergency request fulfilled</span><span class="sewa-row-pts">+100</span></div>
+      </div>
+      <div class="sewa-box sewa-redeem">
+        <div class="sewa-title" style="color:var(--amber);">How You Redeem</div>
+        <div class="sewa-row"><span>Free diagnostic test (partner labs)</span><span class="sewa-row-pts a">150–300</span></div>
+        <div class="sewa-row"><span>Medicine discount — Jan Aushadhi</span><span class="sewa-row-pts a">50–100</span></div>
+        <div class="sewa-row"><span>Cash payout (₹100 = 1000 pts)</span><span class="sewa-row-pts a">1000</span></div>
+        <div class="sewa-row"><span>Premium Curaah AI features</span><span class="sewa-row-pts a">200/mo</span></div>
+        <div class="sewa-row"><span>Donate to a verified NGO</span><span class="sewa-row-pts a">1000</span></div>
+        <div class="sewa-row"><span>Annual Sewa Certificate (physical)</span><span class="sewa-row-pts a">Top 100</span></div>
+      </div>
+      <div class="sewa-box sewa-innovation">
+        <div class="sewa-title" style="color:var(--purple);">The Innovation — First in India</div>
+        <div class="sewa-inno-text">A volunteer with 800+ Sewa Score and consistent good health metrics on Curaah is provably <strong>low-risk</strong>: active, health-aware, community-engaged.<br/><br/>Health insurance companies pay for this behavioral signal.<br/><br/><strong>High Sewa Score = Discounted health insurance premium.</strong><br/><br/>The more you help your community → the healthier you are → the cheaper your insurance. A virtuous cycle that has never existed in India before.<br/><br/>District · State · National Sewa Leaderboard. Annual Curaah Sewa Awards.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BUSINESS MODEL ═════════════════════════════════════════ -->
+<section class="sec" id="model" style="background:rgba(255,255,255,.015);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag green">Business Model</div>
+      <h2 class="sh">Free for Sewa.<br/>Fair for business.</h2>
+      <p class="ss ctr">If you are doing genuine community Sewa, we walk with you for free. If you are using the community for future profit, we take a fair cut — and so do the volunteers who helped you.</p>
+    </div>
+    <div class="model-grid reveal">
+      <div class="model-card mc-free">
+        <div class="mc-title" style="color:var(--green);">Free Forever</div>
+        <div class="mc-sub">Everything community-driven, everything charitable — zero cost. Always.</div>
+        <ul class="mc-list">
+          <li><span style="color:var(--green);font-weight:800;">✓</span>All volunteers — full access, always free</li>
+          <li><span style="color:var(--green);font-weight:800;">✓</span>NGOs running genuine free camps — free</li>
+          <li><span style="color:var(--green);font-weight:800;">✓</span>Blood banks — emergency dispatch, free</li>
+          <li><span style="color:var(--green);font-weight:800;">✓</span>Patients using emergency requests — free</li>
+          <li><span style="color:var(--green);font-weight:800;">✓</span>Resource board — post needs and offers, free</li>
+          <li><span style="color:var(--green);font-weight:800;">✓</span>Curaah App for patients and health-conscious users — free</li>
+        </ul>
+      </div>
+      <div class="model-card mc-fair">
+        <div class="mc-title" style="color:var(--blue);">Fair for Business</div>
+        <div class="mc-sub">Commercial use of community resources is charged fairly — and shared with those who helped.</div>
+        <ul class="mc-list">
+          <li><span style="color:var(--blue);font-weight:800;">→</span>Doctor's patient-acquisition camp: % of revenue. Volunteers who helped: cash payout.</li>
+          <li><span style="color:var(--blue);font-weight:800;">→</span>Pharma company awareness drive: flat sponsorship fee</li>
+          <li><span style="color:var(--blue);font-weight:800;">→</span>Private dietician's paid webinar: % of ticket. Volunteers: share.</li>
+          <li><span style="color:var(--blue);font-weight:800;">→</span>Corporate wellness program: monthly subscription</li>
+        </ul>
+        <div style="margin-top:16px;padding:12px;background:rgba(61,158,255,.08);border-radius:var(--rsm);font-size:12px;color:var(--muted);">The platform is transparent about who pays and why. Volunteers see when they will earn cash before they commit.</div>
+      </div>
+      <div class="model-card mc-future">
+        <div class="mc-title" style="color:var(--purple);">Future Revenue</div>
+        <div class="mc-sub">Organic revenue streams that grow with the network — without compromising community mission.</div>
+        <ul class="mc-list">
+          <li><span style="color:var(--purple);font-weight:800;">→</span>Sewa Score × Insurance referral fees</li>
+          <li><span style="color:var(--purple);font-weight:800;">→</span>Diagnostic lab partnerships (Sewa Points redemption)</li>
+          <li><span style="color:var(--purple);font-weight:800;">→</span>NGO Impact Report premium analytics</li>
+          <li><span style="color:var(--purple);font-weight:800;">→</span>Government district health contracts</li>
+          <li><span style="color:var(--purple);font-weight:800;">→</span>Corporate CSR routing and reporting</li>
+        </ul>
+        <div style="margin-top:16px;font-size:12px;font-weight:700;color:var(--purple);">If monetization fails: convert to NGO. Impact over income. Always.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WHY INDIA ══════════════════════════════════════════════ -->
+<section class="sec" id="whyindia">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag">Why India. Why Punjab. Why Now.</div>
+      <h2 class="sh">Our moat is not technology.<br/>It is the network we are building.</h2>
+      <p class="ss ctr">Any tech company can replicate app features in 90 days. They cannot replicate 50 verified Punjab NGO relationships in 90 days. The verified network is the moat.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-num" style="color:var(--red);">1st</div>
+        <div><div class="why-text-t">Punjab — Highest Chronic Disease Rate in India</div><div class="why-text-d">Punjab has India's highest rates of diabetes, hypertension, and heart disease. Our target market is in our backyard. We understand the problem because we live it.</div></div>
+      </div>
+      <div class="why-card">
+        <div class="why-num" style="color:var(--amber);">∞</div>
+        <div><div class="why-text-t">Sewa Culture — Organic Volunteer Supply</div><div class="why-text-d">Punjab's culture of selfless service — rooted in Gurudwaras across centuries — creates organic volunteer supply that no Bangalore startup can manufacture. Community-first is not our strategy. It is our identity.</div></div>
+      </div>
+      <div class="why-card">
+        <div class="why-num" style="color:var(--blue);">IIT</div>
+        <div><div class="why-text-t">IIT Ropar Home Base</div><div class="why-text-d">Direct access to research talent, government connections, and TBIF's startup ecosystem — all within our target market. We are not building for Punjab from Bangalore. We are building for Punjab from Punjab.</div></div>
+      </div>
+      <div class="why-card">
+        <div class="why-num" style="color:var(--green);">50+</div>
+        <div><div class="why-text-t">NGO and Blood Bank Network Ready</div><div class="why-text-d">Personal connections with NGOs and blood banks across Punjab — our first cohort of partners is already identified. When the platform is ready, onboarding begins immediately with a warm network.</div></div>
+      </div>
+      <div class="why-card">
+        <div class="why-num" style="color:var(--teal);">321M</div>
+        <div><div class="why-text-t">Chronic Patients with No Coordination Layer</div><div class="why-text-d">There is no community health coordination platform in India. We are not competing with an incumbent. We are creating a new category — and the market is 321 million patients plus 500,000 NGOs.</div></div>
+      </div>
+      <div class="why-card">
+        <div class="why-num" style="color:var(--purple);">Now</div>
+        <div><div class="why-text-t">India's Digital Health Infrastructure Is Ready</div><div class="why-text-d">4G/5G penetration, UPI, ABHA ID, Ayushman Bharat — the infrastructure is in place. The missing piece is the community coordination layer. That is exactly what Curaah builds.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FUTURE SCOPE ═══════════════════════════════════════════ -->
+<section class="sec" style="background:rgba(255,255,255,.015);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag teal">Future Scope</div>
+      <h2 class="sh">What we are building next<br/>has never existed in India.</h2>
+    </div>
+    <div class="future-grid reveal">
+      <div class="future-card">
+        <div class="future-ico">🚑</div>
+        <div class="future-title" style="color:var(--red);">Donated Ambulance GPS Network</div>
+        <div class="future-desc">Individuals donate a private ambulance + driver for community use. GPS-tracked like Ola. Patient raises request → nearest ambulance dispatched → tracked live. Donor gets tax documents + monthly impact report.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-ico">🪪</div>
+        <div class="future-title" style="color:var(--blue);">Health Passport QR</div>
+        <div class="future-desc">Patient's full medical summary as a QR code. Conditions, medicines, allergies, blood group, emergency contacts. Doctor scans at clinic or ER — instant history. No "start from the beginning" conversation in emergencies.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-ico">🏛️</div>
+        <div class="future-title" style="color:var(--green);">Government District Health Alerts</div>
+        <div class="future-desc">District health officers push verified disease alerts through Curaah — dengue rising, vaccination drives, outbreak warnings. Government-verified, not rumor. Opens path to state contracts and Startup Punjab integration.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-ico">🏢</div>
+        <div class="future-title" style="color:var(--amber);">Corporate Wellness Programs</div>
+        <div class="future-desc">Companies pay Curaah to run employee wellness programs. Employees join, set goals, participate in community challenges. Company gets aggregate anonymized health report. Enterprise B2B revenue without compromising community mission.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-ico">🛡️</div>
+        <div class="future-title" style="color:var(--purple);">Insurance Integration</div>
+        <div class="future-desc">Sewa Score + consistent health metrics = verified behavioral risk profile. Insurance companies pay Curaah for access to consented aggregated data. High Sewa Score users get premium discounts. Win for everyone.</div>
+      </div>
+      <div class="future-card">
+        <div class="future-ico">🏆</div>
+        <div class="future-title" style="color:var(--teal);">Community Health Challenges</div>
+        <div class="future-desc">"Ludhiana Sugar-Free September." An entire district participates together. NGO or brand sponsors it. Patients and health-conscious users compete on a leaderboard. Sewa Points for completion. Makes health communal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRACTION ═══════════════════════════════════════════════ -->
+<section class="sec" id="traction">
+  <div class="wrap">
+    <div class="ctr reveal">
+      <div class="tag green">Traction &amp; Milestones</div>
+      <h2 class="sh">Foundation built.<br/>Community ready. Building fast.</h2>
+      <p class="ss ctr">The platform is in active development. Once the full system is built and QA-complete, we begin stakeholder onboarding — starting with our existing network of Punjab NGOs and blood banks.</p>
+    </div>
+    <div class="traction-grid reveal">
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--green)"></div>
+        <div><div class="tr-title">IIT Ropar TBIF Incubation</div><div class="tr-desc">Formally incubated at IIT Ropar's Technology Business Incubator — mentorship, facilities, and startup ecosystem support.</div><span class="tr-badge tb-done">Done</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--green)"></div>
+        <div><div class="tr-title">DPIIT Startup Registration</div><div class="tr-desc">Registered as a recognized startup under Startup India — eligible for SISFS seed funding, tax exemptions, and fast-track IP.</div><span class="tr-badge tb-done">Done</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--green)"></div>
+        <div><div class="tr-title">Anicut Capital Meeting</div><div class="tr-desc">Initial investor conversations completed. Platform vision validated with institutional investors. Building toward a formal raise.</div><span class="tr-badge tb-done">Done</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--green)"></div>
+        <div><div class="tr-title">Complete Architecture Designed</div><div class="tr-desc">35-table database schema with GPS, pgvector RAG, RLS, 14 edge functions. Shared design system. Full product vision document locked.</div><span class="tr-badge tb-done">Done</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--amber)"></div>
+        <div><div class="tr-title">Platform Development — Active</div><div class="tr-desc">CareConnect and Curaah App being built across 10 phases. Privacy relay, blood dispatch, AI pipeline, emergency requests — all in development.</div><span class="tr-badge tb-next">In Progress</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--amber)"></div>
+        <div><div class="tr-title">NGO &amp; Blood Bank Network — 5–10 Partners Identified</div><div class="tr-desc">Personal network includes connections with NGOs and blood banks across Punjab. Onboarding begins immediately after platform QA is complete.</div><span class="tr-badge tb-next">Ready to Onboard</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--dim)"></div>
+        <div><div class="tr-title">Startup Punjab Grant Application</div><div class="tr-desc">Applying for Startup Punjab seed grant and Startup India SISFS fund through IIT Ropar TBIF. Strong social impact narrative.</div><span class="tr-badge" style="background:rgba(255,255,255,.06);color:var(--dim);">Upcoming</span></div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-dot" style="background:var(--dim)"></div>
+        <div><div class="tr-title">Punjab Soft Launch — Q4 2026</div><div class="tr-desc">First real users. NGOs, blood banks, and volunteers onboarded. Patients and health-conscious users joining. Community begins growing organically.</div><span class="tr-badge" style="background:rgba(255,255,255,.06);color:var(--dim);">Planned</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA — WAITLIST ═════════════════════════════════════════ -->
+<section class="sec cta-bg" id="waitlist">
+  <div class="wrap">
+    <div class="cta-inner reveal">
+      <div class="tag" style="margin-bottom:22px;">Join the Movement</div>
+      <div class="cta-h">Be part of<br/><em>what India needs.</em></div>
+      <p class="cta-sub">Curaah is in active development. Whether you are a patient, a health-conscious individual, a volunteer, an NGO, a blood bank, or a healthcare professional — we are building this for you. Join the waitlist and be among the first when we launch in Punjab.</p>
+      <div class="cta-btns">
+        <a href="mailto:founder@curaah.in?subject=Waitlist - Patient/Health User" class="btn btn-lg btn-blue">I'm a Patient / Health User →</a>
+        <a href="mailto:founder@curaah.in?subject=Waitlist - NGO/Blood Bank/Professional" class="btn btn-lg btn-teal">I'm an NGO / Volunteer →</a>
+      </div>
+      <div class="cta-note">
+        <div class="cta-note-item"><span style="color:var(--green)">✓</span>Free for genuine Sewa — always</div>
+        <div class="cta-note-item"><span style="color:var(--green)">✓</span>Privacy first — your data is yours</div>
+        <div class="cta-note-item"><span style="color:var(--green)">✓</span>IIT Ropar TBIF backed</div>
+        <div class="cta-note-item"><span style="color:var(--green)">✓</span>DPIIT Registered startup</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════════ -->
 <footer>
   <div class="fg">
     <div>
       <div class="fbrand">
-        <svg class="lsvg" viewBox="0 0 36 36" fill="none"><path d="M18 3L5 9L5 21Q5 30 18 34Q31 30 31 21L31 9Z" fill="#0f1f3d" stroke="#3d9eff" stroke-width="1.5"/><path d="M18 10Q13 15 13 20Q13 25 18 28Q23 25 23 20Q23 15 18 10Z" fill="#3d9eff" opacity=".9"/><circle cx="18" cy="22" r="3.5" fill="white"/></svg>
-        <span style="font-size:22px;font-weight:900;font-family:'Outfit',sans-serif">curaah</span>
+        <img src="assets/logo.svg" alt="Curaah Logo" style="width:32px;height:32px;flex-shrink:0;"/>
+        <div>
+          <div style="font-family:'Outfit',sans-serif;font-size:17px;font-weight:900;">curaah</div>
+          <div style="font-size:9px;color:var(--blue);font-weight:700;letter-spacing:1px;text-transform:uppercase;">HealthTech</div>
+        </div>
       </div>
-      <p class="ftagline">Curaah HealthTech Private Limited. Building India's Personalized Recovery Intelligence Platform, Healthcare Operations Technology, and Community Care Network. IIT Ropar Incubated.</p>
+      <div class="ftagline">India's first verified community health platform. Connecting patients, volunteers, NGOs, blood banks and healthcare professionals — GPS-aware, privacy-first, AI-powered.</div>
+      <div style="font-size:12px;color:var(--dim);margin-top:8px;">Free for Sewa. Fair for business. Privacy for everyone.</div>
     </div>
     <div class="fc">
-      <div class="fch">Curaah Recover</div>
-      <a href="companion.html">AI Recovery Companion</a>
-      <a href="family.html">Family Dashboard</a>
-      <a href="report-explainer.html">Report Explainer</a>
-      <a href="medicine-info.html">Medicine Info</a>
-      <a href="gov-map.html">Govt Health Map</a>
+      <div class="fch">Platform</div>
+      <a href="#careconnect">CareConnect</a>
+      <a href="#curaah-app">Patient App</a>
+      <a href="#emergency">Emergency System</a>
+      <a href="#sewa">Sewa Points</a>
+      <a href="#model">Business Model</a>
     </div>
     <div class="fc">
-      <div class="fch">Curaah HealthOps</div>
-      <a href="scribe.html">AI Doctor Scribe</a>
-      <!-- <a href="whatsapp-sender.html">WhatsApp Automation</a>
-      <a href="print-slips.html">Print Slips</a> -->
-      <a href="mailto:curaahtech@gmail.com">Request Pilot</a>
+      <div class="fch">Company</div>
+      <a href="#whyindia">Our Mission</a>
+      <a href="#traction">Traction</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="mailto:founder@curaah.in">Contact Us</a>
     </div>
     <div class="fc">
-      <div class="fch">CareConnect</div>
-      <a href="#community">Blood Request Network</a>
-      <a href="#community">NGO Camp Discovery</a>
-      <a href="#community">Disease Communities</a>
-      <a href="#community">SOS Caregiver Dispatch</a>
-    </div>
-    <div class="fc">
-      <div class="fch">Legal</div>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms of Service</a>
-      <a href="privacy.html">DPDP Compliance</a>
-      <a href="terms.html#medical-disclaimer">Medical Disclaimer</a>
+      <div class="fch">Get Involved</div>
+      <a href="mailto:founder@curaah.in?subject=Volunteer Waitlist">Volunteer Waitlist</a>
+      <a href="mailto:founder@curaah.in?subject=NGO Registration Interest">Register Your NGO</a>
+      <a href="mailto:founder@curaah.in?subject=Blood Bank Interest">Blood Bank Partner</a>
+      <a href="mailto:founder@curaah.in?subject=Investor Inquiry">Investor Inquiries</a>
     </div>
   </div>
   <div class="fbot">
-    <p>© 2026 Curaah HealthTech Pvt Ltd · All rights reserved · Personalized Recovery. Continuous Care. Intelligent Healthcare.</p>
-    <p class="disc">⚠️ Curaah is an AI recovery support tool, not a substitute for medical advice. Always consult your doctor.</p>
+    <p>© 2026 Curaah HealthTech Private Limited · Akshat Saini · Punjab, India · IIT Ropar TBIF Incubated · DPIIT Registered</p>
+    <p style="color:var(--dim);">founder@curaah.in &nbsp;·&nbsp; curaah.in</p>
   </div>
 </footer>
 
 <button class="st" id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-const nav=document.getElementById('nav');
-const st=document.getElementById('st');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('solid',scrollY>60);
-  st.classList.toggle('vis',scrollY>400);
+// ─── NAV ────────────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('solid', window.scrollY > 60);
+  document.getElementById('st').classList.toggle('vis', window.scrollY > 500);
 });
-function toggleMob(){document.getElementById('mob').classList.toggle('open');}
-document.addEventListener('click',e=>{if(!e.target.closest('#mob')&&!e.target.closest('.ham'))document.getElementById('mob').classList.remove('open');});
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}}),{threshold:.08});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+function toggleMob() {
+  document.getElementById('mob').classList.toggle('open');
 }
+document.querySelectorAll('.mob a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mob').classList.remove('open');
+}));
+
+// ─── SCROLL REVEAL ───────────────────────────────────────────
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ─── SMOOTH NAV LINKS ─────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
 </script>
 </body>
 </html>
