@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Check Your Inbox | CareConnect</title>
+  <meta name="description" content="Please verify your email address to activate your CareConnect account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    .verify-card {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      padding: 16px;
+    }
+    .verify-icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+      animation: emailBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes emailBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+    .verify-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .verify-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .email-highlight {
+      background: var(--blue-a);
+      border: 1px solid var(--blue-b);
+      border-radius: var(--r-sm);
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      display: inline-block;
+      margin-bottom: 24px;
+      word-break: break-all;
+    }
+    .steps-list {
+      text-align: left;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--blue-a);
+      border: 1px solid var(--blue-b);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    ALLOW_UNVERIFIED = true is set BEFORE auth-guard runs.
+    This page is accessible to users who just registered and have NOT verified email yet.
+  -->
+  <script>window.ALLOW_UNVERIFIED = true;</script>
+
+  <div class="screen auth active" style="background: var(--bg);">
+
+    <div class="verify-card">
+
+      <div class="verify-icon">📬</div>
+
+      <h1 class="verify-title">Check your inbox!</h1>
+
+      <p class="verify-sub">
+        We've sent a verification link to:
+      </p>
+
+      <div class="email-highlight" id="email-display">your email address</div>
+
+      <ul class="steps-list">
+        <li>
+          <span class="step-num">1</span>
+          <span>Open the email from <strong>noreply@curaah.in</strong></span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>Click the <strong>"Verify my email"</strong> button inside</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>You'll be redirected back here to sign in</span>
+        </li>
+      </ul>
+
+      <a href="/careconnect/login.html" class="btn btn-primary btn-lg btn-full mb-12">
+        Go to Sign In →
+      </a>
+
+      <button
+        id="btn-resend"
+        class="btn btn-ghost btn-md btn-full mb-16"
+      >
+        Resend verification email
+      </button>
+
+      <p class="text-caption" style="color: var(--dim); line-height: 1.6;">
+        Didn't receive the email? Check your spam folder.<br />
+        If you still can't find it, tap <em>Resend</em> above.
+      </p>
+
+    </div>
+
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <!-- Auth guard (runs AFTER ALLOW_UNVERIFIED is set) -->
+  <script src="/careconnect/js/auth-guard.js"></script>
+
+  <script>
+    // Show the email address that was used to register
+    (function () {
+      const email = sessionStorage.getItem('cc_pending_email');
+      if (email) {
+        document.getElementById('email-display').textContent = email;
+      }
+
+      // Resend verification email
+      document.getElementById('btn-resend').addEventListener('click', async function () {
+        setButtonLoading(this, true);
+        const { error } = await supabase.auth.resend({ type: 'signup', email: email || '' });
+        setButtonLoading(this, false);
+        if (error) {
+          showToast('Could not resend the email right now. Please try again in a minute.', 'error');
+        } else {
+          showToast('Verification email sent! Please check your inbox.', 'success');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
