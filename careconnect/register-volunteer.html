@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Register as Volunteer | CareConnect</title>
+  <meta name="description" content="Join CareConnect as a volunteer. Share your skills, join health camps, and earn Sewa Points." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    .reg-wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 20px) var(--page-pad) 40px;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .toggle-label { font-size: 14px; font-weight: 600; }
+    .toggle-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 48px; height: 26px; flex-shrink: 0;
+    }
+    .toggle-switch input { display: none; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--card-2); border-radius: 13px;
+      border: 1.5px solid var(--line); cursor: pointer;
+      transition: var(--t);
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--dim);
+      transition: var(--t);
+    }
+    .toggle-switch input:checked ~ .toggle-track {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .toggle-switch input:checked ~ .toggle-track::after {
+      background: #fff;
+      transform: translateX(22px);
+    }
+    .blood-fields {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r);
+      display: none;
+    }
+    .blood-fields.visible { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <button class="nav-back" id="btn-back" aria-label="Go back">←</button>
+    <span class="nav-title">Volunteer Registration</span>
+    <div style="width:38px;"></div>
+  </div>
+
+  <div class="screen active" style="background: var(--bg); overflow-y: auto; min-height: 100svh;">
+    <div class="reg-wrap">
+
+      <!-- Step indicator (5 steps) -->
+      <div class="step-indicator" id="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step-dot" id="dot-3">3</div>
+        <div class="step-line" id="line-3"></div>
+        <div class="step-dot" id="dot-4">4</div>
+        <div class="step-line" id="line-4"></div>
+        <div class="step-dot" id="dot-5">5</div>
+      </div>
+
+      <!-- ── STEP 1: Basic info ───────────────────────────── -->
+      <div class="step-body active" id="step-body-1">
+        <h2 class="step-title">Let's get you set up</h2>
+        <p class="step-sub">Basic information for your volunteer profile.</p>
+
+        <div class="form-group" id="fg-full-name">
+          <label class="form-label" for="full-name">Full name <span class="required">*</span></label>
+          <input id="full-name" type="text" class="input" placeholder="Gurpreet Singh" autocomplete="name" />
+          <div class="form-error" id="err-full-name"></div>
+        </div>
+
+        <div class="form-group" id="fg-email">
+          <label class="form-label" for="email">Email address <span class="required">*</span></label>
+          <input id="email" type="email" class="input" placeholder="you@example.com" autocomplete="email" inputmode="email" />
+          <div class="form-error" id="err-email"></div>
+        </div>
+
+        <div class="form-group" id="fg-password">
+          <label class="form-label" for="password">Password <span class="required">*</span></label>
+          <input id="password" type="password" class="input" placeholder="Min. 8 characters" autocomplete="new-password" />
+          <div class="form-error" id="err-password"></div>
+        </div>
+
+        <div class="form-group" id="fg-phone">
+          <label class="form-label" for="phone">WhatsApp number <span class="required">*</span></label>
+          <div class="input-prefix">
+            <span class="prefix-text">+91</span>
+            <input id="phone" type="tel" class="input" placeholder="9876543210" autocomplete="tel" inputmode="tel" maxlength="10" />
+          </div>
+          <span class="form-hint">Blood request alerts will be sent here.</span>
+          <div class="form-error" id="err-phone"></div>
+        </div>
+
+        <div class="form-group" id="fg-state">
+          <label class="form-label" for="state">State <span class="required">*</span></label>
+          <select id="state" class="input"></select>
+          <div class="form-error" id="err-state"></div>
+        </div>
+
+        <div class="form-group" id="fg-district">
+          <label class="form-label" for="district">District <span class="required">*</span></label>
+          <select id="district" class="input" disabled></select>
+          <div class="form-error" id="err-district"></div>
+        </div>
+
+        <div class="form-group" id="fg-city">
+          <label class="form-label" for="city">City / Town <span class="required">*</span></label>
+          <select id="city" class="input" disabled></select>
+          <div class="form-error" id="err-city"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-primary btn-lg btn-full" id="btn-step1-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Skills ────────────────────────────────── -->
+      <div class="step-body" id="step-body-2">
+        <h2 class="step-title">Your skills</h2>
+        <p class="step-sub">Select all that apply. NGOs will see these when planning events.</p>
+
+        <div id="skills-grid" class="chip-grid"></div>
+        <p class="text-caption mt-8">Select at least one skill.</p>
+        <div id="err-skills" class="form-error" style="font-size:12.5px;"></div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step2-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step2-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Availability ──────────────────────────── -->
+      <div class="step-body" id="step-body-3">
+        <h2 class="step-title">Your availability</h2>
+        <p class="step-sub">Tell NGOs when you're free and how far you'll travel.</p>
+
+        <div class="form-group">
+          <label class="form-label">Available days <span class="required">*</span></label>
+          <div id="days-grid" class="chip-grid"></div>
+          <div id="err-days" class="form-error" style="font-size:12.5px;"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preferred times <span class="required">*</span></label>
+          <div id="times-grid" class="chip-grid"></div>
+          <div id="err-times" class="form-error" style="font-size:12.5px;"></div>
+        </div>
+
+        <div class="form-group" id="fg-travel">
+          <label class="form-label" for="travel-radius">Maximum travel distance <span class="required">*</span></label>
+          <select id="travel-radius" class="input">
+            <option value="" disabled selected>Select distance…</option>
+            <option value="5">5 km — within my neighbourhood</option>
+            <option value="10">10 km — within my city</option>
+            <option value="15">15 km</option>
+            <option value="25">25 km — nearby towns</option>
+            <option value="50">50 km — same district</option>
+            <option value="100">100 km — anywhere in Punjab</option>
+          </select>
+          <div class="form-error" id="err-travel"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step3-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step3-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Blood donation opt-in ─────────────────── -->
+      <div class="step-body" id="step-body-4">
+        <h2 class="step-title">Blood donation</h2>
+        <p class="step-sub">Opt in to receive urgent blood donation requests near you. Completely optional.</p>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">🩸 I want to donate blood</div>
+            <div class="toggle-sub">Receive alerts when someone nearby needs your blood group</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="blood-opted" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="blood-fields" id="blood-fields">
+          <div class="form-group" id="fg-blood-group">
+            <label class="form-label" for="blood-group">Blood group <span class="required">*</span></label>
+            <select id="blood-group" class="input"></select>
+            <div class="form-error" id="err-blood-group"></div>
+          </div>
+
+          <div class="form-group" id="fg-last-donated">
+            <label class="form-label" for="last-donated">Last donated on (if ever)</label>
+            <input id="last-donated" type="date" class="input" />
+          </div>
+
+          <div class="form-group" id="fg-alert-radius">
+            <label class="form-label" for="alert-radius">Alert me for requests within <span class="required">*</span></label>
+            <select id="alert-radius" class="input">
+              <option value="" disabled selected>Select radius…</option>
+              <option value="10">10 km</option>
+              <option value="15">15 km</option>
+              <option value="25">25 km</option>
+              <option value="50">50 km</option>
+            </select>
+            <div class="form-error" id="err-alert-radius"></div>
+          </div>
+        </div><!-- /.blood-fields -->
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step4-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step4-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 5: Privacy consent + terms ───────────────── -->
+      <div class="step-body" id="step-body-5">
+        <h2 class="step-title">Your privacy, your choice</h2>
+        <p class="step-sub">Choose how much information NGOs can see about you. You can change this anytime.</p>
+
+        <div class="consent-dial" id="consent-dial">
+          <div class="consent-level active" data-level="relay_only" id="consent-relay_only">
+            <div class="consent-indicator"></div>
+            <div>
+              <div class="consent-level-name">🔒 Relay Only <span class="badge badge-green" style="margin-left:6px;">Recommended</span></div>
+              <div class="consent-level-desc">NGOs never see your name, phone, or email. All messages go through Curaah's relay. Maximum privacy.</div>
+            </div>
+          </div>
+          <div class="consent-level" data-level="name_city" id="consent-name_city">
+            <div class="consent-indicator"></div>
+            <div>
+              <div class="consent-level-name">🏙️ Name + City</div>
+              <div class="consent-level-desc">NGOs see your first name and city (e.g. "Gurpreet S., Amritsar"). Your phone and email remain hidden.</div>
+            </div>
+          </div>
+          <div class="consent-level" data-level="full_contact" id="consent-full_contact">
+            <div class="consent-indicator"></div>
+            <div>
+              <div class="consent-level-name">📞 Full Contact</div>
+              <div class="consent-level-desc">Each time an NGO wants your phone number, you confirm with 3 separate taps. Not a blanket permission.</div>
+            </div>
+          </div>
+        </div><!-- /.consent-dial -->
+
+        <div class="mt-24">
+          <label class="checkbox-item" id="terms-label" for="terms">
+            <input type="checkbox" id="terms" />
+            <div class="check-box"></div>
+            <div class="check-label">
+              <div class="check-title">I agree to the Terms of Service and Privacy Policy</div>
+              <div class="check-sub">Your health data is always private. You can delete your account anytime.</div>
+            </div>
+          </label>
+          <div id="err-terms" class="form-error" style="font-size:12.5px; margin-top:6px;"></div>
+        </div>
+
+        <!-- Global error -->
+        <div id="reg-error" class="alert alert-danger mt-16" style="display:none;">
+          <span class="alert-icon">⚠</span>
+          <span id="reg-error-text"></span>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step5-back">← Back</button>
+          <button class="btn btn-success btn-lg flex-1" id="btn-submit">
+            Create Account ✓
+          </button>
+        </div>
+      </div><!-- /#step-body-5 -->
+
+    </div><!-- /.reg-wrap -->
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js?v=2"></script>
+  <script src="/js/utils/toast.js?v=2"></script>
+  <script src="/js/utils/validate.js?v=2"></script>
+  <script src="/js/utils/upload.js?v=2"></script>
+  <script src="/js/utils/location-api.js?v=2"></script>
+  <script src="/js/utils/dom.js?v=2"></script>
+  <script src="/careconnect/js/register-volunteer.js?v=2"></script>
+
+</body>
+</html>
