@@ -337,6 +337,7 @@
       lat:                 parseFloat(latEl.value) || null,
       lng:                 parseFloat(lngEl.value) || null,
       coverage_districts:  [districtEl.value],
+      blood_inventory:     collectInventory(),
       verification_status: 'pending',
     }).select('id').single();
 
@@ -350,7 +351,7 @@
     await supabase.from('cc_verification_queue').insert({
       org_id:     orgData.id,
       cc_user_id: userId,
-      notes_from_org: `Licence: ${licenseEl.value.trim()}. Inventory: ${JSON.stringify(collectInventory())}`,
+      notes_from_org: `Licence: ${licenseEl.value.trim()}`,
     });
 
     // 5. Redirect
