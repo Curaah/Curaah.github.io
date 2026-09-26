@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Register as Blood Bank | CareConnect</title>
+  <meta name="description" content="Register your licensed blood bank on CareConnect for real-time inventory management and GPS-routed emergency requests." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    .reg-wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 20px) var(--page-pad) 40px;
+    }
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .inventory-item {
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r);
+      padding: 12px 14px;
+    }
+    .inventory-item label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .inventory-item .blood-badge {
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 900;
+      font-family: 'Outfit', sans-serif;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .inventory-item input[type="number"] {
+      width: 100%;
+    }
+    .gps-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .gps-row .input { flex: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <button class="nav-back" id="btn-back" aria-label="Go back">←</button>
+    <span class="nav-title">Blood Bank Registration</span>
+    <div style="width:38px;"></div>
+  </div>
+
+  <div class="screen active" style="background: var(--bg); overflow-y: auto; min-height: 100svh;">
+    <div class="reg-wrap">
+
+      <!-- Step indicator (3 steps) -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step-dot" id="dot-3">3</div>
+      </div>
+
+      <!-- ── STEP 1: Blood bank + login details ───────────── -->
+      <div class="step-body active" id="step-body-1">
+        <h2 class="step-title">Blood bank details</h2>
+        <p class="step-sub">Basic information for registration and login.</p>
+
+        <div class="form-group" id="fg-bank-name">
+          <label class="form-label" for="bank-name">Blood bank name <span class="required">*</span></label>
+          <input id="bank-name" type="text" class="input" placeholder="e.g. Amritsar Civil Hospital Blood Bank" />
+          <div class="form-error" id="err-bank-name"></div>
+        </div>
+
+        <div class="form-group" id="fg-license">
+          <label class="form-label" for="license">Blood bank licence number <span class="required">*</span></label>
+          <input id="license" type="text" class="input" placeholder="e.g. PB/BB/2019/001" />
+          <span class="form-hint">As issued by the state Drug Controller. Required for verification.</span>
+          <div class="form-error" id="err-license"></div>
+        </div>
+
+        <div class="form-group" id="fg-affiliation">
+          <label class="form-label" for="affiliation">Affiliation type <span class="required">*</span></label>
+          <select id="affiliation" class="input">
+            <option value="" disabled selected>Select affiliation…</option>
+            <option value="government">Government hospital</option>
+            <option value="private">Private hospital</option>
+            <option value="ngo">NGO-run</option>
+            <option value="standalone">Standalone (independent)</option>
+          </select>
+          <div class="form-error" id="err-affiliation"></div>
+        </div>
+
+        <div class="form-group" id="fg-hospital-name">
+          <label class="form-label" for="hospital-name">Hospital affiliation (if applicable)</label>
+          <input id="hospital-name" type="text" class="input" placeholder="e.g. Fortis Hospital Amritsar" />
+        </div>
+
+        <div class="form-group" id="fg-email">
+          <label class="form-label" for="email">Email address <span class="required">*</span></label>
+          <input id="email" type="email" class="input" placeholder="bloodbank@hospital.com" autocomplete="email" inputmode="email" />
+          <div class="form-error" id="err-email"></div>
+        </div>
+
+        <div class="form-group" id="fg-password">
+          <label class="form-label" for="password">Password <span class="required">*</span></label>
+          <input id="password" type="password" class="input" placeholder="Min. 8 characters" autocomplete="new-password" />
+          <div class="form-error" id="err-password"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-primary btn-lg btn-full" id="btn-step1-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Location + operating hours ────────────── -->
+      <div class="step-body" id="step-body-2">
+        <h2 class="step-title">Location and hours</h2>
+        <p class="step-sub">Accurate GPS location is required for dispatch routing to nearby requesters.</p>
+
+        <div class="form-group" id="fg-address">
+          <label class="form-label" for="address">Street address <span class="required">*</span></label>
+          <input id="address" type="text" class="input" placeholder="Building / ward name and street" />
+          <div class="form-error" id="err-address"></div>
+        </div>
+
+        <div class="form-group" id="fg-state">
+          <label class="form-label" for="state">State <span class="required">*</span></label>
+          <select id="state" class="input"></select>
+          <div class="form-error" id="err-state"></div>
+        </div>
+
+        <div class="form-group" id="fg-district">
+          <label class="form-label" for="district">District <span class="required">*</span></label>
+          <select id="district" class="input" disabled></select>
+          <div class="form-error" id="err-district"></div>
+        </div>
+
+        <div class="form-group" id="fg-city">
+          <label class="form-label" for="city">City / Town <span class="required">*</span></label>
+          <select id="city" class="input" disabled></select>
+          <div class="form-error" id="err-city"></div>
+        </div>
+
+        <div class="form-group" id="fg-pincode">
+          <label class="form-label" for="pincode">Pincode <span class="required">*</span></label>
+          <input id="pincode" type="text" class="input" placeholder="143001" inputmode="numeric" maxlength="6" />
+          <div class="form-error" id="err-pincode"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">GPS coordinates <span class="required">*</span></label>
+          <div class="gps-row">
+            <div>
+              <div class="form-label" style="font-size:11px; margin-bottom:4px;">Latitude</div>
+              <input id="lat" type="text" class="input" placeholder="31.6340" inputmode="decimal" readonly />
+            </div>
+            <div>
+              <div class="form-label" style="font-size:11px; margin-bottom:4px;">Longitude</div>
+              <input id="lng" type="text" class="input" placeholder="74.8723" inputmode="decimal" readonly />
+            </div>
+            <button class="btn btn-surface btn-md" id="btn-detect-gps" type="button" style="flex-shrink:0; min-width:90px;">
+              📍 Detect
+            </button>
+          </div>
+          <span class="form-hint">Tap Detect to auto-fill, or enter manually after detecting.</span>
+          <div id="err-gps" class="form-error"></div>
+        </div>
+
+        <div class="form-group" id="fg-hours">
+          <label class="form-label" for="hours">Operating hours <span class="required">*</span></label>
+          <input id="hours" type="text" class="input" placeholder="e.g. 24/7 or Mon–Sat 8 AM–8 PM" />
+          <div class="form-error" id="err-hours"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step2-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step2-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Inventory (optional) + terms ───────────── -->
+      <div class="step-body" id="step-body-3">
+        <h2 class="step-title">Current blood inventory</h2>
+        <p class="step-sub">Optional — enter your current stock. You can update this anytime from your dashboard.</p>
+
+        <div class="inventory-grid" id="inventory-grid">
+          <!-- Built by JS -->
+        </div>
+
+        <div class="mt-24">
+          <label class="checkbox-item" id="terms-label" for="terms">
+            <input type="checkbox" id="terms" />
+            <div class="check-box"></div>
+            <div class="check-label">
+              <div class="check-title">I confirm this blood bank holds a valid licence and I agree to the Terms of Service</div>
+              <div class="check-sub">Our team will verify your licence number within 48 hours.</div>
+            </div>
+          </label>
+          <div id="err-terms" class="form-error" style="font-size:12.5px; margin-top:6px;"></div>
+        </div>
+
+        <!-- Global error -->
+        <div id="reg-error" class="alert alert-danger mt-16" style="display:none;">
+          <span class="alert-icon">⚠</span>
+          <span id="reg-error-text"></span>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step3-back">← Back</button>
+          <button class="btn btn-success btn-lg flex-1" id="btn-submit">Submit for Verification ✓</button>
+        </div>
+      </div>
+
+    </div><!-- /.reg-wrap -->
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js?v=2"></script>
+  <script src="/js/utils/toast.js?v=2"></script>
+  <script src="/js/utils/validate.js?v=2"></script>
+  <script src="/js/utils/gps.js?v=2"></script>
+  <script src="/js/utils/location-api.js?v=2"></script>
+  <script src="/js/utils/dom.js?v=2"></script>
+  <script src="/careconnect/js/register-blood-bank.js?v=2"></script>
+
+</body>
+</html>
