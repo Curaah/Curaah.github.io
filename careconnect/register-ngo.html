@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Register as NGO / Organisation | CareConnect</title>
+  <meta name="description" content="Register your NGO or organisation on CareConnect to coordinate volunteers and run community health events." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    .reg-wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 20px) var(--page-pad) 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <button class="nav-back" id="btn-back" aria-label="Go back">←</button>
+    <span class="nav-title">NGO Registration</span>
+    <div style="width:38px;"></div>
+  </div>
+
+  <div class="screen active" style="background: var(--bg); overflow-y: auto; min-height: 100svh;">
+    <div class="reg-wrap">
+
+      <!-- Step indicator (4 steps) -->
+      <div class="step-indicator" id="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step-dot" id="dot-3">3</div>
+        <div class="step-line" id="line-3"></div>
+        <div class="step-dot" id="dot-4">4</div>
+      </div>
+
+      <!-- ── STEP 1: Organisation details ─────────────────── -->
+      <div class="step-body active" id="step-body-1">
+        <h2 class="step-title">About your organisation</h2>
+        <p class="step-sub">Basic details about your NGO or health organisation.</p>
+
+        <div class="form-group" id="fg-org-name">
+          <label class="form-label" for="org-name">Organisation name <span class="required">*</span></label>
+          <input id="org-name" type="text" class="input" placeholder="e.g. Amritsar Health Foundation" />
+          <div class="form-error" id="err-org-name"></div>
+        </div>
+
+        <div class="form-group" id="fg-org-type">
+          <label class="form-label" for="org-type">Organisation type <span class="required">*</span></label>
+          <select id="org-type" class="input"></select>
+          <div class="form-error" id="err-org-type"></div>
+        </div>
+
+        <div class="form-group" id="fg-reg-number">
+          <label class="form-label" for="reg-number">Registration number</label>
+          <input id="reg-number" type="text" class="input" placeholder="12A / 80G / FCRA (if available)" />
+          <span class="form-hint">Optional — informal groups are welcome without a registration number.</span>
+        </div>
+
+        <div class="form-group" id="fg-year-founded">
+          <label class="form-label" for="year-founded">Year founded</label>
+          <input id="year-founded" type="number" class="input" placeholder="e.g. 2010" min="1900" max="2026" inputmode="numeric" />
+        </div>
+
+        <div class="form-group" id="fg-description">
+          <label class="form-label" for="description">What does your organisation do? <span class="required">*</span></label>
+          <textarea id="description" class="input" placeholder="Describe your mission, activities, and the communities you serve…" rows="4" maxlength="500"></textarea>
+          <span class="form-hint">Max 500 characters. <span id="desc-count">0</span>/500</span>
+          <div class="form-error" id="err-description"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-primary btn-lg btn-full" id="btn-step1-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Contact person + login ───────────────── -->
+      <div class="step-body" id="step-body-2">
+        <h2 class="step-title">Contact person</h2>
+        <p class="step-sub">These details create your login and show on your CareConnect profile.</p>
+
+        <div class="form-group" id="fg-contact-name">
+          <label class="form-label" for="contact-name">Your full name <span class="required">*</span></label>
+          <input id="contact-name" type="text" class="input" placeholder="Rajvinder Kaur" autocomplete="name" />
+          <div class="form-error" id="err-contact-name"></div>
+        </div>
+
+        <div class="form-group" id="fg-designation">
+          <label class="form-label" for="designation">Your designation</label>
+          <input id="designation" type="text" class="input" placeholder="e.g. Secretary, Manager, Director" />
+        </div>
+
+        <div class="form-group" id="fg-mobile">
+          <label class="form-label" for="mobile">Mobile number <span class="required">*</span></label>
+          <div class="input-prefix">
+            <span class="prefix-text">+91</span>
+            <input id="mobile" type="tel" class="input" placeholder="9876543210" inputmode="tel" maxlength="10" />
+          </div>
+          <div class="form-error" id="err-mobile"></div>
+        </div>
+
+        <div class="form-group" id="fg-email">
+          <label class="form-label" for="email">Email address <span class="required">*</span></label>
+          <input id="email" type="email" class="input" placeholder="org@example.com" autocomplete="email" inputmode="email" />
+          <div class="form-error" id="err-email"></div>
+        </div>
+
+        <div class="form-group" id="fg-password">
+          <label class="form-label" for="password">Password <span class="required">*</span></label>
+          <input id="password" type="password" class="input" placeholder="Min. 8 characters" autocomplete="new-password" />
+          <div class="form-error" id="err-password"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step2-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step2-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Document uploads ──────────────────────── -->
+      <div class="step-body" id="step-body-3">
+        <h2 class="step-title">Verification documents</h2>
+        <p class="step-sub">Upload at least one document so our team can verify your organisation within 48 hours. Informal groups can upload any available proof.</p>
+
+        <div class="alert alert-info mb-16">
+          <span class="alert-icon">ℹ</span>
+          <span>Documents are stored securely and never shared publicly. Max 5 MB each. PDF, JPG, or PNG.</span>
+        </div>
+
+        <!-- 12A certificate -->
+        <div class="form-group">
+          <label class="form-label">12A Certificate</label>
+          <div class="file-upload" id="zone-12a" onclick="triggerFileInput('file-12a')">
+            <div class="fu-icon">📄</div>
+            <div class="fu-title">Tap to upload 12A certificate</div>
+            <div class="fu-sub">PDF, JPG or PNG · Max 5 MB</div>
+            <input type="file" id="file-12a" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+        </div>
+
+        <!-- 80G certificate -->
+        <div class="form-group">
+          <label class="form-label">80G Certificate</label>
+          <div class="file-upload" id="zone-80g" onclick="triggerFileInput('file-80g')">
+            <div class="fu-icon">📄</div>
+            <div class="fu-title">Tap to upload 80G certificate</div>
+            <div class="fu-sub">PDF, JPG or PNG · Max 5 MB</div>
+            <input type="file" id="file-80g" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+        </div>
+
+        <!-- Other proof -->
+        <div class="form-group">
+          <label class="form-label">Other proof (any govt document)</label>
+          <div class="file-upload" id="zone-other" onclick="triggerFileInput('file-other')">
+            <div class="fu-icon">📎</div>
+            <div class="fu-title">Tap to upload another document</div>
+            <div class="fu-sub">Society registration, trust deed, hospital licence, etc. · Max 5 MB</div>
+            <input type="file" id="file-other" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+        </div>
+
+        <div id="err-docs" class="alert alert-danger" style="display:none;">
+          <span class="alert-icon">⚠</span>
+          <span id="err-docs-text"></span>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step3-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step3-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Work areas + districts + terms ────────── -->
+      <div class="step-body" id="step-body-4">
+        <h2 class="step-title">Your focus areas</h2>
+        <p class="step-sub">This helps volunteers find the right organisations and helps us match you with relevant health camps.</p>
+
+        <div class="form-group">
+          <label class="form-label">Health focus areas <span class="required">*</span></label>
+          <div id="work-areas-grid" class="chip-grid"></div>
+          <div id="err-work-areas" class="form-error" style="font-size:12.5px;"></div>
+        </div>
+
+        <div class="form-group" id="fg-state">
+          <label class="form-label" for="state">Operating state <span class="required">*</span></label>
+          <select id="state" class="input"></select>
+          <div class="form-error" id="err-state"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Districts you operate in <span class="required">*</span></label>
+          <div id="coverage-grid" class="chip-grid"></div>
+          <p class="text-caption mt-8" id="coverage-hint">Please select a state first.</p>
+          <div id="err-coverage" class="form-error" style="font-size:12.5px;"></div>
+        </div>
+
+        <div class="mt-16">
+          <label class="checkbox-item" id="terms-label" for="terms">
+            <input type="checkbox" id="terms" />
+            <div class="check-box"></div>
+            <div class="check-label">
+              <div class="check-title">I agree to the Terms of Service and Privacy Policy</div>
+              <div class="check-sub">Your organisation will be verified by our team within 48 hours.</div>
+            </div>
+          </label>
+          <div id="err-terms" class="form-error" style="font-size:12.5px; margin-top:6px;"></div>
+        </div>
+
+        <!-- Global error -->
+        <div id="reg-error" class="alert alert-danger mt-16" style="display:none;">
+          <span class="alert-icon">⚠</span>
+          <span id="reg-error-text"></span>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step4-back">← Back</button>
+          <button class="btn btn-success btn-lg flex-1" id="btn-submit">Submit for Verification ✓</button>
+        </div>
+      </div>
+
+    </div><!-- /.reg-wrap -->
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js?v=2"></script>
+  <script src="/js/utils/toast.js?v=2"></script>
+  <script src="/js/utils/validate.js?v=2"></script>
+  <script src="/js/utils/upload.js?v=2"></script>
+  <script src="/js/utils/location-api.js?v=2"></script>
+  <script src="/js/utils/dom.js?v=2"></script>
+  <script src="/careconnect/js/register-ngo.js?v=2"></script>
+
+</body>
+</html>
