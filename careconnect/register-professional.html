@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Register as Healthcare Professional | CareConnect</title>
+  <meta name="description" content="Join CareConnect as a verified healthcare professional. Post health content, join camps, and build your trusted profile." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    .reg-wrap {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 20px) var(--page-pad) 40px;
+    }
+    .char-counter {
+      float: right;
+      font-size: 11px;
+      color: var(--dim);
+    }
+    .photo-upload-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 24px;
+      background: var(--card);
+      border: 2px dashed var(--line);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: var(--t);
+    }
+    .photo-upload-wrap:hover { border-color: var(--blue); background: var(--blue-a); }
+    .photo-upload-wrap.has-file { border-color: var(--green); background: var(--green-a); }
+    .photo-preview {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--blue);
+      display: none;
+    }
+    .photo-upload-wrap.has-file .photo-preview { display: block; }
+    .photo-upload-icon { font-size: 48px; }
+    .photo-upload-wrap.has-file .photo-upload-icon { display: none; }
+    .availability-types { display: flex; flex-wrap: wrap; gap: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <button class="nav-back" id="btn-back" aria-label="Go back">←</button>
+    <span class="nav-title">Professional Registration</span>
+    <div style="width:38px;"></div>
+  </div>
+
+  <div class="screen active" style="background: var(--bg); overflow-y: auto; min-height: 100svh;">
+    <div class="reg-wrap">
+
+      <!-- Step indicator (3 steps) -->
+      <div class="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step-dot" id="dot-3">3</div>
+      </div>
+
+      <!-- ── STEP 1: Professional credentials ─────────────── -->
+      <div class="step-body active" id="step-body-1">
+        <h2 class="step-title">Your credentials</h2>
+        <p class="step-sub">This information will be verified by our team within 48 hours before you can post health content.</p>
+
+        <div class="alert alert-info mb-16">
+          <span class="alert-icon">🔒</span>
+          <span>Only verified healthcare professionals can post health advice on Curaah. This is how we prevent misinformation.</span>
+        </div>
+
+        <div class="form-group" id="fg-full-name">
+          <label class="form-label" for="full-name">Full name (as on council registration) <span class="required">*</span></label>
+          <input id="full-name" type="text" class="input" placeholder="Dr. Manpreet Sharma" autocomplete="name" />
+          <div class="form-error" id="err-full-name"></div>
+        </div>
+
+        <div class="form-group" id="fg-specialty">
+          <label class="form-label" for="specialty">Specialty <span class="required">*</span></label>
+          <select id="specialty" class="input"></select>
+          <div class="form-error" id="err-specialty"></div>
+        </div>
+
+        <div class="form-group" id="fg-council-number">
+          <label class="form-label" for="council-number">Medical council registration number <span class="required">*</span></label>
+          <input id="council-number" type="text" class="input" placeholder="e.g. PB-MCI-12345 or MCI-98765" />
+          <span class="form-hint">As issued by your state medical council or MCI/NMC. We verify this before activation.</span>
+          <div class="form-error" id="err-council-number"></div>
+        </div>
+
+        <div class="form-group" id="fg-experience">
+          <label class="form-label" for="experience">Years of experience</label>
+          <input id="experience" type="number" class="input" placeholder="e.g. 8" min="0" max="70" inputmode="numeric" />
+        </div>
+
+        <div class="form-group" id="fg-email">
+          <label class="form-label" for="email">Email address <span class="required">*</span></label>
+          <input id="email" type="email" class="input" placeholder="dr.name@hospital.com" autocomplete="email" inputmode="email" />
+          <div class="form-error" id="err-email"></div>
+        </div>
+
+        <div class="form-group" id="fg-phone">
+          <label class="form-label" for="phone">Phone / Mobile <span class="required">*</span></label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" class="input" value="+91" disabled style="width: 60px; text-align: center; padding: 0;" />
+            <input id="phone" type="text" class="input flex-1" placeholder="9876543210" inputmode="numeric" maxlength="10" />
+          </div>
+          <div class="form-error" id="err-phone"></div>
+        </div>
+
+        <div class="form-group" id="fg-password">
+          <label class="form-label" for="password">Password <span class="required">*</span></label>
+          <input id="password" type="password" class="input" placeholder="Min. 8 characters" autocomplete="new-password" />
+          <div class="form-error" id="err-password"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-primary btn-lg btn-full" id="btn-step1-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Practice details + availability ────────── -->
+      <div class="step-body" id="step-body-2">
+        <h2 class="step-title">Practice & availability</h2>
+        <p class="step-sub">Help NGOs and patients find you for the right opportunities.</p>
+
+        <div class="form-group" id="fg-affiliation">
+          <label class="form-label" for="affiliation">Hospital / Clinic affiliation</label>
+          <input id="affiliation" type="text" class="input" placeholder="e.g. AIIMS Amritsar or Private Practice" />
+        </div>
+
+        <div class="form-group" id="fg-practice-state">
+          <label class="form-label" for="practice-state">Practice state <span class="required">*</span></label>
+          <select id="practice-state" class="input"></select>
+          <div class="form-error" id="err-practice-state"></div>
+        </div>
+
+        <div class="form-group" id="fg-practice-district">
+          <label class="form-label" for="practice-district">Practice district <span class="required">*</span></label>
+          <select id="practice-district" class="input" disabled></select>
+          <div class="form-error" id="err-practice-district"></div>
+        </div>
+
+        <div class="form-group" id="fg-practice-city">
+          <label class="form-label" for="practice-city">Practice city / town <span class="required">*</span></label>
+          <select id="practice-city" class="input" disabled></select>
+          <div class="form-error" id="err-practice-city"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">How would you like to contribute? <span class="required">*</span></label>
+          <p class="form-hint" style="margin-bottom:10px;">Select all that apply.</p>
+          <div id="availability-grid" class="chip-grid"></div>
+          <div id="err-availability" class="form-error" style="font-size:12.5px;"></div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step2-back">← Back</button>
+          <button class="btn btn-primary btn-md flex-1" id="btn-step2-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Profile photo + bio + terms ────────────── -->
+      <div class="step-body" id="step-body-3">
+        <h2 class="step-title">Your public profile</h2>
+        <p class="step-sub">A professional photo and bio build trust. Patients and NGOs will see this.</p>
+
+        <!-- Profile photo upload -->
+        <div class="form-group">
+          <label class="form-label">Profile photo <span class="text-muted" style="font-weight:400;">(strongly recommended)</span></label>
+          <div class="photo-upload-wrap" id="photo-zone" onclick="document.getElementById('photo-file').click()">
+            <img id="photo-preview" class="photo-preview" alt="Profile preview" />
+            <div class="photo-upload-icon">👤</div>
+            <div>
+              <div style="font-size:14px; font-weight:600; margin-bottom:4px;">Tap to upload a photo</div>
+              <div style="font-size:12px; color:var(--dim);">JPG or PNG · Square preferred · Max 5 MB</div>
+            </div>
+            <input type="file" id="photo-file" accept=".jpg,.jpeg,.png" style="display:none;" />
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group" id="fg-bio">
+          <label class="form-label">
+            Short bio
+            <span class="char-counter"><span id="bio-count">0</span>/300</span>
+          </label>
+          <textarea id="bio" class="input" placeholder="Brief summary of your expertise, interests, and how you want to contribute to community health…" rows="4" maxlength="300"></textarea>
+          <span class="form-hint">Shown on your public profile. Max 300 characters.</span>
+        </div>
+
+        <!-- Terms -->
+        <div class="mt-16">
+          <label class="checkbox-item" id="terms-label" for="terms">
+            <input type="checkbox" id="terms" />
+            <div class="check-box"></div>
+            <div class="check-label">
+              <div class="check-title">I confirm I am a licensed healthcare professional and I agree to the Terms of Service</div>
+              <div class="check-sub">False claims will result in permanent account removal. Our team verifies all registrations.</div>
+            </div>
+          </label>
+          <div id="err-terms" class="form-error" style="font-size:12.5px; margin-top:6px;"></div>
+        </div>
+
+        <!-- Global error -->
+        <div id="reg-error" class="alert alert-danger mt-16" style="display:none;">
+          <span class="alert-icon">⚠</span>
+          <span id="reg-error-text"></span>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn btn-ghost btn-md" id="btn-step3-back">← Back</button>
+          <button class="btn btn-success btn-lg flex-1" id="btn-submit">Submit for Verification ✓</button>
+        </div>
+      </div>
+
+    </div><!-- /.reg-wrap -->
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js?v=2"></script>
+  <script src="/js/utils/toast.js?v=2"></script>
+  <script src="/js/utils/validate.js?v=2"></script>
+  <script src="/js/utils/upload.js?v=2"></script>
+  <script src="/js/utils/location-api.js?v=2"></script>
+  <script src="/js/utils/dom.js?v=2"></script>
+  <script src="/careconnect/js/register-professional.js?v=2"></script>
+
+</body>
+</html>
