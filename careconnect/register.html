@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Create Account — Choose Your Role | CareConnect</title>
+  <meta name="description" content="Join CareConnect as a volunteer, NGO, blood bank, or healthcare professional." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* Page-specific layout tweaks — no new design tokens */
+    .register-header {
+      padding: 32px var(--page-pad) 24px;
+      text-align: center;
+    }
+    .register-header img { width: 44px; height: 44px; margin: 0 auto 12px; }
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 var(--page-pad) var(--page-pad);
+    }
+    @media (max-width: 400px) { .role-grid { grid-template-columns: 1fr; } }
+    .role-card { height: 100%; }
+    .continue-bar {
+      padding: var(--page-pad);
+      padding-bottom: calc(var(--page-pad) + env(safe-area-inset-bottom));
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Single screen, no auth-guard (unauthenticated page) -->
+  <div class="screen active" id="screen-register" style="background: var(--bg); overflow-y: auto;">
+
+    <!-- Back to login -->
+    <div class="top-nav">
+      <a href="/careconnect/login.html" class="nav-back" aria-label="Back to login">←</a>
+      <span class="nav-title">Create Account</span>
+      <div style="width:38px;"></div><!-- spacer -->
+    </div>
+
+    <div style="padding-top: var(--nav-h);">
+
+      <!-- Header -->
+      <div class="register-header">
+        <img src="/assets/logo.svg" alt="Curaah" />
+        <h1 class="text-h2" style="margin-bottom:8px;">Who are you joining as?</h1>
+        <p class="text-body">Pick the role that best describes you.<br />You can only have one role per account.</p>
+      </div>
+
+      <!-- 4 role cards -->
+      <div class="role-grid" id="role-grid">
+
+        <div class="role-card card-interactive" data-role="volunteer" id="role-volunteer" tabindex="0" role="button" aria-pressed="false">
+          <div class="role-icon">🤝</div>
+          <div class="role-for">For individuals</div>
+          <div class="role-name">Volunteer</div>
+          <div class="role-desc">Join health camps, donate blood, earn Sewa Points that convert to real rewards.</div>
+        </div>
+
+        <div class="role-card card-interactive" data-role="ngo" id="role-ngo" tabindex="0" role="button" aria-pressed="false">
+          <div class="role-icon">🏛️</div>
+          <div class="role-for">For organisations</div>
+          <div class="role-name">NGO / Org</div>
+          <div class="role-desc">Coordinate volunteers, run health camps, and track your community impact.</div>
+        </div>
+
+        <div class="role-card card-interactive" data-role="blood_bank" id="role-blood_bank" tabindex="0" role="button" aria-pressed="false">
+          <div class="role-icon">🩸</div>
+          <div class="role-for">For licensed banks</div>
+          <div class="role-name">Blood Bank</div>
+          <div class="role-desc">Manage real-time blood inventory and respond to GPS-routed emergency requests.</div>
+        </div>
+
+        <div class="role-card card-interactive" data-role="professional" id="role-professional" tabindex="0" role="button" aria-pressed="false">
+          <div class="role-icon">🩺</div>
+          <div class="role-for">For verified doctors</div>
+          <div class="role-name">Healthcare Professional</div>
+          <div class="role-desc">Post verified health content, join camps, and build your trusted public profile.</div>
+        </div>
+
+      </div><!-- /.role-grid -->
+
+      <!-- Continue button (disabled until selection) -->
+      <div class="continue-bar">
+        <button
+          id="btn-continue"
+          class="btn btn-primary btn-lg btn-full"
+          disabled
+        >
+          Continue →
+        </button>
+        <p class="text-caption text-center mt-12">
+          Already have an account?
+          <a href="/careconnect/login.html" class="text-blue">Sign in</a>
+        </p>
+      </div>
+
+    </div><!-- /padded wrapper -->
+  </div><!-- /.screen -->
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <!-- Page logic -->
+  <script src="/careconnect/js/register-role.js"></script>
+
+</body>
+</html>
