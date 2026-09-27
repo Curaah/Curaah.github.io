@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Community Actions | CareConnect</title>
+  <meta name="description" content="Browse health camps, blood drives, and community health events near you. Join as a volunteer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* Filter bar */
+    .filter-bar {
+      display: flex; gap: 8px; overflow-x: auto;
+      padding: 10px var(--page-pad) 10px; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      position: sticky; top: var(--nav-h);
+      background: var(--bg); z-index: 10;
+      border-bottom: 1px solid var(--line);
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 6px 14px; border-radius: 100px;
+      border: 1.5px solid var(--line); background: var(--card);
+      font-size: 12px; font-weight: 600;
+      white-space: nowrap; cursor: pointer; transition: var(--t);
+      flex-shrink: 0; color: var(--muted);
+    }
+    .filter-chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* Action event card */
+    .action-event-card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r-lg); overflow: hidden;
+      margin: 0 var(--page-pad) 14px;
+      transition: var(--t);
+    }
+    .action-event-card:hover { box-shadow: var(--sh); }
+
+    /* Accent bar on the left based on type */
+    .event-card-inner {
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+    }
+    .event-card-inner.type-blood_drive   { border-color: var(--red); }
+    .event-card-inner.type-health_camp   { border-color: var(--teal); }
+    .event-card-inner.type-vaccination   { border-color: var(--green); }
+    .event-card-inner.type-free_checkup  { border-color: var(--blue); }
+    .event-card-inner.type-awareness_drive{ border-color: var(--amber); }
+    .event-card-inner.type-senior_care   { border-color: var(--purple); }
+
+    .event-type-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .event-type-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+      color: var(--muted);
+    }
+    .event-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+    .event-meta  {
+      font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 10px;
+    }
+    .event-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .event-tag  {
+      font-size: 10px; padding: 2px 8px; border-radius: 100px;
+      background: var(--card-2); border: 1px solid var(--line); color: var(--muted);
+    }
+    .event-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .event-slots {
+      font-size: 12px; color: var(--muted);
+    }
+    .event-slots strong { color: var(--ink); }
+    .slot-mini-bar {
+      width: 80px; height: 4px; background: var(--line);
+      border-radius: 2px; overflow: hidden; display: inline-block;
+      vertical-align: middle; margin-left: 6px;
+    }
+    .slot-mini-fill { height: 100%; background: var(--teal); border-radius: 2px; }
+
+    /* Org info */
+    .event-org { font-size: 11px; color: var(--dim); display: flex; align-items: center; gap: 5px; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <button class="nav-back" onclick="history.back()">←</button>
+    <span class="nav-title">Community Actions</span>
+    <div style="width:38px;"></div>
+  </nav>
+
+  <!-- Filter bar (sticky) -->
+  <div class="filter-bar" id="filter-bar">
+    <div class="filter-chip active" data-type="">All</div>
+    <div class="filter-chip" data-type="health_camp">🏕️ Health Camps</div>
+    <div class="filter-chip" data-type="blood_drive">🩸 Blood Drives</div>
+    <div class="filter-chip" data-type="free_checkup">🩺 Free Checkups</div>
+    <div class="filter-chip" data-type="vaccination">💉 Vaccination</div>
+    <div class="filter-chip" data-type="awareness_drive">📢 Awareness</div>
+    <div class="filter-chip" data-type="senior_care">🧓 Senior Care</div>
+  </div>
+
+  <!-- Actions list -->
+  <div class="screen page active" id="screen-actions" style="padding-top: calc(var(--nav-h) + 52px);">
+
+    <!-- District badge -->
+    <div style="padding: 0 var(--page-pad) 12px; display:flex; align-items:center; justify-content:space-between;">
+      <span class="text-small" style="color:var(--muted);">
+        📍 Showing events in <strong id="district-label" style="color:var(--ink);">your area</strong>
+      </span>
+      <button class="btn btn-ghost btn-sm" onclick="showAllDistricts()">All Punjab</button>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div id="skeleton-wrap" style="padding: 0 var(--page-pad);">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;margin-bottom:14px;">
+        <div style="background:var(--line);height:12px;width:40%;border-radius:4px;margin-bottom:10px;animation:shimmer 1.5s infinite linear;"></div>
+        <div style="background:var(--line);height:16px;width:80%;border-radius:4px;margin-bottom:8px;animation:shimmer 1.5s infinite linear;"></div>
+        <div style="background:var(--line);height:12px;width:60%;border-radius:4px;animation:shimmer 1.5s infinite linear;"></div>
+      </div>
+    </div>
+    <style>@keyframes shimmer { 0%,100%{opacity:.5} 50%{opacity:1} }</style>
+
+    <div id="actions-list"></div>
+
+    <!-- Empty state -->
+    <div id="actions-empty" style="display:none; text-align:center; padding:48px 24px;">
+      <span style="font-size:48px; display:block; margin-bottom:12px;">🏕️</span>
+      <div style="font-size:16px; font-weight:700; margin-bottom:6px;">No events found</div>
+      <div style="font-size:13px; color:var(--muted);">No upcoming events in this category near you.<br />Check back soon or browse all of Punjab.</div>
+      <button class="btn btn-ghost btn-md mt-16" onclick="showAllDistricts()">Show events from all of Punjab</button>
+    </div>
+
+    <!-- Load more -->
+    <div style="text-align:center; padding:16px; display:none;" id="load-more-wrap">
+      <button class="btn btn-ghost btn-md" id="btn-load-more">Load more events</button>
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- NGO Create button (visible only for NGO role) -->
+  <div id="fab-create" style="display:none; position:fixed; bottom:80px; right:20px; z-index:100;">
+    <a href="/careconnect/create-action.html"
+       style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--sh-xl);text-decoration:none;">
+      ＋
+    </a>
+  </div>
+
+  <!-- BOTTOM TABS (role-aware) -->
+  <nav class="bottom-tabs" id="bottom-tabs"></nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/format.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <script src="/careconnect/js/auth-guard.js"></script>
+  <script src="/careconnect/js/community-actions.js"></script>
+
+</body>
+</html>
