@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>My Dashboard | CareConnect Volunteer</title>
+  <meta name="description" content="Your volunteer dashboard — upcoming events, blood alerts, Sewa Points, and your impact." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* ── Sewa Points hero card ── */
+    .sewa-hero {
+      background: linear-gradient(135deg, #1a2a50 0%, #0f2040 100%);
+      border: 1px solid var(--amber-b);
+      border-radius: var(--r-lg);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sewa-hero::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(255,159,0,.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .sewa-hero-icon { font-size: 40px; flex-shrink: 0; }
+    .sewa-hero-points {
+      font-family: 'Outfit', sans-serif;
+      font-size: 36px; font-weight: 900;
+      color: var(--amber); line-height: 1;
+    }
+    .sewa-hero-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .sewa-hero-level {
+      margin-left: auto; text-align: right; flex-shrink: 0;
+    }
+    .sewa-hero-level .level-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 800; color: var(--amber);
+    }
+    .sewa-hero-level .level-sub { font-size: 11px; color: var(--muted); }
+
+    /* ── Action card ── */
+    .action-card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r); padding: 16px;
+      display: flex; gap: 14px;
+      cursor: pointer; transition: var(--t);
+      text-decoration: none; color: inherit;
+    }
+    .action-card:hover { background: var(--card-2); border-color: var(--lineb); transform: translateY(-1px); }
+    .action-icon {
+      width: 44px; height: 44px; border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .action-icon.teal   { background: var(--teal-a);   border: 1px solid var(--teal-b); }
+    .action-icon.blue   { background: var(--blue-a);   border: 1px solid var(--blue-b); }
+    .action-icon.red    { background: var(--red-a);    border: 1px solid var(--red-b); }
+    .action-icon.amber  { background: var(--amber-a);  border: 1px solid var(--amber-b); }
+    .action-body { flex: 1; min-width: 0; }
+    .action-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .action-meta  { font-size: 12px; color: var(--muted); }
+    .action-arrow { color: var(--dim); font-size: 18px; align-self: center; flex-shrink: 0; }
+
+    /* ── Blood alert card ── */
+    .blood-card {
+      background: linear-gradient(135deg, #1a0f0f 0%, #200d0d 100%);
+      border: 1px solid var(--red-b);
+      border-radius: var(--r);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .blood-group-badge {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--red-a);
+      border: 2px solid var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px; font-weight: 900; color: var(--red);
+      flex-shrink: 0;
+    }
+    .blood-card-body { flex: 1; min-width: 0; }
+    .blood-card-title { font-size: 14px; font-weight: 700; color: var(--red); margin-bottom: 3px; }
+    .blood-card-meta  { font-size: 12px; color: var(--muted); }
+
+    /* ── Stats row ── */
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .mini-stat {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r); padding: 14px 12px; text-align: center;
+    }
+    .mini-stat-number {
+      font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900;
+      line-height: 1; margin-bottom: 4px;
+    }
+    .mini-stat-label { font-size: 10px; color: var(--muted); line-height: 1.3; }
+
+    /* ── Empty state ── */
+    .list-empty { text-align: center; padding: 28px 16px; color: var(--dim); font-size: 13px; }
+    .list-empty .empty-emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="brand">
+      <img src="/assets/logo.svg" alt="Curaah" />
+      <div>
+        <span>CareConnect</span>
+        <span class="brand-sub">Volunteer</span>
+      </div>
+    </div>
+    <a href="/careconnect/profile.html" class="nav-action" id="btn-profile" title="My Profile">👤</a>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="screen page active" id="screen-dashboard">
+    <div class="page-content" style="max-width:600px; margin:0 auto;">
+
+      <!-- Greeting -->
+      <div class="flex items-center justify-between mb-16">
+        <div>
+          <h1 class="text-h3" id="greeting">Good morning 👋</h1>
+          <p class="text-small" id="user-name" style="margin-top:3px;">Loading…</p>
+        </div>
+        <div class="badge badge-teal badge-live" id="location-badge" style="display:none;">Live</div>
+      </div>
+
+      <!-- Sewa Points hero -->
+      <div class="sewa-hero" id="sewa-hero">
+        <div class="sewa-hero-icon">⭐</div>
+        <div>
+          <div class="sewa-hero-points" id="sewa-points">—</div>
+          <div class="sewa-hero-label">Sewa Points</div>
+        </div>
+        <div class="sewa-hero-level">
+          <div class="level-name" id="sewa-level">Sewadar</div>
+          <div class="level-sub">Current level</div>
+        </div>
+      </div>
+
+      <!-- Impact stats -->
+      <div class="stats-row">
+        <div class="mini-stat">
+          <div class="mini-stat-number text-teal" id="stat-events">—</div>
+          <div class="mini-stat-label">Events attended</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-number text-red" id="stat-blood">—</div>
+          <div class="mini-stat-label">Blood donations</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-number text-blue" id="stat-emergency">—</div>
+          <div class="mini-stat-label">Emergency helps</div>
+        </div>
+      </div>
+
+      <!-- Active blood requests -->
+      <div class="section-title">🩸 Blood Requests Near You</div>
+      <div id="blood-list">
+        <div class="list-empty"><span class="empty-emoji">🩸</span>No active blood requests in your area right now.</div>
+      </div>
+
+      <!-- Upcoming events -->
+      <div class="section-title" style="margin-top:24px;">📅 Upcoming Events Near You</div>
+      <div id="events-list">
+        <div class="list-empty"><span class="empty-emoji">📅</span>No upcoming events found. Check back later!</div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="section-title" style="margin-top:24px;">⚡ Quick Actions</div>
+      <div class="flex-col gap-8">
+        <a href="/careconnect/community-actions.html" class="action-card">
+          <div class="action-icon teal">🏕️</div>
+          <div class="action-body">
+            <div class="action-title">Browse All Community Events</div>
+            <div class="action-meta">Health camps, drives, and more near you</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </a>
+        <a href="/careconnect/sewa-points.html" class="action-card">
+          <div class="action-icon amber">⭐</div>
+          <div class="action-body">
+            <div class="action-title">My Sewa Points</div>
+            <div class="action-meta">View balance, history & redeem rewards</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </a>
+        <a href="/careconnect/blood-emergency.html" class="action-card">
+          <div class="action-icon red">🆘</div>
+          <div class="action-body">
+            <div class="action-title">Raise Blood Emergency</div>
+            <div class="action-meta">Request blood for a patient in need</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </a>
+        <a href="/careconnect/feed.html" class="action-card">
+          <div class="action-icon blue">📰</div>
+          <div class="action-body">
+            <div class="action-title">Health Content Feed</div>
+            <div class="action-meta">Verified tips from healthcare professionals</div>
+          </div>
+          <div class="action-arrow">›</div>
+        </a>
+      </div>
+
+      <div style="height: 32px;"></div>
+
+    </div><!-- /.page-content -->
+  </div><!-- /.screen -->
+
+  <!-- BOTTOM TABS -->
+  <nav class="bottom-tabs">
+    <div class="tab-item active" onclick="location.href='/careconnect/dashboard-volunteer.html'">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Home</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/community-actions.html'">
+      <span class="tab-icon">🏕️</span>
+      <span class="tab-label">Events</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/blood-emergency.html'">
+      <span class="tab-icon">🩸</span>
+      <span class="tab-label">Blood</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/feed.html'">
+      <span class="tab-icon">📰</span>
+      <span class="tab-label">Feed</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/profile.html'">
+      <span class="tab-icon">👤</span>
+      <span class="tab-label">Profile</span>
+    </div>
+  </nav>
+
+  <!-- Scripts — auth-guard FIRST -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/format.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <!-- auth-guard checks session + is_verified, sets window.currentUserId and window.currentRole -->
+  <script src="/careconnect/js/auth-guard.js"></script>
+  <script src="/careconnect/js/dashboard-volunteer.js"></script>
+
+</body>
+</html>
