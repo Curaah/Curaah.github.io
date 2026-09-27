@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>My Profile | CareConnect</title>
+  <meta name="description" content="View and manage your CareConnect profile — personal details, privacy settings, and account options." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* Profile hero */
+    .profile-hero {
+      background: linear-gradient(160deg, var(--card-2) 0%, var(--card) 100%);
+      border-bottom: 1px solid var(--line);
+      padding: 28px var(--page-pad) 24px;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 84px; height: 84px;
+      border-radius: 50%;
+      border: 3px solid var(--blue);
+      margin: 0 auto 14px;
+      background: var(--card-2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 900;
+      color: var(--blue); overflow: hidden;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px; font-weight: 900; margin-bottom: 4px;
+    }
+    .profile-role-row {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-bottom: 6px;
+    }
+    .profile-location { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+    /* Edit photo button */
+    .edit-photo-btn {
+      position: absolute; bottom: 0; right: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%; background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer; border: 2px solid var(--bg);
+    }
+    .avatar-wrap { position: relative; width: 84px; margin: 0 auto 14px; }
+
+    /* Settings rows */
+    .settings-section { margin-bottom: 24px; }
+    .settings-section-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--dim); padding: 12px var(--page-pad) 6px;
+    }
+    .settings-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px var(--page-pad);
+      background: var(--card); border-bottom: 1px solid var(--line);
+      cursor: pointer; transition: var(--t);
+    }
+    .settings-row:first-of-type { border-top: 1px solid var(--line); }
+    .settings-row:hover { background: var(--card-2); }
+    .settings-icon {
+      width: 34px; height: 34px; border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+      flex-shrink: 0;
+    }
+    .settings-row-body { flex: 1; min-width: 0; }
+    .settings-row-title { font-size: 14px; font-weight: 600; }
+    .settings-row-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .settings-row-arrow { color: var(--dim); font-size: 18px; flex-shrink: 0; }
+    .settings-row-value { font-size: 12px; color: var(--muted); flex-shrink: 0; max-width: 120px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Danger row */
+    .settings-row.danger .settings-row-title { color: var(--red); }
+    .settings-row.danger .settings-icon { background: var(--red-a); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <button class="nav-back" onclick="history.back()">←</button>
+    <span class="nav-title">My Profile</span>
+    <button class="nav-action" id="btn-save-profile" style="display:none;" title="Save changes">💾</button>
+  </nav>
+
+  <div class="screen page active" style="background:var(--bg); overflow-y:auto; min-height:100svh; padding-top:var(--nav-h);">
+
+    <!-- Profile hero -->
+    <div class="profile-hero">
+      <div class="avatar-wrap">
+        <div class="profile-avatar" id="profile-avatar">
+          <span id="avatar-initials">?</span>
+        </div>
+        <div class="edit-photo-btn" onclick="document.getElementById('photo-input').click()">✏️</div>
+        <input type="file" id="photo-input" accept=".jpg,.jpeg,.png" style="display:none;" />
+      </div>
+
+      <div class="profile-name" id="profile-name">Loading…</div>
+
+      <div class="profile-role-row">
+        <span class="badge" id="role-badge">—</span>
+        <span class="badge badge-green" id="verified-badge" style="display:none;">✓ Verified</span>
+      </div>
+
+      <div class="profile-location" id="profile-location">—</div>
+
+      <a href="#" id="btn-edit-profile" class="btn btn-surface btn-sm" onclick="toggleEditMode()">
+        Edit Profile
+      </a>
+    </div>
+
+    <!-- Volunteer: Sewa Points summary -->
+    <div id="sewa-section" style="display:none;">
+      <div class="settings-section-title">Sewa Points</div>
+      <div style="display:flex; gap:12px; padding: 8px var(--page-pad) 16px;">
+        <div style="flex:1; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:14px; text-align:center;">
+          <div style="font-family:'Outfit',sans-serif; font-size:26px; font-weight:900; color:var(--amber);" id="sewa-total">0</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:3px;">Total Points</div>
+        </div>
+        <div style="flex:1; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:14px; text-align:center;">
+          <div style="font-family:'Outfit',sans-serif; font-size:20px; font-weight:900; color:var(--amber);" id="sewa-level-display">Sewadar</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:3px;">Level</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy settings (volunteer only) -->
+    <div id="privacy-section" style="display:none;">
+      <div class="settings-section-title">Privacy</div>
+      <div class="settings-row" onclick="openConsentSettings()">
+        <div class="settings-icon" style="background:var(--blue-a);">🔒</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Data sharing level</div>
+          <div class="settings-row-sub">Control what NGOs can see about you</div>
+        </div>
+        <div class="settings-row-value" id="consent-value">Relay Only</div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+      <div class="settings-row" onclick="openBloodSettings()">
+        <div class="settings-icon" style="background:var(--red-a);">🩸</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Blood donation settings</div>
+          <div class="settings-row-sub">Blood group, alert radius, opt-in status</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Account section -->
+    <div class="settings-section">
+      <div class="settings-section-title">Account</div>
+
+      <div class="settings-row" onclick="changePassword()">
+        <div class="settings-icon" style="background:var(--card-2);">🔑</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Change password</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+
+      <div class="settings-row" onclick="location.href='/careconnect/notifications.html'">
+        <div class="settings-icon" style="background:var(--amber-a);">🔔</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Notification preferences</div>
+          <div class="settings-row-sub">Blood alerts, event updates, messages</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+
+      <div class="settings-row" onclick="signOut()">
+        <div class="settings-icon" style="background:var(--card-2);">🚪</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Sign out</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="settings-section">
+      <div class="settings-section-title">Danger Zone</div>
+      <div class="settings-row danger" onclick="confirmDeleteAccount()">
+        <div class="settings-icon">🗑️</div>
+        <div class="settings-row-body">
+          <div class="settings-row-title">Delete my account</div>
+          <div class="settings-row-sub">Permanently removes all your data. Cannot be undone.</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+    </div>
+
+    <p style="text-align:center; font-size:11px; color:var(--dim); padding:16px;">
+      CareConnect by Curaah · v1.0<br />
+      All data is processed in India (ap-south-1)
+    </p>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- BOTTOM TABS (role-aware) -->
+  <nav class="bottom-tabs" id="bottom-tabs"></nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/format.js"></script>
+  <script src="/js/utils/upload.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <script src="/careconnect/js/auth-guard.js"></script>
+  <script src="/careconnect/js/profile.js"></script>
+
+</body>
+</html>
