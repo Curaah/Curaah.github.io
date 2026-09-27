@@ -135,12 +135,25 @@
 
     setButtonLoading(btn, true);
 
+    // Resolve cc_volunteers.id from cc_user_id
+    const { data: vol } = await supabase
+      .from('cc_volunteers')
+      .select('id')
+      .eq('cc_user_id', userId)
+      .single();
+
+    if (!vol) {
+      setButtonLoading(btn, false);
+      showToast('Your volunteer profile could not be found. Please contact support.', 'error');
+      return;
+    }
+
     // Check if already registered
     const { data: existing } = await supabase
       .from('cc_action_registrations')
       .select('id')
       .eq('action_id', actionId)
-      .eq('user_id', userId)
+      .eq('volunteer_id', vol.id)
       .single();
 
     if (existing) {
@@ -153,7 +166,12 @@
 
     const { error } = await supabase
       .from('cc_action_registrations')
-      .insert({ action_id: actionId, user_id: userId, status: 'registered' });
+      .insert({
+        action_id:         actionId,
+        volunteer_id:      vol.id,
+        registration_type: 'volunteer',
+        status:            'registered',
+      });
 
     setButtonLoading(btn, false);
 
@@ -162,6 +180,7 @@
         showToast('Event registration system coming soon.', 'info');
       } else {
         showToast('Could not register. Please try again.', 'error');
+        console.error('[rsvp]', error);
       }
     } else {
       btn.textContent = '✓ Joined';
