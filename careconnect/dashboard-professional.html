@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Professional Dashboard | CareConnect</title>
+  <meta name="description" content="Your healthcare professional dashboard — post health content, manage camp schedules, and grow your community reach." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* Verified badge hero */
+    .verified-hero {
+      background: linear-gradient(135deg, #051f10 0%, #081f14 100%);
+      border: 1px solid var(--green-b);
+      border-radius: var(--r-lg);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .verified-photo {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--card-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .verified-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px; font-weight: 800; line-height: 1.2;
+    }
+    .verified-badge-row {
+      display: flex; align-items: center; gap: 6px; margin-top: 5px;
+    }
+    .verified-specialty {
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* Post card */
+    .post-card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r); padding: 14px 16px; margin-bottom: 8px;
+    }
+    .post-card-meta { font-size: 11px; color: var(--dim); margin-bottom: 6px; }
+    .post-card-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .post-card-stats {
+      display: flex; gap: 14px; margin-top: 8px;
+      font-size: 11px; color: var(--dim);
+    }
+    .post-card-stat { display: flex; align-items: center; gap: 4px; }
+
+    /* Reach stats */
+    .reach-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .reach-cell {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r); padding: 14px 10px; text-align: center;
+    }
+    .reach-num {
+      font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 900; line-height: 1;
+    }
+    .reach-label { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+    /* Create post CTA */
+    .compose-box {
+      background: var(--card); border: 1.5px dashed var(--line);
+      border-radius: var(--r); padding: 16px; margin-bottom: 20px;
+      cursor: pointer; transition: var(--t);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .compose-box:hover { border-color: var(--blue); background: var(--blue-a); }
+    .compose-placeholder {
+      font-size: 13px; color: var(--dim);
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="brand">
+      <img src="/assets/logo.svg" alt="Curaah" />
+      <div>
+        <span>CareConnect</span>
+        <span class="brand-sub">Professional</span>
+      </div>
+    </div>
+    <a href="/careconnect/profile.html" class="nav-action">👤</a>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="screen page active" id="screen-dashboard">
+    <div class="page-content" style="max-width:600px; margin:0 auto;">
+
+      <!-- Verified profile hero -->
+      <div class="verified-hero">
+        <div class="verified-photo" id="prof-photo">🩺</div>
+        <div>
+          <div class="verified-name" id="prof-name">Loading…</div>
+          <div class="verified-badge-row">
+            <span class="badge badge-green" style="font-size:10px;">✓ Verified</span>
+            <span class="verified-specialty" id="prof-specialty">Healthcare Professional</span>
+          </div>
+          <div style="font-size:11px; color:var(--muted); margin-top:4px;" id="prof-location">—</div>
+        </div>
+      </div>
+
+      <!-- Reach stats -->
+      <div class="section-title">📊 Your Reach</div>
+      <div class="reach-grid">
+        <div class="reach-cell">
+          <div class="reach-num text-blue" id="stat-views">—</div>
+          <div class="reach-label">Content views</div>
+        </div>
+        <div class="reach-cell">
+          <div class="reach-num text-teal" id="stat-posts">—</div>
+          <div class="reach-label">Posts published</div>
+        </div>
+        <div class="reach-cell">
+          <div class="reach-num text-green" id="stat-camps">—</div>
+          <div class="reach-label">Camps joined</div>
+        </div>
+      </div>
+
+      <!-- Compose post CTA -->
+      <div class="compose-box" onclick="location.href='/careconnect/create-post.html'">
+        <span style="font-size:24px;">✍️</span>
+        <span class="compose-placeholder">Share verified health advice with the community…</span>
+        <span class="badge badge-blue" style="font-size:10px; flex-shrink:0;">Post</span>
+      </div>
+
+      <!-- My recent posts -->
+      <div class="flex items-center justify-between">
+        <div class="section-title" style="margin-top:0;">My Recent Posts</div>
+        <a href="/careconnect/feed.html" class="text-small text-blue" style="text-decoration:none;">All posts →</a>
+      </div>
+      <div id="posts-list">
+        <div style="text-align:center; padding:28px; color:var(--dim); font-size:13px;">
+          <span style="font-size:32px; display:block; margin-bottom:8px;">✍️</span>
+          You haven't posted yet. Share your first health tip above!
+        </div>
+      </div>
+
+      <!-- Upcoming camps I can join -->
+      <div class="section-title" style="margin-top:24px;">🏕️ Camps Seeking Professionals</div>
+      <div id="camps-list">
+        <div style="text-align:center; padding:20px; color:var(--dim); font-size:13px;">
+          <span style="font-size:28px; display:block; margin-bottom:8px;">🏕️</span>
+          No camps seeking professionals in your district right now.
+        </div>
+      </div>
+
+      <div style="height:32px;"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM TABS -->
+  <nav class="bottom-tabs">
+    <div class="tab-item active" onclick="location.href='/careconnect/dashboard-professional.html'">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Home</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/create-post.html'">
+      <span class="tab-icon">✍️</span>
+      <span class="tab-label">Post</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/community-actions.html'">
+      <span class="tab-icon">🏕️</span>
+      <span class="tab-label">Camps</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/feed.html'">
+      <span class="tab-icon">📰</span>
+      <span class="tab-label">Feed</span>
+    </div>
+    <div class="tab-item" onclick="location.href='/careconnect/profile.html'">
+      <span class="tab-icon">👤</span>
+      <span class="tab-label">Profile</span>
+    </div>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/format.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <script src="/careconnect/js/auth-guard.js"></script>
+  <script src="/careconnect/js/dashboard-professional.js"></script>
+
+</body>
+</html>
