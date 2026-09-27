@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Health Feed | CareConnect</title>
+  <meta name="description" content="Verified health content from healthcare professionals — tips, advisories, and community health updates." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/shared.css" />
+  <style>
+    /* Feed filters */
+    .feed-filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 var(--page-pad) 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      position: sticky;
+      top: var(--nav-h);
+      background: var(--bg);
+      z-index: 10;
+      padding-top: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+    .feed-filters::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1.5px solid var(--line);
+      background: var(--card);
+      font-size: 12px; font-weight: 600;
+      white-space: nowrap; cursor: pointer;
+      transition: var(--t); flex-shrink: 0;
+      color: var(--muted);
+    }
+    .filter-chip.active {
+      background: var(--blue); border-color: var(--blue);
+      color: #fff;
+    }
+    .filter-chip:hover:not(.active) { border-color: var(--blue-b); color: var(--blue); }
+
+    /* Feed post card */
+    .feed-post {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 16px;
+      margin: 0 var(--page-pad) 12px;
+      transition: var(--t);
+    }
+    .feed-post:hover { box-shadow: var(--sh); }
+
+    /* Author row */
+    .post-author {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .author-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--card-2); border: 1.5px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0; overflow: hidden;
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .author-name { font-size: 14px; font-weight: 700; line-height: 1.2; }
+    .author-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .post-time   { font-size: 11px; color: var(--dim); margin-left: auto; flex-shrink: 0; }
+
+    /* Category pill */
+    .post-category {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+      padding: 3px 8px; border-radius: 100px; margin-bottom: 8px;
+    }
+    .cat-diabetes     { background: var(--blue-a);   color: var(--blue);  border: 1px solid var(--blue-b); }
+    .cat-heart        { background: var(--red-a);    color: var(--red);   border: 1px solid var(--red-b); }
+    .cat-nutrition    { background: var(--green-a);  color: var(--green); border: 1px solid var(--green-b); }
+    .cat-mental       { background: var(--purple-a); color: var(--purple);border: 1px solid var(--purple-b); }
+    .cat-general      { background: var(--card-2);   color: var(--muted); border: 1px solid var(--line); }
+    .cat-awareness    { background: var(--amber-a);  color: var(--amber); border: 1px solid var(--amber-b); }
+    .cat-maternal     { background: var(--teal-a);   color: var(--teal);  border: 1px solid var(--teal-b); }
+
+    /* Post content */
+    .post-content {
+      font-size: 14px; color: var(--ink); line-height: 1.75; margin-bottom: 12px;
+    }
+    .post-content.truncated {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-read-more {
+      color: var(--blue); font-size: 12px; font-weight: 600;
+      cursor: pointer; display: inline-block; margin-bottom: 12px;
+    }
+
+    /* Post image */
+    .post-image {
+      width: 100%; border-radius: var(--r-sm); margin-bottom: 12px;
+      max-height: 280px; object-fit: cover;
+    }
+
+    /* Action bar */
+    .post-actions {
+      display: flex; align-items: center; gap: 16px;
+      padding-top: 10px; border-top: 1px solid var(--line);
+    }
+    .post-action-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 13px; color: var(--muted);
+      cursor: pointer; transition: var(--t);
+      background: none; border: none; padding: 0;
+      font-family: inherit;
+    }
+    .post-action-btn:hover { color: var(--blue); }
+    .post-action-btn.liked { color: var(--red); }
+    .post-action-btn.bookmarked { color: var(--amber); }
+    .post-action-count { font-weight: 600; }
+
+    /* Skeleton loader */
+    .skeleton-post {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--r-lg); padding: 16px;
+      margin: 0 var(--page-pad) 12px;
+    }
+    .skel-line {
+      background: var(--line); border-radius: 4px; animation: shimmer 1.5s infinite linear;
+    }
+    @keyframes shimmer {
+      0%   { opacity: .5; }
+      50%  { opacity: 1;  }
+      100% { opacity: .5; }
+    }
+
+    /* Load more */
+    .load-more-wrap { text-align: center; padding: 16px; }
+
+    /* Empty state */
+    .feed-empty { text-align: center; padding: 48px 24px; }
+    .feed-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .feed-empty-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .feed-empty-sub { font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav">
+    <div class="brand">
+      <img src="/assets/logo.svg" alt="Curaah" />
+      <div>
+        <span>Health Feed</span>
+        <span class="brand-sub">CareConnect</span>
+      </div>
+    </div>
+    <button class="nav-action" id="btn-search" title="Search posts" onclick="location.href='/careconnect/search.html'">🔍</button>
+  </nav>
+
+  <!-- Category filters (sticky) -->
+  <div class="feed-filters" id="feed-filters">
+    <div class="filter-chip active" data-cat="">All</div>
+    <div class="filter-chip" data-cat="diabetes">Diabetes</div>
+    <div class="filter-chip" data-cat="heart">Heart</div>
+    <div class="filter-chip" data-cat="nutrition">Nutrition</div>
+    <div class="filter-chip" data-cat="mental_health">Mental Health</div>
+    <div class="filter-chip" data-cat="maternal">Maternal</div>
+    <div class="filter-chip" data-cat="awareness">Awareness</div>
+    <div class="filter-chip" data-cat="general">General</div>
+  </div>
+
+  <!-- Feed content -->
+  <div class="screen page active" id="screen-feed" style="padding-top: calc(var(--nav-h) + 60px);">
+
+    <!-- Skeleton loaders (shown while loading) -->
+    <div id="skeleton-wrap">
+      <div class="skeleton-post">
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="skel-line" style="width:38px;height:38px;border-radius:50%;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="skel-line" style="height:12px;width:60%;margin-bottom:6px;"></div>
+            <div class="skel-line" style="height:10px;width:40%;"></div>
+          </div>
+        </div>
+        <div class="skel-line" style="height:12px;width:100%;margin-bottom:6px;"></div>
+        <div class="skel-line" style="height:12px;width:90%;margin-bottom:6px;"></div>
+        <div class="skel-line" style="height:12px;width:75%;"></div>
+      </div>
+      <div class="skeleton-post">
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="skel-line" style="width:38px;height:38px;border-radius:50%;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="skel-line" style="height:12px;width:55%;margin-bottom:6px;"></div>
+            <div class="skel-line" style="height:10px;width:35%;"></div>
+          </div>
+        </div>
+        <div class="skel-line" style="height:12px;width:100%;margin-bottom:6px;"></div>
+        <div class="skel-line" style="height:12px;width:80%;"></div>
+      </div>
+    </div>
+
+    <!-- Feed posts injected here -->
+    <div id="feed-list"></div>
+
+    <!-- Load more -->
+    <div class="load-more-wrap" id="load-more-wrap" style="display:none;">
+      <button class="btn btn-ghost btn-md" id="btn-load-more">Load more posts</button>
+    </div>
+
+    <!-- Empty state (when no posts for a filter) -->
+    <div class="feed-empty" id="feed-empty" style="display:none;">
+      <div class="feed-empty-icon">📰</div>
+      <div class="feed-empty-title">No posts yet in this category</div>
+      <div class="feed-empty-sub">Healthcare professionals will be posting here soon.<br />Check back later or try a different category.</div>
+    </div>
+
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- BOTTOM TABS — role-aware (set by JS) -->
+  <nav class="bottom-tabs" id="bottom-tabs">
+    <!-- Built by JS based on role -->
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/toast.js"></script>
+  <script src="/js/utils/format.js"></script>
+  <script src="/js/utils/dom.js"></script>
+  <script src="/careconnect/js/auth-guard.js"></script>
+  <script src="/careconnect/js/feed.js"></script>
+
+</body>
+</html>
