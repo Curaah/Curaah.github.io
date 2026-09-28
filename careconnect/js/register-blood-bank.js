@@ -310,7 +310,7 @@
       district:    districtEl.value,
       state:       stateEl.value,
       pincode:     pincodeEl.value.trim(),
-      is_verified: false, // requires admin verification
+      is_verified: true, // Auto-verify for MVP
     });
 
     if (userErr) {
@@ -355,8 +355,7 @@
     });
 
     // 5. Redirect
-    sessionStorage.setItem('cc_pending_email', email);
-    window.location.href = '/careconnect/verify-email.html';
+    window.location.href = '/careconnect/dashboard-blood-bank.html';
   });
 
   // Clear field errors on input
