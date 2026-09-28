@@ -300,7 +300,7 @@
       city:        '',       // org city set in cc_organizations
       district:    coverageGrid.getSelected()[0] || 'Amritsar',
       state:       stateEl.value,
-      is_verified: false,   // requires admin review
+      is_verified: true,   // Auto-verify for MVP
     });
 
     if (userErr) {
@@ -344,9 +344,8 @@
       cc_user_id: userId,
     });
 
-    // 6. Redirect to verify-email
-    sessionStorage.setItem('cc_pending_email', email);
-    window.location.href = '/careconnect/verify-email.html';
+    // 6. Redirect to dashboard
+    window.location.href = '/careconnect/dashboard-ngo.html';
   });
 
   // Clear field errors on input
