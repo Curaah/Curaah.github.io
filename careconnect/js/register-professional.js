@@ -289,7 +289,7 @@
       district:      practiceDistrictEl.value,
       state:         practiceStateEl.value,
       profile_photo: profilePhotoUrl,
-      is_verified:   false, // requires admin verification of council number
+      is_verified:   true, // Auto-verify for MVP
     });
 
     if (userErr) {
@@ -330,8 +330,7 @@
     });
 
     // 6. Redirect
-    sessionStorage.setItem('cc_pending_email', email);
-    window.location.href = '/careconnect/verify-email.html';
+    window.location.href = '/careconnect/dashboard-professional.html';
   });
 
   // Clear field errors on input
