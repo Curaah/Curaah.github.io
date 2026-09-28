@@ -368,7 +368,7 @@
 
     // 4. Redirect to verify-email screen
     sessionStorage.setItem('cc_pending_email', email);
-    window.location.href = '/careconnect/verify-email.html';
+    window.location.href = '/careconnect/dashboard-volunteer.html';
   });
 
   // Clear field errors on input
