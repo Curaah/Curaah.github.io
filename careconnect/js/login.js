@@ -67,8 +67,8 @@
       .single();
 
     if (error || !u) {
-      // cc_users row missing — shouldn't happen but fail safely
-      showGlobalError('Account setup is incomplete. Please contact support.');
+      console.error('[cc_users fetch error]', error);
+      showGlobalError('Account setup is incomplete. Please contact support. ' + (error?.message || 'Row missing.'));
       setButtonLoading(btn, false);
       return;
     }
@@ -99,19 +99,31 @@
 
     setButtonLoading(btn, true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email:    emailEl.value.trim().toLowerCase(),
-      password: passwordEl.value,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email:    emailEl.value.trim().toLowerCase(),
+        password: passwordEl.value,
+      });
 
-    if (error) {
+      if (error) {
+        setButtonLoading(btn, false);
+        showGlobalError(mapSupabaseError(error.message));
+        return;
+      }
+
+      if (!data || !data.user) {
+        setButtonLoading(btn, false);
+        showGlobalError('Sign in failed. No user returned.');
+        return;
+      }
+
+      // Success — redirect based on role
+      await redirectAfterLogin(data.user.id);
+    } catch (err) {
+      console.error('[Login Error]', err);
       setButtonLoading(btn, false);
-      showGlobalError(mapSupabaseError(error.message));
-      return;
+      showGlobalError('An unexpected error occurred: ' + err.message);
     }
-
-    // Success — redirect based on role
-    await redirectAfterLogin(data.user.id);
   });
 
   // ── Clear field errors on input ───────────────────────────────
