@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Hind", "Noto Sans Gurmukhi", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root { --accent: #1e7f5c; --ink: #12302b; --paper: #f3f7f5; --line: #cfe0d8; --warn: #b3361b; }
+[data-app="careconnect"] { --accent: #2f3f8f; --ink: #1b2250; --paper: #f4f5fa; --line: #d3d8ec; }
+
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans); line-height: 1.55; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
+
+.btn { background: var(--accent); color: #fff; border-radius: .75rem; padding: .75rem 1.25rem; font-weight: 600; width: 100%; cursor: pointer; border: 0; }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn-quiet { background: transparent; color: var(--accent); border: 1px solid var(--line); }
+.field { width: 100%; border: 1px solid var(--line); border-radius: .75rem; padding: .7rem .9rem; background: #fff; color: var(--ink); font: inherit; }
+.label { display: block; font-weight: 600; margin: 1rem 0 .35rem; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 1rem; padding: 1.1rem 1.2rem; }
+.chip { display: inline-block; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: .15rem .75rem; font-size: .9rem; }
+.err { color: var(--warn); font-weight: 500; margin-top: .75rem; }
+.btn:focus-visible, .field:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.nav-link { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: .55rem 0; font-size: .75rem; color: #52645f; text-decoration: none; }
+.nav-link[aria-current="page"] { color: var(--accent); font-weight: 600; }
+@media (min-width: 768px) {
+  .nav-link { flex-direction: row; gap: .75rem; padding: .65rem .75rem; font-size: 1rem; border-radius: .75rem; }
+  .nav-link[aria-current="page"] { background: var(--paper); }
+}
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.btn-emergency { background: var(--warn); color: #fff; border-radius: 999px; padding: .45rem .9rem; font-weight: 600; display: inline-flex; gap: .4rem; align-items: center; text-decoration: none; }
+.btn-emergency:focus-visible { outline: 3px solid var(--warn); outline-offset: 2px; }
+
+.skeleton { background: linear-gradient(90deg, #e6eeea 25%, #f3f7f5 50%, #e6eeea 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: .5rem; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }

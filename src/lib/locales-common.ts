@@ -1,0 +1,66 @@
+const en = {
+  'common.back': 'Back',
+  'common.loading': 'Loading…',
+  'err.generic': 'Something went wrong. Please try again.',
+  'err.network': 'We could not reach the server. Check your internet connection and try again.',
+  'err.credentials': 'That email and password do not match. Please check them and try again.',
+  'err.exists': 'An account with this email already exists. Try signing in instead.',
+  'err.rateLimit': 'Too many attempts. Please wait a few minutes and try again.',
+  'err.weakPassword': 'Please choose a password with at least 8 characters.',
+  'err.duplicate': 'You have already done this.',
+  'err.permission': 'You do not have permission to do that.',
+  'err.invalid': 'Some details are not valid. Please check the form and try again.',
+  'err.signIn': 'Please sign in first.',
+  'err.curaahOnly': 'Only Curaah accounts can raise blood requests.',
+  'err.consentRequester': 'Please agree to share your contact with people who respond.',
+  'err.consentResponder': 'Please agree to share your contact with the requester.',
+  'err.maxOpen': 'You already have 3 open requests. Close one before raising another.',
+  'err.alreadyResponded': 'You have already responded to this request.',
+  'err.notMatch': 'This request is closed, expired, or not a match for you.',
+} as const
+
+type K = keyof typeof en
+
+const hi: Record<K, string> = {
+  'common.back': 'वापस',
+  'common.loading': 'लोड हो रहा है…',
+  'err.generic': 'कुछ गड़बड़ हो गई। कृपया फिर से प्रयास करें।',
+  'err.network': 'सर्वर से संपर्क नहीं हो सका। अपना इंटरनेट कनेक्शन जाँचें और फिर प्रयास करें।',
+  'err.credentials': 'ईमेल और पासवर्ड मेल नहीं खाते। कृपया जाँचकर फिर प्रयास करें।',
+  'err.exists': 'इस ईमेल से खाता पहले से मौजूद है। कृपया साइन इन करें।',
+  'err.rateLimit': 'बहुत ज़्यादा प्रयास हो गए। कृपया कुछ मिनट रुककर फिर प्रयास करें।',
+  'err.weakPassword': 'कृपया कम से कम 8 अक्षरों का पासवर्ड चुनें।',
+  'err.duplicate': 'आप यह पहले ही कर चुके हैं।',
+  'err.permission': 'आपको ऐसा करने की अनुमति नहीं है।',
+  'err.invalid': 'कुछ जानकारी सही नहीं है। कृपया फ़ॉर्म जाँचकर फिर प्रयास करें।',
+  'err.signIn': 'कृपया पहले साइन इन करें।',
+  'err.curaahOnly': 'केवल Curaah खाते ही रक्त का अनुरोध कर सकते हैं।',
+  'err.consentRequester': 'कृपया जवाब देने वालों के साथ अपना संपर्क साझा करने की सहमति दें।',
+  'err.consentResponder': 'कृपया अनुरोध करने वाले के साथ अपना संपर्क साझा करने की सहमति दें।',
+  'err.maxOpen': 'आपके 3 अनुरोध पहले से खुले हैं। नया अनुरोध करने से पहले किसी एक को बंद करें।',
+  'err.alreadyResponded': 'आप इस अनुरोध का जवाब पहले ही दे चुके हैं।',
+  'err.notMatch': 'यह अनुरोध बंद या समाप्त हो चुका है, या आपसे मेल नहीं खाता।',
+}
+
+const pa: Record<K, string> = {
+  'common.back': 'ਵਾਪਸ',
+  'common.loading': 'ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…',
+  'err.generic': 'ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'err.network': 'ਸਰਵਰ ਨਾਲ ਸੰਪਰਕ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਆਪਣਾ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਜਾਂਚੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'err.credentials': 'ਈਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਮੇਲ ਨਹੀਂ ਖਾਂਦੇ। ਕਿਰਪਾ ਕਰਕੇ ਜਾਂਚ ਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'err.exists': 'ਇਸ ਈਮੇਲ ਨਾਲ ਖਾਤਾ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਾਈਨ ਇਨ ਕਰੋ।',
+  'err.rateLimit': 'ਬਹੁਤ ਜ਼ਿਆਦਾ ਕੋਸ਼ਿਸ਼ਾਂ ਹੋ ਗਈਆਂ। ਕਿਰਪਾ ਕਰਕੇ ਕੁਝ ਮਿੰਟ ਰੁਕ ਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'err.weakPassword': 'ਕਿਰਪਾ ਕਰਕੇ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਪਾਸਵਰਡ ਚੁਣੋ।',
+  'err.duplicate': 'ਤੁਸੀਂ ਇਹ ਪਹਿਲਾਂ ਹੀ ਕਰ ਚੁੱਕੇ ਹੋ।',
+  'err.permission': 'ਤੁਹਾਨੂੰ ਇਹ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਨਹੀਂ ਹੈ।',
+  'err.invalid': 'ਕੁਝ ਜਾਣਕਾਰੀ ਸਹੀ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਫਾਰਮ ਜਾਂਚ ਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
+  'err.signIn': 'ਕਿਰਪਾ ਕਰਕੇ ਪਹਿਲਾਂ ਸਾਈਨ ਇਨ ਕਰੋ।',
+  'err.curaahOnly': 'ਸਿਰਫ਼ Curaah ਖਾਤੇ ਹੀ ਖੂਨ ਦੀ ਬੇਨਤੀ ਕਰ ਸਕਦੇ ਹਨ।',
+  'err.consentRequester': 'ਕਿਰਪਾ ਕਰਕੇ ਜਵਾਬ ਦੇਣ ਵਾਲਿਆਂ ਨਾਲ ਆਪਣਾ ਸੰਪਰਕ ਸਾਂਝਾ ਕਰਨ ਦੀ ਸਹਿਮਤੀ ਦਿਓ।',
+  'err.consentResponder': 'ਕਿਰਪਾ ਕਰਕੇ ਬੇਨਤੀ ਕਰਨ ਵਾਲੇ ਨਾਲ ਆਪਣਾ ਸੰਪਰਕ ਸਾਂਝਾ ਕਰਨ ਦੀ ਸਹਿਮਤੀ ਦਿਓ।',
+  'err.maxOpen': 'ਤੁਹਾਡੀਆਂ 3 ਬੇਨਤੀਆਂ ਪਹਿਲਾਂ ਹੀ ਖੁੱਲ੍ਹੀਆਂ ਹਨ। ਨਵੀਂ ਬੇਨਤੀ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕਿਸੇ ਇੱਕ ਨੂੰ ਬੰਦ ਕਰੋ।',
+  'err.alreadyResponded': 'ਤੁਸੀਂ ਇਸ ਬੇਨਤੀ ਦਾ ਜਵਾਬ ਪਹਿਲਾਂ ਹੀ ਦੇ ਚੁੱਕੇ ਹੋ।',
+  'err.notMatch': 'ਇਹ ਬੇਨਤੀ ਬੰਦ ਜਾਂ ਖ਼ਤਮ ਹੋ ਚੁੱਕੀ ਹੈ, ਜਾਂ ਤੁਹਾਡੇ ਨਾਲ ਮੇਲ ਨਹੀਂ ਖਾਂਦੀ।',
+}
+
+export const common = { en, hi, pa }
