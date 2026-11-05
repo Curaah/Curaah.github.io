@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Select app HTML template
+        run: cp app-index.html index.html
+
       - name: Build Curaah
         run: npm run build:curaah
         env:
@@ -40,13 +43,30 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
 
+      - name: Build Careconnect
+        run: npm run build:care
+        env:
+          VITE_APP_KIND: careconnect
+          VITE_APP_NAME: Curaah Careconnect
+          VITE_APP_COLOR: "#2f3f8f"
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Assemble website
+        run: |
+          mkdir -p site/curaah site/careconnect
+          cp landing-index.html CNAME site/
+          cp -R assets site/
+          cp -R dist-curaah/. site/curaah/
+          cp -R dist-careconnect/. site/careconnect/
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./dist-curaah
+          path: ./site
 
       - name: Deploy website
         id: deployment

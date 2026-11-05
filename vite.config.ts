@@ -4,10 +4,12 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // One codebase, two apps. Mode "curaah" or "careconnect" picks the app.
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const care = mode === 'careconnect'
   const icon = care ? 'careconnect' : 'curaah'
+  const base = command === 'build' ? `/${icon}/` : '/'
   return {
+    base,
     build: { outDir: `dist-${icon}` },
     server: { port: care ? 5174 : 5173, host: true },
     preview: { port: care ? 4174 : 4173, host: true },
@@ -25,13 +27,13 @@ export default defineConfig(({ mode }) => {
           theme_color: care ? '#2f3f8f' : '#1e7f5c',
           background_color: '#f3f7f5',
           display: 'standalone',
-          start_url: '/',
+          start_url: base,
           icons: [
-            { src: `/${icon}-192.png`, sizes: '192x192', type: 'image/png' },
-            { src: `/${icon}-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+            { src: `${base}${icon}-192.png`, sizes: '192x192', type: 'image/png' },
+            { src: `${base}${icon}-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
           ],
         },
-        workbox: { navigateFallback: '/index.html' },
+        workbox: { navigateFallback: `${base}index.html` },
       }),
     ],
   }
