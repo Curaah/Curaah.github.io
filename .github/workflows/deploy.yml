@@ -55,7 +55,8 @@ jobs:
       - name: Assemble website
         run: |
           mkdir -p site/curaah site/careconnect
-          cp landing-index.html CNAME site/
+          cp landing-index.html site/index.html
+          cp CNAME site/
           cp -R assets site/
           cp -R dist-curaah/. site/curaah/
           cp -R dist-careconnect/. site/careconnect/
