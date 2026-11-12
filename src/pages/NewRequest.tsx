@@ -58,7 +58,7 @@ export default function NewRequest() {
     return (
       <Shell back>
         <h1 className="text-2xl font-bold">Your request is live</h1>
-        <p className="mt-2">Matching volunteers and blood banks in {city} can now see it. They will contact you only if they choose to respond.</p>
+        <p className="mt-2">Matching volunteers, NGOs and blood banks in {city} can now see it. They will contact you only if they choose to respond.</p>
         <p className="mt-2">Please also contact the hospital’s blood bank directly, and call for help if the situation is life-threatening.</p>
         {callButtons}
         <Link to="/" className="btn mt-6 block text-center">Back to home</Link>

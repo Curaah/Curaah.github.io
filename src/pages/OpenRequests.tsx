@@ -80,7 +80,10 @@ export default function OpenRequests() {
   const { session, profile } = useSession()
   const { t } = useI18n()
   const uid = session!.user.id
-  const eligible = IS_CARE ? profile?.org_type === 'blood_bank' : Boolean(profile?.is_volunteer && profile?.emergency_available)
+  const eligible = IS_CARE
+    ? profile?.org_type === 'blood_bank' || profile?.org_type === 'ngo'
+    : Boolean(profile?.is_volunteer && profile?.emergency_available)
+  const organizationCity = profile?.city?.trim().toLocaleLowerCase() ?? ''
   const [reqs, setReqs] = useState<Req[] | null>(null)
   const [mine, setMine] = useState<Set<string>>(new Set())
   const [contacts, setContacts] = useState<Record<string, string>>({})
@@ -97,9 +100,11 @@ export default function OpenRequests() {
       .eq('status', 'open')
       .gt('expires_at', new Date().toISOString())
       .neq('requester_id', uid)
-    const list = ((data as Req[] | null) ?? []).sort(
-      (a, b) => RANK[a.urgency] - RANK[b.urgency] || new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    )
+    const list = ((data as Req[] | null) ?? [])
+      .filter((request) => !IS_CARE || !organizationCity || request.city.trim().toLocaleLowerCase() === organizationCity)
+      .sort(
+        (a, b) => RANK[a.urgency] - RANK[b.urgency] || new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      )
     setReqs(list)
     const prev = seen.current
     seen.current = new Set(list.map((x) => x.id))

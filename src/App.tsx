@@ -21,6 +21,7 @@ import NewProgram from './pages/NewProgram'
 import ManageProgram from './pages/ManageProgram'
 import ProgramDetail from './pages/ProgramDetail'
 import SessionRoom from './pages/SessionRoom'
+import Organizations from './pages/Organizations'
 import { Shell, Splash } from './pages/ui'
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
       <Route path="/programs/new" element={<NewProgram />} />
       <Route path="/programs/:id" element={IS_CARE ? <ManageProgram /> : <ProgramDetail />} />
       <Route path="/session/:id" element={<SessionRoom />} />
+      <Route path="/organizations" element={<Organizations />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

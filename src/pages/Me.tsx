@@ -5,6 +5,8 @@ import { useSession } from '../lib/session'
 import { IS_CARE } from '../lib/app'
 import { LanguageSwitcher, useI18n } from '../lib/i18n'
 import EmergencyProfile from './EmergencyProfile'
+import CareProfile from './CareProfile'
+import InterestsCard from './InterestsCard'
 
 export default function Me() {
   const { session, profile } = useSession()
@@ -28,6 +30,8 @@ export default function Me() {
 
       <div className="mt-5"><LanguageSwitcher /></div>
 
+      <CareProfile />
+      <InterestsCard />
       <EmergencyProfile />
 
       <div className="mt-6 grid gap-3">
